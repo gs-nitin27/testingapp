@@ -1385,8 +1385,8 @@ else if($_POST['act'] == 'select_applicant')
   $applicant_id = urldecode($_POST['applicant_id']);
   $emp_id = urldecode($_POST['employer_id']);
   $status = urldecode($_POST['status']);
-  $job_id = urldecode($_POST['job_id'])
-  $name   = urldecode($_POST['employer_name'])
+  $job_id = urldecode($_POST['job_id']);
+  $name   = urldecode($_POST['employer_name']);
 
   $req = new userdataservice();
   $res = jobStatus($job_id,$status);
