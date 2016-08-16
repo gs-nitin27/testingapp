@@ -1043,6 +1043,25 @@ echo 0;
 
 }
 
+public function jobStatus($job_id,$status)
+{
+
+  $query = "UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = 'applicant_id' AND `userjob` = 'job_id'";
+  $q = mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = 'applicant_id' AND `userjob` = 'job_id'");
+
+  if($q)
+  {
+    return true;
+  }
+  else
+  {
+
+    return false;
+
+  }
+}
+
+
 }
 
 ?>

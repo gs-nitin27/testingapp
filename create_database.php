@@ -1382,22 +1382,20 @@ echo json_encode($data);
 
 else if($_POST['act'] == 'select_applicant')
 {
-$applicant_id = urldecode($_POST['applicant_id']);
-$emp_id = urldecode($_POST['employer_id']);
-$status = urldecode($_POST['status']);
-$job_id = urldecode($_POST['job_id'])
-$name   = urldecode($_POST['employer_name'])
+  $applicant_id = urldecode($_POST['applicant_id']);
+  $emp_id = urldecode($_POST['employer_id']);
+  $status = urldecode($_POST['status']);
+  $job_id = urldecode($_POST['job_id'])
+  $name   = urldecode($_POST['employer_name'])
 
-$req = new userdataservice();
-$res = jobStatus($job_id,$status);
-if($res)
-{
-$message      = $name." has sent you a job offer";
-$pushobj      = new userdataservice();
-$pushnote     = $pushobj ->sendPushNotificationToGCM($applicant_id, $message);
-}
-
-
+  $req = new userdataservice();
+  $res = jobStatus($job_id,$status);
+  if($res == true && $status == '1')
+  {
+    $message      = $name." has sent you a job offer";
+    $pushobj      = new userdataservice();
+    $pushnote     = $pushobj ->sendPushNotificationToGCM($applicant_id, $message);
+  }
 }
 
 //******************************************//
