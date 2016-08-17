@@ -1389,13 +1389,26 @@ else if($_POST['act'] == 'select_applicant')
   $name   = urldecode($_POST['employer_name']);
 
   $req = new userdataservice();
-  $res = jobStatus($job_id,$status);
+  $res = $req->jobStatus($job_id,$status);
   if($res == true && $status == '1')
   {
     $message      = $name." has sent you a job offer";
     $pushobj      = new userdataservice();
     $pushnote     = $pushobj ->sendPushNotificationToGCM($applicant_id, $message);
   }
+   $resp = array();
+  if($pushnote)
+  {
+
+   $resp['status'] = "Success";
+   echo json_encode($resp);
+
+  }else
+  {
+   $resp['status'] = "Failure";
+   echo json_encode($resp);
+  }
+
 }
 
 //******************************************//
