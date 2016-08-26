@@ -11,7 +11,7 @@ $.ajax({
 
     type: "POST",
     url: "create_database.php",
-    data: "act=getappliedjobs&user_id="+"16",
+    data: "act=jobOffersList&user_id="+"16",
     dataType: "json",
     success: function(result) {
 

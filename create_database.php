@@ -729,8 +729,8 @@ else if($_POST['act'] == "search_job")
  $gender    =urldecode($_POST ['gender']);
  $subs      =urldecode($_POST ['subs']);
  $para      =urldecode($_POST ['para']);
-//echo "the type of module is in act ".$type;die();
-if($para == '')
+
+if($para == '') // For Default Search parameters
 {
 
 
@@ -1349,19 +1349,25 @@ $res1        = $rev1->getEmpdeviceid($id);
 $rev2        = new userdataservice();
 $res2        = $rev2->getdeviceid($userid);
 
+$date = date("F j, Y, g:i a");
+$message = array('message'=>$res2['name']."has applied for a job" , 'Module'=>'8','date_alerted'=>$date);
+$message1 = array('data'=>$message);
+
 $empdevice_id =  $res1['device_id'];
-$message      =  $res2['name']."has applied for a job";
+//$message      =  $res2['name']."has applied for a job";
 
 
 if($empdevice_id != '')
 {
 $pushobj      = new userdataservice();
-$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
+$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message1);
 }
 $employerid   = $res1['userid'];
 $title        = 'job application';
 $savealertobj = new userdataservice();
-$savealert    = $savealertobj->savealert($employerid , $message , $title , $userid);
+$message = $message['message'];
+$type = '8'; // Applied for Job Alert Type recognition No. 
+$savealert    = $savealertobj->savealert($employerid , $type ,$message , $title , $userid);
 
 echo $savealert;
 
@@ -1389,27 +1395,64 @@ else if($_POST['act'] == 'select_applicant')
   $name   = urldecode($_POST['employer_name']);
 
   $req = new userdataservice();
-  $res = $req->jobStatus($job_id,$status);
+  $res = $req->jobStatus($job_id,$applicant_id,$status);
+
   if($res == true && $status == '1')
   {
-    $message      = $name." has sent you a job offer";
-    $pushobj      = new userdataservice();
-    $pushnote     = $pushobj ->sendPushNotificationToGCM($applicant_id, $message);
+   $date    = date("F j, Y, g:i a");
+   $message = array('message'=>$name."has sent you a job offer" , 'Module'=>'8');
+   $message1 = array('data'=>$message);
+   $pushobj  = new userdataservice();
+   $getid    = $pushobj->getdeviceid($applicant_id);  
+   $pushnote = $pushobj ->sendPushNotificationToGCM($getid, $message1);
   }
+  else if($res == true && $status == '2')
+  {
+   $date     = date("F j, Y, g:i a");
+   $message  = array('message'=>"candidate has accepted your offer" , 'Module'=>'8');
+   $message1 = array('data'=>$message);
+   $pushobj  = new userdataservice();
+   $getid    = $pushobj->getdeviceid($emp_id);
+   $pushnote = $pushobj ->sendPushNotificationToGCM($getid, $message1);
+  }
+  
    $resp = array();
+  
   if($pushnote)
   {
 
    $resp['status'] = "Success";
    echo json_encode($resp);
 
-  }else
+  }
+  else
   {
    $resp['status'] = "Failure";
    echo json_encode($resp);
   }
 
 }
+
+else if($_POST['act'] == 'jobOffersList')
+{
+
+  $userid=urldecode($_POST['user_id']);
+  $req = new userdataservice();
+  $res = $req->getOfferList($userid);
+  if($res != 0)
+  {
+  $data = array('data'=>$res,'status'=>1);
+  echo json_encode($data);
+  }
+  else
+  {
+  $data = array('status'=>$res);
+  echo json_encode($data);
+  }
+
+}
+
+
 
 //******************************************//
 //**********GCM TESTING CODE***************//

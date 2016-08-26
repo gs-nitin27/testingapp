@@ -843,11 +843,12 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
     }
 
 
-public function savealert($employerid , $message , $title, $applicantId)
+public function savealert($employerid ,$type,$message , $title, $applicantId)
 {
 
 //echo "INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title','CURDATE()')";
-$query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE())");
+  print_r($title);
+$query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`,`type`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE(),'$type')");
 
 if($query){
   return 1;
@@ -1043,10 +1044,10 @@ echo 0;
 
 }
 
-public function jobStatus($job_id,$status)
+public function jobStatus($job_id,$applicant_id,$status)
 {
 
-  $q = mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = 'applicant_id' AND `userjob` = 'job_id'");
+  $q = mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = '$applicant_id' AND `userjob` = 'job_id'");
 
   if($q)
   {
@@ -1060,6 +1061,31 @@ public function jobStatus($job_id,$status)
   }
 }
 
+public function getOfferList($userid)
+{
+$query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userjob` , ji.`id` AS job_id, ji.`title` AS job_title , ji.`organisation_name` AS employer_name FROM `user_jobs` AS uj LEFT JOIN `gs_jobInfo` AS ji ON uj.`userjob` = ji.`id` WHERE uj.`userjob` = ji.`id` AND uj.`status` = '1' AND uj.`userid` = '$userid'"); 
+
+if(mysql_num_rows($query)>0)
+{
+
+while($row = mysql_fetch_assoc($query))
+{
+
+$rows[] = $row;
+
+}
+
+return $rows;
+
+}
+else
+{
+
+return 0;
+
+}
+
+}
 
 }
 
