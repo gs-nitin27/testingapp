@@ -1415,7 +1415,8 @@ else if($_POST['act'] == 'select_applicant')
    $getid    = $pushobj->getdeviceid($emp_id);
    $pushnote = $pushobj ->sendPushNotificationToGCM($getid, $message1);
   }
-  
+
+   echo json_decode($pushnote);
    $resp = array();
   
   if($pushnote)
@@ -1453,6 +1454,23 @@ else if($_POST['act'] == 'jobOffersList')
 }
 
 
+else if($_POST['act'] == "create_resource")
+{
+
+$data = json_decode($_REQUEST['data']);
+echo $userid       = $data->user_id;
+echo $title        = $data->title;
+echo $message      = $data->description;
+echo $url          = $data->url;
+
+$video        = urldecode($_POST ['video']);
+
+echo "http://getsporty.in/VideoUpload/".$file_name;
+//echo $userid."=>userid";
+}
+
+
+
 
 //******************************************//
 //**********GCM TESTING CODE***************//
@@ -1484,19 +1502,6 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  move_uploaded_file($temp_name, $location.$file_name);
  //echo "http://getsporty.in/VideoUpload/".$file_name;
 
-}
-
-else if($_POST['act'] == "create_resource")
-{
-
-$userid       = urldecode($_POST ['user_id']);
-$title        = urldecode($_POST ['title']);
-$description  = urldecode($_POST ['description']);
-$url          = urldecode($_POST ['url']);
-$video        = urldecode($_POST ['video']);
-
-echo "http://getsporty.in/VideoUpload/".$file_name;
-//echo $userid."=>userid";
 }
 
 
