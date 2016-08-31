@@ -1466,11 +1466,6 @@ echo "http://getsporty.in/VideoUpload/".$file_name;
 //echo $userid."=>userid";
 }
 
-{"data":
-{
-"tilte": jkfhsjkf, "name" : dfsfsdfsd , "phone":dadasd
-}
-}
 
 
 //******************************************//
