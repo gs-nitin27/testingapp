@@ -1458,18 +1458,19 @@ else if($_POST['act'] == "create_resource")
 {
 
 $data = json_decode($_REQUEST['data']);
-echo $userid       = $data->user_id;
-echo $title        = $data->title;
-echo $message      = $data->description;
-echo $url          = $data->url;
 
-$video        = urldecode($_POST ['video']);
-
+//$video        = urldecode($_POST ['video']);
+$req = new userdataservice();
+$res = $req->createResources($data);
 echo "http://getsporty.in/VideoUpload/".$file_name;
 //echo $userid."=>userid";
 }
 
-
+{"data":
+{
+"tilte": jkfhsjkf, "name" : dfsfsdfsd , "phone":dadasd
+}
+}
 
 
 //******************************************//
