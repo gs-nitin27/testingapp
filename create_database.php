@@ -1458,12 +1458,18 @@ else if($_POST['act'] == "create_resource")
 {
 
 $data = json_decode($_REQUEST['data']);
-
-//$video        = urldecode($_POST ['video']);
 $req = new userdataservice();
 $res = $req->createResources($data);
-echo "http://getsporty.in/VideoUpload/".$file_name;
-//echo $userid."=>userid";
+if($res != 0)
+{
+$resp = array('status'=>$res ,  'message'=>'Resource has been created');
+echo json_encode($resp);
+}
+else
+{
+ $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
+echo json_encode($resp);
+}
 }
 
 

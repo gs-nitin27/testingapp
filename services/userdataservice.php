@@ -1090,11 +1090,18 @@ public function createResources($data)
 {
 $userid       = $data->user_id;
 $title        = $data->title;
-$message      = $data->description;
-$url          = $data->url;
+$message      = $data->message;
+$url          = $data->link;
 $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`user_id`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
 
-
+if($query)
+{
+  return 1;
+}
+else
+{
+  return 0;;
+}
 }
 
 }
