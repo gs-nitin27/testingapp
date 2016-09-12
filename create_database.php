@@ -114,7 +114,7 @@ echo json_encode($res);
 }
 
 
-//controller code for edit profile starts here//
+//******************CODE FOR EDIT PROFILE STARTS ******************************/
 
 else if($_POST['act']=="editprofile")
 {
@@ -1315,7 +1315,6 @@ else
 
 }
 
-
 if($type == 1)
 {
 $req = new userdataservice();
@@ -1331,7 +1330,7 @@ echo json_encode($data3);
 }
 
 
-//*********CODE FOR APPLIYING FOR JOB BY THE USER**********//
+/*********    CODE FOR APPLIYING FOR JOB BY THE USER   *************************/
 
 else if($_POST['act'] == "apply")
 {
@@ -1375,6 +1374,10 @@ echo $savealert;
 echo json_encode($res);
 
 }
+
+/******************************** CODE FOR GET APPLY JOBS *******************************************************/
+
+
 else if($_POST['act'] == "getappliedjobs")
 {
 $userid = urldecode($_POST['user_id']);
@@ -1453,6 +1456,7 @@ else if($_POST['act'] == 'jobOffersList')
 
 }
 
+/* ***********************************************************************************/
 
 else if($_POST['act'] == "create_resource")
 {
@@ -1472,6 +1476,37 @@ echo json_encode($resp);
 }
 }
 
+
+
+
+/********************************************************************************/
+
+  else if($_GET['act'] == 'getresource')
+  {
+    $title = urldecode($_REQUEST ['title']); 
+  if($title !="")
+  {
+  $where1= "WHERE `title` LIKE '%$title%' ";
+
+  $search = new userdataservice();
+  $res = $search->getResources_search($where1);
+    if($res != 0)
+  {
+  $data = array('data'=>$res , 'status'=>'1');
+  
+  echo json_encode($data);
+  }
+  else
+  {
+  $data = array('data'=>'0' , 'status'=>'0');
+  echo json_encode($data);
+  }
+  }
+  }
+
+
+
+/***********************************************************************/
 
 
 //******************************************//
