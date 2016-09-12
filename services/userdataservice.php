@@ -1125,7 +1125,7 @@ public function createResources($data)
 public function imageupload($image,$id,$title)
 {
 
-  define('UPLOAD_DIR','img2/');
+  define('UPLOAD_DIR','gs_images/Resources/');
   $img = $image;
   $img = str_replace('data:image/png;base64,', '', $img);
   $img = str_replace('$filepath,', '', $img);
