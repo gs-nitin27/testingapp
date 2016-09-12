@@ -1093,8 +1093,6 @@ $title        = $data->title;
 $message      = $data->description;
 $url          = $data->url;
 $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`user_id`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
-
-
 }
 
 }
