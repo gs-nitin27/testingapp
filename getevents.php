@@ -8,10 +8,7 @@ $ch = curl_init();
 
 // Set url
 
-$fields = array(
-	'category' => 'sports'
-	
-);
+$fields = array('category' => 'sports');
 
 //url-ify the data for the POST
 foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }

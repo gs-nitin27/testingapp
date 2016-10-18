@@ -906,18 +906,14 @@ $query = mysql_query("INSERT INTO `gs_jobInfo` (`userid`,`title`,`location`,`des
 
 if($query)
 {
-
 return 1;
-
 }else
 {
-
 return 0;
-
+}
 }
 
-
-}
+/***********************Function for Save parameter ***********/
 
 public function saveparam($id,$job_title,$sport_name,$location)
 {
@@ -933,38 +929,27 @@ return 1;
 }
 else
 {
-
-
 return 0;
-
 }
-
-
 }
+/*****************************Function for Search The job************************/
 public function getSearch()
 {
-
 $query = mysql_query("SELECT * FROM `search_param` ORDER BY `date_created` DESC LIMIT 0,10");
 {
-
 if(mysql_num_rows($query)>0)
 {
-
 while ($row = mysql_fetch_assoc($query)) {
   $data[] = $row;
 }
 return $data;
-
 }
 else
-
 return 0;
-
+}
 }
 
-
-}
-
+/********************Function for Update The Records*********/
 
 public function updaterecords($data)
 {
@@ -986,26 +971,19 @@ $query = mysql_query("INSERT INTO `Temp_gs_eventinfo`(`id`, `userid`, `type`, `n
 if($query)
 {
   $resp = $this->updateMoreEvents();
-
   if($resp == '1')
   {
-
   return 1;
-
   }
   else
   {
-
   return 0;
-
-
   }
-
+}
 }
 
+/*************************Function for Update Event*********************/
 
-
-}
 public function updateMoreEvents()
 {
 
@@ -1026,6 +1004,8 @@ return 0;
 
 }
 
+/***********************Function for listing the Job************************/
+
 public function getAppliedJobListing($userid)
 {
 $q =  "SELECT ji.`userid` AS employerid ,ji.`id` AS job_id ,uj.`userjob`,uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE us.`userid` = uj.`userid` AND ji.`userid` = '$userid' ";
@@ -1042,11 +1022,12 @@ return $rows;
 else
 {
 
-echo 0;
+return 0;
 
 }
-
 }
+
+/*************************Function for Check Jab Status***************/
 
 public function jobStatus($job_id,$applicant_id,$status)
 {
@@ -1092,7 +1073,7 @@ return 0;
 
 
 
-/*******************************************************/
+/****************Function for Create Resources*******************************/
 
 public function createResources($data)
 {
@@ -1120,6 +1101,8 @@ public function createResources($data)
 
 
 }
+
+/****************Function for Upload Image in Create Resource************************/
 
 
 public function imageupload($image,$id,$title)
@@ -1154,7 +1137,7 @@ public function imageupload($image,$id,$title)
 }
 
 
-/*****************************************************************/
+/******************************Function for Serach The Resources************************/
 
    public function getResources_search($fwhere)
   {
@@ -1178,8 +1161,99 @@ public function imageupload($image,$id,$title)
       return 0;
        }
 
-      }  
+}  
 
+/*************************Function for Create Resources for Video****************/
+
+public function CreateResourcesVideo($data)
+{
+  
+  $title            = $data->title;
+  $sport            = $data->sport;
+  $message          = $data->description;
+  $videolink        = $data->videolink;
+  $image            = $data->image;
+
+  $query  = mysql_query("INSERT INTO `gs_resources`(`id`, `userid`, `title`, `sport`, `description`, `url`, `date_created`, `image`, `video_link`) VALUES('','','$title','$sport',$message','$videolink','image'");
+
+  if($query)
+  { 
+   // $id = mysql_insert_id();
+   // if($id!=NULL && $image!=NULL)
+   // {
+    // $image = $this->imageupload($image,$id,$title);
+   // }
+   return 1;
+    }
+    else
+    {
+      return 0;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+/***********************Function for GetSporty*************************************/
+
+  public function  CheckToSeeIfUserIsalreadyRegistered($where)
+  {
+   $query  = mysql_query("SELECT * FROM `gs_signup` ".$where);
+   if(mysql_num_rows($query)>0)
+   {
+   while($row = mysql_fetch_assoc($query))
+   {
+   $data = $row;
+   }
+   return $data;
+   }
+   else 
+   {
+    return 0;
+   }
+  }
+/************************************************************************************/
+   public function GsUserRegister($data)
+  {
+     $name         =  $data['name'];
+     $email        =  $data['email'];
+     $password1    =  $data['password'];
+$query =mysql_query("INSERT INTO `gs_signup`(`id`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
+     if($query)
+     {
+          return 1;
+     }
+     else
+     {    
+          return 0;
+     }  
+  }
+
+/*******************************************************************************/
+public function Gs_signIn($email,$password1)
+{
+$query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$email' AND `password` = '$password1' ");
+  $row  = mysql_num_rows($query);
+  
+    if($row)
+        {
+         while($row = mysql_fetch_assoc($query))
+         {
+          $data= $row; 
+          }
+         return $data;
+          } 
+          else
+          {
+          return 0;
+    }
+}
 }
 
 ?>
