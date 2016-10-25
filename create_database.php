@@ -1128,7 +1128,6 @@ $user_favs =urldecode($_POST['id']);
 
 $rev = new userdataservice();
 $res = $rev->favourites($user_id, $module , $user_favs);
-
 if($res == 1)
 {
 echo json_encode($res);
@@ -1176,8 +1175,7 @@ $data       = implode(",",$favo_array);
 $res = new userdataservice();
 $rev = $res->updatefav($id,$user_id,$data);
 echo json_encode($rev);
-    
-    }
+     }
   }
 }
 
@@ -1504,27 +1502,6 @@ else if($_POST['act'] == "create_resource")
   }
 
 
-/*******************************CREATE RESOURCE FOR VIDEO************************/
-
-else if($_POST['act'] == "create_resource_video")
-{
-  $data = json_decode($_REQUEST['data']);
-  $req = new userdataservice();
-  $res = $req->CreateResourcesVideo($data);
-  if($res != 0)
-  {
-  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
-  echo json_encode($resp);
-  }
-  else
-  {
-   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
-  echo json_encode($resp);
-  }
-}
-
-
-
 
 
 
@@ -1606,20 +1583,6 @@ else if($_REQUEST['act']=="GsLogin")
         $data = array('data'=>'Invalid login credentials' , 'status'=>'0');
         echo json_encode($data);
         }
-
-
-
-   // print_r($res); die();
-    //if($res != 0)
-    //  {
-    //  $res1 = array('data' => $res,'status' => 1);
-     // echo json_encode($res1); 
-    //  }
-   // else 
-   //     {
-     //   $res2 = array('data' => 'Invalid login credentials','status' => 0);
-      //  echo json_encode($res2); 
-      //  }
 
 }
 

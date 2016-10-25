@@ -13,7 +13,7 @@ $.ajax({
     url: "create_database.php",
      //dataType: "json",
     //data: "act=editcreation&userid="+"16"+"&type="+"4",
-    data: "act=GsLogin&email=Dineshkumahghgr@gmail.com&password=123456",
+    data: "act=GsLogin&email=rak@yahoo.com&password=123456",
     
    
     success: function(result) {

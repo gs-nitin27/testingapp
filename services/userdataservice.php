@@ -285,15 +285,16 @@ else
  public function favourites($user_id, $module , $user_favs)
  {
 
-     $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
+$record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
      if(mysql_num_rows($record) < 1)
      {
      $query = mysql_query("INSERT INTO `users_fav`(`id`, `userid`, `userfav`, `module`) VALUES ('','$user_id','$user_favs','$module')");
-      if ($query){
+      if ($query)
+      {
         return 1;
-      }else{
-
-
+      }
+      else
+      {
         return 0;
       }
 
@@ -1051,16 +1052,12 @@ $query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userj
 
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
 
 $rows[] = $row;
-
 }
-
 return $rows;
-
 }
 else
 {
@@ -1141,7 +1138,6 @@ public function imageupload($image,$id,$title)
 
    public function getResources_search($fwhere)
   {
-
     $query = "SELECT  IFNull(`title`,'') AS title, IFNull(`description`,'') AS description, IFNull(`url`,'') AS link , IFNull(`image`,'') AS image,IFNull(DATEDIFF(CURDATE(),`date_created`) ,'') AS date, IFNull(`id` , '') AS res_id FROM `gs_resources` ".$fwhere." ";
 
    $query1 = mysql_query($query);
@@ -1152,7 +1148,6 @@ public function imageupload($image,$id,$title)
       {
       $rows[] = $row; 
       }
-
       return $rows;
        } 
       
@@ -1165,6 +1160,7 @@ public function imageupload($image,$id,$title)
 
 /*************************Function for Create Resources for Video****************/
 
+/*
 public function CreateResourcesVideo($data)
 {
   
@@ -1196,7 +1192,7 @@ public function CreateResourcesVideo($data)
 
 
 
-
+*/
 
 
 
