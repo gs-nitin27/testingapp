@@ -1,12 +1,12 @@
  <?php
   class userdataservice
-  {
+  { 
   
   /*******************Check The User is Already Exits [Function]*************/
 
   public function  userExits($where)
   {
-   $query  = mysql_query("SELECT * FROM `gs_signup` ".$where);
+   $query  = mysql_query("SELECT `id`,`name`, `email` FROM `gs_signup` ".$where);
    if(mysql_num_rows($query)>0)
    {
    while($row = mysql_fetch_assoc($query))
@@ -20,9 +20,10 @@
     return 0;
    }
   }
+  
 /****************Sign Up in Getsporty [Function]***********************/
 
-    public function GsUserRegister($data)
+ public function GsUserRegister($data)
   {
      $name         =  $data['name'];
      $email        =  $data['email'];
@@ -30,26 +31,38 @@
 $query =mysql_query("INSERT INTO `gs_signup`(`id`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
      if($query)
      {
-          return 1;
-     }
-     else
+     $id = mysql_insert_id();
+    if($id!=NULL)
+    {
+     $data1 = $this->userdata();
+    }
+  return $data1;
+   } 
+    else
      {    
           return 0;
      }  
   }
 
-/****************************Sign In GetSporty [Function]*******************************/
-// public function utf8ize($d) {
-//     if (is_array($d)) {
-//         foreach ($d as $k => $v) {
-//             $d[$k] = utf8ize($v);
-//         }
-//     } else if (is_string ($d)) {
-//         return utf8_encode($d);
-//     }
-//     return $d;
-// }
-/*****************/
+public function userdata()
+{
+    $query  = mysql_query("SELECT `id`,`name`, `email` FROM `gs_signup` where 1");
+   if(mysql_num_rows($query)>0)
+   {
+   while($row = mysql_fetch_assoc($query))
+   {
+   $data = $row;
+   }
+   return $data;
+   }
+   else 
+   {
+    return 0;
+   }
+  }
+
+
+
 
 /****************************Sign In GetSporty [Function]*******************************/
 public function gsSignIn($email,$password1)
@@ -69,17 +82,16 @@ $query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$
           {
           return 0;
           }
-      
-}
+  }
+
 /****************************Listing Resources GetSporty [Function]*************************/
 public function getList()
 {
 
-//  $query    = mysql_query("SELECT * FROM `gs_resources` WHERE `id`=11 ");
-  //SELECT * FROM `gs_resources` ORDER by `date_created`
+
 $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
 
- //$data =array();
+ 
   $row  = mysql_num_rows($query);
   if($row)
   {
@@ -87,28 +99,8 @@ $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
    {
   
     $data[] = $row;
-   // print_r($row);die();
-  //foreach ($data as  $value) {
-   // print_r($value);die();
-}
-//foreach ($data as  $value) 
-//{
-//print_r($value['description']);
-//$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
-
-
-
-
-//die();
-   //$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $data[]['description']);
-
    
-  // $json = $temp;
-    //$json = $temp;
-    //print_r($json);die();
- //$data['description'];die();
-  // return $json;
- //  print_r($data);die();
+}
     return $data;
    }
   else
@@ -116,24 +108,13 @@ $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
   return 0;
   }
 }
-
-
-
-
 
 
 /****************************Listing  for Sports GetSporty [Function]**************/
 
-
-
 public function Get_Sports()
 {
-
-//  $query    = mysql_query("SELECT * FROM `gs_resources` WHERE `id`=11 ");
-  //SELECT * FROM `gs_resources` ORDER by `date_created`
 $query = mysql_query("SELECT `sports` FROM `gs_sports` where 1  ");
-
- //$data =array();
   $row  = mysql_num_rows($query);
   if($row)
   {
@@ -141,28 +122,7 @@ $query = mysql_query("SELECT `sports` FROM `gs_sports` where 1  ");
    {
   
     $data[] = $row;
-   // print_r($row);die();
-  //foreach ($data as  $value) {
-   // print_r($value);die();
-}
-//foreach ($data as  $value) 
-//{
-//print_r($value['description']);
-//$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
-
-
-
-
-//die();
-   //$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $data[]['description']);
-
-   
-  // $json = $temp;
-    //$json = $temp;
-    //print_r($json);die();
- //$data['description'];die();
-  // return $json;
- //  print_r($data);die();
+  }
     return $data;
    }
   else
@@ -172,20 +132,11 @@ $query = mysql_query("SELECT `sports` FROM `gs_sports` where 1  ");
 }
 
 
-
-
 /****************************Listing for Location GetSporty [Function]**************/
-
-
 
 public function Get_Location()
 {
-
-//  $query    = mysql_query("SELECT * FROM `gs_resources` WHERE `id`=11 ");
-  //SELECT * FROM `gs_resources` ORDER by `date_created`
-$query = mysql_query("SELECT `city` FROM `location` where `status`=1 ");
-
- //$data =array();
+$query = mysql_query("SELECT `name` FROM `gs_city` where 1 ");
   $row  = mysql_num_rows($query);
   if($row)
   {
@@ -195,24 +146,6 @@ $query = mysql_query("SELECT `city` FROM `location` where `status`=1 ");
     $data[] = $row;
    
 }
-//foreach ($data as  $value) 
-//{
-//print_r($value['description']);
-//$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
-
-
-
-
-//die();
-   //$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $data[]['description']);
-
-   
-  // $json = $temp;
-    //$json = $temp;
-    //print_r($json);die();
- //$data['description'];die();
-  // return $json;
- //  print_r($data);die();
     return $data;
    }
   else
@@ -250,7 +183,6 @@ else
 
 public function getDetail($userid)
 {
- // echo "SELECT * FROM `gs_resources` where `id`=$userid "; die();
 $query = mysql_query("SELECT * FROM `gs_resources` where `id`=$userid ");
 if(mysql_num_rows($query)>0)
 {
@@ -266,23 +198,50 @@ return 0;
 }
 }
 
+/************************ Get favourites of Resources*****************/
+
+ public function favourites($user_id, $module , $user_favs)
+  {
+    //echo "SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ";die();
+     $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
+  
+   if(mysql_num_rows($record) < 1)
+     {
+         $query = mysql_query("INSERT INTO `users_fav`(`id`, `userid`, `userfav`, `module`) VALUES ('','$user_id','$user_favs','$module')");
+      if ($query)
+      {
+        return 1;
+      }
+      else
+      {
+        return 0;
+      }
+  }
+  else
+  {
+             while($data = mysql_fetch_assoc($record))
+          {
+                $row = $data;
+                return $row;
+               
+          }   
+      }
+   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+public function updatefav($id,$user_id,$data)
+{
+  $data = rtrim($data,"");
+  $data = rtrim($data,",");
+$query = mysql_query("UPDATE `users_fav` SET `userfav` = '$data' WHERE `userid` = '$user_id' AND `id` = '$id' ");
+if($query)
+{
+  return 1;
+}else
+{
+  return 0;
+}
+}
 
 
 } // End Class

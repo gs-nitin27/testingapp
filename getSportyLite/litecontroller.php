@@ -1,10 +1,10 @@
 <?php 
 include('../config.php');
-include('Controller/userdatabaseservice.php');
+include('liteservice.php');
 
 /****************Sign Up in Getsporty***********************/
 
-if($_POST['act']=='gs_signup')
+if($_POST['act'] == 'gs_signup')
 {
    $name       =  urldecode($_POST ['name']);
    $email      =  urldecode($_POST ['email']);
@@ -15,29 +15,24 @@ if($_POST['act']=='gs_signup')
    $data       =  array('name'=>$name,'email'=>$email,'password'=> $password1);
     if($res)
     {
-     $status = array('status' => 0, 'message' => 'User is  already Registered');
+     $status = array('status' => $res, 'message' => 'User is  already Registered');
      $data1=array('data' =>$status);
      echo json_encode($data1); 
     }
    else
    {
    $req1 = new userdataservice();
-
    $res1 = $req1->GsUserRegister($data);
-   if($res1 == '1')
+   
+    if($res1)
    {
-   $req2 = new userdataservice();
-   $res2 = $req2->userExits($where);
-   if($res2 != 0)
-   {
-   $res3 = array('data' => $res2,'status' => 1);
-   echo json_encode($res3);  
-   }
-   }
+    $res2 = array('data' => $res1,'status' => 1);
+    echo json_encode($res2);
+    }
    else
    {
-   $res3 = array('data' => 'Record not saved','status' => 0);
-   echo json_encode($res3);  
+   $res2 = array('data' => 'Record not saved','status' => 0);
+   echo json_encode($res2);  
    }
    }
 } 
@@ -68,23 +63,23 @@ else if($_REQUEST['act']=="gs_login")
 
 else if($_REQUEST['act']=="gs_list")
 { 
-  //echo "ram";die();
     $req           =  new userdataservice();
     $res           =  $req->getList();
-    if($res)
+   if($res)
     {   
-  //foreach ($res as $key => $value)
-  // {
-     // $value['description']  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
-      //$value
-       $data = array('data'=>$res,'status'=>'1');
-       echo json_encode($data);
-    //}
-   }
+    foreach ($res as $key => $value)
+     {
+       $res[$key]['description']; 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
+       $res[$key]['description'] = $desc;
+     }
+       $data1 = array('data'=>$res,'status'=>'1');
+       echo json_encode($data1);
+    }
     else
     {
        $data = array('data'=>'0' , 'status'=>'0');
-        echo json_encode($data);
+       echo json_encode($data);
     }
 }
 
@@ -114,12 +109,9 @@ else if($_REQUEST['act']=="gs_location")
     $res           =  $req->Get_Location();
     if($res)
     {   
-
       $data = array('location'=>$res);
-        $data = array('data'=>$data,'status'=>'1');
-        
-       echo json_encode($data);
-  
+      $data = array('data'=>$data,'status'=>'1');
+      echo json_encode($data);
     }
     else
     {
@@ -176,8 +168,7 @@ else if($_REQUEST['act']=="gs_search")
     }
     if($where != '')
     {
-      //echo "sasaa"; exit;   
-   $res         =  $req->GetSearch($where);
+      $res         =  $req->GetSearch($where);
     }
     else
     {
@@ -186,10 +177,14 @@ else if($_REQUEST['act']=="gs_search")
           }
     if($res)
     {   
-
-        $data = array('data'=>$res,'status'=>'1');
-        echo json_encode($data);
-  
+    foreach ($res as $key1 => $value)
+     {
+       $res[$key1]['description']; 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
+       $res[$key1]['description'] = $desc;
+     }
+       $data1 = array('data'=>$res,'status'=>'1');
+       echo json_encode($data1);
     }
     else
     {
@@ -209,8 +204,14 @@ else if($_REQUEST['act']=="gs_detail")
   $res             =  $req->getDetail($userid);
     if($res)
     {   
-        $data = array('data'=>$res,'status'=>'1');
-        echo json_encode($data);
+    foreach ($res as $key2 => $value)
+     {
+       $res[$key2]['description']; 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
+       $res[$key2]['description'] = $desc;
+     }
+       $data1 = array('data'=>$res,'status'=>'1');
+       echo json_encode($data1);
     }
     else
     {
@@ -219,6 +220,55 @@ else if($_REQUEST['act']=="gs_detail")
     }
 }
 
+/******CODE FOR MARKING SEARCH RECORDS AS FAVOURITE BY THE USER [act]****************/
+
+else if ($_POST['act'] == "gs_fav" )
+{
+$user_id   =urldecode(@$_POST['user_id']);
+$module    =urldecode(@$_POST['type']);
+$user_favs =urldecode(@$_POST['id']);
+$rev = new userdataservice();
+$res = $rev->favourites($user_id, $module , $user_favs);
+if($res == 1)
+{
+echo json_encode($res);
+}
+else
+{
+$favourite  =  $res['userfav'];
+$favo_array = split(",",$favourite);
+if(in_array($user_favs, $favo_array))
+{
+$res1 = array_search($user_favs, $favo_array);
+unset($favo_array[$res1]);
+$data = implode(",",$favo_array);
+$id   = $res['id'];
+$res = new userdataservice();
+$rev = $res->updatefav($id,$user_id,$data);
+if($rev == 1)
+echo 0;
+}
+else if($favourite == "")
+{
+$favourite =  $res['userfav'];
+$id        = $res['id'];
+$res       = new userdataservice();
+$rev       = $res->updatefav($id,$user_id,$user_favs);
+echo json_encode($rev);
+}
+else if(!in_array($user_favs, $favo_array))
+{
+$favourite  = $res['userfav'];
+$id         = $res['id'];
+$favo_array = split(",",$favourite);
+$add        = array_push($favo_array,$user_favs);
+$data       = implode(",",$favo_array);
+$res = new userdataservice();
+$rev = $res->updatefav($id,$user_id,$data);
+echo json_encode($rev);
+     }
+  }
+}
 
 
 
