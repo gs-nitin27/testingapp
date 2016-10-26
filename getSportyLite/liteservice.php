@@ -243,5 +243,23 @@ if($query)
 }
 }
 
+public function saveToken($token)
+  {
+
+    $query = mysql_query("SELECT `token_id` FROM `get_token` USE INDEX (`token_id`) WHERE `token_id` = '$token'");
+    if(mysql_num_rows($query) < 1)
+      {
+
+        $insert = mysql_query("INSERT INTO `get_token` (`id`,`token_id`) VALUES ('','$token')");
+        if($insert)
+        {
+          return 1;
+        }else{
+          return 0;
+        }
+      }else{
+        return 1;
+      }
+  }
 
 } // End Class
