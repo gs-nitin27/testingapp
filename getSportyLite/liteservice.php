@@ -6,7 +6,8 @@
 
   public function  userExits($where)
   {
-   $query  = mysql_query("SELECT `id`,`name`, `email` FROM `gs_signup` ".$where);
+    //echo $where;die();
+   $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` ".$where);
    if(mysql_num_rows($query)>0)
    {
    while($row = mysql_fetch_assoc($query))
@@ -25,10 +26,14 @@
 
  public function GsUserRegister($data)
   {
+    
+    //print($data);die();
+    //echo $data['name'];die();
      $name         =  $data['name'];
      $email        =  $data['email'];
      $password1    =  $data['password'];
-$query =mysql_query("INSERT INTO `gs_signup`(`id`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
+$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`profile_status`) VALUES('','$name','$email','$password1','3')");
+     //echo $query ;die();
      if($query)
      {
      $id = mysql_insert_id();
@@ -46,7 +51,7 @@ $query =mysql_query("INSERT INTO `gs_signup`(`id`, `name`, `email`, `password`) 
 
 public function userdata()
 {
-    $query  = mysql_query("SELECT `id`,`name`, `email` FROM `gs_signup` where 1");
+    $query  = mysql_query("SELECT `id`,`name`, `email` FROM `user` where 1");
    if(mysql_num_rows($query)>0)
    {
    while($row = mysql_fetch_assoc($query))
@@ -67,7 +72,7 @@ public function userdata()
 /****************************Sign In GetSporty [Function]*******************************/
 public function gsSignIn($email,$password1)
 {
-$query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$email' AND `password` = '$password1' ");
+$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1' AND `profile_status`='3' ");
   $row  = mysql_num_rows($query);
   
     if($row)
@@ -93,15 +98,16 @@ $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
 
  
   $row  = mysql_num_rows($query);
-  if($row)
+  if($row > 0)
   {
    while ($row = mysql_fetch_assoc($query))
-   {
-  
-    $data[] = $row;
-   
-}
-    return $data;
+   {   $row['description']; 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+       $row['description'] = $desc;
+       $row['fav'] = '0';
+       $data[] = $row;
+  }
+  return $data;
    }
   else
   {
@@ -160,12 +166,17 @@ $query = mysql_query("SELECT `name` FROM `gs_city` where 1 ");
 
 public function GetSearch( $where)
   {
+    //echo $where;die();
       $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
       $query1 = $query;
 if(mysql_num_rows($query1) > 0)
 {
 while($row = mysql_fetch_assoc($query1))
 {
+       $row['description']; 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+       $row['description'] = $desc;
+       $row['fav'] = '0';
 $rows[] = $row;
 }
   return $rows;
@@ -242,6 +253,75 @@ if($query)
   return 0;
 }
 }
+
+
+
+/*************************Get The Favourate*********************************/
+
+
+public function getfav($id,$type)
+{
+$query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
+
+if(mysql_num_rows($query)>0){
+
+   while($row = mysql_fetch_assoc($query))
+   {
+     
+      $data = $row;
+
+   }
+return $data;
+}
+else{
+
+  return 0;
+   }
+}
+
+  
+public function get_fvdata($fwhere)
+  {
+  $query = mysql_query("SELECT `id`,`userid`, `title`,`sport`,`description`,`url`,`date_created`,`image`,`video_link`,`location` FROM `gs_resources` where `id` IN (".$fwhere.")" );
+
+   if(mysql_num_rows($query)>0){
+   while($row = mysql_fetch_assoc($query))
+   {  $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+      $row['description'] = $desc;
+      $row['fav'] = 1;
+      $data[] = $row;
+
+   }
+   
+   return $data;
+}
+else{
+  return 0;
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 } // End Class
