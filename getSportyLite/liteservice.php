@@ -67,7 +67,7 @@ public function userdata()
 /****************************Sign In GetSporty [Function]*******************************/
 public function gsSignIn($email,$password1)
 {
-$query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$email' AND `password` = '$password1' ");
+$query = mysql_query("SELECT `id`,`name`, `email` FROM `gs_signup` WHERE `email` = '$email' AND `password` = '$password1' ");
   $row  = mysql_num_rows($query);
   
     if($row)
@@ -242,6 +242,76 @@ if($query)
   return 0;
 }
 }
+
+
+
+/*************************Get The Favourate*********************************/
+
+
+public function getfav($id,$type)
+{
+$query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
+
+if(mysql_num_rows($query)>0){
+
+   while($row = mysql_fetch_assoc($query))
+   {
+     
+      $data = $row;
+
+   }
+return $data;
+}
+else{
+
+  return 0;
+   }
+}
+
+  
+public function get_fvdata($fwhere)
+  {
+  $query = mysql_query("SELECT `id`,`userid`, `title`,`sport`,`description`,`url`,`date_created`,`image`,`video_link`,`location` FROM `gs_resources` where `id` IN (".$fwhere.")" );
+
+   if(mysql_num_rows($query)>0){
+   while($row = mysql_fetch_assoc($query))
+   {  $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+      $row['description'] = $desc;
+      $row['fav'] = 1;
+      $data[] = $row;
+
+   }
+   
+   return $data;
+}
+else{
+  return 0;
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 } // End Class

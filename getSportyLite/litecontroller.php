@@ -64,14 +64,27 @@ else if($_REQUEST['act']=="gs_login")
 else if($_REQUEST['act']=="gs_list")
 { 
     $req           =  new userdataservice();
+    $userid        = urldecode($_POST ['userid']);
     $res           =  $req->getList();
+    $type          = '6'; 
    if($res)
-    {   
+    { 
+      $res1 = $req->getfav($userid,$type);  
+      $favid = split(",", $res1['userfav']);
     foreach ($res as $key => $value)
      {
        $res[$key]['description']; 
        $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
        $res[$key]['description'] = $desc;
+        foreach ($favid as $key2 => $value1) 
+       {
+         if($res[$key]['id'] == $value1 && $userid!= '')
+         { 
+          $res[$key]['fav'] = '1';
+         }else{
+          $res[$key]['fav'] = '0';
+         }
+       }
      }
        $data1 = array('data'=>$res,'status'=>'1');
        echo json_encode($data1);
@@ -199,16 +212,28 @@ else if($_REQUEST['act']=="gs_search")
 
 else if($_REQUEST['act']=="gs_detail")
 { 
-  $userid         =  urldecode(($_POST ['id']));
+  $userid          =  urldecode(($_POST ['id']));
   $req             =  new userdataservice();
   $res             =  $req->getDetail($userid);
-    if($res)
-    {   
+  $type            = '6';
+    if($res != 0)
+    {
+    $res1 = $req->getfav($userid,$type);  
+    $favid = split(",", $res1['userfav']);
     foreach ($res as $key2 => $value)
      {
        $res[$key2]['description']; 
        $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
        $res[$key2]['description'] = $desc;
+       foreach ($favid as $key => $value1) 
+       {
+         if($res[$key2]['id'] == $value1)
+         {
+          $res[$key2]['fav'] = '1';
+         }else{
+          $res[$key2]['fav'] = '0';
+         }
+       }
      }
        $data1 = array('data'=>$res,'status'=>'1');
        echo json_encode($data1);
@@ -271,6 +296,32 @@ echo json_encode($rev);
 }
 
 
+/***************Code for GET Favourate*******************/
+
+
+else if($_POST['act'] == "gs_getfav")
+{
+  //echo "ram";die();
+$id   = urldecode($_POST ['id']);
+$type = urldecode($_POST ['type']);
+$rev  = new userdataservice();
+//echo "$id";die();
+$res  = $rev->getfav($id,$type);
+
+if($res != 0)
+{
+
+$favdata = $res['userfav'];
+$res1  = new userdataservice();
+$rev1  = $res1->get_fvdata($favdata);//die;
+$favdata = split(",",$favdata);
+
+         $data = array('data'=>$rev1,'status' => 1);
+         echo json_encode($data);
+   }else
+         $data = array('data'=>0,'status' => 0);
+         echo json_encode($data);
+}
 
 
 
