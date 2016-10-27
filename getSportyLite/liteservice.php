@@ -32,14 +32,14 @@
      $name         =  $data['name'];
      $email        =  $data['email'];
      $password1    =  $data['password'];
-$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`profile_status`) VALUES('','$name','$email','$password1','3')");
+$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
      //echo $query ;die();
      if($query)
      {
      $id = mysql_insert_id();
     if($id!=NULL)
     {
-     $data1 = $this->userdata();
+     $data1 = $this->userdata($id);
     }
   return $data1;
    } 
@@ -49,9 +49,9 @@ $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`p
      }  
   }
 
-public function userdata()
+public function userdata($id)
 {
-    $query  = mysql_query("SELECT `id`,`name`, `email` FROM `user` where 1");
+    $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` where `userid` = '$id'");
    if(mysql_num_rows($query)>0)
    {
    while($row = mysql_fetch_assoc($query))
@@ -73,7 +73,7 @@ public function userdata()
 public function gsSignIn($email,$password1)
 {
 
-$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1' AND `profile_status`='3' ");
+$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
   $row  = mysql_num_rows($query);
   
     if($row)
