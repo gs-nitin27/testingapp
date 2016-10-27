@@ -1,5 +1,5 @@
  <?php
-  class userdataservice
+  class liteservice
   { 
   
   /*******************Check The User is Already Exits [Function]*************/
@@ -32,14 +32,14 @@
      $name         =  $data['name'];
      $email        =  $data['email'];
      $password1    =  $data['password'];
-$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`profile_status`) VALUES('','$name','$email','$password1','3')");
+$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
      //echo $query ;die();
      if($query)
      {
      $id = mysql_insert_id();
     if($id!=NULL)
     {
-     $data1 = $this->userdata();
+     $data1 = $this->userdata($id);
     }
   return $data1;
    } 
@@ -49,9 +49,9 @@ $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`p
      }  
   }
 
-public function userdata()
+public function userdata($id)
 {
-    $query  = mysql_query("SELECT `id`,`name`, `email` FROM `user` where 1");
+    $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` where `userid` = '$id'");
    if(mysql_num_rows($query)>0)
    {
    while($row = mysql_fetch_assoc($query))
@@ -72,7 +72,8 @@ public function userdata()
 /****************************Sign In GetSporty [Function]*******************************/
 public function gsSignIn($email,$password1)
 {
-$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1' AND `profile_status`='3' ");
+
+$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
   $row  = mysql_num_rows($query);
   
     if($row)
@@ -104,6 +105,8 @@ $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
    {   $row['description']; 
        $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
        $row['description'] = $desc;
+       $summary = strip_tags($row['summary']);
+       $row['summary'] = $summary; 
        $row['fav'] = '0';
        $data[] = $row;
   }
@@ -164,7 +167,7 @@ $query = mysql_query("SELECT `name` FROM `gs_city` where 1 ");
 /******************** New Seraching******************************/
 
 
-public function GetSearch( $where)
+public function GetSearch($where)
   {
     //echo $where;die();
       $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
@@ -176,15 +179,17 @@ while($row = mysql_fetch_assoc($query1))
        $row['description']; 
        $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
        $row['description'] = $desc;
+       $summary = strip_tags($row['summary']);
+       $row['summary'] = $summary; 
        $row['fav'] = '0';
-$rows[] = $row;
-}
-  return $rows;
-} 
-else
-{
-  return 0;
-}
+        $rows[] = $row;
+        }
+          return $rows;
+        } 
+        else
+        {
+          return 0;
+        }
 }
 
 
@@ -300,8 +305,7 @@ else{
   
 public function get_fvdata($fwhere)
   {
-  $query = mysql_query("SELECT `id`,`userid`, `title`,`sport`,`description`,`url`,`date_created`,`image`,`video_link`,`location` FROM `gs_resources` where `id` IN (".$fwhere.")" );
-
+  $query = mysql_query("SELECT `id`,`user_id`, `title`,`sport`,`description`,`url`,`date_created`,`image`,`video_link`,`location` FROM `gs_resources` where `id` IN (".$fwhere.")" );
    if(mysql_num_rows($query)>0){
    while($row = mysql_fetch_assoc($query))
    {  $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
@@ -317,29 +321,5 @@ else{
   return 0;
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 } // End Class
