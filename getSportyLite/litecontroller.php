@@ -6,7 +6,6 @@ include('liteservice.php');
 
 if($_POST['act'] == 'gs_signup')
 {
- //echo "ram";die();
    $name       =  urldecode($_POST ['name']);
    $email      =  urldecode($_POST ['email']);
    $password1  =  md5(urldecode(@$_POST ['password']));
@@ -23,6 +22,7 @@ if($_POST['act'] == 'gs_signup')
    else
    {
     $req1 = new liteservice();
+
    $res1 = $req1->GsUserRegister($data);
    
     if($res1)
@@ -66,7 +66,6 @@ else if($_REQUEST['act']=="gs_list")
     $req           =  new liteservice();
     $res           =  $req->getList();
     $module        = '6';
-
    if($res != 0)
        {
     if(!isset($_REQUEST['user_id']))
@@ -348,7 +347,6 @@ $req = new liteservice();
 $res = $req->saveToken($token);
 echo json_encode($res);
 }
-
 ?>
 
 
