@@ -319,6 +319,17 @@ $favdata = split(",",$favdata);
 
 
 
+if($_REQUEST['act'] == 'get_token')
+{
+$token = $_REQUEST['token'];
+$req = new userdataservice();
+$res = $req->saveToken($token);
+echo json_encode($res);
+}
+
+
+
+
 
 
 

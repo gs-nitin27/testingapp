@@ -1,13 +1,14 @@
 <?
 include('../services/userdataservice.php');
-include('liteservice.php');
+//include('liteservice.php');
 
-if($_REQUEST['act'] == 'get_token')
+$query = mysql_query("SELECT * FROM `gs_resources` ORDER BY `id` DESC LIMIT 0, 10");
+
+if(mysql_num_rows($query) > 0)
 {
-$token = $_REQUEST['token'];
-$req = new liteservice();
-$res = $req->saveToken($token);
 
+$req = new userdataservice();
+$res = $req->sendPushNotificationToGCM($registatoin_ids, $message)
 
 
 }

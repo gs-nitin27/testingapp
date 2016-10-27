@@ -1,5 +1,5 @@
  <?php
-  class userdataservice
+  class liteservice
   { 
   
   /*******************Check The User is Already Exits [Function]*************/
