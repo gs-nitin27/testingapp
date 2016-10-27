@@ -347,6 +347,48 @@ $req = new liteservice();
 $res = $req->saveToken($token);
 echo json_encode($res);
 }
+
+else if($_REQUEST['act']=="gs_sub")
+{
+   $key          =  urldecode(@($_POST ['key']));
+   $sports       =  urldecode((@$_POST ['sports']));
+   $location     =  urldecode(@($_POST ['location']));
+   $topic        =  urldecode(@($_POST ['topic']));
+   $user_id      =  urldecode(@($_POST['user_id']));
+   $where[]      = ' 1=1 ';
+   if($sports != '')
+   {
+     
+     $where[] = " `sport` = '$sports' ";
+
+   }if($location != '')
+   {
+
+     $where[] = " `location` = '$location' ";
+
+   }
+   if($topic != '')
+   {
+
+     $where[] = " `title` = '$topic' ";    
+   }
+   if($key != '')
+   {
+
+     $where[] = " `Description` LIKE '%$key%'' ";    
+   }
+   $whereclause = implode('AND', $where);
+   $req = new liteservice();
+   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause)); 
+   if($res != 0)
+   {
+   $data = array('status'=> $res , 'data'=>'Success'); 
+   }else
+   {
+    $data = array('status'=> $res , 'data'=>'Failure');
+   }
+  echo json_encode($data);
+}
 ?>
 
 

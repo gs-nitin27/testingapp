@@ -322,4 +322,47 @@ else{
    }
 }
 
+public function getsubscribed($userid)
+{
+  //echo "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6'";die;
+  $query = mysql_query("SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6'");
+  if(mysql_num_rows($query)>0)
+  {
+
+  while ($row = mysql_fetch_assoc($query)) {
+    return $row;
+  }
+}
+  else
+  {
+    return 0;
+  }
+
+  }
+
+public function saveSubscribe($userid , $where)
+  {
+    if($this->getsubscribed($userid) == 0)
+    {
+     $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`) VALUES ('','$userid','$where','6','0','1',CURDATE())");
+    }else
+    {
+      $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' WHERE `userid` = '$userid' AND `Moudule` = '6' ");
+    }
+    
+    if($query)
+    {
+
+    return 1;
+
+    }else
+
+    {
+    return 0;
+    }
+
+
+  }
+
+
 } // End Class
