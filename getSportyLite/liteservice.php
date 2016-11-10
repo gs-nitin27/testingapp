@@ -6,34 +6,30 @@
 
   public function  userExits($where)
   {
-    //echo $where;die();
-   $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` ".$where);
-   if(mysql_num_rows($query)>0)
-   {
-   while($row = mysql_fetch_assoc($query))
-   {
-   $data = $row;
-   }
-   return $data;
-   }
-   else 
-   {
-    return 0;
-   }
+     $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` ".$where);
+     if(mysql_num_rows($query)>0)
+     {
+     while($row = mysql_fetch_assoc($query))
+     {
+     $data = $row;
+     }
+     return $data;
+     }
+     else 
+     {
+      return 0;
+     }
   }
   
 /****************Sign Up in Getsporty [Function]***********************/
 
  public function GsUserRegister($data)
   {
-    
-    //print($data);die();
-    //echo $data['name'];die();
      $name         =  $data['name'];
      $email        =  $data['email'];
      $password1    =  $data['password'];
-$query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
-     //echo $query ;die();
+     $token        =  mysql_escape_string($data['token']);
+     $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`device_id`) VALUES('','$name','$email','$password1','$token')");
      if($query)
      {
      $id = mysql_insert_id();
@@ -67,19 +63,21 @@ public function userdata($id)
   }
 
 
-
-
 /****************************Sign In GetSporty [Function]*******************************/
-public function gsSignIn($email,$password1)
+
+public function gsSignIn($email,$password1,$token)
 {
 
-$query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+$query = mysql_query("SELECT `userid`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
   $row  = mysql_num_rows($query);
   
     if($row)
         {
           while($row = mysql_fetch_assoc($query))
-          {
+          {   if($data['device_id'] != $token)
+               {
+                mysql_query(" UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' AND `password` = '$password1'");
+               }
               $data= $row; 
           }
           return $data;
@@ -91,22 +89,21 @@ $query = mysql_query("SELECT `userid`,`name`, `email` FROM `user` WHERE `email` 
   }
 
 /****************************Listing Resources GetSporty [Function]*************************/
+
 public function getList()
 {
-
-
-$query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
-
- 
+$query = mysql_query("SELECT *FROM `gs_resources` ORDER by `date_created` desc ");
   $row  = mysql_num_rows($query);
   if($row > 0)
   {
    while ($row = mysql_fetch_assoc($query))
-   {   $row['description']; 
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+   {   
+       $des1=strip_tags($row['description']); 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
        $row['description'] = $desc;
-       $summary = strip_tags($row['summary']);
-       $row['summary'] = $summary; 
+       $sum1=strip_tags($row['summary']);
+       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum; 
        $row['fav'] = '0';
        $data[] = $row;
   }
@@ -145,7 +142,7 @@ $query = mysql_query("SELECT `sports` FROM `gs_sports` where 1  ");
 
 public function Get_Location()
 {
-$query = mysql_query("SELECT `name` FROM `gs_city` where 1 ");
+$query = mysql_query("SELECT `name` FROM `gs_city` where 1 GROUP BY `name` ORDER BY `name` ASC ");
   $row  = mysql_num_rows($query);
   if($row)
   {
@@ -164,25 +161,24 @@ $query = mysql_query("SELECT `name` FROM `gs_city` where 1 ");
 }
 
 
-/******************** New Seraching******************************/
+/******************** Seraching [Function]******************************/
 
 
 public function GetSearch($where)
-  {
-    //echo $where;die();
-      $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
-      $query1 = $query;
-if(mysql_num_rows($query1) > 0)
 {
-while($row = mysql_fetch_assoc($query1))
-{
-       $row['description']; 
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
+    $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
+    if(mysql_num_rows($query) > 0)
+    {
+    while($row = mysql_fetch_assoc($query))
+    {
+       $des1=strip_tags($row['description']); 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
        $row['description'] = $desc;
-       $summary = strip_tags($row['summary']);
-       $row['summary'] = $summary; 
+       $sum1=strip_tags($row['summary']);
+       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum; 
        $row['fav'] = '0';
-        $rows[] = $row;
+       $rows[] = $row;
         }
           return $rows;
         } 
@@ -195,7 +191,7 @@ while($row = mysql_fetch_assoc($query1))
 
 
 
-/************************ Get Details of Resources*****************/
+/************************ Get Details of Resources[Function]*****************/
 
 public function getDetail($userid)
 {
@@ -214,14 +210,13 @@ return 0;
 }
 }
 
-/************************ Get favourites of Resources*****************/
+
+/************************ Get favourites of Resources [Function]*****************/
 
  public function favourites($user_id, $module , $user_favs)
   {
-    //echo "SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ";die();
-     $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
-  
-   if(mysql_num_rows($record) < 1)
+    $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
+  if(mysql_num_rows($record) < 1)
      {
          $query = mysql_query("INSERT INTO `users_fav`(`id`, `userid`, `userfav`, `module`) VALUES ('','$user_id','$user_favs','$module')");
       if ($query)
@@ -259,6 +254,9 @@ if($query)
 }
 }
 
+
+/*************** Save Token When user is first instal APPS [Function]********/
+
 public function saveToken($token)
   {
 
@@ -279,7 +277,7 @@ public function saveToken($token)
   }
 
 
-/*************************Get The Favourate*********************************/
+/*************************Get The Favourate [Function]*********************************/
 
 
 public function getfav($id,$type)
@@ -292,7 +290,6 @@ if(mysql_num_rows($query)>0){
    {
      
       $data = $row;
-
    }
 return $data;
 }
@@ -305,21 +302,166 @@ else{
   
 public function get_fvdata($fwhere)
   {
-  $query = mysql_query("SELECT `id`,`user_id`, `title`,`sport`,`description`,`url`,`date_created`,`image`,`video_link`,`location` FROM `gs_resources` where `id` IN (".$fwhere.")" );
-   if(mysql_num_rows($query)>0){
-   while($row = mysql_fetch_assoc($query))
-   {  $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $row['description']);
-      $row['description'] = $desc;
-      $row['fav'] = 1;
-      $data[] = $row;
 
+    $query = mysql_query("SELECT *FROM `gs_resources` where `id` IN (".$fwhere.")" );
+   if(mysql_num_rows($query)>0)
+   {
+   while($row = mysql_fetch_assoc($query))
+   {  
+       $des1=strip_tags($row['description']); 
+       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+       $row['description'] = $desc;
+       $sum1=strip_tags($row['summary']);
+       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum; 
+       $row['fav'] = 1;
+      $data[] = $row;
    }
-   
    return $data;
 }
 else{
   return 0;
    }
 }
+
+
+/************* Subscribed The Application by User [Function]************************/
+
+public function getsubscribed($userid)
+{
+  $query = mysql_query("SELECT  *FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6'");
+  if(mysql_num_rows($query)>0)
+  {
+
+  while ($row = mysql_fetch_assoc($query)) {
+    return $row;
+  }
+}
+  else
+  {
+    return 0;
+  }
+
+  }
+
+
+/******************Save the Subscribe query [Function]*************************/
+
+public function saveSubscribe($userid , $where, $textjson)
+  { //echo "INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('','$userid','$where','6','0','1',CURDATE(),'$textjson')";die;
+    if($this->getsubscribed($userid) == 0)
+    {
+     $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('','$userid','$where','6','0','1',CURDATE(),'$textjson')");
+    }else
+    {
+      $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = '6' ");
+    }
+    if($query)
+    {
+    return 1;
+    }else
+    {
+    return 0;
+    }
+  }
+
+public function getSubs($userid,$module)
+{
+
+$query = "SELECT `para_json` FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '$module'";
+$exec = mysql_query($query);
+if(mysql_num_rows($exec) > 0)
+{
+while ($row = mysql_fetch_assoc($exec)) {
+$rows[] = json_decode($row['para_json']);
+}
+//print_r($rows);die;
+return $rows;
+
+}else{
+return false;
+}
+
+
+}
+/****************Create Resource [Share Story here] [Function] *******************************/
+
+
+// public function getCreate($data)
+// {
+//   $title             = $data->title;
+//   $summary           = $data->summary; 
+//   $url               = $data->link;
+//   $image             = $data->photo;
+//   $topic_artical     = $data->topic_artical; 
+//   $sports            = $data->sports;
+//   $location          = $data->location;
+// $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
+
+
+//   if($query)
+//   { 
+//     $id = mysql_insert_id();
+//     if($id!=NULL && $image!=NULL)
+//     {
+//      $image = $this->imageupload($image,$id,$title);
+//     }
+//   return 1;
+//   }
+//   else
+//     {
+//       return 0;
+//     }
+
+
+// }
+
+// ***************Function for Upload Image in Create Resource***********************
+
+
+// public function imageupload($image,$id,$title)
+// {
+//   define('UPLOAD_DIR','gs_images/Resources/');
+//   $img = $image;
+
+//   $img = str_replace('data:image/png;base64,', '', $img);
+//   $img = str_replace('$filepath,', '', $img);
+//   $img = str_replace(' ', '+', $img);
+//   $data = base64_decode($img);
+//   $img_name = $id.'_'.$title;
+//   $success=move_uploaded_file($img, $filepath);
+//   $file = UPLOAD_DIR .$img_name. '.png';
+//   $success = file_put_contents($file, $data);
+//   if($success)
+//   {
+//     $img_name = $img_name. '.png';
+//     $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
+//   if($updateImage)
+//   {
+//     return 1;
+//   }
+//   }
+//   else
+//     {
+//       echo "image not uploaded";
+//       return 0;
+//     }
+
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 } // End Class

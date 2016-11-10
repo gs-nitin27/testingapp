@@ -818,9 +818,11 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
             'registration_ids' => $registatoin_ids,
             'data' => $message,
         );
+
         //$registatoin_ids = '/topics/global';
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
+      
       $data = array('data'=>$message,'to'=>$registatoin_ids);
        //echo json_encode($data);
         //print_r($fields);

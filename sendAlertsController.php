@@ -4,6 +4,7 @@ include('config.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/getAlertsDataService.php');
+include('getSportyLite/liteservice.php');
 
 
 
@@ -35,9 +36,14 @@ for($i = 0; $i< $size ; $i++)
 				}
 				else if ($res[$i]['Moudule'] == '3') 
 				{
-						$req1 = new userdataservice();
+						$req1 = new listservice();
 						$res1 = $req1->tournamentsearch($fwhere);
-				} 
+				}
+				else if ($res[$i]['Moudule'] == '6') 
+				{
+						$req1 = new liteservice();
+						$res1 = $req1->GetSearch($fwhere);
+				}  
 
 				$updates = sizeof($res1) - $res[$i]['count'];
 				//echo $updates;
@@ -70,6 +76,10 @@ for($i = 0; $i< $size ; $i++)
 				{
 				$prof = 'Trainer';	
 				}
+				// else if($res[$i]['Moudule'] == '6')
+				// {
+				// $prof = 'Subscribed';	
+				// }
 			    
 			    $userid = $id;
 				$empdevice_id = $getToken['device_id'];
