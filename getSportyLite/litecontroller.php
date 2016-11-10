@@ -1,7 +1,7 @@
 <?php
 include('../config.php');
 include('liteservice.php');
-
+ 
 
 /****************Sign Up in Getsporty***********************/
 

@@ -360,7 +360,7 @@ public function saveSubscribe($userid , $where, $textjson)
     {
     return 1;
     }else
-    {
+    { 
     return 0;
     }
   }
