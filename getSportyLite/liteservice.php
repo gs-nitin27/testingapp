@@ -1,5 +1,5 @@
  <?php
-  class liteservice 
+  class liteservice
   { 
   
   /*******************Check The User is Already Exits [Function]*************/
@@ -259,9 +259,11 @@ if($query)
 
 public function saveToken($token)
   {
+
     $query = mysql_query("SELECT `token_id` FROM `get_token` USE INDEX (`token_id`) WHERE `token_id` = '$token'");
     if(mysql_num_rows($query) < 1)
       {
+
         $insert = mysql_query("INSERT INTO `get_token` (`id`,`token_id`) VALUES ('','$token')");
         if($insert)
         {
@@ -269,9 +271,7 @@ public function saveToken($token)
         }else{
           return 0;
         }
-      }
-      else
-      {
+      }else{
         return 1;
       }
   }
@@ -284,8 +284,8 @@ public function getfav($id,$type)
 {
 $query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
 
-if(mysql_num_rows($query)>0)
-{
+if(mysql_num_rows($query)>0){
+
    while($row = mysql_fetch_assoc($query))
    {
      
@@ -305,7 +305,7 @@ public function get_fvdata($fwhere)
 
     $query = mysql_query("SELECT *FROM `gs_resources` where `id` IN (".$fwhere.")" );
    if(mysql_num_rows($query)>0)
-   { 
+   {
    while($row = mysql_fetch_assoc($query))
    {  
        $des1=strip_tags($row['description']); 
@@ -323,8 +323,6 @@ else{
   return 0;
    }
 }
-
-
 
 
 /************* Subscribed The Application by User [Function]************************/
@@ -347,20 +345,16 @@ public function getsubscribed($userid)
   }
 
 
-
-
-
 /******************Save the Subscribe query [Function]*************************/
 
-public function saveSubscribe($userid , $where)
-  {
+public function saveSubscribe($userid , $where, $textjson)
+  { //echo "INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('','$userid','$where','6','0','1',CURDATE(),'$textjson')";die;
     if($this->getsubscribed($userid) == 0)
     {
-     $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`) VALUES ('','$userid','$where','6','0','1',CURDATE())");
-    }
-    else
+     $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('','$userid','$where','6','0','1',CURDATE(),'$textjson')");
+    }else
     {
-      $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' WHERE `userid` = '$userid' AND `Moudule` = '6' ");
+      $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = '6' ");
     }
     if($query)
     {
@@ -371,68 +365,26 @@ public function saveSubscribe($userid , $where)
     }
   }
 
+public function getSubs($userid,$module)
+{
 
+$query = "SELECT `para_json` FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '$module'";
+$exec = mysql_query($query);
+if(mysql_num_rows($exec) > 0)
+{
+while ($row = mysql_fetch_assoc($exec)) {
+$rows[] = json_decode($row['para_json']);
+}
+//print_r($rows);die;
+return $rows;
 
+}else{
+return false;
+}
+ 
 
-
-
-
-/************* get by User function************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 /****************Create Resource [Share Story here] [Function] *******************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // public function getCreate($data)
@@ -444,7 +396,7 @@ public function saveSubscribe($userid , $where)
 //   $topic_artical     = $data->topic_artical; 
 //   $sports            = $data->sports;
 //   $location          = $data->location;
-// $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_TIMESTAMP)");
+// $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
 
 
 //   if($query)
@@ -508,7 +460,7 @@ public function saveSubscribe($userid , $where)
 
 
 
-//INSERT INTO `gs_resources`(`id`,`title`,`date_created`) VALUES ('','ram',CURRENT_TIMESTAMP)
+
 
 
 

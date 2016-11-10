@@ -38,7 +38,7 @@ if($_POST['act'] == 'gs_signup')
      }
    }
 } 
-
+ 
 /****************************Sign In GetSporty*******************************/
 
 else if($_REQUEST['act']=="gs_login")
@@ -339,30 +339,33 @@ else if($_REQUEST['act']=="gs_sub")
    $topic        =  urldecode($_REQUEST ['topic']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
    $where[]      = ' 1=1 ';
+   $arr = array();
    if($sports != '')
    {
      
      $where[] = " `sport` = '$sports' ";
-
+     $arr['sport'] = $sports;
    }if($location != '')
    {
 
      $where[] = " `location` = '$location' ";
-
+     $arr['location'] = $location;
    }
    if($topic != '')
    {
 
      $where[] = " `topic_of_artical` = '$topic' "; 
-     //$where[] = " `title` = '$topic' ";    
+     $arr['topic_of_artical'] = $topic;    
    }
    if($key != '')
    {
-     $where[] = " `Description` LIKE '%$key%'' ";    
+     $where[] = " `Description` LIKE '%$key%'' ";
+     $arr['key'] = $key;    
    }
    $whereclause = implode('AND', $where);
+  // echo json_encode($where);die;
    $req = new liteservice();
-   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause)); 
+   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
    if($res != 0)
    {
    $data = array('status'=> $res , 'data'=>'Success'); 
@@ -373,7 +376,21 @@ else if($_REQUEST['act']=="gs_sub")
   echo json_encode($data);
 }
 
+else if($_REQUEST['act'] == 'get_subs')
+{
+$userid = $_REQUEST['user_id'];
+$module = '6';
 
+$req = new liteservice();
+$res = $req->getSubs($userid,$module);
+if($res != 0)
+{ 
+$data = array('data'=>$res,'user_id'=>$userid,'status'=>'Success');
+}else
+{$data = array('data'=>$res,'user_id'=>$userid,'status'=>'Failure');
+}
+echo json_encode($data);
+}
 /***************Code for Create Resource [Share Story here]  ****************/
 
 // else if($_REQUEST['act'] == "gs_create")
@@ -391,99 +408,6 @@ else if($_REQUEST['act']=="gs_sub")
 //    $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
 //   echo json_encode($resp);
 //   }
-// }
-
-
-
-
-
-// if($_POST['act'] == "getSubscribedAlerts")
-// {
-
-// $userid = urldecode($_POST['user_id']);
-// $module = urldecode($_POST['type']);
-
-// $req = new getAlertsDataService();
-// $res = $req->getsubscribealerts($userid);
-// //print_r($res);
-
-
-// if($res != 0)
-// {
-// $size = sizeof($res);
-
-// for($i=0 ;  $i<$size ; $i++)
-// {
-// $param = $res[$i]['search_para'];
-// $pos   = strstr($param, '%');
-// $itr = (substr_count($pos, '%'))/'2';
-// for( $j=0 ; $j<$itr ; $j++)
-// {
-
-// $pos1 = stripos($pos, '%');
- 
-// $str = substr($pos, $pos1);
- 
-// $str_two = substr($str, strlen('%'));
- 
-// $second_pos = stripos($str_two, '%');
- 
-// $str_three = substr($str_two, 0, $second_pos);
- 
-// $unit = trim($str_three); // remove whitespaces
-
-// $pos = str_replace("%".$unit."%", '',$pos );
-// //$para = array($unit);
-
-// $test[] = $unit;
-// $param = implode(',', $test);
-
-// }
-//print_r($test);
-
-//echo $param;
-// $res[$i]['search_para'] = $param;
-// unset($test);
-// //echo "next";
-
-// $module = $res[$i]['Moudule'];
-// switch($module)
-// {
-
-// case "1":
-//   $mod = "Job";
-//    break;
-//    case "2":
-//    $mod = "Event";
-//    break;
-//    case "3":
-//    $mod = "Tournament";
-//    break;
-//    case "4":
-//    $mod = "Coach";
-//    break; 
-//    case "5":
-//    $mod = "Trainer";
-//    break;
-//    default:
-//    $mod = "";
-
-// }
-
-
-// $res[$i]['title'] = "you subscribed for  ".$mod;
-// }
-// //print_r($res);
-// $data = array('data'=>$res, 'status'=>'1');
-// //print_r($res);
-// }
-// else
-// {
-
-// $data = array('data'=>$res, 'status' => $res);
-
-// }
-// echo json_encode($data);
 // }
 
 
