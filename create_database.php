@@ -1503,88 +1503,34 @@ else if($_POST['act'] == "create_resource")
 
 
 
+/************************************CREATE SHARE STORY********************************************/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/************************************GETSPORTY-LITE********************************************/
-
-/**********************************GETSPORTY SIGNUP *******************************************/
-
-else if($_POST['act']=='gs_signup')
+else if($_REQUEST['act'] == "gs_create")
 {
-
-   $name       =  urldecode($_POST ['name']);
-   $email      =  urldecode($_POST ['email']);
-   $password1  =  md5(urldecode(@$_POST ['password']));
-   $where     =  "WHERE `email` = '".$email."'";
-   $req        =  new userdataservice();
-   $res        =  $req->CheckToSeeIfUserIsalreadyRegistered($where);
-   $data       =  array('name'=>$name,'email'=>$email,'password'=> $password1);
-   
-   if($res != 0)
-   {
-   $status = array('status' => 0, 'message' => 'User is  already Registered');
-   $data1=array('data' =>$status);
-   echo json_encode($data1); 
-  }
-   else
-   {
-   $req1 = new userdataservice();
-
-   $res1 = $req1->GsUserRegister($data);
-   if($res1 == '1')
-   {
-   $req2 = new userdataservice();
-   $res2 = $req2->CheckToSeeIfUserIsalreadyRegistered($where);
-   if($res2 != 0)
-   {
-   $res3 = array('data' => $res2,'status' => 1);
-   echo json_encode($res3);  
-   }
-   }
-   else
-   {
-   $res3 = array('data' => 'Record not saved','status' => 0);
-   echo json_encode($res3);  
-   }
-   }
-} 
-
-/***************************************************************************/
-
-else if($_REQUEST['act']=="GsLogin")
+  $data = json_decode($_REQUEST['data']);
+   $req = new userdataservice();
+  $res = $req->getCreate($data);
+  if($res != 0)
   {
-    $email         = urldecode($_REQUEST['email']);
-    $pass          = md5(urldecode($_REQUEST['password']));
-    $username      = mysql_real_escape_string($email);
-    $password1     = mysql_real_escape_string($pass);
-    $req           =  new userdataservice();
-    $res           =  $req->Gs_signIn($email,$password1);
-  
-  if($res)
-      {
-        $data = array('data'=>$res,'status'=>'1');
-        echo json_encode($data);
-        }
-        else
-        {
-        $data = array('data'=>'Invalid login credentials' , 'status'=>'0');
-        echo json_encode($data);
-        }
-
+  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
+  echo json_encode($resp);
+  }
+  else
+  {
+   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
+  echo json_encode($resp);
+  }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

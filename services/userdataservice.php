@@ -1158,98 +1158,84 @@ public function imageupload($image,$id,$title)
 
 }  
 
-/*************************Function for Create Resources for Video****************/
+/*************************Function for Create SHARE STORY****************/
 
-/*
-public function CreateResourcesVideo($data)
+public function getCreate($data)
 {
-  
-  $title            = $data->title;
-  $sport            = $data->sport;
-  $message          = $data->description;
-  $videolink        = $data->videolink;
-  $image            = $data->image;
-
-  $query  = mysql_query("INSERT INTO `gs_resources`(`id`, `userid`, `title`, `sport`, `description`, `url`, `date_created`, `image`, `video_link`) VALUES('','','$title','$sport',$message','$videolink','image'");
+  $title             = $data->title;
+  $summary           = $data->summary; 
+  $url               = $data->link;
+  $image             = $data->photo;
+  $topic_artical     = $data->topic_artical; 
+  $sports            = $data->sports;
+  $location          = $data->location;
+$query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
 
   if($query)
   { 
-   // $id = mysql_insert_id();
-   // if($id!=NULL && $image!=NULL)
-   // {
-    // $image = $this->imageupload($image,$id,$title);
-   // }
-   return 1;
+    $id = mysql_insert_id();
+    if($id!=NULL && $image!=NULL)
+    {
+     $image = $this->imageupload($image,$id,$title);
     }
-    else
+  return 1;
+  }
+  else
     {
       return 0;
     }
-
-
 }
 
 
 
 
-*/
+/****************Function for Upload Image in Create Resource************************/
+
+
+// public function imageupload($image,$id,$title)
+// {
+//   define('UPLOAD_DIR','gs_images/Resources/');
+//   $img = $image;
+
+//   $img = str_replace('data:image/png;base64,', '', $img);
+//   $img = str_replace('$filepath,', '', $img);
+//   $img = str_replace(' ', '+', $img);
+//   $data = base64_decode($img);
+//   $img_name = $id.'_'.$title;
+//   $success=move_uploaded_file($img, $filepath);
+//   $file = UPLOAD_DIR .$img_name. '.png';
+//   $success = file_put_contents($file, $data);
+//   if($success)
+//   {
+//     $img_name = $img_name. '.png';
+//     $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
+//   if($updateImage)
+//   {
+//     return 1;
+//   }
+//   }
+//   else
+//     {
+//       echo "image not uploaded";
+//       return 0;
+//     }
+
+
+// }
 
 
 
-/***********************Function for GetSporty*************************************/
 
-  public function  CheckToSeeIfUserIsalreadyRegistered($where)
-  {
-   $query  = mysql_query("SELECT * FROM `gs_signup` ".$where);
-   if(mysql_num_rows($query)>0)
-   {
-   while($row = mysql_fetch_assoc($query))
-   {
-   $data = $row;
-   }
-   return $data;
-   }
-   else 
-   {
-    return 0;
-   }
-  }
-/************************************************************************************/
-   public function GsUserRegister($data)
-  {
-     $name         =  $data['name'];
-     $email        =  $data['email'];
-     $password1    =  $data['password'];
-$query =mysql_query("INSERT INTO `gs_signup`(`id`, `name`, `email`, `password`) VALUES('','$name','$email','$password1')");
-     if($query)
-     {
-          return 1;
-     }
-     else
-     {    
-          return 0;
-     }  
-  }
 
-/*******************************************************************************/
-public function Gs_signIn($email,$password1)
-{
-$query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$email' AND `password` = '$password1' ");
-  $row  = mysql_num_rows($query);
-  
-    if($row)
-        {
-         while($row = mysql_fetch_assoc($query))
-         {
-          $data= $row; 
-          }
-         return $data;
-          } 
-          else
-          {
-          return 0;
-    }
-}
+
+
+
+
+
+
+
+
+
 }
 
 ?>

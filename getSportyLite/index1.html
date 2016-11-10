@@ -1,8 +1,8 @@
 
 <Html>
 <head>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="jquery.min.js"></script>
+<!-- <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
 
 <script type="text/javascript"> 
 
@@ -11,12 +11,17 @@
 	
 // var university = "";
 // var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
+
+//var data = '{"add_text":"How are You","add_link":"www.yahoo.com","photo":"","keyword":"Open Source","title":"JOB","location":"Kanpur"}';
 $.ajax({
 
     type: "POST",
     url: "litecontroller.php",
-     data: "act=gs_list&user_id=16",
-    success: function(result) {
+     //data: "act=gs_create&add_text=How are You&add_link=www.yahoo.com&photo=&keyword=Open Source",
+    data: "act=gs_create&add_text=How are You&add_link=www.yahoo.com&photo=&keyword=Open Source",
+     data: "act=gs_list",
+     //dataType: "json",
+     success: function(result) {
 
     }
 });
