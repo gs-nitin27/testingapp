@@ -827,7 +827,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
        //echo json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
-    define("GOOGLE_API_KEY", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
+    define("GOOGLE_API_KEY", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");   
+     
         $headers = array(
             'Authorization: key=' . GOOGLE_API_KEY,
             'Content-Type: application/json'

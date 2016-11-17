@@ -7,10 +7,10 @@ include('liteservice.php');
 
 if($_POST['act'] == 'gs_signup')
 {
-   $name       =  urldecode($_POST ['name']);
-   $email      =  urldecode($_POST ['email']);
-   $password1  =  md5(urldecode(@$_POST ['password']));
-   $token      =  urldecode($_POST['tokin_id']);
+   $name       =  @urldecode($_POST ['name']);
+   $email      =  @urldecode($_POST ['email']);
+   $password1  =  @md5(urldecode(@$_POST ['password']));
+   $token      =  @urldecode($_POST['tokin_id']);
    $where      =  "WHERE `email` = '".$email."'";
    $req        =  new liteservice();
    $res        =  $req->userExits($where);
@@ -247,8 +247,6 @@ else if($_REQUEST['act']=="gs_detail")
 
 /******CODE FOR MARKING SEARCH RECORDS AS FAVOURITE BY THE USER [act]****************/
 
-
-
 else if ($_POST['act'] == "gs_fav" )
 {
 $user_id   =urldecode(@$_POST['user_id']);
@@ -329,8 +327,6 @@ if($res != 0)
 
 /***************Code for Token *******************/
 
-
-
 else if($_POST['act'] == 'get_token')
 {
 $token = $_REQUEST['token'];
@@ -338,8 +334,6 @@ $req = new liteservice();
 $res = $req->saveToken($token);
 echo json_encode($res);
 }
-
-
 
 
 
@@ -437,8 +431,6 @@ echo json_encode($data);
 /**********Delete The  Subscribe**************/
 
 
-
-
 else if($_REQUEST['act'] == 'un_subs')
 {
 $userid        = $_REQUEST['user_id'];
@@ -494,8 +486,6 @@ $where[]      = ' 1=1 ';
    }
   echo json_encode($data);
 }
-
-
 
 
 
@@ -607,69 +597,6 @@ $new_topic         = $_REQUEST['new_topic_of_artical'];
 
 
 
-/*********************Forget Password*********************/
-
-
- else if($_REQUEST['act']=='forget_pass')
-  {
-   $email      =  urldecode($_REQUEST['user_email']);
-   $where      =  "WHERE `email` = '".$email."'";
-   $req        =  new liteservice();
-   $res        =   $req->userExits($where);
-   if($res)
-   {
-     $req1        =    new liteservice();
-     $res1        =    $req1->forgetPass($email); 
-      if($res1)
-     {
-      $res1  = array('data'=>'OTP Code are send to your Email id', 'status'=>'1');
-      echo json_encode($res1);
-     exit();
-     }
-     else
-     {
-      $res2  = array('data'=>'OTP Code are Not send  to your Email id', 'status'=>'0');
-      echo json_encode($res2);
-      exit();
-     }
-      $res3  = array('data'=>'Email id is Registered', 'status'=>'1');
-      echo json_encode($res3);
-   }
-  else
-  {
-    $res4  = array('data'=>'Email id is Not Registered', 'status'=>'0');
-   echo json_encode($res4);
-    
-   }
-}
-
-    
-/******************Change The Password************/
-
-
-else if($_REQUEST['act']=='change_pass')
-{
-     $otp_code          =   @$_POST['otp_code'];
-     $new_password      =   @$_POST['new_password'];
-     $req               =  new liteservice();
-      $res             =   $req->change_passwrod($otp_code,$new_password);
-        if($res)
-        {
-        $res1  = array('data'=>'Password Successfully change', 'status'=>'1');
-        echo json_encode($res1);
-        exit();
-        }
-        else
-        { 
-         $res2  = array('data'=>'OTP Code is Wrong', 'status'=>'0');
-         echo json_encode($res2);
-         exit();
-        }
-     }
-
-
-
-
 
 /***************Code for Create Resource [Share Story here]  ****************/
 
@@ -695,13 +622,72 @@ else if($_REQUEST['act']=='change_pass')
 
 
 
+ else if($_REQUEST['act']=='forget_pass')
+  {
+   $email      =  urldecode($_POST['user_email']);
+   $where      =  "WHERE `email` = '".$email."'";
+   $req        =  new liteservice();
+   //echo "$where";die();
+   $res        =   $req->userExits($where);
+
+   if($res)
+   {
+
+     $req1        =    new liteservice();
+     $res1        =    $req1->forgetPass($email); 
+     if($res1)
+     {
+      $res1  = array('data'=>'OTP Code are send to your Email id', 'status'=>'1');
+      echo json_encode($res1);
+     exit();
+     }
+     else
+     {
+      $res2  = array('data'=>'OTP Code are Not send  to your Email id', 'status'=>'0');
+      echo json_encode($res2);
+      exit();
+     }
+      $res3  = array('data'=>'Email id is Registered', 'status'=>'1');
+      echo json_encode($res3);
+   }
+  else
+  {
+    $res4  = array('data'=>'Email id is Not Registered', 'status'=>'0');
+   echo json_encode($res4);
+    
+   }
+}
+
+    
 
 
 
-
-
-
-
+else if($_REQUEST['act']=='change_pass')
+ {
+ $otp_code          =   urldecode($_POST['otp_code']);
+ $new_password      =   urldecode($_POST['new_password']);
+ $con_password      =   urldecode($_POST['con_password']);
+  $req              =  new liteservice();
+  //if($new_password==$con_password)
+  //{
+      $res             =   $req->change_passwrod($otp_code,$new_password,$con_password);
+      if($res)
+      {
+      $res1  = array('data'=>'Password Successfully change', 'status'=>'1');
+      echo json_encode($res1);
+      }
+       else
+      { 
+       $res2  = array('data'=>' Wrong OTP CODE  ', 'status'=>'0');
+       echo json_encode($res2);
+      }
+  }
+  //else
+  //{
+    //$res3  = array('data'=>'Password is not matched', 'status'=>'0');
+   // echo json_encode($res3);
+  // }
+//}
 
 ?>
 

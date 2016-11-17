@@ -381,18 +381,22 @@ while ($row = mysql_fetch_assoc($exec))
 {
 
 $rows[] = json_decode($row['para_json']);
+
 }
+
 return $rows;
 }
 else
 {
 return false;
 }
-}
+ 
+ }
 
 
 
 /*************Function for Delete The Subscribe and Alert*************************/
+
 
 public function delSubs($userid,$where,$module)
 {
@@ -454,48 +458,50 @@ public function forgetPass($email)
                }
         }
     }  
-   
+      // =md5($code);
 $query  = mysql_query("UPDATE `user` SET `forget_code` ='$code'  WHERE `email` = '$email'");
+
 if($query)
+     {
+       if($code)
    {
-   if($code)
-   {
-  require('class.phpmailer.php');
-  $mail = new PHPMailer();
-  $to=$email;
-  $from="info@getsporty.in";
-  $from_name="Getsporty Lite";
-  $subject="Forget Password ";
+    require('class.phpmailer.php');
+    $mail = new PHPMailer();
+    $to=$email;
+  $from="devendrakumarpandey@gmail.com";
+  $from_name="D. K. Pandey";
+  $subject="GetSportyLite ";
   $user=$user_name;
-  $otp  =$code;
-  //global $error;
+  $otp =$code;
+  global $error;
   $mail = new PHPMailer();  // create a new object
   $mail->IsSMTP(); // enable SMTP
-  $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+  $mail->SMTPDebug = 0;  // debugging: 1 = errors and messages, 2 = messages only
   $mail->SMTPAuth = true;  // authentication enabled
   $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-  $mail->Host = 'dezire.websitewelcome.com';
-  //$mail->Host = 'smtp.gmail.com';
+  $mail->Host = 'smtp.gmail.com';
   $mail->Port = 465; 
-  $mail->Username ="info@getsporty.in";  
-  $mail->Password = "%leq?xgq;D?v";           
+  $mail->Username = "devendrakumarpandey@gmail.com";  
+  $mail->Password = "062630482";           
   $mail->SetFrom($from, $from_name);
   $mail->Subject = $subject;
-   $mail->Body = ' 
+  //$mail->Body = $body;
+ $mail->Body = ' 
           <div style="width: 800px; font-family: Arial, sans-serif;"> 
           <h1 style="font-size: 1.4em; font-weight: bold; ">Dear user :</h1> 
           <p><strong>User name:</strong> ' . $user . '</p><br><strong>OTP Code : '.$otp.'</strong><br><p><b>Note:- Please change your Password after login.</b></p> 
-  </div>'; 
+     </div>'; 
     $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
     $mail->AltBody = $txt; 
-    $mail->AddAddress($to);
+
+  $mail->AddAddress($to);
     $mail->Send();
        return 1;
-   }
-   else
-   {
-     return 0;
-   }
+       }
+       else
+       {
+       return 0;
+       }
    }       
     else
     {
@@ -507,18 +513,16 @@ if($query)
 
 
 
-/**************************Change Password [Function]****************/
+/***********Change The Password [Function]******************/
 
 
-public function change_passwrod($otp_code,$new_password)
+public function change_passwrod($otp_code,$new_password,$con_password)
 {
-  $new_password1=md5($new_password);
   $query  = mysql_query("SELECT `email` from `user`  WHERE `forget_code`= '$otp_code'");
   $query1=mysql_num_rows($query);
    if($query1)
   {
-     mysql_query("UPDATE `user` SET `password` ='$new_password1',`forget_code` =''   WHERE `forget_code`='$otp_code' ");
-  
+     mysql_query("UPDATE `user` SET `password` ='$new_password'  WHERE `forget_code`='$otp_code' ");
      return 1;
   }
    else
