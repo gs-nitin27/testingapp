@@ -9,13 +9,12 @@ if(mysql_num_rows($getToken) > 0)
 		$req = new userdataservice(); 
 		$message = "New Update from getSporty";
 		//$message1 = array('data'=>$message);
-		while($row = mysql_fetch_assoc($getToken)){
+		while($row = mysql_fetch_assoc($getToken))
+		{
 		$token = $row['token_id'];
         $res = $req->sendPushNotificationToGCM($token, $message);
 		print_r($res);
 		}
-
-
 	}
 
 
