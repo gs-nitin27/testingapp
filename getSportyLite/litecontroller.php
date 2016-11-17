@@ -612,6 +612,8 @@ $new_topic         = $_REQUEST['new_topic_of_artical'];
 
  else if($_REQUEST['act']=='forget_pass')
   {
+    echo "devendra";die;
+    
    $email      =  urldecode($_REQUEST['user_email']);
    $where      =  "WHERE `email` = '".$email."'";
    $req        =  new liteservice();
