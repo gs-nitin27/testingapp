@@ -1,5 +1,6 @@
 <?php
 $con = mysql_connect('localhost','root','');
+
 if($con)
 {
 if($_POST['token_id'] == 'dhs2016'){	
