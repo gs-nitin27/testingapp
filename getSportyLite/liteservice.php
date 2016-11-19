@@ -2,6 +2,13 @@
   class liteservice
   { 
   
+  function __construct()
+  {    error_reporting(0);
+     mysql_set_charset("UTF8");
+     header('Content-type: text/html; charset=utf-8');
+    
+  }
+
   /*******************Check The User is Already Exits [Function]*************/
 
   public function  userExits($where)
@@ -30,7 +37,7 @@
      $email        =  $data['email'];
      $password1    =  $data['password'];
      $token        =  mysql_escape_string($data['token']);
-     $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`device_id`) VALUES('','$name','$email','$password1','$token')");
+     $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`device_id`,`userType`) VALUES('','$name','$email','$password1','$token','4')");
      if($query)
      {
      $id = mysql_insert_id();
@@ -92,19 +99,19 @@ $query = mysql_query("SELECT `userid`,`name`, `email` ,`device_id` FROM `user` W
 /****************************Listing Resources GetSporty [Function]*************************/
 
 public function getList()
-{
-$query = mysql_query("SELECT *FROM `gs_resources` ORDER by `date_created` desc ");
-  $row  = mysql_num_rows($query);
+{ 
+    $query = mysql_query("SELECT *FROM `gs_resources` ORDER by `id` desc ");
+    $row  = mysql_num_rows($query);
   if($row > 0)
   {
    while ($row = mysql_fetch_assoc($query))
    {   
-       $des1=strip_tags($row['description']); 
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
-       $row['description'] = $desc;
+       $des1=strip_tags($row['description']);
+       // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+       $row['description'] = $des1;
        $sum1=strip_tags($row['summary']);
-       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
-       $row['summary'] = $sum; 
+       //$sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum1; 
        $row['fav'] = '0';
        $data[] = $row;
   }
@@ -173,11 +180,11 @@ public function GetSearch($where)
     while($row = mysql_fetch_assoc($query))
     {
        $des1=strip_tags($row['description']); 
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
-       $row['description'] = $desc;
+      // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+       $row['description'] = $des1;
        $sum1=strip_tags($row['summary']);
-       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
-       $row['summary'] = $sum; 
+       //$sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum1; 
        $row['fav'] = '0';
        $rows[] = $row;
         }
@@ -310,11 +317,11 @@ public function get_fvdata($fwhere)
    while($row = mysql_fetch_assoc($query))
    {  
        $des1=strip_tags($row['description']); 
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
-       $row['description'] = $desc;
+      // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+       $row['description'] = $des1;
        $sum1=strip_tags($row['summary']);
-       $sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
-       $row['summary'] = $sum; 
+       //$sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $row['summary'] = $sum1; 
        $row['fav'] = 1;
       $data[] = $row;
    }

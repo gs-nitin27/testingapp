@@ -226,11 +226,11 @@ else if($_REQUEST['act']=="gs_detail")
        $res[$key2]['description']; 
        $res[$key2]['summary'];
        $des1   = strip_tags($value['description']);
-       $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
-       $res[$key2]['description'] = $desc;
+       //$desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+       $res[$key2]['description'] = $des1;
        $sum1 = strip_tags($value['description']);
-       $sum   =preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
-       $res[$key2]['summary'] = $sum; 
+       //$sum   =preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
+       $res[$key2]['summary'] = $sum1; 
        $res[$key2]['fav'] =$fav;
          }
        $data1 = array('data'=>$res,'status'=>'1');
