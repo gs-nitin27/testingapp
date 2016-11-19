@@ -3,10 +3,11 @@
   { 
   
   function __construct()
-  {    error_reporting(0);
+
+  {  
+    error_reporting(0);
      mysql_set_charset("UTF8");
      header('Content-type: text/html; charset=utf-8');
-    
   }
 
   /*******************Check The User is Already Exits [Function]*************/
@@ -100,17 +101,18 @@ $query = mysql_query("SELECT `userid`,`name`, `email` ,`device_id` FROM `user` W
 
 public function getList()
 { 
-    $query = mysql_query("SELECT *FROM `gs_resources` ORDER by `id` desc ");
+
+    $query = mysql_query("SELECT *FROM `gs_resources` ORDER by `date_created` desc ");
     $row  = mysql_num_rows($query);
   if($row > 0)
   {
    while ($row = mysql_fetch_assoc($query))
    {   
-       $des1=strip_tags($row['description']);
-       // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
+
+       $des1=strip_tags($row['description']); 
+      // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
        $row['description'] = $des1;
        $sum1=strip_tags($row['summary']);
-       //$sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
        $row['summary'] = $sum1; 
        $row['fav'] = '0';
        $data[] = $row;
