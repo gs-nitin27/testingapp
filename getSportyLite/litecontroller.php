@@ -101,7 +101,7 @@ else if($_REQUEST['act']=="gs_list")
 }
 
 
-/****************************Searching The Resources *******************************/
+/****************************Get the all Sports *******************/
 
 else if($_REQUEST['act']=="gs_sports")
 { 
@@ -119,6 +119,8 @@ else if($_REQUEST['act']=="gs_sports")
         echo json_encode($data);
     }
 }
+/****************Get the All City*******************************/
+
 else if($_REQUEST['act']=="gs_location")
 { 
 
@@ -162,7 +164,6 @@ else if($_REQUEST['act']=="gs_search")
    if($topic != '')
    {
      $where[] = " `topic_of_artical` = '$topic' ";    
-     //$where[] = " `title` = '$topic' ";    
    }
    if($key != '')
    {
@@ -251,9 +252,9 @@ else if($_REQUEST['act']=="gs_detail")
 
 else if ($_POST['act'] == "gs_fav" )
 {
-$user_id   =urldecode(@$_POST['user_id']);
-$module    =urldecode(@$_POST['type']);
-$user_favs =urldecode(@$_POST['id']);
+$user_id   =urldecode($_POST['user_id']);
+$module    =urldecode($_POST['type']);
+$user_favs =urldecode($_POST['id']);
 $rev = new liteservice();
 $res = $rev->favourites($user_id, $module , $user_favs);
 if($res == 1)
@@ -505,18 +506,18 @@ $where[]      = ' 1=1 ';
  else if($_REQUEST['act'] == 'modify_subs')
  {
 
- $userid           = $_REQUEST['user_id']; 
- $key              = $_REQUEST['key'];
- $location         = $_REQUEST['location'];
- $sports           = $_REQUEST['sports'];
-$topic             = $_REQUEST['topic_of_artical'];
-$new_key           = $_REQUEST['new_key'];
-$new_location      = $_REQUEST['new_location'];
-$new_sports        = $_REQUEST['new_sports'];
-$new_topic         = $_REQUEST['new_topic_of_artical'];
- $module = '6';
- $new_where[]      = ' 1=1 ';
- $where[]          = ' 1=1 ';
+  $userid            = $_REQUEST['user_id']; 
+  $key               = $_REQUEST['key'];
+  $location          = $_REQUEST['location'];
+  $sports            = $_REQUEST['sports'];
+  $topic             = $_REQUEST['topic_of_artical'];
+  $new_key           = $_REQUEST['new_key'];
+  $new_location      = $_REQUEST['new_location'];
+  $new_sports        = $_REQUEST['new_sports'];
+  $new_topic         = $_REQUEST['new_topic_of_artical'];
+  $module = '6';
+  $new_where[]      = ' 1=1 ';
+  $where[]          = ' 1=1 ';
 
    if($sports != '')
    {
@@ -612,8 +613,8 @@ $new_topic         = $_REQUEST['new_topic_of_artical'];
 
  else if($_REQUEST['act']=='forget_pass')
   {
-    echo "devendra";die;
-    
+   //echo "Ram";die();
+
    $email      =  urldecode($_REQUEST['user_email']);
    $where      =  "WHERE `email` = '".$email."'";
    $req        =  new liteservice();

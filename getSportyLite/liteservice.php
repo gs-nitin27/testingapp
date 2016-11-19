@@ -14,7 +14,7 @@
 
   public function  userExits($where)
   {
-    //echo "$where";die();
+    
      $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` ".$where);
      if(mysql_num_rows($query)>0)
      {
@@ -182,10 +182,8 @@ public function GetSearch($where)
     while($row = mysql_fetch_assoc($query))
     {
        $des1=strip_tags($row['description']); 
-      // $desc  = preg_replace("/[^a-zA-Z 0-9]+/", "", $des1);
        $row['description'] = $des1;
        $sum1=strip_tags($row['summary']);
-       //$sum=preg_replace("/[^a-zA-Z 0-9]+/", "", $sum1);
        $row['summary'] = $sum1; 
        $row['fav'] = '0';
        $rows[] = $row;
@@ -341,7 +339,7 @@ else
 
 public function getsubscribed($userid,$textjson)
 {
-  $query = mysql_query("SELECT  *FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6' AND `para_json`='$textjson'");
+  $query = mysql_query("SELECT  * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6' AND `para_json`='$textjson'");
   if(mysql_num_rows($query)>0)
   {
 
@@ -548,6 +546,7 @@ public function change_passwrod($otp_code,$new_password)
 
 // public function getCreate($data)
 // {
+     //$token             = 0;
 //   $title             = $data->title;
 //   $summary           = $data->summary; 
 //   $url               = $data->link;
@@ -555,7 +554,7 @@ public function change_passwrod($otp_code,$new_password)
 //   $topic_artical     = $data->topic_artical; 
 //   $sports            = $data->sports;
 //   $location          = $data->location;
-// $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
+// $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`token`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ','$token',CURRENT_DATE)");
 
 
 //   if($query)
