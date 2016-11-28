@@ -13,7 +13,7 @@
     public function  userExits($where)
     {
      
-       $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` ".$where);
+       $query  = mysql_query("SELECT `userid`,`userType`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -36,62 +36,104 @@
        $email        =  $data['email'];
        $password1    =  $data['password'];
        $token        =  mysql_escape_string($data['token']);
-       $query =mysql_query("INSERT INTO `user`(`userid`, `name`, `email`, `password`,`device_id`) VALUES('','$name','$email','$password1','$token')");
+       $userType     = '4';
+
+       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`, `name`, `email`, `password`,`device_id`) VALUES('','$userType','$name','$email','$password1','$token')");
        if($query)
        {
-          $id = mysql_insert_id();
-          if($id!=NULL)
-          {
-            $data1 = $this->userdata($id);
+              require('class.phpmailer.php');
+              $mail = new PHPMailer();
+              $to=$email;
+              $from="info@getsporty.in";
+              $from_name="Getsporty Lite";
+              $subject="Email varification ";
+              $emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
+              //global $error;
+              $mail = new PHPMailer();  // create a new object
+              $mail->IsSMTP(); // enable SMTP
+              $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPAuth = true;  // authentication enabled
+              $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+              $mail->Host = 'dezire.websitewelcome.com';
+              //$mail->Host = 'smtp.gmail.com';
+              $mail->Port = 465; 
+              $mail->Username ="info@getsporty.in";  
+              $mail->Password = "%leq?xgq;D?v";           
+              $mail->SetFrom($from, $from_name);
+              $mail->Subject = $subject;
+              $mail->Body = ' 
+                         <h1> Click here </h1>'.$emailconform.''.$email.'<br><b>Note:- Please varification of this email</b>
+              '; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+           return 1;
           }
-            return $data1;
-        } 
-        else
-        {    
-          return 0;
-        }  
-    }
-
-    public function userdata($id)
-    {
-       $query  = mysql_query("SELECT `userid`,`name`, `email` FROM `user` where `userid` = '$id'");
-       if(mysql_num_rows($query)>0)
-       {
-          while($row = mysql_fetch_assoc($query))
+          else
           {
-            $data = $row;
+            return 0;
           }
-        return $data;
         }
-        else 
-        {
-         return 0;
-        }
-    }
+       
+    
+    // public function userdata($id)
+    // {
+    //    $query  = mysql_query("SELECT `userid`,`userType`,`name`, `email` FROM `user` where `userid` = '$id'");
+    //    if(mysql_num_rows($query)>0)
+    //    {
+    //       while($row = mysql_fetch_assoc($query))
+    //       {
+    //         $data = $row;
+    //       }
+    //     return $data;
+    //     }
+    //     else 
+    //     {
+    //      return 0;
+    //     }
+    // }
 
       /********************Sign In GetSporty [Function]*******************/
 
     public function gsSignIn($email,$password1,$token)
     {
-     $query = mysql_query("SELECT `userid`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+    	      
+     $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
      $row  = mysql_num_rows($query);
+    
        if($row)
        {
             while($row = mysql_fetch_assoc($query))
             {   
-                if($data['device_id'] != $token)
+                if($row['status'] == '1' )
                 {
-                 mysql_query(" UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' AND `password` = '$password1'");
-                }
-             $data= $row; 
+                     if($row['device_id'] != $token)
+                     {
+                      mysql_query(" UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' AND `password` = '$password1'");
+                          $data= $row; 
+                          return $data;
+                     }
+                     else
+                     {
+                        $data= $row; 
+                        return $data;
+                     }
+               }
+                else
+               {
+                  $data= $row; 
+                  return $data;
+               }
             }
-         return $data;
-        } 
-         else
+
+        }     
+        else
         {
-          return 0;
+           return 0;
         }
-    }
+
+  }
 
     /****************************Listing Resources GetSporty [Function]*************************/
 
@@ -479,67 +521,66 @@
 
 
     /****************Create Resource [Share Story here] [Function] *******************************/
-    // {
-    //   $title             = $data->title;
-    //   $summary           = $data->summary; 
-    //   $url               = $data->link;
-    //   $image             = $data->photo;
-    //   $topic_artical     = $data->topic_artical; 
-    //   $sports            = $data->sports;
-    //   $location          = $data->location;
-    // $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
+    
+      public function getCreate($data)
+      {
+	      $title             = $data->title;
+	      $summary           = $data->summary; 
+	      $url               = $data->link;
+	      $image             = $data->photo;
+	      $topic_artical     = $data->topic_artical; 
+	      $sports            = $data->sports;
+	      $location          = $data->location;
+	      $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
+	      if($query)
+	      { 
+	        $id = mysql_insert_id();
+	        if($id!=NULL && $image!=NULL)
+	        {
+	         $image = $this->imageupload($image,$id,$title);
+	        }
+	      return 1;
+	      }
+	      else
+	        {
+	          return 0;
+	        }
+        }
+
+    /***************Function for Upload Image in Create Resource***********************/
 
 
-    //   if($query)
-    //   { 
-    //     $id = mysql_insert_id();
-    //     if($id!=NULL && $image!=NULL)
-    //     {
-    //      $image = $this->imageupload($image,$id,$title);
-    //     }
-    //   return 1;
-    //   }
-    //   else
-    //     {
-    //       return 0;
-    //     }
-
-
-    // }
-
-    // ***************Function for Upload Image in Create Resource***********************
-
-
-    // public function imageupload($image,$id,$title)
-    // {
-    //   define('UPLOAD_DIR','gs_images/Resources/');
-    //   $img = $image;
-
-    //   $img = str_replace('data:image/png;base64,', '', $img);
-    //   $img = str_replace('$filepath,', '', $img);
-    //   $img = str_replace(' ', '+', $img);
-    //   $data = base64_decode($img);
-    //   $img_name = $id.'_'.$title;
-    //   $success=move_uploaded_file($img, $filepath);
-    //   $file = UPLOAD_DIR .$img_name. '.png';
-    //   $success = file_put_contents($file, $data);
-    //   if($success)
-    //   {
-    //     $img_name = $img_name. '.png';
-    //     $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-    //   if($updateImage)
-    //   {
-    //     return 1;
-    //   }
-    //   }
-    //   else
-    //     {
-    //       echo "image not uploaded";
-    //       return 0;
-    //     }
-
-
-    // }
+    public function imageupload($image,$id,$title)
+    {
+       define('UPLOAD_DIR','..\..\staging\assets\crop\images/');
+       //define('UPLOAD_DIR','gs_images/Resources/');
+      $img = $image;
+      $img = str_replace('data:image/png;base64,', '', $img);
+      $img = str_replace('$filepath,', '', $img);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+      $img_name = $id.'_'.$title;
+      $success=move_uploaded_file($img, $filepath);
+      $file = UPLOAD_DIR .$img_name. '.png';
+      $success = file_put_contents($file, $data);
+      if($success)
+      {
+        $img_name = $img_name. '.png';
+        $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
+      if($updateImage)
+      {
+        return 1;
+      }
+      }
+      else
+        {
+          $res = array('data' =>'Image is Not Upload' ,'status' => 0);
+          echo json_encode($res);
+          return 0;
+          //echo "image not uploaded";
+         // return 0;
+        }
+    }
 
    
    } // End of Class

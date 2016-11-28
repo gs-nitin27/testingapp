@@ -62,6 +62,7 @@ else if($_REQUEST['act']=="gs_login")
 
 /****************************Listing The Resources *******************************/
 
+
 else if($_REQUEST['act']=="gs_list")
 { 
     $req           =  new liteservice();
@@ -209,6 +210,7 @@ else if($_REQUEST['act']=="gs_search")
 
 /****************************Details of Resources *******************************/
 
+
 else if($_REQUEST['act']=="gs_detail")
 { 
   $resource_id     =  urldecode($_REQUEST['id']);
@@ -322,6 +324,7 @@ else if($_POST['act'] == "gs_getfav")
 }
 
 /***************TOKEN for save*****************/
+
 
 else if($_POST['act'] == 'get_token')
 {
@@ -585,22 +588,22 @@ else if($_REQUEST['act']=='change_pass')
 
 /***************Code for Create Resource [Share Story here]  ****************/
 
-// else if($_REQUEST['act'] == "gs_create")
-// {
-//   $data = json_decode($_REQUEST['data']);
-//    $req = new liteservice();
-//   $res = $req->getCreate($data);
-//   if($res != 0)
-//   {
-//   $resp = array('status'=>$res ,  'message'=>'Resource has been created');
-//   echo json_encode($resp);
-//   }
-//   else
-//   {
-//    $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
-//   echo json_encode($resp);
-//   }
-// }
+else if($_REQUEST['act'] == "gs_create")
+{
+  $data = json_decode(@$_REQUEST['data']);
+   $req = new liteservice();
+  $res = $req->getCreate($data);
+  if($res != 0)
+  {
+  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
+  echo json_encode($resp);
+  }
+  else
+  {
+   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
+  echo json_encode($resp);
+  }
+}
 
 
 
