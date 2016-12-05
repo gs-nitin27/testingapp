@@ -1,40 +1,22 @@
-<?php 
-//$page = $_SERVER['PHP_SELF'];
- //$sec = "20";
- //header("Refresh: $sec; url=$page");
- //echo "Watch the page reload itself in 10 second!";
+<?
+include('services/userdataservice.php');
+include('config.php');
+
+$query = mysql_query("SELECT * FROM `gs_resources` ORDER BY `id` DESC LIMIT 0, 10");
+$getToken = mysql_query("SELECT `token_id` FROM `get_token` WHERE 1 GROUP BY `token_id` ");
+if(mysql_num_rows($getToken) > 0)
+	{    
+		$req = new userdataservice(); 
+		$message = "New Update from getSporty";
+		//$message1 = array('data'=>$message);
+		while($row = mysql_fetch_assoc($getToken)){
+		$token = $row['token_id'];
+        $res = $req->sendLitePushNotificationToGCM($token, $message);
+		print_r($res);
+		}
+
+
+	}
+
+
 ?>
-<Html>
-<head>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script type="text/javascript">
-
-
-
-// function reloadPage(){
-//   window.location.reload();
-// }
-// var time  = 5*60000;
-// setTimeout ( reloadPage, time);
-
-//43200000
-
-   
-$.ajax({
-
-    type: "POST",
-    url:  "sendAlerts.php",
-    data: "act=test",
-    dataType: "text",
-    success: function(result) {
-
-    }
-}); 
-  
-</script>
-</head>
-<body>
-<input type="button" id="alert" value="Send Alerts" onclick="myFunction()"></input>
-</body>
-</html>

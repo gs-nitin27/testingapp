@@ -13,6 +13,8 @@ if(mysql_num_rows($getToken) > 0)
         $res = $req->sendLitePushNotificationToGCM($token, $message);
 		print_r($res);
 		}
+
+
 	}
 
 

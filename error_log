@@ -372,3 +372,74 @@
 [15-Apr-2016 04:01:48 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT), expecting ',' or ';' in /home/getsport/public_html/testingapp/userdataservice.php on line 177
 [15-Apr-2016 04:02:02 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT), expecting ',' or ';' in /home/getsport/public_html/testingapp/userdataservice.php on line 177
 [15-Apr-2016 06:40:52 America/Chicago] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/getsport/public_html/testingapp/userdataservice.php on line 966
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(/services/userdataservice.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 3
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(): Failed opening '/services/userdataservice.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 3
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(/services/searchdataservice.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 4
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(): Failed opening '/services/searchdataservice.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 4
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(/services/UserProfileService.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 5
+[11-Aug-2016 21:46:35 America/Chicago] PHP Warning:  include(): Failed opening '/services/UserProfileService.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 5
+[11-Aug-2016 21:46:35 America/Chicago] PHP Fatal error:  Class 'userdataservice' not found in /home/getsport/public_html/testingapp/create_database.php on line 1375
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(/services/userdataservice.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 3
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(): Failed opening '/services/userdataservice.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 3
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(/services/searchdataservice.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 4
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(): Failed opening '/services/searchdataservice.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 4
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(/services/UserProfileService.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/create_database.php on line 5
+[11-Aug-2016 21:48:07 America/Chicago] PHP Warning:  include(): Failed opening '/services/UserProfileService.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/create_database.php on line 5
+[11-Aug-2016 21:48:07 America/Chicago] PHP Fatal error:  Class 'userdataservice' not found in /home/getsport/public_html/testingapp/create_database.php on line 1375
+[15-Aug-2016 23:28:59 America/Chicago] PHP Parse error:  syntax error, unexpected '$name' (T_VARIABLE) in /home/getsport/public_html/testingapp/create_database.php on line 1389
+[15-Aug-2016 23:29:08 America/Chicago] PHP Parse error:  syntax error, unexpected '$name' (T_VARIABLE) in /home/getsport/public_html/testingapp/create_database.php on line 1389
+[15-Aug-2016 23:32:41 America/Chicago] PHP Parse error:  syntax error, unexpected '$name' (T_VARIABLE) in /home/getsport/public_html/testingapp/create_database.php on line 1389
+[15-Aug-2016 23:32:55 America/Chicago] PHP Parse error:  syntax error, unexpected '$name' (T_VARIABLE) in /home/getsport/public_html/testingapp/create_database.php on line 1389
+[15-Aug-2016 23:33:12 America/Chicago] PHP Parse error:  syntax error, unexpected '$req' (T_VARIABLE) in /home/getsport/public_html/testingapp/create_database.php on line 1391
+[15-Aug-2016 23:36:03 America/Chicago] PHP Fatal error:  Call to undefined function jobStatus() in /home/getsport/public_html/testingapp/create_database.php on line 1392
+[15-Aug-2016 23:38:32 America/Chicago] PHP Fatal error:  Call to undefined function jobStatus() in /home/getsport/public_html/testingapp/create_database.php on line 1392
+[16-Aug-2016 23:00:59 America/Chicago] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/getsport/public_html/testingapp/create_database.php on line 1354
+[24-Aug-2016 22:11:13 America/Chicago] PHP Parse error:  syntax error, unexpected '}' in /home/getsport/public_html/testingapp/create_database.php on line 1435
+[24-Aug-2016 22:12:38 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getOfferList() in /home/getsport/public_html/testingapp/create_database.php on line 1429
+[20-Sep-2016 00:34:42 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[20-Sep-2016 00:34:46 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[20-Sep-2016 00:34:47 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[03-Oct-2016 02:00:52 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[03-Oct-2016 02:00:53 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[03-Oct-2016 02:01:37 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[03-Oct-2016 02:01:38 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[05-Oct-2016 04:47:18 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[05-Oct-2016 04:47:19 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[06-Oct-2016 00:58:00 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[06-Oct-2016 00:58:01 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[13-Oct-2016 03:00:52 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[13-Oct-2016 03:02:11 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[13-Oct-2016 03:02:11 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[13-Oct-2016 06:15:47 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[16-Oct-2016 10:02:57 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[21-Oct-2016 05:52:12 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[08-Nov-2016 21:36:04 America/Chicago] PHP Fatal error:  Class 'listservice' not found in /home/getsport/public_html/testingapp/sendAlertsController.php on line 39
+[08-Nov-2016 21:38:17 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[09-Nov-2016 22:10:30 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[09-Nov-2016 22:10:30 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[09-Nov-2016 22:10:30 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[10-Nov-2016 14:07:49 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[10-Nov-2016 14:07:49 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[10-Nov-2016 14:07:49 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[10-Nov-2016 14:07:49 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:21 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:21 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:21 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:21 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:23 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:23 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[14-Nov-2016 15:40:24 America/Chicago] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/getsport/public_html/testingapp/getSportyLite/liteservice.php on line 170
+[16-Nov-2016 17:59:30 America/Chicago] PHP Warning:  include(db.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/upload.php on line 2
+[16-Nov-2016 17:59:30 America/Chicago] PHP Warning:  include(db.php): failed to open stream: No such file or directory in /home/getsport/public_html/testingapp/upload.php on line 2
+[16-Nov-2016 17:59:30 America/Chicago] PHP Warning:  include(): Failed opening 'db.php' for inclusion (include_path='.:/opt/php54/lib/php') in /home/getsport/public_html/testingapp/upload.php on line 2
+[16-Nov-2016 18:25:20 America/Chicago] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/getsport/public_html/testingapp/create_database1.php on line 4
+[29-Nov-2016 23:22:32 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[29-Nov-2016 23:23:32 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[29-Nov-2016 23:23:33 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1220
+[30-Nov-2016 00:44:40 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[30-Nov-2016 02:56:44 America/Chicago] PHP Fatal error:  Call to undefined method userdataservice::getfav() in /home/getsport/public_html/testingapp/create_database.php on line 1290
+[02-Dec-2016 23:55:59 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT) in /home/getsport/public_html/testingapp/create_database.php on line 97
+[02-Dec-2016 23:56:20 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT) in /home/getsport/public_html/testingapp/create_database.php on line 97
+[02-Dec-2016 23:57:01 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT) in /home/getsport/public_html/testingapp/create_database.php on line 97
+[02-Dec-2016 23:58:21 America/Chicago] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT) in /home/getsport/public_html/testingapp/create_database.php on line 97
+[03-Dec-2016 03:18:54 America/Chicago] PHP Parse error:  syntax error, unexpected end of file in /home/getsport/public_html/testingapp/create_database.php on line 612

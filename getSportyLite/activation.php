@@ -54,7 +54,7 @@ if(mysql_num_rows($query)==1)
                 <div class="row">
                     <div class="col-md-12">
                         <div class="platforms">
-                            <a href="www.getsporty.in" class="btn btn-primary inverse scrollpoint sp-effect1">
+                            <a href="index.html" class="btn btn-primary inverse scrollpoint sp-effect1">
                                 <span>OK</span><br>
                             </a>
                         </div>

@@ -1,6 +1,6 @@
 <?php
 
-include('config.php');
+include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/getAlertsDataService.php');
@@ -36,7 +36,7 @@ for($i = 0; $i< $size ; $i++)
 				}
 				else if ($res[$i]['Moudule'] == '3') 
 				{
-						$req1 = new listservice();
+						$req1 = new userdataservice();
 						$res1 = $req1->tournamentsearch($fwhere);
 				}
 				else if ($res[$i]['Moudule'] == '6') 
@@ -79,7 +79,8 @@ for($i = 0; $i< $size ; $i++)
 				// else if($res[$i]['Moudule'] == '6')
 				// {
 				// $prof = 'Subscribed';	
-				// }
+				// echo $res[$i]['Moudule'];
+				// } 
 			    
 			    $userid = $id;
 				$empdevice_id = $getToken['device_id'];
@@ -88,7 +89,8 @@ for($i = 0; $i< $size ; $i++)
               {
                 $pushobj      = new userdataservice();
 				$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
-                echo $pushnote;
+                //echo $pushnote;
+                return $pushnote;
               }
               else 
               	echo $getToken['name']."  is not yet logged in.";

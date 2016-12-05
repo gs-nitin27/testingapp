@@ -1,5 +1,5 @@
 <?php
-include('config.php');
+include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
@@ -70,47 +70,53 @@ echo json_encode($res3);
 
 else if($_POST['act']=="login")
 {
-
 $status   = array('sucess' => 1, 'failure'=>0);
 $email    = urldecode($_POST['email']);
 $pass     = md5(urldecode($_POST['password']));
 $username = mysql_real_escape_string($email);
 $password = mysql_real_escape_string($pass);
 $token    = urldecode($_POST ['token']);
-
-// echo $pass;die();
-//echo "SELECT `userid` , `name` FROM `user` WHERE `email` = '$email' AND `password` = '$pass' ";
+$multiple = 0;
 $validate = mysql_query("SELECT `userid` , `name`,`prof_id` , `user_image`,`location`,`device_id`FROM `user` WHERE `email` = '$username' AND `password` = '$password' ");
-
 $row = mysql_num_rows($validate);
-if($row==1){
 
-while($row1 = mysql_fetch_assoc($validate) ){
-   if($row1['device_id'] != $token )
-  {
-    $message = 'Multiple Logins not allowed, You have been successfully Logged Out';
-    
-    $pushobj      = new userdataservice();
-    $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
+if($row==1)
+{
+	while($row1 = mysql_fetch_assoc($validate))
+	{
+	   if($row1['device_id'] != $token )
+	  {
+	    $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
+      $multiple = '1';
+      $message = array('message'=>$mes,'multiple'=>"1");
+	    $pushobj      = new userdataservice();
+	    $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
+ 		  $obj = new userdataservice();
+	    $upd = $obj->updatedevice($token ,$email);
+      $multiple = "1";
+	  }
+         
+          $data = array('data'=>$row1,'status'=>'1','multiple'=>$multiple);
+         // print_r($data);die();
+          echo json_encode($data);
+	   // $status = array('status' => 1);
+	   // $res = array('data' => $row1,'status' => 1);
+	   // echo json_encode($res); 
 
-    $obj = new userdataservice();
-    $upd = $obj->updatedevice($token ,$email);
-
-  }
-
-   $status = array('status' => 1);
-//echo json_encode($status);
-$res = array('data' => $row1,'status' => 1);
-echo json_encode($res);  
+	}
 }
+else
+    {
+        $data = array('data'=>'Invalid login credentials' , 'status'=>'0');
+        echo json_encode($data);
+    }
 
-}
- else{
-//echo json_encode($status);
-$res = array('status' => 0 , 'message' => 'Invalid login credentials' );
-echo json_encode($res);
+//  else
+//  {
+// $res = array('status' => 0 , 'message' => 'Invalid login credentials' );
+// echo json_encode($res);
+//   }
 
-  }
 }
 
 
@@ -604,7 +610,6 @@ echo json_encode($status['failure']);
 
 
 //*********CODE FOR FETCHING THE CREATED DATA***********//
-
 else if($_POST['act'] == "editcreation")
 {
 
@@ -1128,6 +1133,7 @@ $user_favs =urldecode($_POST['id']);
 
 $rev = new userdataservice();
 $res = $rev->favourites($user_id, $module , $user_favs);
+
 if($res == 1)
 {
 echo json_encode($res);
@@ -1175,7 +1181,8 @@ $data       = implode(",",$favo_array);
 $res = new userdataservice();
 $rev = $res->updatefav($id,$user_id,$data);
 echo json_encode($rev);
-     }
+    
+    }
   }
 }
 
@@ -1374,7 +1381,7 @@ echo json_encode($res);
 
 }
 
-/************************** CODE FOR GET APPLY JOBS *************************************/
+/******************************** CODE FOR GET APPLY JOBS *******************************************************/
 
 
 else if($_POST['act'] == "getappliedjobs")
@@ -1455,9 +1462,7 @@ else if($_POST['act'] == 'jobOffersList')
 
 }
 
-/* *****************************Code of Resource Application*********************************/
-
-/***********************************CREATE RESOURCE for Text******************************/
+/* ***********************************************************************************/
 
 else if($_POST['act'] == "create_resource")
 {
@@ -1476,7 +1481,10 @@ else if($_POST['act'] == "create_resource")
   }
 }
 
-/**********************************************VIEW RESOURCE*******************************/
+
+
+
+/********************************************************************************/
 
   else if($_GET['act'] == 'getresource')
   {
@@ -1503,45 +1511,7 @@ else if($_POST['act'] == "create_resource")
 
 
 
-/************************************CREATE SHARE STORY********************************************/
-
-else if($_REQUEST['act'] == "gs_create")
-{
-  $data = json_decode($_REQUEST['data']);
-   $req = new userdataservice();
-  $res = $req->getCreate($data);
-  if($res != 0)
-  {
-  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
-  echo json_encode($resp);
-  }
-  else
-  {
-   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
-  echo json_encode($resp);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/***********************************************************************/
 
 
 //******************************************//

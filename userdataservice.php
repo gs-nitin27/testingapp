@@ -160,7 +160,7 @@ else
 public function updatedevice($token ,$email)
 {
 
-//echo "UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' ";//die;
+
 $query = mysql_query("UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' ");
 if($query){
 
@@ -220,6 +220,7 @@ if($type == 1)
 {
 
 
+
 $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
 }
 else if ($type == 2) 
@@ -253,11 +254,6 @@ $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,
 
 
 }
-else if($type == '4')
-{
-$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`title`,'')AS title, IFNull(`description`,'') AS description, IFNull(`url`,'') AS url, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created  FROM `gs_resources`  WHERE ".$where."  ORDER BY `date_created` ASC");
-} 
-
 //$query = mysql_query("SELECT * FROM `".$table."` WHERE `userid` = '$userid' ");
 if(mysql_num_rows($query) > 0)
 {
@@ -538,7 +534,7 @@ else
 
 
 
-public function a($id,$type)
+public function getfav($id,$type)
 {
 $query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
 
@@ -821,13 +817,12 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
-      //print_r($data);
-       //echo json_encode($data);
+       echo json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
-    define("GOOGLE_API", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
+    define("GOOGLE_API_KEY", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
         $headers = array(
-            'Authorization: key=' . GOOGLE_API,
+            'Authorization: key=' . GOOGLE_API_KEY,
             'Content-Type: application/json'
         );
         $ch = curl_init();
@@ -848,52 +843,11 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
     }
 
 
-public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
-{
-    //Google cloud messaging GCM-API url
-        $url = 'https://gcm-http.googleapis.com/gcm/send';
-        $fields = array(
-            'registration_ids' => $registatoin_ids,
-            'data' => $message,
-        );
-        //$registatoin_ids = '/topics/global';
-        //echo $registatoin_ids;
-       $message = array('data1'=>$message);
-      $data = array('data'=>$message,'to'=>$registatoin_ids);
-     // print_r($data);
-       //echo json_encode($data);
-        //print_r($fields);
-    // Google Cloud Messaging GCM API Key
-   define("API_KEY", "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU");    
-        $headers = array(
-            'Authorization: key=' . API_KEY,
-            'Content-Type: application/json'
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        $result = curl_exec($ch);       
-        if ($result === FALSE) {
-            die('Curl failed: ' . curl_error($ch));
-        }
-        curl_close($ch);
-        return $result;
-        //print_r($result);
-    }
-
-
-
-public function savealert($employerid ,$type,$message , $title, $applicantId)
+public function savealert($employerid , $message , $title, $applicantId)
 {
 
 //echo "INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title','CURDATE()')";
-  print_r($title);
-$query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`,`type`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE(),'$type')");
+$query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE())");
 
 if($query){
   return 1;
@@ -1009,7 +963,7 @@ return 0;
 
 public function updaterecords($data)
 {
- $event_id    = $data['event_id']; 
+ $event_id    = $data['event_id'];
  $event_name  = $data['event_name'];
  $start_time  = $data['start_time'];
  $end_time    = $data['end_time'];
@@ -1070,8 +1024,8 @@ return 0;
 public function getAppliedJobListing($userid)
 {
 $q =  "SELECT ji.`userid` AS employerid ,ji.`id` AS job_id ,uj.`userjob`,uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE us.`userid` = uj.`userid` AND ji.`userid` = '$userid' ";
+echo $q;die;
 $query = mysql_query($q);
-
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
@@ -1088,138 +1042,6 @@ echo 0;
 }
 
 }
-
-public function jobStatus($job_id,$applicant_id,$status)
-{
-    $q = mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
-
-  if($q)
-  {
-    return true;
-  }
-  else
-  {
-
-    return false;
-
-  }
-}
-
-public function getOfferList($userid)
-{
-$query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userjob` , ji.`id` AS job_id, ji.`title` AS job_title , ji.`organisation_name` AS employer_name , uj.`status` FROM `user_jobs` AS uj LEFT JOIN `gs_jobInfo` AS ji ON uj.`userjob` = ji.`id` WHERE uj.`userjob` = ji.`id` AND uj.`status` > 0 AND uj.`userid` = '$userid'"); 
-
-if(mysql_num_rows($query)>0)
-{
-
-while($row = mysql_fetch_assoc($query))
-{
-
-$rows[] = $row;
-
-}
-
-return $rows;
-
-}
-else
-{
-
-return 0;
-
-}
-
-}
-
-
-
-/*******************************************************/
-
-public function createResources($data)
-{
-  $userid       = $data->userid;
-  $title        = $data->title;
-  $message      = $data->message;
-  $url          = $data->link;
-  $image        = $data->image;
-
-  $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`userid`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
-
-  if($query)
-  { 
-    $id = mysql_insert_id();
-    if($id!=NULL && $image!=NULL)
-    {
-     $image = $this->imageupload($image,$id,$title);
-    }
-  return 1;
-  }
-  else
-    {
-      return 0;
-    }
-
-
-}
-
-
-public function imageupload($image,$id,$title)
-{
-
-  define('UPLOAD_DIR','gs_images/Resources/');
-  $img = $image;
-  $img = str_replace('data:image/png;base64,', '', $img);
-  $img = str_replace('$filepath,', '', $img);
-  $img = str_replace(' ', '+', $img);
-  $data = base64_decode($img);
-  $img_name = $id.'_'.$title;
-  $success=move_uploaded_file($img, $filepath);
-  $file = UPLOAD_DIR .$img_name. '.png';
-  $success = file_put_contents($file, $data);
-  if($success)
-  {
-    $img_name = $img_name. '.png';
-    $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-  if($updateImage)
-  {
-    return true;
-  }
-  }
-  else
-    {
-      echo "image not uploaded";
-      return false;
-    }
-
-
-}
-
-
-/*****************************************************************/
-
-   public function getResources_search($fwhere)
-  {
-
-    $query = "SELECT  IFNull(`title`,'') AS title, IFNull(`description`,'') AS description, IFNull(`url`,'') AS link , IFNull(`image`,'') AS image,IFNull(DATEDIFF(CURDATE(),`date_created`) ,'') AS date, IFNull(`id` , '') AS res_id FROM `gs_resources` ".$fwhere." ";
-
-   $query1 = mysql_query($query);
-
-    if(mysql_num_rows($query1) > 0)
-      {
-      while($row = mysql_fetch_assoc($query1))
-      {
-      $rows[] = $row; 
-      }
-
-      return $rows;
-       } 
-      
-        else
-       {
-      return 0;
-       }
-
-      }  
 
 }
 

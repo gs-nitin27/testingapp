@@ -1,5 +1,5 @@
 <?php
-include('config.php');
+include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 

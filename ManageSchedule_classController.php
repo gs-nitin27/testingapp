@@ -1,5 +1,5 @@
 <?php
-include('config.php');
+include('config1.php');
 include('services/manageSchedulingService.php');
 include('services/userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);

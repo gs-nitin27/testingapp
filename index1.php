@@ -10,14 +10,9 @@
 $.ajax({
 
     type: "POST",
-    //url: "create_database.php",
-    url: "useralertcontroller.php",
-     //dataType: "json",
-    //data: "act=editcreation&userid="+"16"+"&type="+"4",
-   // data: "act=GsLogin&email=rak@yahoo.com&password=123456",
-     data: "ac=getSubscribedAlerts&user_id=16&type=6",
-    
-   
+    url: "create_database.php",
+    data: "act=jobOffersList&user_id="+"16&token=dhs2016",
+    dataType: "json",
     success: function(result) {
 
     }

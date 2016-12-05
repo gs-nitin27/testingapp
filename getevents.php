@@ -1,6 +1,6 @@
 
 <?php
-include('config.php');
+include('config1.php');
 include('services/userdataservice.php');
 include('services/getListingService.php');
 // Get cURL resource
@@ -8,7 +8,10 @@ $ch = curl_init();
 
 // Set url
 
-$fields = array('category' => 'sports');
+$fields = array(
+	'category' => 'sports'
+	
+);
 
 //url-ify the data for the POST
 foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }

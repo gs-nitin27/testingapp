@@ -1,12 +1,11 @@
 <?php
-include('config.php');
+include('config1.php');
 include('services/searchdataservice.php');
 include('services/userdataservice.php');
 include('services/getAlertsDataService.php');
 
 
 //********CODE TO GET LISTING OF LATEST ALERTS************//
-
 if($_POST['act'] == "getLatestAlerts")
 {
 
@@ -39,8 +38,11 @@ if($_POST['act'] == "getSubscribedAlerts")
 
 $userid = urldecode($_POST['user_id']);
 $module = urldecode($_POST['type']);
+
 $req = new getAlertsDataService();
 $res = $req->getsubscribealerts($userid);
+//print_r($res);
+
 
 if($res != 0)
 {
@@ -67,6 +69,8 @@ $str_three = substr($str_two, 0, $second_pos);
 $unit = trim($str_three); // remove whitespaces
 
 $pos = str_replace("%".$unit."%", '',$pos );
+//$para = array($unit);
+
 $test[] = $unit;
 $param = implode(',', $test);
 
@@ -101,6 +105,7 @@ case "1":
    $mod = "";
 
 }
+
 
 $res[$i]['title'] = "you subscribed for  ".$mod;
 }

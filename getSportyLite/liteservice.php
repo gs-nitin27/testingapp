@@ -47,7 +47,8 @@
               $from="info@getsporty.in";
               $from_name="Getsporty Lite";
               $subject="Email varification ";
-              $emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
+              $emailconform="getsporty.in/activation.php?email=";
+              //$emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
               //global $error;
               $mail = new PHPMailer();  // create a new object
               $mail->IsSMTP(); // enable SMTP
@@ -61,9 +62,53 @@
               $mail->Password = "%leq?xgq;D?v";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
-              $mail->Body = ' 
-                         <h1> Click here </h1>'.$emailconform.''.$email.'<br><b>Note:- Please varification of this email</b>
-              '; 
+              // $mail->Body = ' 
+              //            <h1> Click here </h1>'.$emailconform.''.$email.'<br><b>Note:- Please varification of this email</b>
+              // '; 
+$mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Please verify your email Address.</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click here: </h1>'.$emailconform.''.$email.'<br></strong>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting GetSportyLite Team</p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
@@ -480,11 +525,50 @@
               $mail->Password = "%leq?xgq;D?v";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
-              $mail->Body = ' 
-                    <div style="width: 800px; font-family: Arial, sans-serif;"> 
-                  <h1 style="font-size: 1.4em; font-weight: bold; ">Dear user :</h1> 
-                      <p><strong>User name:</strong> ' . $user . '</p><br><strong>OTP Code : '.$otp.'</strong><br><p><b>Note:- Please change your Password after login.</b></p> 
-               </div>'; 
+              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Forgot your password? Lets get you a new one.</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Dear <strong> ' . $user . '</strong></p>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">If you want to reset your password enter given OTP <strong>'.$otp.'</strong><br>Note:- Please change your Password after login.<br><br><br><br><br>Thanks GetSportyLite Team </p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
@@ -549,19 +633,20 @@
 
     /***************Function for Upload Image in Create Resource***********************/
 
-
     public function imageupload($image,$id,$title)
     {
-       define('UPLOAD_DIR','..\..\staging\assets\crop\images/');
-       //define('UPLOAD_DIR','gs_images/Resources/');
+       $now = new DateTime();
+       $time=$now->getTimestamp(); 
+	     define('UPLOAD_DIR','../../staging/uploads/resources/');
       $img = $image;
       $img = str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
+      echo $filepath;
       $data = base64_decode($img);
-      $img_name = $id.'_'.$title;
+      $img_name= "res"."_".$time;
       $success=move_uploaded_file($img, $filepath);
-      $file = UPLOAD_DIR .$img_name. '.png';
+      $file = UPLOAD_DIR.$img_name.'.png';
       $success = file_put_contents($file, $data);
       if($success)
       {
@@ -578,7 +663,7 @@
           echo json_encode($res);
           return 0;
           //echo "image not uploaded";
-         // return 0;
+         
         }
     }
 
