@@ -5,6 +5,7 @@ include('services/userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
 
 //************CODE FOR MAKING SEARCH FOR COACHES AND TRAINERS***********//
+
 if($_POST['act'] == "search")
 {
 $type             = urldecode($_POST['type']);	

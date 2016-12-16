@@ -86,7 +86,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click here: </h1>'.$emailconform.''.$email.'<br></strong>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click here:<h1> Click here </h1>'.$emailconform.''.$email.'<br></strong>
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting GetSportyLite Team</p> 
 
 </td>
@@ -246,7 +246,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
    /******************** Seraching [Function]**********************/
     public function GetSearch($where)
     {
+      //echo "SELECT * FROM `gs_resources` 'where' .'$where'.";die();
+     //$query ="SELECT * FROM `gs_resources` where ".$where;
         $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
+        //$a=mysql_query($query);
+        //echo $a;die();
         if(mysql_num_rows($query) > 0)
         {
               while($row = mysql_fetch_assoc($query))
@@ -266,9 +270,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         }
     }
      /*************** Get Details of Resources[Function]*****************/
-     public function getDetail($userid)
+
+     public function getDetail($resource_id)
     {
-      $query = mysql_query("SELECT * FROM `gs_resources` where `id`=$userid ");
+      $query = mysql_query("SELECT * FROM `gs_resources` where `id`=$resource_id");
         if(mysql_num_rows($query)>0)
         {
            while ($row = mysql_fetch_assoc($query))
@@ -621,7 +626,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 	        $id = mysql_insert_id();
 	        if($id!=NULL && $image!=NULL)
 	        {
-	         $image = $this->imageupload($image,$id,$title);
+	         $image = $this->imageupload($image,$id);
 	        }
 	      return 1;
 	      }
@@ -633,7 +638,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     /***************Function for Upload Image in Create Resource***********************/
 
-    public function imageupload($image,$id,$title)
+    public function imageupload($image,$id)
     {
        $now = new DateTime();
        $time=$now->getTimestamp(); 

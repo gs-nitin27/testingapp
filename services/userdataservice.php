@@ -58,8 +58,9 @@ $prof     =  $data['prof'];
 $sport    =  $data['sport'];
 $location =  $data['location'];
 $token    =  $data['token'];
+$usertype =  $data ['usertype'];
 
-$query = mysql_query("INSERT into `user`(`name`,`email`,`password`,`contact_no`,`Gender`,`prof_id`,`sport`,`location`,`device_id`) values('$name','$email','$password','$phone','$gender','$prof','$sport','$location','$token')");
+$query = mysql_query("INSERT into `user`(`name`,`userType`,`email`,`password`,`contact_no`,`Gender`,`prof_id`,`sport`,`location`,`device_id`) values('$name','$usertype','$email','$password','$phone','$gender','$prof','$sport','$location','$token')");
 
 if($query)
 {
@@ -177,29 +178,35 @@ public function create_job($item)
 
 $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`, `gender`, `sport`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
 
-
 if($query)
+{
   return true;
+}
 else
+{
   return false;
+}
 
 }
 
 public function create_tournament($item)
 {
-  //print_r($item);die();
-
+ //print_r($item);die();
 $query = mysql_query("INSERT INTO `gs_tournament_info`(`id`, `userid`, `name`, `address_1`, `address_2`, `location`,`state`, `pin`, `description`,`sport` ,`level`, `age_group`, `gender`, `eligibility1`,`eligibility2`, `terms_and_cond1`,`organiser_name`, `mobile`, `landline`, `email`, `org_address1`, `org_address2`, `org_city`, `org_pin`, `tournaments_link`, `start_date`, `end_date`, `event_entry_date`, `event_end_date`, `file_name`, `file`, `email_app_collection`, `phone_app_collection`,`date_created`) VALUES ('$item->id','$item->userid','$item->tournament_name','$item->address_line1','$item->address_line2','$item->city','$item->state','$item->pin','$item->description','$item->sport','$item->tournament_level','$item->tournament_ageGroup','$item->gender','$item->eligibility1','$item->eligibility2','$item->terms_and_conditions1','$item->organizer_name','$item->mobile','$item->landline','$item->emailid','$item->organizer_address_line1','$item->organizer_address_line2','$item->organizer_city','$item->organizer_pin','$item->tournament_links',FROM_UNIXTIME ('$item->start_date'),FROM_UNIXTIME ('$item->end_date'),FROM_UNIXTIME('$item->entry_start_date') ,FROM_UNIXTIME ('$item->entry_end_date'),'$item->file_name','$item->file','$item->email_app_collection','$item->phone_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `name` = '$item->tournament_name', `address_1` = '$item->address_line1' , `address_2` = '$item->address_line2' , `location` = '$item->city' ,`state`='$item->state' ,`pin` = '$item->pin' , `description` = '$item->description',`sport`='$item->sport',`level` = '$item->tournament_level',`age_group`='$item->tournament_ageGroup',`gender` = '$item->gender',`eligibility1` = '$item->eligibility1' ,`eligibility2` = '$item->eligibility2', `terms_and_cond1` = '$item->terms_and_conditions1',`organiser_name` = '$item->organizer_name' , `mobile` = '$item->mobile' ,`landline` = '$item->landline' , `email` = '$item->emailid' , `org_address1` = '$item->organizer_address_line1' , `org_address2` = '$item->organizer_address_line2' , `org_city` = '$item->organizer_city', `org_pin` = '$item->organizer_pin' , `tournaments_link` = '$item->tournament_links' ,`start_date` = FROM_UNIXTIME ('$item->start_date') , `end_date` = FROM_UNIXTIME ('$item->end_date') , `event_entry_date` = FROM_UNIXTIME ('$item->entry_start_date') , `event_end_date` = FROM_UNIXTIME ('$item->entry_end_date'), `file_name` = '$item->file_name' , `file` = '$item->file' , `email_app_collection` = '$item->email_app_collection' , `phone_app_collection` = '$item->phone_app_collection'");
 
-if($query){
-
-
+if($query)
+{
   return true;
-}else
-  return false;
-
-
 }
+else
+{
+  return false;
+}
+}
+
+
+
+
 
 public function create_event($item)
 {
@@ -215,7 +222,7 @@ else
 
 public function getCreation($where , $type)
 {
-
+//echo "$type";die();
 if($type == 1)
 {
 
@@ -431,20 +438,20 @@ $rows[] = $row;
 
   public function getfavForUser($data,$type,$id)
 {
-
-    //print_r($data);
+    //print_r($type);
   	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
-    //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";
+    //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";die();
   	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
+
 
         if($type == '1' || $type == '2' || $type == '3')
         {
 
-         $type = 'id';
-         }
-         else if ($type == '4' || $type == '5')
+        $type = 'id';
+        }
+        else if ($type == '4' || $type == '5')
         {
-            $type = 'userid';
+           $type = 'userid';
         }
 
    if(mysql_num_rows($query)>0 && $id != "")
@@ -462,15 +469,13 @@ $rows[] = $row;
         for($i = 0 ; $i< $num ; $i++)
         {    
               $val = $data[$i][$type];
-              if(in_array($val, $fav)){
-
+              if(in_array($val, $fav))
+              {
               array_push($data[$i]['fav'], 1);
               $data[$i]['fav'] = "1";
-            	
-            }
+             }
             else
             {
-
             	array_push($data[$i]['fav'], 0);
             	$data[$i]['fav'] = "0";
             }
@@ -495,6 +500,7 @@ $rows[] = $row;
               // }
                 }
        return $data;
+      // print_r($data);
         
 
    }

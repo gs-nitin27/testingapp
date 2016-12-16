@@ -20,12 +20,13 @@ if($_POST['act']=="register")
  $sport      =urldecode($_POST ['sport']);
  $location   =urldecode($_POST ['location']);
  $token      =urldecode($_POST ['token']);
+ $usertype   ='104';//urlencode($_POST ['usertype']);
 
 
  $where  = "WHERE `email` = '".$email."'";
  $req    = new userdataservice();
  $res    = $req->userVarify($where);
- $data   = array('name'=>$name,'email'=>$email,'password'=> $password1,'phone'=>$phone,'gender'=>$gender,'prof'=>$prof,'sport'=>$sport,'location'=>$location,'token'=>$token);
+ $data   = array('name'=>$name,'email'=>$email,'password'=> $password1,'phone'=>$phone,'gender'=>$gender,'prof'=>$prof,'sport'=>$sport,'location'=>$location,'token'=>$token,'usertype'=>$usertype);
  
  if($res != 0)
  {
@@ -904,12 +905,11 @@ $rec     = new userdataservice();
 $rec1    = $rec->saverecent($recdata,$type, $id);
 }
 }
-$rev1 = new userdataservice();
+$req = new userdataservice();
+
 $res1 = $rev->getfavForUser($res, $type, $id);
-
 $data = array('data'=>$res1 , 'status'=>'1');
-//echo json_encode($data);
-
+echo json_encode($data);
 }
 else
 {
@@ -927,95 +927,111 @@ die();
 }
 echo json_encode($data);
 }
+
+
+
+
+
+
+
+
 //********* CODE FOR the view of JOB , EVENT , TOURNAMENT ****//
 
 else if($_POST['act'] == "getsearchview")
 {
 
-$type  = urldecode($_POST['type']);
-$id    = urldecode($_POST['id']);
-$where =  "`id` = '".$id."'"; 
+    $type  = urldecode($_POST['type']);
+    $id    = urldecode($_POST['id']);
+    $user_id =urldecode($_POST['user_id']);
+    $where =  "`id` = '".$id."'"; 
+    $req   = new userdataservice();
+    $res   = $req->getCreation($where , $type);
+    if($res != 0)
+    {
+    /*********************************/
+    /*******************************/
+    $eligibility = $res[0]['eligibility1'];
+    $eligibility = explode("|",$eligibility);
+    $eligibility = array_filter(array_values($eligibility));
+    $size        = sizeof($eligibility);
+    //print_r($size);die();
+    $el = array();
+    for ($i=0; $i <$size ; $i++) 
+    { 
+        $index = "Eligibility ".($i +'1');
+        if($eligibility[$i] == '')
+        {
+        $el[$index] = "";
+        }
+        else
+        { 
+        $el[$index] = $eligibility[$i];
+        }
+    $elig[] = $el[$index];
+    }
 
-$req   = new userdataservice();
-$res   = $req->getCreation($where , $type);
-
-
-if($res != 0)
-{
-$eligibility = $res[0]['eligibility1'];
-$eligibility = explode("|",$eligibility);
-$eligibility = array_filter(array_values($eligibility));
-$size        = sizeof($eligibility);
-
-$el = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Eligibility ".($i +'1');
-if($eligibility[$i] == '')
-{
-
-$el[$index] = "";
-
-}
-else
-{ 
-$el[$index] = $eligibility[$i];
-}
-}
-
-$res[0]['eligibility1'] = $el;
-if($type == '2')
-{
-$terms = $res[0]['terms_cond1'];
-}
-else if($type == '3')
-{
-$terms = $res[0]['terms_and_cond1'];
-}
-
-$terms = explode("|",$terms);
-$terms = array_filter(array_values($terms));
-$size  = sizeof($terms);
-
-$tc = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Terms & condition ".($i +'1');
-if($terms[$i] == '')
-{
-
-$tc[$index] = "";
-
-}
-else
-{ 
-$tc[$index] = $terms[$i];
-}
-}
-$terms = $tc;
-if($type == '2')
-{
-$res[0]['terms_cond1'] = $terms;
-
-}
-else if($type == '3')
-{
-
-$res[0]['terms_and_cond1'] = $terms;
-
-}
+    $res[0]['eligibility1'] = $elig;
 
 
-$data = array('data'=>$res, 'status'=>'1');
-}
-else
-{
-$data = array('data'=>$res, 'status'=>'0');
-}
-echo json_encode($data);
+    if($type == '2')
+    {
+    $terms = $res[0]['terms_cond1'];
+    }
+    else if($type == '3')
+    {
+    $terms = $res[0]['terms_and_cond1'];
+    }
 
+    $terms = explode("|",$terms);
+    $terms = array_filter(array_values($terms));
+    $size  = sizeof($terms);
 
-}
+    $tc = array();
+    for ($i=0; $i <$size ; $i++) 
+    { 
+    $index = "Terms & condition ".($i +'1');
+    if($terms[$i] == '')
+    {
+    $tc[$index] = "";
+    }
+    else
+    { 
+    $tc[$index] = $terms[$i];
+    }
+    
+    $t_and_c[] = $tc[$index];
+
+    }
+    $terms = $t_and_c;
+          if($type == '2')
+          {
+          $res[0]['terms_cond1'] = $terms;
+
+          }
+          else if($type == '3')
+          {
+
+          $res[0]['terms_and_cond1'] = $terms;
+          }
+     // print_r($res);die;
+    /***********call the get fav For User ********************/
+         
+          $rev1 = new userdataservice();
+          $res1 = $rev1->getfavForUser($res, $type, $user_id);
+          $data = array('data'=>$res1 , 'status'=>'1');
+          echo json_encode($data);
+         // print_r($data);
+      /***********************************************/
+       }
+      //echo json_encode($data);
+       else
+       {
+       $data = array('data'=>$res, 'status'=>'0');
+       echo json_encode($data);
+       }
+       
+      }
+
 
 
 //********* CODE FOR SEARCHING TOURNAMENTS **********//

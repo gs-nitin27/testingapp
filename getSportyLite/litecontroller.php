@@ -144,6 +144,7 @@ else if($_REQUEST['act']=="gs_location")
 
 else if($_REQUEST['act']=="gs_search")
 {
+ // echo "dev";die();
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
    $location     =  urldecode($_REQUEST ['location']);
@@ -350,7 +351,7 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
    {
-     $where[] = " `sport` = '$sports' ";
+     $where[] = " `sport` LIKE '%$sports%' ";
      $arr['sport'] = $sports;
    }
    if($location != '')
@@ -360,7 +361,7 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
    {
-     $where[] = " `location` = '$location' ";
+     $where[] = " `location` LIKE '%$location%' ";
      $arr['location'] = $location;
    }
     if($topic != '')
@@ -370,17 +371,17 @@ else if($_REQUEST['act']=="gs_sub")
    }
     else
     {
-      $where[] = " `topic_of_artical` = '$topic' "; 
+      $where[] = " `topic_of_artical` LIKE '%$topic%' "; 
       $arr['topic_of_artical'] = $topic; 
     }
    if($key != '')
    {
-     $where[] = " `Description` LIKE '%$key%'' ";
+     $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;    
    }
    else
    {
-     $where[] = " `Description` LIKE '%$key%'' ";
+     $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
    $whereclause = implode('AND', $where);
@@ -459,7 +460,7 @@ else if($_REQUEST['act']=="gs_sub")
    $sports       =  urldecode($_REQUEST ['sports']);
    $location     =  urldecode($_REQUEST ['location']);
    $topic        =  urldecode($_REQUEST ['topic_of_artical']);
-    $module = '6';
+   $module       = '6';
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
@@ -469,7 +470,7 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
      {
-     $where[] = " `sport` = '$sports' ";
+     $where[] = " `sport` LIKE '%$sports%' ";
      $arr['sport'] = $sports;
      }
    
@@ -480,7 +481,7 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
    {
-     $where[] = " `location` = '$location' ";
+     $where[] = " `location` LIKE '%$location%' ";
      $arr['location'] = $location;
    }
     if($topic != '')
@@ -490,17 +491,17 @@ else if($_REQUEST['act']=="gs_sub")
    }
     else
     {
-      $where[] = " `topic_of_artical` = '$topic' "; 
+      $where[] = " `topic_of_artical` LIKE '%$topic%' "; 
       $arr['topic_of_artical'] = $topic; 
     }
    if($key != '')
    {
-     $where[] = " `Description` LIKE '%$key%'' ";
+     $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;    
    }
    else
    {
-     $where[] = " `Description` LIKE '%$key%'' ";
+     $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
    $whereclause = implode('AND', $where);
