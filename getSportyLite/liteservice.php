@@ -184,7 +184,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function getList()
     { 
-      $query = mysql_query("SELECT *FROM `gs_resources` ORDER by `date_created` desc ");
+      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `date_created` desc ");
       $row  = mysql_num_rows($query);
        if($row > 0)
         {
@@ -248,7 +248,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     {
       //echo "SELECT * FROM `gs_resources` 'where' .'$where'.";die();
      //$query ="SELECT * FROM `gs_resources` where ".$where;
-        $query = mysql_query("SELECT * FROM `gs_resources` where ".$where);
+        $query = mysql_query("SELECT * FROM `gs_resources` where `status` = '1' AND ".$where);
         //$a=mysql_query($query);
         //echo $a;die();
         if(mysql_num_rows($query) > 0)
@@ -375,7 +375,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     public function get_fvdata($fwhere)
     {
 
-      $query = mysql_query("SELECT *FROM `gs_resources` where `id` IN (".$fwhere.")" );
+      $query = mysql_query("SELECT * FROM `gs_resources` where `id` IN (".$fwhere.") AND `status` = '1'" );
      if(mysql_num_rows($query)>0)
      {
        while($row = mysql_fetch_assoc($query))
@@ -642,8 +642,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     {
        $now = new DateTime();
        $time=$now->getTimestamp(); 
-	     define('UPLOAD_DIR','../../staging/uploads/resources/');
-      $img = $image;
+	    $img = $image;
       $img = str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
