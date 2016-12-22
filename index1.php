@@ -11,8 +11,8 @@ $.ajax({
 
     type: "POST",
     url: "create_database.php",
-    data: "act=getsearchview&user_id=105&id=79&type=3",
-
+    //data: "act=getsearchview&user_id=116&id=1type=3",
+     data:"act=getsearchview&id=1&user_id=116&type=1",
    // data: "act=getsearchview&id=21&type=2&user_id=16",
     dataType: "json",
     success: function(result) {

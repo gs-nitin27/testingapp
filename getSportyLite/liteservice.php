@@ -642,7 +642,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     {
        $now = new DateTime();
        $time=$now->getTimestamp(); 
-	    $img = $image;
+	     define('UPLOAD_DIR','../../staging/uploads/resources/');
+      $img = $image;
       $img = str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);

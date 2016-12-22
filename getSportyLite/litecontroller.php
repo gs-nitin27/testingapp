@@ -144,17 +144,41 @@ else if($_REQUEST['act']=="gs_location")
 
 else if($_REQUEST['act']=="gs_search")
 {
-        $key          =  urldecode($_REQUEST ['key']);
-        $user_id      =  urldecode($_REQUEST ['user_id']);
-        if($key != '')
-        {
-         $where        =  " `summary` LIKE '%$key%' ";  
-        }
-       $req          =  new liteservice();
-       $module       = '6';
+    $key          =  urldecode($_REQUEST ['key']);
+    if($key != '')
+      {
+      $where        =  " `summary` LIKE '%$key%' ";  
+      }
+      else
+      {
+      $where          =  " `summary` ='' ";
+      }
+   //$sports       =  urldecode($_REQUEST ['sports']);
+   //$location     =  urldecode($_REQUEST ['location']);
+   //$topic        =  urldecode($_REQUEST ['topic']);
+     $user_id      =  urldecode($_REQUEST ['user_id']);
+     $req          =  new liteservice();
+     $module       = '6';
+     // if($sports != '')
+     // {
+     //   $where[] = " `sport` = '$sports' ";
+     // }
+     // if($location != '')
+     // {
+     //   $where[] = " `location` = '$location' ";
+     // }
+     // if($topic != '')
+     // {
+     //   $where[] = " `topic_of_artical` = '$topic' ";    
+     // }
+     // if($key != '')
+     // {
+     //   $where[] = " `Description` LIKE '%$key%' ";    
+     // }
+      // $whereclause = implode('AND', $where);
        $res = $req->GetSearch($where);
-       if($res != 0)
-        { 
+     if($res != 0)
+      { 
            if(!isset($_REQUEST['user_id']))
            { 
             $data1 = array('data'=>$res,'status'=>'1');
@@ -188,7 +212,7 @@ else if($_REQUEST['act']=="gs_search")
         echo json_encode($data);
     }
 }
-
+  
 
 
 /****************************Details of Resources *******************************/
@@ -443,7 +467,7 @@ else if($_REQUEST['act']=="gs_sub")
    $sports       =  urldecode($_REQUEST ['sports']);
    $location     =  urldecode($_REQUEST ['location']);
    $topic        =  urldecode($_REQUEST ['topic_of_artical']);
-    $module = '6';
+   $module       = '6';
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
