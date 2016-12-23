@@ -37,6 +37,7 @@ if($_POST['act'] == 'gs_signup')
 } 
  
 
+
 /****************************Sign In GetSporty*******************************/
 
 else if($_REQUEST['act']=="gs_login")
@@ -59,6 +60,7 @@ else if($_REQUEST['act']=="gs_login")
           echo json_encode($data);
         }
 }
+
 
 /****************************Listing The Resources *******************************/
 
@@ -101,6 +103,7 @@ else if($_REQUEST['act']=="gs_list")
 }
 
 
+
 /************  Drop Down Sports  ************************/
 
 else if($_REQUEST['act']=="gs_sports")
@@ -119,6 +122,7 @@ else if($_REQUEST['act']=="gs_sports")
        echo json_encode($data);
     }
 }
+
 
 
 /************  Drop Down City************************/
@@ -140,6 +144,8 @@ else if($_REQUEST['act']=="gs_location")
     }
 }
 
+
+
 /**************Searching Resource*****************/
 
 else if($_REQUEST['act']=="gs_search")
@@ -153,30 +159,10 @@ else if($_REQUEST['act']=="gs_search")
       {
       $where          =  " `summary` ='' ";
       }
-   //$sports       =  urldecode($_REQUEST ['sports']);
-   //$location     =  urldecode($_REQUEST ['location']);
-   //$topic        =  urldecode($_REQUEST ['topic']);
      $user_id      =  urldecode($_REQUEST ['user_id']);
      $req          =  new liteservice();
      $module       = '6';
-     // if($sports != '')
-     // {
-     //   $where[] = " `sport` = '$sports' ";
-     // }
-     // if($location != '')
-     // {
-     //   $where[] = " `location` = '$location' ";
-     // }
-     // if($topic != '')
-     // {
-     //   $where[] = " `topic_of_artical` = '$topic' ";    
-     // }
-     // if($key != '')
-     // {
-     //   $where[] = " `Description` LIKE '%$key%' ";    
-     // }
-      // $whereclause = implode('AND', $where);
-       $res = $req->GetSearch($where);
+     $res = $req->GetSearch($where);
      if($res != 0)
       { 
            if(!isset($_REQUEST['user_id']))
@@ -215,6 +201,8 @@ else if($_REQUEST['act']=="gs_search")
   
 
 
+
+
 /****************************Details of Resources *******************************/
 
 else if($_REQUEST['act']=="gs_detail")
@@ -248,9 +236,10 @@ else if($_REQUEST['act']=="gs_detail")
 
 
 
+
+
+
 /******FAVOURITE BY THE USER****************/
-
-
 
 else if ($_POST['act'] == "gs_fav" )
 {
@@ -302,17 +291,17 @@ else if ($_POST['act'] == "gs_fav" )
 }
 
 
-/***************GET FAVOURATE*******************/
 
+
+/***************GET FAVOURATE*******************/
 
 else if($_POST['act'] == "gs_getfav")
 {
- 
   $id   = urldecode($_POST ['user_id']);
   $type = urldecode($_POST ['type']);
   $rev  = new liteservice();
   $res  = $rev->getfav($id,$type);
-  if($res != 0)
+   if($res != 0)
     { 
        $favdata = $res['userfav'];
        $rev1  = $rev->get_fvdata($favdata);
@@ -323,11 +312,20 @@ else if($_POST['act'] == "gs_getfav")
        }
        else
        {
+       
              $data = array('data'=>0,'status' => 0);
              echo json_encode($data);
        }
     }
+       else
+       {
+             $data = array('data'=>0,'status' => 0);
+             echo json_encode($data);
+       }
+
 }
+
+
 
 /***************TOKEN for save*****************/
 
@@ -338,6 +336,8 @@ else if($_POST['act'] == 'get_token')
   $res = $req->saveToken($token);
   echo json_encode($res);
 }
+
+
 
 
 /**************SUBSCRIBE for save*******************/
@@ -408,8 +408,9 @@ else if($_REQUEST['act']=="gs_sub")
 
 
 
-/***************Subscribed and Alerts*******************/
 
+
+/***************Subscribed and Alerts*******************/
 
   else if($_REQUEST['act'] == 'get_subs')
   {
@@ -429,10 +430,8 @@ else if($_REQUEST['act']=="gs_sub")
   }
 
 
+
 /********** Delete The Subscribed **************/
-
-
-
 
   else if($_REQUEST['act'] == 'un_subs')
   {
@@ -528,9 +527,10 @@ else if($_REQUEST['act']=="gs_sub")
 
 
 
+
+
  
 /*********************Forget Password*********************/
-
 
  else if($_REQUEST['act']=='forget_pass')
   {

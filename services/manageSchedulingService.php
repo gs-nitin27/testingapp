@@ -15,8 +15,9 @@ if($query)
 return true;
 }
 else 
+{
 return false;
-
+}
 }
 
 
@@ -126,10 +127,8 @@ public function getStudents($class)
 	$query = mysql_query("SELECT us.`name`,us.`device_id`, gs.`classid`,gs.`student_id` ,gs.`fees`,gs.`joining_date` FROM `gs_class_data` AS gs LEFT JOIN `user` AS us ON gs.`student_id` = us.`userid`  WHERE gs.`student_id` = us.`userid` AND gs.`classid` = '$class' ");
 if(mysql_num_rows($query)>0)
 {
-
 while($rows = mysql_fetch_assoc($query))
 {
-
 $data[] = $rows;
 
 }

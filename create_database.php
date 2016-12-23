@@ -1327,7 +1327,7 @@ echo json_encode($data3);
 }
 
 
-/*********    CODE FOR APPLIYING FOR JOB BY THE USER   *************************/
+/********* CODE FOR APPLIYING FOR JOB BY THE USER   **********/
 
 else if($_POST['act'] == "apply")
 {

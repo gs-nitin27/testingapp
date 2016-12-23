@@ -36,7 +36,7 @@
        $email        =  $data['email'];
        $password1    =  $data['password'];
        $token        =  mysql_escape_string($data['token']);
-       $userType     = '4';
+       $userType     = '104';
 
        $query =mysql_query("INSERT INTO `user`(`userid`,`userType`, `name`, `email`, `password`,`device_id`) VALUES('','$userType','$name','$email','$password1','$token')");
        if($query)
@@ -86,8 +86,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click here:<h1> Click here </h1>'.$emailconform.''.$email.'<br></strong>
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting GetSportyLite Team</p> 
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click activate to login</br> <a href="'.$emailconform.''.$email.'">Activate<br></strong>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting</p></br><p>GetSporty Team</p> 
 
 </td>
 </tr>
@@ -246,12 +246,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
    /******************** Seraching [Function]**********************/
     public function GetSearch($where)
     {
-      //echo "SELECT * FROM `gs_resources` 'where' .'$where'.";die();
-     //$query ="SELECT * FROM `gs_resources` where ".$where;
-        $query = mysql_query("SELECT * FROM `gs_resources` where `status` = '1' AND ".$where);
-        //$a=mysql_query($query);
-        //echo $a;die();
-        if(mysql_num_rows($query) > 0)
+      $query = mysql_query("SELECT * FROM `gs_resources` where `status` = '1' AND ".$where);
+       if(mysql_num_rows($query) > 0)
         {
               while($row = mysql_fetch_assoc($query))
               {
@@ -269,6 +265,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
           return 0;
         }
     }
+
+
+
      /*************** Get Details of Resources[Function]*****************/
 
      public function getDetail($resource_id)
@@ -287,7 +286,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
           return 0;
         }
     }
+
+
+
      /**************** Get favourites of Resources [Function]*****************/
+
      public function favourites($user_id, $module , $user_favs)
     {
         $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
@@ -314,6 +317,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     }
 
 
+/**************** Update favourites of Resources [Function]*****************/
+
 
     public function updatefav($id,$user_id,$data)
    {
@@ -329,7 +334,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
        return 0;
        }
     } 
+
+
+
      /********** Save Token When user is first instal APPS [Function]********/
+
     public function saveToken($token)
     {
       $query = mysql_query("SELECT `token_id` FROM `get_token` USE INDEX (`token_id`) WHERE `token_id` = '$token'");
@@ -351,6 +360,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
     /*****************Get The Favourate [Function]**********************/
 
     public function getfav($id,$type)
@@ -362,6 +372,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         {
             $data = $row;
         }
+   
        return $data;
       }
       else
@@ -370,12 +381,13 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
+
  /*****************Get The Favourate and Alert [Function]**********************/
 
     public function get_fvdata($fwhere)
     {
-
-      $query = mysql_query("SELECT * FROM `gs_resources` where `id` IN (".$fwhere.") AND `status` = '1'" );
+       $query = mysql_query("SELECT * FROM `gs_resources` where `id` IN (".$fwhere.") AND `status` = '1'" );
      if(mysql_num_rows($query)>0)
      {
        while($row = mysql_fetch_assoc($query))
@@ -395,7 +407,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
      /************* Subscribed The Application by User [Function]************************/
+
      public function getsubscribed($userid,$textjson)
     {
      $query = mysql_query("SELECT  *FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6' AND `para_json`='$textjson'");
@@ -411,6 +425,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         return 0;
       }
     }
+
 
 
      /***************Save the Subscribe query [Function]*******************/
@@ -434,7 +449,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
        return 0;
       }
     }
+
+
      /******************Get  the All Subscribe Alert [Function]*************************/
+
     public function getSubs($userid,$module)
     {
       $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '$module'";
@@ -454,6 +472,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
+
    /*************Function for Delete The Subscribe and Alert*************************/
 
     public function delSubs($userid,$sub_id,$module)
@@ -469,6 +489,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
+
      /**************Modify The Subscribe and Alert [Function]*******************/
 
      public function modify($user_id ,$sub_id,$where, $textjson,$module)
@@ -483,6 +505,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         return 0;
         }
     }
+
+
 
       /***********************Forget Password [Function] **********/
 
@@ -591,7 +615,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
+
+
       /***********************Change Password [Function]****************/
+
      public function change_passwrod($otp_code,$new_password)
     {
       $new_password1=md5($new_password);
@@ -609,7 +636,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     }
 
 
-    /****************Create Resource [Share Story here] [Function] *******************************/
+
+
+
+    /**********Create Resource [Share Story here] [Function] *******************************/
     
       public function getCreate($data)
       {
@@ -636,14 +666,16 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 	        }
         }
 
+
+
+
     /***************Function for Upload Image in Create Resource***********************/
 
     public function imageupload($image,$id)
     {
        $now = new DateTime();
        $time=$now->getTimestamp(); 
-	     define('UPLOAD_DIR','../../staging/uploads/resources/');
-      $img = $image;
+	    $img = $image;
       $img = str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
