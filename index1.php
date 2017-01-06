@@ -11,9 +11,18 @@ $.ajax({
 
     type: "POST",
     url: "create_database.php",
-    //data: "act=getsearchview&user_id=116&id=1type=3",
-     data:"act=getsearchview&id=1&user_id=116&type=1",
-   // data: "act=getsearchview&id=21&type=2&user_id=16",
+
+   data:"act=apply&user_id=84&employerid=&id=127&type=1",
+
+
+
+
+   // url: "useralertcontroller.php",
+ //data: "act=select_applicant&applicant_id=84&employer_id=84&job_title=PHPdeveloper&job_id=1000&employer_name=ram&salary=5090&joining_date=12-jan-2014&other_deatil=hi how are you&status=1",
+ // data: "act=select_applicant&applicant_id=84&employer_id=84&job_title=PHPdeveloper&job_id=1000&employer_name=ram&salary=5090&joining_date=12-jan-2014&other_deatil=hi how are you&status=1",
+//data: "act=getappliedjobs&user_id=84",
+    // data:"act=select_applicant&applicant_id=84&employer_id=104&employer_name=Sameer&job_id=127&job_title=Php&salary=5000&joining_date=december&other_deatil=Hi How are you &status=3",
+  
     dataType: "json",
     success: function(result) {
 

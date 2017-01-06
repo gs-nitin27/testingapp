@@ -58,9 +58,8 @@ $prof     =  $data['prof'];
 $sport    =  $data['sport'];
 $location =  $data['location'];
 $token    =  $data['token'];
-$usertype =  $data ['usertype'];
 
-$query = mysql_query("INSERT into `user`(`name`,`userType`,`email`,`password`,`contact_no`,`Gender`,`prof_id`,`sport`,`location`,`device_id`) values('$name','$usertype','$email','$password','$phone','$gender','$prof','$sport','$location','$token')");
+$query = mysql_query("INSERT into `user`(`name`,`email`,`password`,`contact_no`,`Gender`,`prof_id`,`sport`,`location`,`device_id`) values('$name','$email','$password','$phone','$gender','$prof','$sport','$location','$token')");
 
 if($query)
 {
@@ -88,24 +87,29 @@ else
 
 public function getdeviceid($id)
 {
-//echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";
-$query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
-$row = mysql_num_rows($query);
-if($row == 1)
-{
+ //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die();
+  $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
+  $row = mysql_num_rows($query);
+  if($row == 1)
+  {
+      while($data = mysql_fetch_assoc($query))
+      {
+      $dev = $data;
+      //  $rows=$data;
+      }
+     // print_r($dev);die();
+      return $dev;
+      //if($dev['device_id'] != "")
 
-while($data = mysql_fetch_assoc($query))
-{
+      //return $dev['device_id'];
+  }
+  else 
+  {
+      return 0;
+  }
 
-$dev = $data;
-if($dev['device_id'] != "")
-return $dev;
-else 
-return 0;
-}
-
-}
-else return 0;
+//}
+//else return 0;
 
 
 }
@@ -128,6 +132,8 @@ else return 0;
 public function getEmpdeviceid($id)
 {
 
+ //echo  "SELECT ji.`userid` , us.`device_id` , us.`email`FROM `gs_jobInfo` AS ji LEFT JOIN `user` AS us ON ji.`userid` = us.`userid` WHERE ji.`id` = '$id'";die();
+//echo "dev";die();
 $query = mysql_query("SELECT ji.`userid` , us.`device_id` , us.`email`FROM `gs_jobInfo` AS ji LEFT JOIN `user` AS us ON ji.`userid` = us.`userid` WHERE ji.`id` = '$id'");
 if(mysql_num_rows($query)>0)
 {
@@ -138,7 +144,6 @@ while($row = mysql_fetch_assoc($query))
 $data = $row;
 
 }
-
 return $data;
 }
 else 
@@ -176,37 +181,31 @@ return 0;
 public function create_job($item)
 {
 
-$query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`, `gender`, `sport`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
+$query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
+
 
 if($query)
-{
   return true;
-}
 else
-{
   return false;
-}
 
 }
 
 public function create_tournament($item)
 {
- //print_r($item);die();
+  //print_r($item);die();
+
 $query = mysql_query("INSERT INTO `gs_tournament_info`(`id`, `userid`, `name`, `address_1`, `address_2`, `location`,`state`, `pin`, `description`,`sport` ,`level`, `age_group`, `gender`, `eligibility1`,`eligibility2`, `terms_and_cond1`,`organiser_name`, `mobile`, `landline`, `email`, `org_address1`, `org_address2`, `org_city`, `org_pin`, `tournaments_link`, `start_date`, `end_date`, `event_entry_date`, `event_end_date`, `file_name`, `file`, `email_app_collection`, `phone_app_collection`,`date_created`) VALUES ('$item->id','$item->userid','$item->tournament_name','$item->address_line1','$item->address_line2','$item->city','$item->state','$item->pin','$item->description','$item->sport','$item->tournament_level','$item->tournament_ageGroup','$item->gender','$item->eligibility1','$item->eligibility2','$item->terms_and_conditions1','$item->organizer_name','$item->mobile','$item->landline','$item->emailid','$item->organizer_address_line1','$item->organizer_address_line2','$item->organizer_city','$item->organizer_pin','$item->tournament_links',FROM_UNIXTIME ('$item->start_date'),FROM_UNIXTIME ('$item->end_date'),FROM_UNIXTIME('$item->entry_start_date') ,FROM_UNIXTIME ('$item->entry_end_date'),'$item->file_name','$item->file','$item->email_app_collection','$item->phone_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `name` = '$item->tournament_name', `address_1` = '$item->address_line1' , `address_2` = '$item->address_line2' , `location` = '$item->city' ,`state`='$item->state' ,`pin` = '$item->pin' , `description` = '$item->description',`sport`='$item->sport',`level` = '$item->tournament_level',`age_group`='$item->tournament_ageGroup',`gender` = '$item->gender',`eligibility1` = '$item->eligibility1' ,`eligibility2` = '$item->eligibility2', `terms_and_cond1` = '$item->terms_and_conditions1',`organiser_name` = '$item->organizer_name' , `mobile` = '$item->mobile' ,`landline` = '$item->landline' , `email` = '$item->emailid' , `org_address1` = '$item->organizer_address_line1' , `org_address2` = '$item->organizer_address_line2' , `org_city` = '$item->organizer_city', `org_pin` = '$item->organizer_pin' , `tournaments_link` = '$item->tournament_links' ,`start_date` = FROM_UNIXTIME ('$item->start_date') , `end_date` = FROM_UNIXTIME ('$item->end_date') , `event_entry_date` = FROM_UNIXTIME ('$item->entry_start_date') , `event_end_date` = FROM_UNIXTIME ('$item->entry_end_date'), `file_name` = '$item->file_name' , `file` = '$item->file' , `email_app_collection` = '$item->email_app_collection' , `phone_app_collection` = '$item->phone_app_collection'");
 
-if($query)
-{
+if($query){
+
+
   return true;
-}
-else
-{
+}else
   return false;
+
+
 }
-}
-
-
-
-
 
 public function create_event($item)
 {
@@ -222,17 +221,17 @@ else
 
 public function getCreation($where , $type)
 {
-//echo $type;die();
 
 if($type == 1)
 {
 
+
 $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
 }
-
 else if ($type == 2) 
 {
-  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE ".$where." ORDER BY `id` DESC ");
+  
+$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE ".$where." ORDER BY `id` DESC ");
 }
 else if($type == 3)
 {
@@ -266,24 +265,25 @@ $query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`title`,'')A
 } 
 
 //$query = mysql_query("SELECT * FROM `".$table."` WHERE `userid` = '$userid' ");
-$a=mysql_num_rows($query);
-//echo $a;die();
 if(mysql_num_rows($query) > 0)
 {
+
 while($row = mysql_fetch_assoc($query))
 {
-$data[] = $row;
-}
 
+
+$data[] = $row;
+
+}
 return $data;
-//print_r($data);die();
 }
 else 
-{
- return 0;
-}
-}
+  return 0;
 
+
+
+
+}
 
 
 
@@ -406,16 +406,21 @@ $rows[] = $row;
 
 public function jobsearch($fwhere)
 {
-//echo $fwhare;die();
+
 $query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` ".$fwhere." ORDER BY `date_created` DESC";
 //echo $query;
 $query1 = mysql_query($query);
 if(mysql_num_rows($query1) > 0)
 {
+
+
+
 while($row = mysql_fetch_assoc($query1))
 {
+
 $rows[] = $row;
 //$res = array('data'=>$rows);
+
 }
   return $rows;
  } 
@@ -425,9 +430,6 @@ $rows[] = $row;
    }
 }
 
-
-
-
 /**********************************/
 //Function to fetch the favourite data for the user from table `user_fav` 
 //and send with search results
@@ -435,21 +437,20 @@ $rows[] = $row;
 
   public function getfavForUser($data,$type,$id)
 {
-    //print_r($type);
-  	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
-  // echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";die();
-  
-  	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
 
+    //print_r($data);
+  	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
+    //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";
+  	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
 
         if($type == '1' || $type == '2' || $type == '3')
         {
 
-        $type = 'id';
-        }
-        else if ($type == '4' || $type == '5')
+         $type = 'id';
+         }
+         else if ($type == '4' || $type == '5')
         {
-           $type = 'userid';
+            $type = 'userid';
         }
 
    if(mysql_num_rows($query)>0 && $id != "")
@@ -467,13 +468,15 @@ $rows[] = $row;
         for($i = 0 ; $i< $num ; $i++)
         {    
               $val = $data[$i][$type];
-              if(in_array($val, $fav))
-              {
+              if(in_array($val, $fav)){
+
               array_push($data[$i]['fav'], 1);
               $data[$i]['fav'] = "1";
-             }
+            	
+            }
             else
             {
+
             	array_push($data[$i]['fav'], 0);
             	$data[$i]['fav'] = "0";
             }
@@ -498,7 +501,6 @@ $rows[] = $row;
               // }
                 }
        return $data;
-      // print_r($data);
         
 
    }
@@ -732,7 +734,11 @@ else{
 public function jobsapplied($userid , $id , $type)
 {
 
-$query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`) VALUES ('','$userid','$id',CURDATE())");
+//echo"INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),$type)";die();
+
+
+
+$query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
 if($query){
 
 
@@ -815,6 +821,7 @@ for($i = 0 ; $i<$size ; $i++)
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
+
     //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
@@ -825,8 +832,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
-      //print_r($data);
-       //echo json_encode($data);
+  
+        json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
     define("GOOGLE_API", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
@@ -848,8 +855,26 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
-        //print_r($result);
     }
+
+
+/*************************************************************************/
+
+
+
+
+
+
+
+
+
+
+/***************************************************************************/
+
+
+
+
+
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -864,9 +889,8 @@ public function sendLitePushNotificationToGCM($registatoin_ids, $message)
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
-     // print_r($data);
-       //echo json_encode($data);
-        //print_r($fields);
+       json_encode($data);
+       
     // Google Cloud Messaging GCM API Key
    define("API_KEY", "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU");    
         $headers = array(
@@ -887,16 +911,12 @@ public function sendLitePushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
-        //print_r($result);
-    }
+      }
 
 
 
-public function savealert($employerid ,$type,$message , $title, $applicantId)
+public function savealert($employerid ,$type,$message ,$title, $applicantId)
 {
-
-//echo "INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title','CURDATE()')";
-  print_r($title);
 $query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`,`type`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE(),'$type')");
 
 if($query){
@@ -1073,7 +1093,14 @@ return 0;
 
 public function getAppliedJobListing($userid)
 {
-$q =  "SELECT ji.`userid` AS employerid ,ji.`id` AS job_id ,uj.`userjob`,uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE us.`userid` = uj.`userid` AND ji.`userid` = '$userid' ";
+// echo "$userid";die();
+
+
+
+
+$q =  "SELECT ji.`userid` AS employerid, ji.`id` AS job_id ,uj.`userjob`,uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE us.`userid` = uj.`userid` AND ji.`userid` = '$userid' ";
+
+
 $query = mysql_query($q);
 
 if(mysql_num_rows($query)>0)
@@ -1086,18 +1113,20 @@ return $rows;
 }
 else
 {
-
 echo 0;
-
+}
 }
 
-}
 
-public function jobStatus($job_id,$applicant_id,$status)
+/********************Function For Job Status************************/
+
+public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
+//public function jobStatus($job_id,$applicant_id,$status)
 {
-    $q = mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
+  //echo "UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'";die();
+    $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
 
-  if($q)
+  if($query)
   {
     return true;
   }
@@ -1109,8 +1138,18 @@ public function jobStatus($job_id,$applicant_id,$status)
   }
 }
 
+
+
+
+
+/**************************Offer Listing******************************/
+
+
+
+
 public function getOfferList($userid)
 {
+
 $query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userjob` , ji.`id` AS job_id, ji.`title` AS job_title , ji.`organisation_name` AS employer_name , uj.`status` FROM `user_jobs` AS uj LEFT JOIN `gs_jobInfo` AS ji ON uj.`userjob` = ji.`id` WHERE uj.`userjob` = ji.`id` AND uj.`status` > 0 AND uj.`userid` = '$userid'"); 
 
 if(mysql_num_rows($query)>0)
@@ -1137,7 +1176,7 @@ return 0;
 
 
 
-/*******************************************************/
+/*********************************Create Resources***********************************/
 
 public function createResources($data)
 {
@@ -1199,7 +1238,7 @@ public function imageupload($image,$id,$title)
 }
 
 
-/*****************************************************************/
+/******************************Get Resources Search******************************/
 
    public function getResources_search($fwhere)
   {
@@ -1225,6 +1264,98 @@ public function imageupload($image,$id,$title)
 
       }  
 
-}
+
+/**************************Function for Email Send****************************/
+
+public function sendEmail($id)
+{
+ $query  = mysql_query("SELECT `email`,`name` FROM `user` WHERE `userid` = '$id'");
+ while ($row=mysql_fetch_assoc($query))
+  {
+   $email=$row['email'];
+   $user_name= $row['name'];
+   }
+               require('class.phpmailer.php');
+              $mail = new PHPMailer();
+              $to=$email;
+              $from="info@getsporty.in";
+              $from_name="Getsporty Lite";
+              $subject="Offer letter";
+              $user=$user_name;
+              $otp  =$code;
+              //global $error;
+              $mail = new PHPMailer();  // create a new object
+              $mail->IsSMTP(); // enable SMTP
+                  $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPAuth = true;  // authentication enabled
+              $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+              $mail->Host = 'dezire.websitewelcome.com';
+              //$mail->Host = 'smtp.gmail.com';
+              $mail->Port = 465; 
+              $mail->Username ="info@getsporty.in";  
+              $mail->Password = "%leq?xgq;D?v";           
+              $mail->SetFrom($from, $from_name);
+              $mail->Subject = $subject;
+              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">RE: LETTER OF OFFER OF EMPLOYMENT – Position title</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Dear Mr. /Ms., <strong><br> ' . $user . '</strong></p>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Following our recent discussions, we are delighted to offer you the position of Position Title with Our Organization. Our Organization is describe key highlights about your organization. If you join Our Organization, you will become part of a fast-paced and dedicated team that works together to provide our clients with the highest possible level of service and advice.<br> 
+
+As a member of Our Organization team, we would ask for your commitment to deliver outstanding quality and results that exceed client expectations. In addition, we expect your personal accountability in all the products, actions, advice and results that you provide as a representative of Our Organization. In return, we are committed to providing you with every opportunity to learn, grow and stretch to the highest level of your ability and potential.<br>
+
+We are confident you will find this new opportunity both challenging and rewarding. The following points outline the terms and conditions we are proposing.
+<br><br><br><br><br>Thanks GetSportyLite Team </p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+         return 1;
+         
+      }       
+  
+
+
+
+}//End Class
 
 ?>

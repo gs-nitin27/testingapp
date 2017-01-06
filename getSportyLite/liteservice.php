@@ -13,7 +13,7 @@
     public function  userExits($where)
     {
      
-       $query  = mysql_query("SELECT `userid`,`userType`,`name`, `email` FROM `user` ".$where);
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -30,15 +30,37 @@
     
     /****************Sign Up in Getsporty [Function]***********************/
 
-    public function GsUserRegister($data)
-    {
-       $name         =  $data['name'];
-       $email        =  $data['email'];
-       $password1    =  $data['password'];
-       $token        =  mysql_escape_string($data['token']);
-       $userType     = '104';
+public function GsUserRegister($data)
+  {
+    
+     $name                 =  $data['name'];
+     $email                =  $data['email'];
+     $password1            =  $data['password'];
+     $token                =  mysql_escape_string($data['token']);
+     $device_id            =  mysql_escape_string($data['device_id']);
+     $facebook_status      =  mysql_escape_string($data['facebook_status']); 
+     $userType     = '104';
+     if($facebook_status!=0)
+     {
+          $query =mysql_query("INSERT INTO `user`(`userid`,`userType`,`name`, `email`, `password`,`device_id`,`status`) VALUES('','$userType','$name','$email','$password1','$device_id','$facebook_status')");
+         if($query)
+         {
+            $id = mysql_insert_id();
+             if($id!=NULL)
+            {
+               $data1 = $this->userdata($id);
+            }
+            return $data1;
+         } 
+         else
+         {    
+            return 0;
+         }  
+      }
 
-       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`, `name`, `email`, `password`,`device_id`) VALUES('','$userType','$name','$email','$password1','$token')");
+else 
+    {
+       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`, `name`, `email`, `password`,`device_id`,`status`) VALUES('','$userType','$name','$email','$password1','$device_id','$facebook_status')");
        if($query)
        {
               require('class.phpmailer.php');
@@ -120,28 +142,30 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
             return 0;
           }
         }
-       
-    
-    // public function userdata($id)
-    // {
-    //    $query  = mysql_query("SELECT `userid`,`userType`,`name`, `email` FROM `user` where `userid` = '$id'");
-    //    if(mysql_num_rows($query)>0)
-    //    {
-    //       while($row = mysql_fetch_assoc($query))
-    //       {
-    //         $data = $row;
-    //       }
-    //     return $data;
-    //     }
-    //     else 
-    //     {
-    //      return 0;
-    //     }
-    // }
+  }
+
+    public function userdata($id)
+    {
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` where `userid` = '$id'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+    }
+
+  
 
       /********************Sign In GetSporty [Function]*******************/
 
-    public function gsSignIn($email,$password1,$token)
+    public function gsSignIn($email,$password1,$device_id)
     {
     	      
      $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
@@ -339,12 +363,12 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
      /********** Save Token When user is first instal APPS [Function]********/
 
-    public function saveToken($token)
+    public function saveToken($device_id)
     {
-      $query = mysql_query("SELECT `token_id` FROM `get_token` USE INDEX (`token_id`) WHERE `token_id` = '$token'");
+      $query = mysql_query("SELECT `device_id` FROM `get_token` USE INDEX (`device_id) WHERE `device_id` = '$device_id'");
       if(mysql_num_rows($query) < 1)
       {
-          $insert = mysql_query("INSERT INTO `get_token` (`id`,`token_id`) VALUES ('','$token')");
+          $insert = mysql_query("INSERT INTO `get_token` (`id`,`device_id`) VALUES ('','$device_id')");
           if($insert)
           {
             return 1;
@@ -704,8 +728,32 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         }
     }
 
-   
-   } // End of Class
+
+
+
+
+
+/***************Function for Searching the Result fro ***********************/
+
+public function getSearching($where)
+{
+  $query =mysql_query("SELECT *FROM $where ");
+  while($row=mysql_fetch_assoc($query))
+  {
+    $row['fav']='0';
+   $data[]= $row;
+  // $data['fav']='0';
+   //$row[$fav]['fav'] ='0';
+  }
+  return $data;
+//return $row;
+}
+ 
+
+
+
+  
+} // End of Class
 
 
 ?>
