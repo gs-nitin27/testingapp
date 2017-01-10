@@ -8,8 +8,6 @@ include('liteservice.php');
 
 if($_POST['act'] == 'gs_signup')
 {
-
- // $data = json_decode($_REQUEST['data']);
     $name             =  urldecode($_POST ['name']);
     $email            =  urldecode($_POST ['email']);
     $password1        =  md5(urldecode(@$_POST ['password']));
@@ -49,7 +47,6 @@ if($_POST['act'] == 'gs_signup')
 
 else if($_REQUEST['act']=="gs_login")
 {
-  //$data = json_decode($_REQUEST['data']);
       $email         = urldecode($_REQUEST['email']);
       $pass          = md5(urldecode($_REQUEST['password']));
       $username      = mysql_real_escape_string($email);
@@ -74,7 +71,6 @@ else if($_REQUEST['act']=="gs_login")
 
 else if($_REQUEST['act']=="gs_list")
 { 
-  //$data = json_decode($_REQUEST['data']);
     $req           =  new liteservice();
     $res           =  $req->getList();
     $module        = '6';
@@ -119,7 +115,6 @@ else if($_REQUEST['act']=="gs_list")
 
 else if($_REQUEST['act']=="gs_sports")
 { 
-  //$data = json_decode($_REQUEST['data']);
     $req           =  new liteservice();
     $res           =  $req->Get_Sports();
     if($res)
@@ -141,7 +136,6 @@ else if($_REQUEST['act']=="gs_sports")
 
 else if($_REQUEST['act']=="gs_location")
 { 
-  //$data = json_decode($_REQUEST['data']);
     $req           =  new liteservice();
     $res           =  $req->Get_Location();
     if($res)
@@ -163,8 +157,6 @@ else if($_REQUEST['act']=="gs_location")
 
 else if($_REQUEST['act']=="gs_search")
 {
-
-  //$data = json_decode($_REQUEST['data']);
     $key          =  urldecode($_REQUEST ['key']);
     if($key != '')
       {
@@ -222,7 +214,6 @@ else if($_REQUEST['act']=="gs_search")
 
 else if($_REQUEST['act']=="gs_detail")
 { 
-  //$data = json_decode($_REQUEST['data']);
   $resource_id     =  urldecode($_REQUEST['id']);
   $fav             =  urldecode($_REQUEST['fav']);
   $req             =  new liteservice();
@@ -259,7 +250,6 @@ else if($_REQUEST['act']=="gs_detail")
 
 else if ($_POST['act'] == "gs_fav" )
 {
-  //$data = json_decode($_REQUEST['data']);
   $user_id   =urldecode(@$_POST['user_id']);
   $module    =urldecode(@$_POST['type']);
   $user_favs =urldecode(@$_POST['id']);
@@ -314,7 +304,6 @@ else if ($_POST['act'] == "gs_fav" )
 
 else if($_POST['act'] == "gs_getfav")
 {
-  //$data = json_decode($_REQUEST['data']);
   $id   = urldecode($_POST ['user_id']);
   $type = urldecode($_POST ['type']);
   $rev  = new liteservice();
@@ -349,8 +338,6 @@ else if($_POST['act'] == "gs_getfav")
 
 else if($_POST['act'] == 'get_token')
 {
-
-  //$data = json_decode($_REQUEST['data']);
   $device_id = $_REQUEST['device_id'];
   $req = new liteservice();
   $res = $req->saveToken($device_id);
@@ -364,7 +351,6 @@ else if($_POST['act'] == 'get_token')
 
 else if($_REQUEST['act']=="gs_sub")
 {
-  //$data = json_decode($_REQUEST['data']);
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
    $location     =  urldecode($_REQUEST ['location']);
@@ -435,7 +421,6 @@ else if($_REQUEST['act']=="gs_sub")
 
   else if($_REQUEST['act'] == 'get_subs')
   {
-    //$data = json_decode($_REQUEST['data']);
     $userid    = $_REQUEST['user_id'];
     $module    = '6';
     $req       = new liteservice();
@@ -457,7 +442,6 @@ else if($_REQUEST['act']=="gs_sub")
 
   else if($_REQUEST['act'] == 'un_subs')
   {
-    //$data = json_decode($_REQUEST['data']);
    $userid        = $_REQUEST['user_id'];
    $sub_id        = $_REQUEST['id'];
    $module        = '6';
@@ -483,7 +467,6 @@ else if($_REQUEST['act']=="gs_sub")
 
  else if($_REQUEST['act'] == 'modify_subs')
  {
-  //$data = json_decode($_REQUEST['data']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
    $sub_id       =  urldecode($_REQUEST['id']) ;
    $key          =  urldecode($_REQUEST ['key']);
@@ -558,7 +541,6 @@ else if($_REQUEST['act']=="gs_sub")
 
  else if($_REQUEST['act']=='forget_pass')
   {
-    //$data = json_decode($_REQUEST['data']);
      $email      =  urldecode($_REQUEST['user_email']);
      $where      =  "WHERE `email` = '".$email."'";
      $req        =  new liteservice();
@@ -595,7 +577,6 @@ else if($_REQUEST['act']=="gs_sub")
 
 else if($_REQUEST['act']=='change_pass')
 {
-  //$data = json_decode($_REQUEST['data']);
     $otp_code          =   @$_POST['otp_code'];
     $new_password      =   @$_POST['new_password'];
     $req               =  new liteservice();
@@ -621,76 +602,78 @@ else if($_REQUEST['act']=='change_pass')
 
 else if($_REQUEST['act'] == "gs_create")
 {
-  //$data = json_decode($_REQUEST['data']);
 	  $data = json_decode($_REQUEST['data']);
 	   $req = new liteservice();
 	  $res = $req->getCreate($data);
 	  if($res != 0)
 	  {
-	  $resp = array('data'=>$res ,  'message'=>'Resource has been created');
+	  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
 	  echo json_encode($resp);
 	  }
 	  else
 	  {
-	   $resp = array('data'=>$res ,  'message'=>'Resource has not been created'); 
+	   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
 	  echo json_encode($resp);
 	  }
 }
 
 
 
+/*********************************************************************/
+
+
 
 /***************Code for Searching the Result form [JOB,EVENT, TOURNAMENT]  ****************/
-
 
 
 else if($_REQUEST['act'] == "gs_searching")
 {
     $keyword   =  $_REQUEST['key'];
     $userid    =  $_REQUEST['userid'];
-    $status    =  $_REQUEST['status'];
-    switch ($status)
+    $module    =  $_REQUEST['module'];
+    switch ($module)
     {
       case '1':
-               $module        = '1';
-                if($keyword=='')
+              $module        = '1';
+               if(empty($keyword))
                 {
-                  $where="`gs_jobinfo` WHERE `title` like '%$keyword%' OR `description` like '%$keyword%' ";
+                 $where="`gs_jobInfo` WHERE 1 ";
                 }
                 else
                 {
-                   $where="`gs_jobinfo` WHERE 1 ";
+                 $where="`gs_jobInfo` WHERE `title` like '%$keyword%' OR `description` like '%$keyword%' ";
                 }
         break;
+
       case '2':
                $module        = '2';
-              if($keyword=='')
+             if(empty($keyword))
               {
-                $where="`gs_eventinfo` WHERE `type` like '%$keyword%' OR `description` like '%$keyword%' ";
+                 $where="`gs_eventinfo` WHERE 1 ";
               }
               else
               {
-                $where="`gs_eventinfo` WHERE 1 ";
+                  $where="`gs_eventinfo` WHERE `type` like '%$keyword%' OR `description` like '%$keyword%' ";
               }
               break;
       case '3':
                $module        = '3';
-              if($keyword=='')
+             if(empty($keyword))
               {
-                 $where="`gs_tournament_info` WHERE `sport` like '%$keyword%' OR `description` like '%$keyword%' ";
+                $where="`gs_tournament_info` WHERE 1 ";
               }
               else
               {
-                 $where="`gs_tournament_info` WHERE 1 ";
+                 $where="`gs_tournament_info` WHERE `sport` like '%$keyword%' OR `description` like '%$keyword%' ";
+               
               }
       break;
       default:
                 $resp = array('data'=>'0' ,  'status'=>'Record is Found');
                 echo json_encode($resp);
     }
-
            $req = new liteservice();
-           $res = $req->getSearching($where);
+           $res = $req->getSearching($where,$module);
            if($res != 0)
             { 
             if($userid=='')
@@ -699,7 +682,7 @@ else if($_REQUEST['act'] == "gs_searching")
              echo json_encode($data1);
             }
             else
-           { 
+            { 
               $userid        =  urldecode($_REQUEST['user_id']);
               $res2          = $req->getfav($userid,$module);
               if($res2 != 0 && $res2['userfav'] != '')
@@ -732,36 +715,6 @@ else if($_REQUEST['act'] == "gs_searching")
     }
 }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

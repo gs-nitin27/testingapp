@@ -85,9 +85,9 @@ else
 
      */ 
 
+/*************************New Device id find**********************************/
 public function getdeviceid($id)
 {
- //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die();
   $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
   $row = mysql_num_rows($query);
   if($row == 1)
@@ -95,26 +95,52 @@ public function getdeviceid($id)
       while($data = mysql_fetch_assoc($query))
       {
       $dev = $data;
-      //  $rows=$data;
       }
-     // print_r($dev);die();
-      return $dev;
-      //if($dev['device_id'] != "")
-
-      //return $dev['device_id'];
+        return $dev;
+       
   }
   else 
   {
       return 0;
   }
 
-//}
-//else return 0;
-
-
 }
 
 
+/**********************************************************************/
+
+
+
+
+
+
+/*****************Old Device Id Find code***********************************/
+// public function getdeviceid($id)
+// {
+// //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die();
+// $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
+// $row = mysql_num_rows($query);
+// if($row == 1)
+// {
+
+// while($data = mysql_fetch_assoc($query))
+// {
+
+// $dev = $data;
+// }
+// //if($dev['device_id'] != "")
+// return $dev;
+// else 
+// return 0;
+// }
+
+// }
+// else return 0;
+
+
+// }
+
+/****************************************************************************************/
 /**
 
      * function For fetching Device token id to send GCM message
@@ -132,8 +158,6 @@ public function getdeviceid($id)
 public function getEmpdeviceid($id)
 {
 
- //echo  "SELECT ji.`userid` , us.`device_id` , us.`email`FROM `gs_jobInfo` AS ji LEFT JOIN `user` AS us ON ji.`userid` = us.`userid` WHERE ji.`id` = '$id'";die();
-//echo "dev";die();
 $query = mysql_query("SELECT ji.`userid` , us.`device_id` , us.`email`FROM `gs_jobInfo` AS ji LEFT JOIN `user` AS us ON ji.`userid` = us.`userid` WHERE ji.`id` = '$id'");
 if(mysql_num_rows($query)>0)
 {
@@ -144,6 +168,7 @@ while($row = mysql_fetch_assoc($query))
 $data = $row;
 
 }
+
 return $data;
 }
 else 
@@ -731,25 +756,23 @@ else{
 
 }
 
+
+
 public function jobsapplied($userid , $id , $type)
 {
 
 //echo"INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),$type)";die();
-
-
-
 $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
-if($query){
-
-
+if($query)
+{
   return 1;
-}else{
-
+}
+else
+{
   return 0;
 }
-
-
 }
+
 
 
 public function getuserjobs($res, $type, $id)
@@ -822,6 +845,9 @@ for($i = 0 ; $i<$size ; $i++)
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
 
+ // print_r($registatoin_ids);
+ // print_r($message);die();
+
     //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
@@ -832,7 +858,9 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
-  
+
+     // print_r($data);
+      
         json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
@@ -855,26 +883,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
+        //print_r($result);
     }
-
-
-/*************************************************************************/
-
-
-
-
-
-
-
-
-
-
-/***************************************************************************/
-
-
-
-
-
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -889,8 +899,9 @@ public function sendLitePushNotificationToGCM($registatoin_ids, $message)
         //echo $registatoin_ids;
        $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
-       json_encode($data);
-       
+     // print_r($data);
+        json_encode($data);
+        //print_r($fields);
     // Google Cloud Messaging GCM API Key
    define("API_KEY", "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU");    
         $headers = array(
@@ -911,12 +922,16 @@ public function sendLitePushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
-      }
+        //print_r($result);
+    }
 
 
 
-public function savealert($employerid ,$type,$message ,$title, $applicantId)
+public function savealert($employerid ,$type,$message , $title, $applicantId)
 {
+
+//echo "INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`) VALUES ('','$employerid','$applicantId','$message','$title','CURDATE()')";
+  //print_r($title);
 $query = mysql_query("INSERT INTO `gs_alerts`(`id`, `userid`,`applicant_id`, `message`, `title`, `date_alerted`,`type`) VALUES ('','$employerid','$applicantId','$message','$title',CURDATE(),'$type')");
 
 if($query){
@@ -1091,18 +1106,11 @@ return 0;
 
 }
 
-public function getAppliedJobListing($userid)
+public function getAppliedJobListing($userid,$jobid)
 {
-// echo "$userid";die();
-
-
-
-
-$q =  "SELECT ji.`userid` AS employerid, ji.`id` AS job_id ,uj.`userjob`,uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE us.`userid` = uj.`userid` AND ji.`userid` = '$userid' ";
-
-
+$n=1;
+$q ="SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'";
 $query = mysql_query($q);
-
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
@@ -1113,15 +1121,14 @@ return $rows;
 }
 else
 {
-echo 0;
+return 0;
 }
 }
 
+/***********************************/
 
-/********************Function For Job Status************************/
 
 public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
-//public function jobStatus($job_id,$applicant_id,$status)
 {
   //echo "UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'";die();
     $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
@@ -1140,16 +1147,8 @@ public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 
 
 
-
-
-/**************************Offer Listing******************************/
-
-
-
-
 public function getOfferList($userid)
 {
-
 $query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userjob` , ji.`id` AS job_id, ji.`title` AS job_title , ji.`organisation_name` AS employer_name , uj.`status` FROM `user_jobs` AS uj LEFT JOIN `gs_jobInfo` AS ji ON uj.`userjob` = ji.`id` WHERE uj.`userjob` = ji.`id` AND uj.`status` > 0 AND uj.`userid` = '$userid'"); 
 
 if(mysql_num_rows($query)>0)
@@ -1176,7 +1175,7 @@ return 0;
 
 
 
-/*********************************Create Resources***********************************/
+/*******************************************************/
 
 public function createResources($data)
 {
@@ -1238,7 +1237,7 @@ public function imageupload($image,$id,$title)
 }
 
 
-/******************************Get Resources Search******************************/
+/*****************************************************************/
 
    public function getResources_search($fwhere)
   {
@@ -1263,6 +1262,7 @@ public function imageupload($image,$id,$title)
        }
 
       }  
+
 
 
 /**************************Function for Email Send****************************/
@@ -1356,6 +1356,7 @@ We are confident you will find this new opportunity both challenging and rewardi
 
 
 
-}//End Class
+
+}//end class
 
 ?>
