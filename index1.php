@@ -13,9 +13,9 @@ $.ajax({
     url: "create_database.php",
 
   //data:"act=apply&user_id=177&employerid=&id=197&type=1",
-data:"act=getappliedjobs&user_id=176&id=133",
+//data:"act=getappliedjobs&user_id=176&id=133",
 
-
+data:"act=gs_searching&user_id=&module=3&key=",
 
    // url: "useralertcontroller.php",
 //data: "act=select_applicant&applicant_id=84&employer_id=104&job_title=PHPdeveloper&job_id=1000&employer_name=ram&salary=5090&joining_date=12-jan-2014&other_deatil=hi how are you&status=2",

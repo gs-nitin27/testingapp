@@ -620,7 +620,7 @@ else if($_REQUEST['act'] == "gs_create")
 
 
 /*********************************************************************/
-
+// This Act is Transfer in Create Database.php so Please Ignore this Code 
 
 
 /***************Code for Searching the Result form [JOB,EVENT, TOURNAMENT]  ****************/

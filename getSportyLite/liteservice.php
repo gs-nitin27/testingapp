@@ -177,7 +177,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
             {   
                 if($row['status'] == '1' )
                 {
-                     if($row['device_id'] != $token)
+                     if($row['device_id'] != $token  && $row['device_id'] != '')
                      {
                       mysql_query(" UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' AND `password` = '$password1'");
                           $data= $row; 
@@ -734,6 +734,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
 
 /***************Function for Searching the JOB EVENT and Tournament ***********************/
+// This Code is Transfer in Create Database.php file so Please Check it 
+
+
 
 public function getSearching($where,$module)
 {

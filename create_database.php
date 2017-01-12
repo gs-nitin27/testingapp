@@ -30,24 +30,21 @@ if($_POST['act']=="register")
  
  if($res != 0)
  {
-
 $status = array('status' => 0, 'message' => 'user already exists');
 echo json_encode($status); 
-
  }
-
-
 else
 {
 $req1 = new userdataservice();
 $res1 = $req1->createUser($data);
+
 if($res1 == '1')
 {
 $req2 = new userdataservice();
 $res2 = $req2->userVarify($where);
+//print_r($res2);die();
 if($res2 != 0)
 {
-
 $res3 = array('data' => $res2,'status' => 1);
 echo json_encode($res3);  
 
@@ -85,7 +82,7 @@ if($row==1)
 {
 	while($row1 = mysql_fetch_assoc($validate))
 	{
-	   if($row1['device_id'] != $token )
+	   if($row1['device_id'] != $token  && $row1['device_id'] != $token)
 	  {
 	    $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
       $multiple = '1';
@@ -1597,7 +1594,236 @@ else if($_POST['act'] == "create_resource")
 
 
 
-/***********************************************************************/
+
+
+/*****************************GetsportyLite Searching*****************************/
+
+
+else if($_REQUEST['act'] == "gs_searching")
+{
+ $id          =urldecode($_POST ['user_id']);
+ $type        =urldecode($_POST ['module']);  //Module
+ $keyword     =  urldecode($_REQUEST['key']);
+switch ($type)
+    {
+      case '1':
+              $type        = '1';
+               if($type=='1')
+               {
+                if(empty($keyword))
+                {
+                $fwhere="`WHERE 1` ";
+                 }
+                else
+                {
+                 $fwhere=" WHERE `title` like '%$keyword%' OR `description` like '%$keyword%' ";
+                }
+                $rev = new userdataservice();
+              //  echo " $fwhere";die();
+                $res = $rev->jobsearch($fwhere);
+              }
+
+//$rev = new userdataservice();
+//$res = $rev->jobsearch($fwhere);
+if($res != 0)
+{
+
+if($id != '')
+{
+$recarr = array();
+$size = sizeof($res);
+for($i = 0; $i<$size ; $i++)
+{
+
+  $resid= $res[$i]['id'];
+  array_push($recarr, $resid);
+  $recarr[$i][$resid];
+}
+
+$recdata = implode(",",$recarr);
+if($para == '')
+{
+$rec     = new userdataservice();
+$rec1    = $rec->saverecent($recdata,$type, $id);
+}
+}
+
+$rev1 = new userdataservice();
+$res1 = $rev->getfavForUser($res, $type, $id);
+
+$rev2 = new userdataservice();
+$res2 = $rev->getuserjobs($res1, $type, $id);
+$data = array('data'=>$res2 , 'status'=>'1');
+echo json_encode($data);
+
+if($id !='' && $subs != '0')
+{
+$al1  = new searchdataservice();
+$al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
+//echo $al2;
+die();
+}
+
+}
+else
+{
+$data = array('data'=>'0' , 'status'=>'0');
+echo json_encode($data);
+}
+      break;
+
+case '2':
+              $type        = '2';
+               if($type=='2')
+               {
+                if(empty($keyword))
+                {
+                $fwhere="`WHERE 1` ";
+                 }
+                else
+                {
+                 $fwhere=" WHERE `type` like '%$keyword%' OR `description` like '%$keyword%' ";
+                }
+                $rev = new userdataservice();
+                $res = $rev->eventsearch($fwhere);
+                }
+if($res != 0)
+{
+if($id != '')
+{
+$recarr = array();
+$size   = sizeof($res);
+for($i  = 0; $i<$size ; $i++)
+{
+  $eligibility = $res[$i]['eligibility1'];
+  $res[$i]['eligibility1'] = explode("|",$eligibility);
+  $terms = $res[$i]['terms_cond1'];
+  $res[$i]['terms_cond1'] = explode("|", $terms);
+
+  $resid= $res[$i]['id'];
+  array_push($recarr, $resid);
+}
+$recdata = implode(",",$recarr);
+
+if($para == '')
+{
+$rec     = new userdataservice();
+$rec1    = $rec->saverecent($recdata,$type, $id);
+}
+}
+$req = new userdataservice();
+
+$res1 = $rev->getfavForUser($res, $type, $id);
+$data = array('data'=>$res1 , 'status'=>'1');
+echo json_encode($data);
+}
+else
+{
+$data = array('data'=>'0' , 'status'=>'0');
+
+}
+
+if($id !='' && $subs != '0')
+{
+$al1  = new searchdataservice();
+$al2  = $al1->savealert($id ,$fwhere , $type , $size , $subs);
+echo $al2;
+die();
+}
+echo json_encode($data);
+break;
+case '3':
+                $type        = '3';
+               if($type=='3')
+               {
+                if(empty($keyword))
+                {
+                $fwhere="`WHERE 1` ";
+                 }
+                else
+                {
+                 $fwhere=" WHERE `sport` like '%$keyword%' OR `description` like '%$keyword%' ";
+                }
+              $rev = new userdataservice();
+              $res = $rev->tournamentsearch($fwhere);
+              }
+//$rev = new userdataservice();
+//$res = $rev->tournamentsearch($fwhere);
+if($res != 0)
+{
+$recarr= array();
+$size  = sizeof($res);
+for($i = 0; $i<$size ; $i++)
+{
+  $eligibility = $res[$i]['eligibility1'];
+  $res[$i]['eligibility1'] = explode("|",$eligibility);
+  $terms = $res[$i]['terms_and_cond1'];
+  $res[$i]['terms_and_cond1'] = explode("|", $terms);
+
+  $resid= $res[$i]['id'];
+  array_push($recarr, $resid);
+}
+$recdata = implode(",",$recarr);
+if($id != '' && $para == '')
+{
+$rec     = new userdataservice();
+$rec1    = $rec->saverecent($recdata,$type, $id);
+
+}
+$rev1 = new userdataservice();
+$res1 = $rev->getfavForUser($res, $type, $id);
+
+$data = array('data'=>$res1 , 'status'=>'1');
+
+}
+
+else
+{
+$data = array('data'=>'0' , 'status'=>'0');
+}
+if($id !='' && $subs != '0')
+{
+$al1  = new searchdataservice();
+$al2  = $al1->savealert($id ,$fwhere , $type , $size , $subs);
+//echo $al2;
+die();
+}
+echo json_encode($data);
+break;
+      default:
+                $resp = array('data'=>'0' ,  'status'=>'Record is Found');
+                echo json_encode($resp);
+    } //End Switch
+
+
+}//end Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //******************************************//
