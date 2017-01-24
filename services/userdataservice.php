@@ -206,15 +206,30 @@ return 0;
 public function create_job($item)
 {
 
+$image =$item->image;
 $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
-
-
-if($query)
-  return true;
-else
-  return false;
-
+ 
+ if($query)
+        { 
+          $id = mysql_insert_id();
+          if($id!=NULL && $image!=NULL)
+          {
+           $image = $this->imageupload($image,$id);
+          }
+        return 1;
+        }
+        else
+          {
+            return 0;
+          }
 }
+
+
+
+
+
+/***********************************Create Tournament Function****************/
+
 
 public function create_tournament($item)
 {
@@ -251,7 +266,7 @@ if($type == 1)
 {
 
 
-$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
+$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link, IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
 }
 else if ($type == 2) 
 {
@@ -432,7 +447,7 @@ $rows[] = $row;
 public function jobsearch($fwhere)
 {
 
-$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` ".$fwhere." ORDER BY `date_created` DESC";
+$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` ".$fwhere." ORDER BY `date_created` DESC";
 //echo $query;
 $query1 = mysql_query($query);
 if(mysql_num_rows($query1) > 0)
@@ -596,7 +611,7 @@ $id= $favdata;
 if($type == '1'){
 
 	//$table = 'gs_jobInfo';
-  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE `id` = '$id' ");
+  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE `id` = '$id' ");
  // $id1    = 'id';
 }else if($type == '2'){
 
@@ -702,7 +717,7 @@ public function get_recentdata($data1, $type)
 if($type == 1)
 {
 
-  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE `id` = '$data1' ORDER BY `date_created` ASC");
+  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE `id` = '$data1' ORDER BY `date_created` ASC");
 }
 else if($type == 2)
 {
@@ -844,23 +859,16 @@ for($i = 0 ; $i<$size ; $i++)
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
-
- // print_r($registatoin_ids);
- // print_r($message);die();
-
     //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
             'registration_ids' => $registatoin_ids,
             'data' => $message,
         );
-        //$registatoin_ids = '/topics/global';
-        //echo $registatoin_ids;
-       $message = array('data1'=>$message);
+          $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
 
-     // print_r($data);
-      
+     
         json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
@@ -883,8 +891,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
-        //print_r($result);
-    }
+          }
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -1188,55 +1195,63 @@ public function createResources($data)
   $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`userid`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
 
   if($query)
-  { 
-    $id = mysql_insert_id();
-    if($id!=NULL && $image!=NULL)
-    {
-     $image = $this->imageupload($image,$id,$title);
-    }
-  return 1;
-  }
-  else
-    {
-      return 0;
-    }
-
-
+        { 
+          $id = mysql_insert_id();
+          if($id!=NULL && $image!=NULL)
+          {
+           $image = $this->imageupload($image,$id);
+          }
+        return 1;
+        }
+        else
+          {
+            return 0;
+          }
 }
 
 
-public function imageupload($image,$id,$title)
-{
 
-  define('UPLOAD_DIR','gs_images/Resources/');
-  $img = $image;
-  $img = str_replace('data:image/png;base64,', '', $img);
-  $img = str_replace('$filepath,', '', $img);
-  $img = str_replace(' ', '+', $img);
-  $data = base64_decode($img);
-  $img_name = $id.'_'.$title;
-  $success=move_uploaded_file($img, $filepath);
-  $file = UPLOAD_DIR .$img_name. '.png';
-  $success = file_put_contents($file, $data);
-  if($success)
-  {
-    $img_name = $img_name. '.png';
-    $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-  if($updateImage)
-  {
-    return true;
-  }
-  }
-  else
+
+
+/***************Function for Upload Image in Create Resource***********************/
+
+
+ public function imageupload($image,$id)
     {
-      echo "image not uploaded";
-      return false;
+      define('UPLOAD_DIR','../staging/uploads/job/');
+      $now = new DateTime();
+      $time=$now->getTimestamp(); 
+      $img = $image;
+      $img = str_replace('data:image/png;base64,', '', $img);
+      $img = str_replace('$filepath,', '', $img);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+      $img_name= "res"."_".$time;
+      $success=move_uploaded_file($img, $filepath);
+      $file = UPLOAD_DIR.$img_name.'.png';
+      $success = file_put_contents($file, $data);
+      if($success)
+      {
+        $img_name = $img_name. '.png';
+        // This code is Used for Create Resource for Uploading the Image
+       // $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
+         $updateImage = mysql_query("update `gs_jobInfo` set `image`='$img_name' where `id`='$id'");
+      if($updateImage)
+      {
+        return 1;
+      }
+      }
+      else
+        {
+          $res = array('data' =>'Image is Not Upload' ,'status' => 0);
+          echo json_encode($res);
+          return 0;
+          //echo "image not uploaded";
+         
+        }
     }
-
-
-}
-
-
+ 
+   
 /*****************************************************************/
 
    public function getResources_search($fwhere)
@@ -1353,6 +1368,139 @@ We are confident you will find this new opportunity both challenging and rewardi
          
       }       
   
+
+
+
+
+
+//  ***************User is view apply  our JOB , EVENT ,TOURNAMENT**********************
+
+
+
+
+  public function view_apply($userid,$type)
+  {
+switch ($type) 
+{
+
+  case '1':
+       $query = "SELECT `gs_jobInfo`.`id`,`TITLE`,`description`,`image` FROM `gs_jobInfo`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_jobs`.`userid`=$userid AND `user_jobs`.`STATUS`>=1";
+   $query1 = mysql_query($query);
+
+    if(mysql_num_rows($query1) > 0)
+      {
+      while($row = mysql_fetch_assoc($query1))
+      {
+      $rows[] = $row; 
+      }
+
+      return $rows;
+       } 
+      
+        else
+       {
+      return 0;
+       }
+break;
+case '2':
+
+
+  break;
+
+case '3':
+      break;
+      default:
+     } //End Switch
+
+}//End Function
+
+
+
+
+
+/***************************************New Apply function Job Event Tournament*****************/
+
+// This code is Only for Local System Please Ignore it if Functionaly is Complite then code is replace the Code Server
+
+
+public function apply($userid , $id , $type,$module)
+{
+switch ($module)
+ {
+   case '1':
+     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+     break;
+   case '2':
+       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+     break;
+     case '3':
+       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+       break;
+  
+ }  //End Switch
+    if($query)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+}// End Function
+
+
+
+
+
+
+
+//  *************** New Code for User is view apply  our JOB , EVENT ,TOURNAMENT**********************
+// This code for view Apply when the User is apply  our JOB , EVENT ,TOURNAMENT so Pleas Ignore this Code
+ public function v_apply($userid,$type)
+  {
+switch ($type) 
+{
+case '1':
+      $query = mysql_query("SELECT `ji`.`id`,`ji`.`TITLE`,`ji`.`description`,`ji`.`image` FROM `gs_jobInfo` AS ji, `user_jobs` AS uj WHERE `ji`.`id`=`uj`.`userjob` AND `uj`.`userid`=$userid AND `uj`.`status`>=1");
+      break;
+case '2':
+       $query = mysql_query("SELECT `ei`.`id`,`TITLE`,`description`,`image` FROM ` gs_eventinfo` AS ei ,`user_events` ue WHERE `ei`.`id`=`ue`.`userevent` AND `ue`.`userid`=$userid AND `ue`.`status`>=1");
+
+      break;
+case '3':
+    $query = mysql_query("SELECT `gs_tournament_info`.`id`,`TITLE`,`description`,`image` FROM `gs_tournament_info`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_tournaments`.`userid`=$userid AND `user_tournaments`.`status`>=1");
+
+      break;
+      default:
+      $resp['status'] = "Falure";
+      echo json_encode($resp);
+   break;
+
+     } //End Switch
+
+      if(mysql_num_rows($query) > 0)
+      {
+      while($row = mysql_fetch_assoc($query))
+      {
+      $rows[] = $row; 
+      }
+      return $rows;
+      } 
+      else
+      {
+      return 0;
+      }
+}//End Function
+
+
+
+
+
+
+
+
+
+
 
 
 

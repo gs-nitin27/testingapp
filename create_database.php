@@ -20,12 +20,12 @@ if($_POST['act']=="register")
  $sport      =urldecode($_POST ['sport']);
  $location   =urldecode($_POST ['location']);
  $token      =urldecode($_POST ['token']);
- $usertype   ='104';//urlencode($_POST ['usertype']);
-
+ $usertype   ='103';//urlencode($_POST ['usertype']);
 
  $where  = "WHERE `email` = '".$email."'";
  $req    = new userdataservice();
  $res    = $req->userVarify($where);
+//print_r($res);die();
  $data   = array('name'=>$name,'email'=>$email,'password'=> $password1,'phone'=>$phone,'gender'=>$gender,'prof'=>$prof,'sport'=>$sport,'location'=>$location,'token'=>$token,'usertype'=>$usertype);
  
  if($res != 0)
@@ -47,11 +47,7 @@ if($res2 != 0)
 {
 $res3 = array('data' => $res2,'status' => 1);
 echo json_encode($res3);  
-
-
 }
-
-
 }
 else
 {
@@ -82,7 +78,7 @@ if($row==1)
 {
 	while($row1 = mysql_fetch_assoc($validate))
 	{
-	   if($row1['device_id'] != $token  && $row1['device_id'] != $token)
+	   if($row1['device_id'] != $token )
 	  {
 	    $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
       $multiple = '1';
@@ -119,6 +115,7 @@ else
 
 
 //******************CODE FOR EDIT PROFILE STARTS ******************************/
+
 
 else if($_POST['act']=="editprofile")
 {
@@ -272,6 +269,9 @@ echo json_encode($status);
 
 }
 }
+
+
+/***********************Get User Data*********************************/
 
 else if($_POST['act']=="getUserData")
 {
@@ -445,19 +445,21 @@ $item->pin                   = $data1->pin;
 $item->name                  = $data1->name;
 $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
+$item->image                 = $data1->image; 
 
 //print_r($item);
 
 $req = new userdataservice();
 $res = $req->create_job($item);
 
-if($res != 0){
-
+if($res != 0)
+{
 echo json_encode($status['success']);
-
 }
 else
+{
 echo json_encode($status['failure']);
+}
 
 }
 
@@ -942,6 +944,7 @@ else if($_POST['act'] == "getsearchview")
     $where =  "`id` = '".$id."'"; 
     $req   = new userdataservice();
     $res   = $req->getCreation($where , $type);
+   // print_r($res);die();
     if($res != 0)
     {
     /*********************************/
@@ -977,7 +980,6 @@ else if($_POST['act'] == "getsearchview")
     {
     $terms = $res[0]['terms_and_cond1'];
     }
-
     $terms = explode("|",$terms);
     $terms = array_filter(array_values($terms));
     $size  = sizeof($terms);
@@ -1002,24 +1004,35 @@ else if($_POST['act'] == "getsearchview")
           if($type == '2')
           {
           $res[0]['terms_cond1'] = $terms;
-
           }
           else if($type == '3')
           {
 
           $res[0]['terms_and_cond1'] = $terms;
+        
           }
-     // print_r($res);die;
+     //print_r($res);die;
+
+// *****New code add for user job apply ********
+$rev1 = new userdataservice();
+$res1 = $req->getfavForUser($res, $type, $user_id);
+//print_r($res1);die();
+$rev2 = new userdataservice();
+$res2 = $req->getuserjobs($res1, $type, $user_id);
+$data = array('data'=>$res2 , 'status'=>'1');
+echo json_encode($data);
+
     /***********call the get fav For User ********************/
          
-          $rev1 = new userdataservice();
-          $res1 = $rev1->getfavForUser($res, $type, $user_id);
-          $data = array('data'=>$res1 , 'status'=>'1');
-          echo json_encode($data);
+      //    $rev1 = new userdataservice();
+      //    $res1 = $rev1->getfavForUser($res, $type, $user_id);
+     //     $data = array('data'=>$res1 , 'status'=>'1');
+     //     echo json_encode($data);
          // print_r($data);
       /***********************************************/
        }
       //echo json_encode($data);
+       
        else
        {
        $data = array('data'=>$res, 'status'=>'0');
@@ -1354,11 +1367,12 @@ echo json_encode($data3);
 
 else if($_POST['act'] == "apply")
 {
-//echo "DEV kumar";die();
+
 $userid      = urldecode($_POST ['user_id']);// Applicant User Id
 $id          = urldecode($_POST ['id']);       // Job id   
-$type        = urldecode($_POST ['type']);      
-$employerid  = urldecode($_POST ['employerid']);// Employer Id
+$type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1    
+//$employerid  = urldecode($_POST ['employerid']);// Employer Id
+
 $rev         = new userdataservice();
 $res         = $rev->jobsapplied($userid , $id , $type);
 //die();
@@ -1593,17 +1607,18 @@ else if($_POST['act'] == "create_resource")
   }
 
 
-
-
-
+/*---------------------------------------------------------------------------------------
+ | This code for User Point of view when the user is search any Job ,Event ,tournament   |
+ | after that the user is apply on job ,Event,or Tournament                              | 
+ ----------------------------------------------------------------------------------------
 /*****************************GetsportyLite Searching*****************************/
 
 
 else if($_REQUEST['act'] == "gs_searching")
 {
- $id          =urldecode($_POST ['user_id']);
- $type        =urldecode($_POST ['module']);  //Module
- $keyword     =  urldecode($_REQUEST['key']);
+ $id          =urldecode($_POST ['user_id']);  //Apply User Id 
+ $type        =urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
+ $keyword     =  urldecode($_REQUEST['key']);  // Search the Value by Applicant User
 switch ($type)
     {
       case '1':
@@ -1616,15 +1631,11 @@ switch ($type)
                  }
                 else
                 {
-                 $fwhere=" WHERE `title` like '%$keyword%' OR `description` like '%$keyword%' ";
+                 $fwhere=" WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' ";
                 }
                 $rev = new userdataservice();
-              //  echo " $fwhere";die();
                 $res = $rev->jobsearch($fwhere);
               }
-
-//$rev = new userdataservice();
-//$res = $rev->jobsearch($fwhere);
 if($res != 0)
 {
 
@@ -1634,7 +1645,6 @@ $recarr = array();
 $size = sizeof($res);
 for($i = 0; $i<$size ; $i++)
 {
-
   $resid= $res[$i]['id'];
   array_push($recarr, $resid);
   $recarr[$i][$resid];
@@ -1660,7 +1670,6 @@ if($id !='' && $subs != '0')
 {
 $al1  = new searchdataservice();
 $al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
-//echo $al2;
 die();
 }
 
@@ -1682,7 +1691,7 @@ case '2':
                  }
                 else
                 {
-                 $fwhere=" WHERE `type` like '%$keyword%' OR `description` like '%$keyword%' ";
+                 $fwhere=" WHERE `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ";
                 }
                 $rev = new userdataservice();
                 $res = $rev->eventsearch($fwhere);
@@ -1742,13 +1751,11 @@ case '3':
                  }
                 else
                 {
-                 $fwhere=" WHERE `sport` like '%$keyword%' OR `description` like '%$keyword%' ";
+                 $fwhere=" WHERE `sport` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ";
                 }
               $rev = new userdataservice();
               $res = $rev->tournamentsearch($fwhere);
               }
-//$rev = new userdataservice();
-//$res = $rev->tournamentsearch($fwhere);
 if($res != 0)
 {
 $recarr= array();
@@ -1794,13 +1801,32 @@ break;
                 $resp = array('data'=>'0' ,  'status'=>'Record is Found');
                 echo json_encode($resp);
     } //End Switch
-
-
 }//end Function
 
 
 
 
+/******************************View Apply by the User ***************************/
+
+
+else if($_POST['act'] == "gs_viewapply")
+{
+$userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
+$type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
+$rev = new userdataservice();
+$res = $rev->view_apply($userid,$type);
+$res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
+if($res1)
+{
+ $data = array('data'=>$res1,'status'=>'1');
+ echo json_encode($data);
+}
+else
+{
+$data = array('data'=>'0','status'=>'0');
+echo json_encode($data);
+}
+}
 
 
 
@@ -1809,6 +1835,95 @@ break;
 
 
 
+
+
+
+
+/**********************    New Apply Code  act=apply  *************************/
+// When the Job Event and Tournament is Apply then so used this code Pleas Ignore this Code 
+
+
+else if($_POST['act'] == "newapply")
+{
+$userid      = urldecode($_POST ['user_id']);// Applicant User Id
+$id          = urldecode($_POST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
+$type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1 
+ 
+$module      = urldecode($_POST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
+$rev         = new userdataservice();
+$res         = $rev->apply($userid , $id ,$type,$module);
+if($res)
+{
+$rev1        = new userdataservice();
+$res1        = $rev1->getEmpdeviceid($id);
+$rev2        = new userdataservice();
+$res2        = $rev2->getdeviceid($userid);
+$date        = date("F j, Y, g:i a");
+switch ($module) 
+{
+  case '1':
+   $message = array('message'=>$res2['name']." "." has applied for a job" , 'Module'=>'1','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+    break;
+  case '2':
+  $message = array('message'=>$res2['name']." "." has applied for a Event  " , 'Module'=>'2','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+    
+    break;
+    case '3':
+    $message = array('message'=>$res2['name']." "." has applied for a  Tournament*** " , 'Module'=>'3','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+     break;
+} // End Switch
+
+$empdevice_id =  $res1['device_id'];
+echo "$empdevice_id";
+if($empdevice_id != '')
+{
+$pushobj      = new userdataservice();
+$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
+}
+$employerid   = $res1['userid'];
+$title        = 'job application';
+$savealertobj = new userdataservice();
+$message      = $message['message'];
+$type = $module; // Applied for Job Alert Type recognition No. 
+$savealert    = $savealertobj->savealert($employerid , $type ,$message , $title , $userid);
+$resp['status'] = "Success";
+echo json_encode($resp);
+}
+else
+{
+$resp['status'] = "Failure";
+echo json_encode($resp);
+
+}
+
+
+}  //End Function
+
+
+
+/*************************** New View the User is Apply the Job Event Tournament**********************/
+
+
+
+
+else if($_POST['act'] == "gs_viewapply1")
+{
+$userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
+$type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
+$rev = new userdataservice();
+$res = $rev->v_apply($userid,$type);
+$res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
+if($res1)
+{
+ $data = array('data'=>$res1,'status'=>'1');
+ echo json_encode($data);
+}
+else
+{
+$data = array('data'=>'0','status'=>'0');
+echo json_encode($data);
+}
+}
 
 
 

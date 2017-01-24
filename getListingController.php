@@ -58,4 +58,16 @@ $res = $req->getsportlisting();
 $data = array('data'=>$res);
 echo json_encode($data);
 }
+
+//*********CODE FOR Profession Listing *************//
+
+if($_POST['act'] == "professionlisting")
+{
+$req = new GetListingService();
+$res = $req->getProfession();
+$data = array('data'=>$res);
+echo json_encode($data);
+}
+
+
 ?>
