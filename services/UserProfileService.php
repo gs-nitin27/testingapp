@@ -3,25 +3,16 @@
  {
 
 /**
-
      * function to edit FormalEducation
-
      * 
-
      * Long description (if any) ...
-
      * 
-
      * @param in array $education 
-
      * @return results 1 on success and 0 on failure..
-
      * @access public  
-
      */ 
 public function editFormalEducation($userid,$education)
 {
-
 $id             = $education['id'];
 $degree         = $education['Degree_course'];
 $specialization = $education['specialization'];
@@ -218,7 +209,6 @@ return 0;
 
 public function editUserData($userid,$userinfo)
 {
-
 $name       = $userinfo['name'];
 $contact_no = $userinfo['contact_no'];
 $address1   = $userinfo['address1'];
@@ -402,6 +392,41 @@ return 0;
 
 
 }
+
+
+public function editProfile($userdata)
+{
+
+ // print_r($userdata->userid);//die;
+
+$userid       = $userdata->userid;
+$email        = $userdata->email;
+$mobile_no    = $userdata->mobile_no;
+$proffession  = $userdata->proffession;
+$sport        = $userdata->sport;
+$gender       = $userdata->gender;
+$dob          = $userdata->dob;
+
+//print_r($mobile_no);
+
+$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$proffession',`sport`='$sport',`dob`=FROM_UNIXTIME ('$dob'),`Gender`='$gender' WHERE `userid`='$userid'");
+
+//print_r($query);die;
+if($query)
+{
+
+     return 1;
+}
+else
+{
+
+    return 0;
+
+}    
+
+
+}
+
 
 }
 

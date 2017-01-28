@@ -1,17 +1,11 @@
 <?php 
  class userdataservice 
 {
-
 /**
-
      * function to check the existing user while registration
- 
      * @param in variable $where
-     
      * @return results data in array form on success and 0 on failure..
-
      * @access public  
-
      */ 
 public function userVarify($where)
 {
@@ -1286,14 +1280,14 @@ public function sendEmail($id)
               //global $error;
               $mail = new PHPMailer();  // create a new object
               $mail->IsSMTP(); // enable SMTP
-                  $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
               $mail->SMTPAuth = true;  // authentication enabled
               $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-              $mail->Host = 'dezire.websitewelcome.com';
-              //$mail->Host = 'smtp.gmail.com';
+             // $mail->Host = 'dezire.websitewelcome.com';
+              $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
-              $mail->Username ="info@getsporty.in";  
-              $mail->Password = "%leq?xgq;D?v";           
+              $mail->Username ="harshvardhan@darkhorsesports.in";  
+              $mail->Password = "New@job2016";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
               $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
@@ -1351,11 +1345,303 @@ We are confident you will find this new opportunity both challenging and rewardi
                $mail->Send();
          return 1;
          
-      }       
+}       
   
 
+public function getuserdata($userid)
+{
+$query = mysql_query("SELECT * FROM `user` WHERE `userid`=$userid");
+{
+if(mysql_num_rows($query)>0)
+{
+while ($row = mysql_fetch_assoc($query)) {
+  $data[] = $row;
+}
+return $data;
+}
+else
+return 0;
+}
+}
+
+public function manage_Login($item)
+{
+
+$query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND `userType`= '103' ");
+{
+if(mysql_num_rows($query)>0)
+{
+while ($row = mysql_fetch_assoc($query)) 
+{
+  $data[] = $row;
+}
+
+if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
+{
+   $userid= $data[0]['userid'];
+   $query = mysql_query("UPDATE `user` SET `device_id`='$item->device_id' WHERE `userid`='$userid'");
+    
+
+}
+//die;
+return $data;
+}
+else
+return 0;
+}
+}
 
 
+
+public  function create_manage_user_exits($data)
+{
+        $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code` FROM `user`  WHERE `email`='$data->email'");
+        if(mysql_num_rows($query)>0)
+        {
+          while($row = mysql_fetch_assoc($query))
+        {
+          $data = $row;
+        }
+
+        $userid=$data['userid'];
+           //print_r($data['password']); die;
+        if($data['userType']=='104'  && ($data['password']=='' || $data['password']== NULL ))
+        {
+        $query = mysql_query("UPDATE `user` SET `userType`='103' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+
+//###################### password set  email send to user #########################
+
+$body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Password Reset</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">  Please click on the link to reset the password <br>
+
+ <a href="http://getsporty.in/user_reg/index.php?id='.$userid. '">continue reading.</a>
+
+<br><br><br><br><br>Thanks GetSportyLite Team </p> 
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+
+   $this->sendEmail_for_password_reset($userid,$body);
+   return 1;
+    }
+
+else if($data['userType']=='104')
+    {
+    $userid=$data['userid'];
+    $query = mysql_query("UPDATE `user` SET `userType`='103' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+
+
+//###################### welcome email send to user ##############################################
+
+       
+ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Password Reset</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">welcome in  getsporty family <br>
+
+<br><br><br><br><br>Thanks GetSportyLite Team </p> 
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+
+        // $this->sendEmail($userid);
+     $this->sendEmail_for_password_reset($userid,$body);
+
+         return 2;
+
+        }
+        else{
+          return 3;
+            }
+        }
+        else 
+        {
+
+         // print_r("expression");die;
+    $query = mysql_query("INSERT into `user`(`email`,`contact_no`,`Gender`,`prof_id`,`sport`,`dob`,`userType`,`device_id`) values('$data->email','$data->phone_no','$data->gender','$data->proffession','$data->sport','$data->dob','$data->userType','$data->device_id')");
+         
+       //print_r($query);die;
+       if($query)
+       {
+		    $last_id = mysql_insert_id();
+        //print_r($last_id);die;
+
+       //#######################  password set email send to user ######################
+
+$body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Password Reset</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">  Please click on the link to reset the password <br>
+
+ <a href="http://getsporty.in/user_reg/index.php?id='.$last_id. '">continue reading.</a>
+
+<br><br><br><br><br>Thanks GetSportyLite Team </p> 
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+
+    $this->sendEmail_for_password_reset($last_id,$body);
+    return 4;
+  }
+  else{
+     return 0;
+  }
+
+    }
+}
+
+
+public function sendEmail_for_password_reset($id,$body)
+{
+
+  //print_r($id);
+//  die;
+ $query  = mysql_query("SELECT `email`,`name` FROM `user` WHERE `userid` = '$id'");
+ while ($row=mysql_fetch_assoc($query))
+  {
+   $email=$row['email'];
+   $user_name= $row['name'];
+   }
+               require('class.phpmailer.php');
+              $mail = new PHPMailer();
+              $to=$email;
+              $from="info@getsporty.in";
+              $from_name="Getsporty Lite";
+              $subject="Offer letter";
+              $user=$user_name;
+              $otp  =$code;
+              //global $error;
+              $mail = new PHPMailer();  // create a new object
+              $mail->IsSMTP(); // enable SMTP
+              $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPAuth = true;  // authentication enabled
+              $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+             // $mail->Host = 'dezire.websitewelcome.com';
+              $mail->Host = 'smtp.gmail.com';
+              $mail->Port = 465; 
+              $mail->Username ="harshvardhan@darkhorsesports.in";  
+              $mail->Password = "New@job2016";           
+              $mail->SetFrom($from, $from_name);
+              $mail->Subject = $subject;
+               $mail->Body = $body;
+              
+
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+            return 1;
+}
 
 }//end class
 

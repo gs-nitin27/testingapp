@@ -118,294 +118,393 @@ else
 }
 
 
+else if($_REQUEST['act']=="manage_Login")
+{
+
+$data1  = json_decode($_POST[ 'data' ]);
+
+$item                 =  new stdClass();
+
+$item->email          =  $data1->email;
+$item->password       =  md5($data1->password);
+$item->device_id      =  $data1->device_id;
+
+$req1= new userdataservice();
+$req3 = $req1->manage_Login($item);
+
+//print_r($req3);
+
+//die;
+
+if($req3 != 0 )
+{
+$user = array('status' => 1, 'data'=> $req3, 'msg'=>'Updated' );
+echo json_encode($user);
+}
+else
+{
+$user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
+echo json_encode($user);
+}
+
+}
+
+else if($_REQUEST['act']=="create_manage_user")
+{
+
+$data1  = json_decode($_POST[ 'data' ]);
+
+$item                 =  new stdClass();
+
+$item->email          =  $data1->email;
+$item->phone_no       =  $data1->phone_no;
+$item->proffession    =  $data1->proffession;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$item->userType       =  103;
+$item->device_id      =  $data1->device_id;
+$item->token_id       =  $data1->token_id;
+
+$req1= new userdataservice();
+
+$req3 = $req1->create_manage_user_exits($item);
+//print_r($req3);
+if($req3 == 1 )
+{
+$user = array('status' => 1);
+echo json_encode($user);
+}
+else if($req3 == 2)
+{
+$user = array('status' => 2);
+echo json_encode($user);
+}
+else if($req3 == 3){
+  $user = array('status' => 3);
+  echo json_encode($user);
+
+}
+else if($req3 == 4){
+  $user = array('status' => 4);
+  echo json_encode($user);
+
+}
+else
+{
+$user = array('status' => 0);
+  echo json_encode($user);
+
+}
+
+
+}
+
+
 //******************CODE FOR EDIT PROFILE STARTS ******************************/
 
-else if($_POST['act']=="editprofile")
+else if($_REQUEST['act']=="editprofile")
 {
-$userid = urldecode($_POST['userid']);
-$data1  = json_decode($_REQUEST[ 'data' ]);////
+  //print_r($_POST);
+// $userid = urldecode($_POST['userid']);
+$data1  = json_decode($_POST[ 'data' ]);////
 
-$item                     =  new stdClass();
-$item->formal_edu         =  $data1->formal_education;
-$item->sports_edu         =  $data1->sports_education;
-$item->other_cert         =  $data1->other_certificate;
-$item->Work_exp           =  $data1->work_experience;
-$item->player_exp         =  $data1->experience_as_player;
-$item->other_exp          =  $data1->other_experience;
-$item->other_skills       =  $data1->other_skills;
-$item->userinfo           =  $data1->info;
-$item->other_skills       =  $data1->other_skills;
+$item                 =  new stdClass();
+
+$item->userid         =  $data1->userid;
+$item->email          =  $data1->email;
+$item->mobile_no      =  $data1->mobile_no;
+$item->proffession    =  $data1->proffession;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$req = new UserProfileService();
+$res = $req->editProfile($item);
+$req1= new userdataservice();
+$req2=$req1->getuserdata($item->userid);
 
 //print_r($item);
 
-$formaledu = (json_decode(json_encode($item->formal_edu),true));
-$size = sizeof($formaledu);
-for($i=0;$i<$size;$i++)
-{
-$req1 = new UserProfileService();
-$res1 = $req1->editFormalEducation($userid,$formaledu[$i]);
-
-if($res1 != '1')
-{
-
-echo "some problem while saving formal education";
-
-}
-}
-$sports_edu = (json_decode(json_encode($item->sports_edu),true));
-$size       = sizeof($sports_edu);
-for ($i=0; $i <$size ; $i++) 
-{ 
-$req2  = new UserProfileService();
-$res2 = $req2->editSportsEducation($userid ,$sports_edu[$i]);
-
-if($res2!= '1')
-{
-
-echo "some problem while saving sports education";
-
-}
-}
-
-$education = (json_decode(json_encode($item->other_cert),true));
-//print_r($education);
-$size = sizeof($education); 
-for ($i=0; $i <$size ; $i++) 
-{ 
-
-$req3 = new UserProfileService();
-$res3 = $req3->editFormalEducation($userid ,$education[$i]);
-//echo $res3;
-if($res3 != '1')
-{
-
-echo "some problem while saving other certs info.";
-
-}
-}
-$experience = (json_decode(json_encode($item->Work_exp),true));
-//print_r($experience);
-$size       = sizeof($experience);
-for ($i=0; $i <$size ; $i++) 
-{ 
-
-$req4 = new UserProfileService();
-$res4 = $req4->editExperience($userid ,$experience[$i]);
-
-if($res4 != '1')
-{
+// $formaledu = (json_decode(json_encode($item->formal_edu),true));
+// $size = sizeof($formaledu);
+// for($i=0;$i<$size;$i++)
+// {
+// $req1 = new UserProfileService();
+// $res1 = $req1->editFormalEducation($userid,$formaledu[$i]);
+
+// if($res1 != '1')
+// {
+
+// echo "some problem while saving formal education";
+
+// }
+// }
+// $sports_edu = (json_decode(json_encode($item->sports_edu),true));
+// $size       = sizeof($sports_edu);
+// for ($i=0; $i <$size ; $i++) 
+// { 
+// $req2  = new UserProfileService();
+// $res2 = $req2->editSportsEducation($userid ,$sports_edu[$i]);
+
+// if($res2!= '1')
+// {
+
+// echo "some problem while saving sports education";
+
+// }
+// }
+
+// $education = (json_decode(json_encode($item->other_cert),true));
+// //print_r($education);
+// $size = sizeof($education); 
+// for ($i=0; $i <$size ; $i++) 
+// { 
+
+// $req3 = new UserProfileService();
+// $res3 = $req3->editFormalEducation($userid ,$education[$i]);
+// //echo $res3;
+// if($res3 != '1')
+// {
+
+// echo "some problem while saving other certs info.";
+
+// }
+// }
+// $experience = (json_decode(json_encode($item->Work_exp),true));
+// //print_r($experience);
+// $size       = sizeof($experience);
+// for ($i=0; $i <$size ; $i++) 
+// { 
+
+// $req4 = new UserProfileService();
+// $res4 = $req4->editExperience($userid ,$experience[$i]);
+
+// if($res4 != '1')
+// {
 
-echo "some problem while saving user work experience";
+// echo "some problem while saving user work experience";
 
-}
-}
- $sports_experience = (json_decode(json_encode($item->player_exp),true));
- $size = sizeof($sports_experience);
- //$array = print_r($sports_experience);die();
- for ($i=0; $i <$size ; $i++)
-{ 
-  $req5 = new UserProfileService();
-  $res5 = $req5->editSportExperience($userid ,$sports_experience[$i]);
+// }
+// }
+//  $sports_experience = (json_decode(json_encode($item->player_exp),true));
+//  $size = sizeof($sports_experience);
+//  //$array = print_r($sports_experience);die();
+//  for ($i=0; $i <$size ; $i++)
+// { 
+//   $req5 = new UserProfileService();
+//   $res5 = $req5->editSportExperience($userid ,$sports_experience[$i]);
 
-  if($res5 != '1')
-  {
+//   if($res5 != '1')
+//   {
 
-   echo "Some probelem while saving user sports experience";
-
-  }
-}
-
-$experience = (json_decode(json_encode($item->other_exp),true));
-$size       = sizeof($experience);
-for ($i=0; $i <$size ; $i++) 
-{ 
+//    echo "Some probelem while saving user sports experience";
+
+//   }
+// }
+
+// $experience = (json_decode(json_encode($item->other_exp),true));
+// $size       = sizeof($experience);
+// for ($i=0; $i <$size ; $i++) 
+// { 
 
-$req6 = new UserProfileService();
-$res6 = $req6->editExperience($userid ,$experience[$i]);
+// $req6 = new UserProfileService();
+// $res6 = $req6->editExperience($userid ,$experience[$i]);
 
-if($res6 != '1')
-{
+// if($res6 != '1')
+// {
 
-echo "some problem while saving user work experience";
-
-}
-}
-$skill = (json_decode(json_encode($item->other_skills),true));
-$size  = sizeof($skill);
-//print_r($skill);
-for($i=0;$i<$size;$i++)
-{
+// echo "some problem while saving user work experience";
+
+// }
+// }
+// $skill = (json_decode(json_encode($item->other_skills),true));
+// $size  = sizeof($skill);
+// //print_r($skill);
+// for($i=0;$i<$size;$i++)
+// {
 
-$req7 = new UserProfileService();
-$res7 = $req7->editUserSkill($userid ,$skill[$i]);
-if($res7 != '1')
-{
+// $req7 = new UserProfileService();
+// $res7 = $req7->editUserSkill($userid ,$skill[$i]);
+// if($res7 != '1')
+// {
 
-echo "some problem while saving user skill";
+// echo "some problem while saving user skill";
 
-}
+// }
 
 
-}
-$userinfo = json_decode(json_encode($item->userinfo),true);
-$req = new UserProfileService();
-$res = $req->editUserData($userid,$userinfo);
-//echo $res;
-if($res != '1')
-{
+// }
+// $userinfo = json_decode(json_encode($item->userinfo),true);
+// $req = new UserProfileService();
+// $res = $req->editUserData($userid,$userinfo);
+// //echo $res;
+// if($res != '1')
+// {
 
-echo "some problem while updating user info";
+// echo "some problem while updating user info";
 
-}
-//echo "res1=".$res1." res2=".$res2." res3=".$res3." res4=".$res4." res5=".$res5." res6=".$res6." res7=".$res7." res=".$res;
-if ( $res1 != '0' && $res2 != '0' && $res3 != '0' && $res4 != '0' && $res5 != '0' && $res6 != '0' && $res7 != '0' && $res != '0')
-{
+// }
+// //echo "res1=".$res1." res2=".$res2." res3=".$res3." res4=".$res4." res5=".$res5." res6=".$res6." res7=".$res7." res=".$res;
+// if ( $res1 != '0' && $res2 != '0' && $res3 != '0' && $res4 != '0' && $res5 != '0' && $res6 != '0' && $res7 != '0' && $res != '0')
+// {
 
-$status = array('failure' => 0 , 'success' => 1);
-echo json_encode($status);
-} 
-else 
-{
+// $status = array('failure' => 0 , 'success' => 1);
+// echo json_encode($status);
+// } 
+// else 
+// {
 
-$status = array('failure' => 1 , 'success' => 0);
-echo json_encode($status);
+// $status = array('failure' => 1 , 'success' => 0);
+// echo json_encode($status);
 
-}
-}
+// }
+// }
 
-else if($_POST['act']=="getUserData")
-{
+// else if($_POST['act']=="getUserData")
+// {
 
-$userid =urldecode($_POST['userid']);
-$eduid  = '1';
-$req1 = new UserProfileService();
-$res1 = $req1->getUserEducation($userid,$eduid); 
+// $userid =urldecode($_POST['userid']);
+// $eduid  = '1';
+// $req1 = new UserProfileService();
+// $res1 = $req1->getUserEducation($userid,$eduid); 
 
-if($res1 != '0')
-{
+// if($res1 != '0')
+// {
 
-$formaledu = $res1;
+// $formaledu = $res1;
 
-}
-else
-{
-$formaledu =  0;
-}
+// }
+// else
+// {
+// $formaledu =  0;
+// }
 
 
 
-$req2 = new UserProfileService();
-$res2 = $req2->getSportsEducation($userid);
-if($res2 != '0')
-{
+// $req2 = new UserProfileService();
+// $res2 = $req2->getSportsEducation($userid);
+// if($res2 != '0')
+// {
 
-$sportsedu = $res2;
+// $sportsedu = $res2;
 
-}else{
-$sportsedu = 0;
-}
+// }else{
+// $sportsedu = 0;
+// }
 
-$eduid  = '3';
-$req3   = new UserProfileService();
-$res3   = $req3->getUserEducation($userid,$eduid);
-if($res3 != '0')
-{
-$otheredu = $res3;
-}
-else
-{
+// $eduid  = '3';
+// $req3   = new UserProfileService();
+// $res3   = $req3->getUserEducation($userid,$eduid);
+// if($res3 != '0')
+// {
+// $otheredu = $res3;
+// }
+// else
+// {
 
-$otheredu = 0;
+// $otheredu = 0;
 
-}
+// }
 
-$user_exp = '1';
+// $user_exp = '1';
 
-$req4 = new UserProfileService();
-$res4 = $req4->getUserExperience($userid,$user_exp);
-if($res4 != '0')
-{
-$work_exp = $res4;
-}
-else
-{
+// $req4 = new UserProfileService();
+// $res4 = $req4->getUserExperience($userid,$user_exp);
+// if($res4 != '0')
+// {
+// $work_exp = $res4;
+// }
+// else
+// {
 
-$work_exp = 0;
+// $work_exp = 0;
 
-}
+// }
 
-$req5 = new UserProfileService();
-$res5 = $req5->getUserSportsExp($userid);
-if($res5 != '0')
-{
+// $req5 = new UserProfileService();
+// $res5 = $req5->getUserSportsExp($userid);
+// if($res5 != '0')
+// {
 
-$sport_exp = $res5;
+// $sport_exp = $res5;
 
-}
-else
-{
+// }
+// else
+// {
 
-$sport_exp = 0;
+// $sport_exp = 0;
 
-}
+// }
 
-$user_exp = '2';
+// $user_exp = '2';
 
-$req6 = new UserProfileService();
-$res6 = $req6->getUserExperience($userid,$user_exp);
-if($res6 != '0')
-{
-$other_exp = $res6;
-}
-else
-{
+// $req6 = new UserProfileService();
+// $res6 = $req6->getUserExperience($userid,$user_exp);
+// if($res6 != '0')
+// {
+// $other_exp = $res6;
+// }
+// else
+// {
 
-$other_exp = 0;
+// $other_exp = 0;
 
-}
+// }
 
-$req7         = new UserProfileService();
-$res7         = $req7->getUserSkill($userid);
-if($res7 != 0)
-{
+// $req7         = new UserProfileService();
+// $res7         = $req7->getUserSkill($userid);
+// if($res7 != 0)
+// {
 
-$other_skills = $res7;
+// $other_skills = $res7;
 
-}
-else
-{
+// }
+// else
+// {
 
-$other_skills = 0;
+// $other_skills = 0;
 
-}
+// }
 
 
-$req = new UserProfileService();
-$res = $req->getuserData($userid);
-if($res != '0')
-{
+// $req = new UserProfileService();
+// $res = $req->getuserData($userid);
+// if($res != '0')
+// {
 
-$user = $res;
-}
-else
-{
+// $user = $res;
+// }
+// else
+// {
 
-$user = 0;
+// $user = 0;
 
-}
+// }
 
-$userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-if(in_array(0, $userdata)){
+// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
+// if(in_array(0, $userdata)){
 
-  $userdata['status'] = 0; 
+//   $userdata['status'] = 0; 
 
-}else{
+// }else{
 
-  $userdata['status'] = 1;
-}
+//   $userdata['status'] = 1;
+// }
 //print_r($userdata);
-$user = array('data' => $userdata);
+
+if($res== 1)
+{
+// print_r($req2);//die;
+//$user = array('Status' => 1);
+$user = array('Status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
 echo json_encode($user);
+}
+else
+{
+//  $user = array('Status' => 0);
+$user = array('Status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+echo json_encode($user);
+}
 }
 
 
