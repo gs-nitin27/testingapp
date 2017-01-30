@@ -9,54 +9,34 @@ error_reporting(E_ERROR | E_PARSE);
 if($_POST['act'] == "search")
 {
 $type             = urldecode($_POST['type']);	
- 
 $location         = urldecode($_POST['location']);
- 
 $sport            = urldecode($_POST['sport']);
-
 $id               = urldecode($_POST['userid']);
-
 $certification    = urldecode($_POST['certification']);
-
 $area             = urldecode($_POST['area']);
-
 $subs             = urldecode($_POST['subs']);
- 
 
 $whereclause = "WHERE"." ";
 if($type != "")
 {
-
 $where1 = "us.`prof_id` LIKE '%$type%'"; 
-
-
 }
-
 if($location != "")
 {
-
 $where2 = "AND us.`location` LIKE '%$location%'"; 
-
 }
 if($sport !="")
 {
-
 $where3= "AND us.`sport` LIKE '%$sport%' ";
-
 }
 if($area !="")
 {
-
 $where4= "AND (us.`address1` OR us.`address2` OR us.`address3`) LIKE '%$area%' ";
-
 }
 if($certification != "")
 {
-
 $where5 = "AND ue.`Degree_course` LIKE '%$age%' AND ue.`edu_id` = '3'"; 
-
 }
- 
  //echo $wherenext;
  $wherenext = $where1.$where2.$where3.$where4.$where5;// WHERE CLAUSE FOR THE SEARCH QUERY
  if($wherenext == "" )

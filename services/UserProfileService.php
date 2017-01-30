@@ -3,25 +3,16 @@
  {
 
 /**
-
      * function to edit FormalEducation
-
      * 
-
      * Long description (if any) ...
-
      * 
-
      * @param in array $education 
-
      * @return results 1 on success and 0 on failure..
-
      * @access public  
-
      */ 
 public function editFormalEducation($userid,$education)
 {
-
 $id             = $education['id'];
 $degree         = $education['Degree_course'];
 $specialization = $education['specialization'];
@@ -218,7 +209,6 @@ return 0;
 
 public function editUserData($userid,$userinfo)
 {
-
 $name       = $userinfo['name'];
 $contact_no = $userinfo['contact_no'];
 $address1   = $userinfo['address1'];
@@ -400,10 +390,122 @@ return 0;
 
 }
 
-
 }
 
-}
+
+public function editProfile($userdata)
+{
+ //print_r($userdata);die();
+$userid       = $userdata->userid;
+$email        = $userdata->email;
+$mobile_no    = $userdata->mobile_no;
+$proffession  = $userdata->proffession;
+$sport        = $userdata->sport;
+$gender       = $userdata->gender;
+$dob          = $userdata->dob;
+$status       = $userdata->status;  // Status
+$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$proffession',`sport`='$sport',`dob`=FROM_UNIXTIME ('$dob'),`Gender`='$gender' WHERE `userid`='$userid'");
+if($query)
+{
+     if ($status==0)
+      {
+              require('class.phpmailer.php');
+              $mail = new PHPMailer();
+              $to=$email;
+              $from="info@getsporty.in";
+              $from_name="Getsporty Lite";
+              $subject="Email varification ";
+              $emailconform="getsporty.in/testingactivation.php?email=";
+              //$emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
+              //global $error;
+              $mail = new PHPMailer();  // create a new object
+              $mail->IsSMTP(); // enable SMTP
+              $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPAuth = true;  // authentication enabled
+              $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+              $mail->Host = 'dezire.websitewelcome.com';
+              //$mail->Host = 'smtp.gmail.com';
+              $mail->Port = 465; 
+              $mail->Username ="info@getsporty.in";  
+              $mail->Password = "%leq?xgq;D?v";           
+              $mail->SetFrom($from, $from_name);
+              $mail->Subject = $subject;
+              // $mail->Body = ' 
+              //            <h1> Click here </h1>'.$emailconform.''.$email.'<br><b>Note:- Please varification of this email</b>
+              // '; 
+$mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Please verify your email Address.</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click activate to login</br> <a href="'.$emailconform.''.$email.'">Activate<br></strong>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting</p></br><p>GetSporty Team</p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+                   return 1; 
+          }
+          else
+          {
+            return 1;
+          }
+ }
+else
+{
+
+    return 0;
+
+}    
+
+
+
+} // End of Function
+
+
+
+
+
+
+
+
+
+
+} // End of Class
 
 
  ?>

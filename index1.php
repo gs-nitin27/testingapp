@@ -5,14 +5,39 @@
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
 	
+var data = {
+    "userid":"288",
+    "name":"Ramesh",
+    "email":"darkhorses@yahoo.com",
+    "password":"123456",
+    "device_id":"8888",
+    "usertype":"104",
+    "logintype":2,
+    "status":0,
+    "mobile_no":89827263,
+    "proffession":"Coach",
+    "sport":"Hockey",
+    "gender":"Male",
+    "dob":"1989/23/43"
+ // "userid":"101",
+ // "email":"dev@gmail.com",
+
+
+
+};
+
+
 // var university = "";
 // var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
 $.ajax({
 
     type: "POST",
-    url: "getListingController.php",
+   // url: "getListingController.php?act=sportlisting",
+    url: "create_database.php?act=editprofile",
+    data:"data="+JSON.stringify(data),
+    //url: "getListingController.php",
 
- data:"act=professionlisting",
+// data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
 //data:"act=getappliedjobs&user_id=176&id=133",
 

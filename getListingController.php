@@ -6,7 +6,7 @@ include('services/getListingService.php');
 
 
 //*********CODE FOR STATE LISTING *************//
-if($_POST['act'] == "statelisting")
+if($_REQUEST['act'] == "statelisting")
 {
 $sug = $_POST['suggest'];
 if ($sug == '')
@@ -30,7 +30,7 @@ echo json_encode($data);
 //*********CODE FOR CITY LISTING *************//
 
 
-if($_POST['act'] == "citylisting")
+if($_REQUEST['act'] == "citylisting")
 {
 $sug = $_POST['suggest'];
 if ($sug == '')
@@ -51,7 +51,7 @@ echo json_encode($data);
 
 //*********CODE FOR SPORTS LISTING *************//
 
-if($_POST['act'] == "sportlisting")
+if($_REQUEST['act'] == "sportlisting")
 {
 $req = new GetListingService();
 $res = $req->getsportlisting();
@@ -61,7 +61,7 @@ echo json_encode($data);
 
 //*********CODE FOR Profession Listing *************//
 
-if($_POST['act'] == "professionlisting")
+if($_REQUEST['act'] == "professionlisting")
 {
 $req = new GetListingService();
 $res = $req->getProfession();
