@@ -10,7 +10,6 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_POST['act']=="register")
 {
-
  $name       =urldecode($_POST ['name']);
  $email      =urldecode($_POST ['email']);
  $password1  =md5(urldecode($_POST ['password']));
@@ -21,14 +20,11 @@ if($_POST['act']=="register")
  $location   =urldecode($_POST ['location']);
  $token      =urldecode($_POST ['token']);
  $usertype   ='103';//urlencode($_POST ['usertype']);
-
  $where  = "WHERE `email` = '".$email."'";
  $req    = new userdataservice();
  $res    = $req->userVarify($where);
-//print_r($res);die();
  $data   = array('name'=>$name,'email'=>$email,'password'=> $password1,'phone'=>$phone,'gender'=>$gender,'prof'=>$prof,'sport'=>$sport,'location'=>$location,'token'=>$token,'usertype'=>$usertype);
- 
- if($res != 0)
+  if($res != 0)
  {
 $status = array('status' => 0, 'message' => 'user already exists');
 echo json_encode($status); 
@@ -37,12 +33,10 @@ else
 {
 $req1 = new userdataservice();
 $res1 = $req1->createUser($data);
-
 if($res1 == '1')
 {
 $req2 = new userdataservice();
 $res2 = $req2->userVarify($where);
-//print_r($res2);die();
 if($res2 != 0)
 {
 $res3 = array('data' => $res2,'status' => 1);
@@ -91,26 +85,14 @@ if($row==1)
 	  }
          
           $data = array('data'=>$row1,'status'=>'1','multiple'=>$multiple);
-         // print_r($data);die();
           echo json_encode($data);
-	   // $status = array('status' => 1);
-	   // $res = array('data' => $row1,'status' => 1);
-	   // echo json_encode($res); 
-
-	}
+	  	}
 }
 else
     {
         $data = array('data'=>'Invalid login credentials' , 'status'=>'0');
         echo json_encode($data);
     }
-
-//  else
-//  {
-// $res = array('status' => 0 , 'message' => 'Invalid login credentials' );
-// echo json_encode($res);
-//   }
-
 }
 
 
@@ -121,7 +103,6 @@ else if($_POST['act']=="editprofile")
 {
 $userid = urldecode($_POST['userid']);
 $data1  = json_decode($_REQUEST[ 'data' ]);////
-
 $item                     =  new stdClass();
 $item->formal_edu         =  $data1->formal_education;
 $item->sports_edu         =  $data1->sports_education;
@@ -132,21 +113,15 @@ $item->other_exp          =  $data1->other_experience;
 $item->other_skills       =  $data1->other_skills;
 $item->userinfo           =  $data1->info;
 $item->other_skills       =  $data1->other_skills;
-
-//print_r($item);
-
 $formaledu = (json_decode(json_encode($item->formal_edu),true));
 $size = sizeof($formaledu);
 for($i=0;$i<$size;$i++)
 {
 $req1 = new UserProfileService();
 $res1 = $req1->editFormalEducation($userid,$formaledu[$i]);
-
 if($res1 != '1')
 {
-
 echo "some problem while saving formal education";
-
 }
 }
 $sports_edu = (json_decode(json_encode($item->sports_edu),true));
@@ -155,60 +130,42 @@ for ($i=0; $i <$size ; $i++)
 { 
 $req2  = new UserProfileService();
 $res2 = $req2->editSportsEducation($userid ,$sports_edu[$i]);
-
 if($res2!= '1')
 {
-
 echo "some problem while saving sports education";
-
 }
 }
-
 $education = (json_decode(json_encode($item->other_cert),true));
-//print_r($education);
 $size = sizeof($education); 
 for ($i=0; $i <$size ; $i++) 
 { 
-
 $req3 = new UserProfileService();
 $res3 = $req3->editFormalEducation($userid ,$education[$i]);
-//echo $res3;
 if($res3 != '1')
 {
-
 echo "some problem while saving other certs info.";
-
 }
 }
 $experience = (json_decode(json_encode($item->Work_exp),true));
-//print_r($experience);
 $size       = sizeof($experience);
 for ($i=0; $i <$size ; $i++) 
 { 
-
 $req4 = new UserProfileService();
 $res4 = $req4->editExperience($userid ,$experience[$i]);
-
 if($res4 != '1')
 {
-
 echo "some problem while saving user work experience";
-
 }
 }
  $sports_experience = (json_decode(json_encode($item->player_exp),true));
  $size = sizeof($sports_experience);
- //$array = print_r($sports_experience);die();
- for ($i=0; $i <$size ; $i++)
+for ($i=0; $i <$size ; $i++)
 { 
   $req5 = new UserProfileService();
   $res5 = $req5->editSportExperience($userid ,$sports_experience[$i]);
-
   if($res5 != '1')
   {
-
    echo "Some probelem while saving user sports experience";
-
   }
 }
 
@@ -216,57 +173,41 @@ $experience = (json_decode(json_encode($item->other_exp),true));
 $size       = sizeof($experience);
 for ($i=0; $i <$size ; $i++) 
 { 
-
 $req6 = new UserProfileService();
 $res6 = $req6->editExperience($userid ,$experience[$i]);
-
 if($res6 != '1')
 {
-
 echo "some problem while saving user work experience";
-
 }
 }
 $skill = (json_decode(json_encode($item->other_skills),true));
 $size  = sizeof($skill);
-//print_r($skill);
 for($i=0;$i<$size;$i++)
 {
-
 $req7 = new UserProfileService();
 $res7 = $req7->editUserSkill($userid ,$skill[$i]);
 if($res7 != '1')
 {
-
 echo "some problem while saving user skill";
-
 }
-
-
 }
 $userinfo = json_decode(json_encode($item->userinfo),true);
 $req = new UserProfileService();
 $res = $req->editUserData($userid,$userinfo);
-//echo $res;
 if($res != '1')
 {
-
 echo "some problem while updating user info";
-
 }
 //echo "res1=".$res1." res2=".$res2." res3=".$res3." res4=".$res4." res5=".$res5." res6=".$res6." res7=".$res7." res=".$res;
 if ( $res1 != '0' && $res2 != '0' && $res3 != '0' && $res4 != '0' && $res5 != '0' && $res6 != '0' && $res7 != '0' && $res != '0')
 {
-
 $status = array('failure' => 0 , 'success' => 1);
 echo json_encode($status);
 } 
 else 
 {
-
 $status = array('failure' => 1 , 'success' => 0);
 echo json_encode($status);
-
 }
 }
 
@@ -275,36 +216,27 @@ echo json_encode($status);
 
 else if($_POST['act']=="getUserData")
 {
-
 $userid =urldecode($_POST['userid']);
 $eduid  = '1';
 $req1 = new UserProfileService();
 $res1 = $req1->getUserEducation($userid,$eduid); 
-
 if($res1 != '0')
 {
-
 $formaledu = $res1;
-
 }
 else
 {
 $formaledu =  0;
 }
-
-
-
 $req2 = new UserProfileService();
 $res2 = $req2->getSportsEducation($userid);
 if($res2 != '0')
 {
-
 $sportsedu = $res2;
-
-}else{
+}else
+{
 $sportsedu = 0;
 }
-
 $eduid  = '3';
 $req3   = new UserProfileService();
 $res3   = $req3->getUserEducation($userid,$eduid);
@@ -314,13 +246,9 @@ $otheredu = $res3;
 }
 else
 {
-
 $otheredu = 0;
-
 }
-
 $user_exp = '1';
-
 $req4 = new UserProfileService();
 $res4 = $req4->getUserExperience($userid,$user_exp);
 if($res4 != '0')
@@ -329,28 +257,20 @@ $work_exp = $res4;
 }
 else
 {
-
 $work_exp = 0;
-
 }
 
 $req5 = new UserProfileService();
 $res5 = $req5->getUserSportsExp($userid);
 if($res5 != '0')
 {
-
 $sport_exp = $res5;
-
 }
 else
 {
-
 $sport_exp = 0;
-
 }
-
 $user_exp = '2';
-
 $req6 = new UserProfileService();
 $res6 = $req6->getUserExperience($userid,$user_exp);
 if($res6 != '0')
@@ -359,51 +279,37 @@ $other_exp = $res6;
 }
 else
 {
-
 $other_exp = 0;
-
 }
-
 $req7         = new UserProfileService();
 $res7         = $req7->getUserSkill($userid);
 if($res7 != 0)
 {
-
 $other_skills = $res7;
-
 }
 else
 {
-
 $other_skills = 0;
-
 }
-
-
 $req = new UserProfileService();
 $res = $req->getuserData($userid);
 if($res != '0')
 {
-
 $user = $res;
 }
 else
 {
-
 $user = 0;
-
 }
 
 $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-if(in_array(0, $userdata)){
-
+if(in_array(0, $userdata))
+{
   $userdata['status'] = 0; 
-
-}else{
-
+}else
+{
   $userdata['status'] = 1;
 }
-//print_r($userdata);
 $user = array('data' => $userdata);
 echo json_encode($user);
 }
@@ -415,10 +321,7 @@ else if($_POST['act']=="createjob")
 {
 $status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
-
 $item = new stdClass(); 
-
-
 $item->id                    = $data1->id;
 $item->userid                = $data1->userid;
 $item->title                 = $data1->title;
@@ -446,12 +349,8 @@ $item->name                  = $data1->name;
 $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
-
-//print_r($item);
-
 $req = new userdataservice();
 $res = $req->create_job($item);
-
 if($res != 0)
 {
 echo json_encode($status['success']);
@@ -460,15 +359,13 @@ else
 {
 echo json_encode($status['failure']);
 }
-
 }
+
 
 //********* CODE FOR CREATING TOURNAMENTS **********//
 
 else if($_POST['act'] == "createtournament")
-
 {
-
 $status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
 $item = new stdClass();
@@ -505,53 +402,44 @@ $item->file                    = $data1->file;
 $item->email_app_collection    = $data1->email_app_collection;
 $item->phone_app_collection    = $data1->phone_app_collection;
 $item->sport                   = $data1->sport;
-
 $eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
 $eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
 $terms = json_decode($data1->terms_and_conditions1);
 $terms = implode("|",$terms);
-
-
 $item->eligibility1          = $eligibility;
 $item->terms_and_conditions1 = $terms;
-
-
-if($item->checkBox_maleValue == "1" ){
+if($item->checkBox_maleValue == "1" )
+{
 $gender = "Male";
-
-}else if($item->checkBox_femaleValue == "1"){
-
+}
+else if($item->checkBox_femaleValue == "1")
+{
 $gender = "Female";
-
 }
-else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  ){
-
+else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  )
+{
 $gender = "Unisex";
-
 }
-
 $req = new userdataservice();
 $res = $req->create_tournament($item);
-if($res == 1){
-
+if($res == 1)
+{
 echo json_encode($status['success']);
-
 }
 else
 echo json_encode($status['failure']);
-
 }
+
+
 
 
 //********* CODE FOR CREATING EVENTS **********//
 
-else if ($_POST['act'] == 'createevent') {
-  
+else if ($_POST['act'] == 'createevent') 
+{
 $status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
-
 $item = new stdClass();
-
 $item->id                       = $data1->id;
 $item->userid                   = $data1->userid;
 $item->type                     = $data1->type;
@@ -583,30 +471,23 @@ $item->entry_end_date           = strtotime($data1->entry_end_date);//strtotime(
 $item->file_name                = $data1->file_name;
 $item->file                     = $data1->file;
 $item->email_app_collection     = $data1->emailid;
-
 $eligibility = json_decode($data1->eligibility1);
 $eligibility = implode("|", $eligibility);
-
 $terms       = json_decode($data1->terms_and_conditions1);
 $terms       = implode("|",$terms);
-
 $item->eligibility1 = $eligibility;
 $item->tandc1       = $terms;
-
 $req = new userdataservice();
 $res = $req->create_event($item);
-
-
 if($res == 1)
 {
-
 echo json_encode($status['success']);
-
 }
 else
 echo json_encode($status['failure']);
-
 }
+
+
 
 
 //*********CODE FOR FETCHING THE CREATED DATA***********//
@@ -615,56 +496,41 @@ else if($_POST['act'] == "editcreation")
 $userid = urldecode($_POST['userid']);
 $type   = urldecode($_POST['type']);
 $id     = urldecode($_POST['id']);
-
 if($userid != '')
 {
-
 $where1 = "`userid`  = '".$userid."'";
-
 }
 if($id != '')
 {
-
 $where2 = "  AND `id` = '".$id."'";
-
 }
-
 $where = $where1.$where2;
-
 $req = new userdataservice();
 $res = $req->getCreation($where, $type);
-
 if($res != 0)
 {
   if(sizeof($res == '1'))
 {
-
 if($type == '2' || $type == '3')
 {
-
 $eligibility = $res[0]['eligibility1'];
 $eligibility = explode("|",$eligibility);
 $eligibility = array_filter(array_values($eligibility));
 $size        = sizeof($eligibility);
-
 $el = array();
 for ($i=0; $i <$size ; $i++) 
 { 
 $index = "Eligibility ".($i +'1');
 if($eligibility[$i] == '')
 {
-
 $el[$index] = "";
-
 }
 else
 { 
 $el[$index] = $eligibility[$i];
 }
 }
-
 $res[0]['eligibility1'] = $el; 
-
 if($type == '2')
 {
 $terms = $res[0]['terms_cond1'];
@@ -673,20 +539,16 @@ else if($type == '3')
 {
 $terms = $res[0]['terms_and_cond1'];
 }
-
 $terms = explode("|",$terms);
 $terms = array_filter(array_values($terms));
 $size  = sizeof($terms);
-
 $tc = array();
 for ($i=0; $i <$size ; $i++) 
 { 
 $index = "Terms & condition ".($i +'1');
 if($terms[$i] == '')
 {
-
 $tc[$index] = "";
-
 }
 else
 { 
@@ -697,30 +559,25 @@ $terms = $tc;
 if($type == '2')
 {
 $res[0]['terms_cond1'] = $terms;
-
 }
 else if($type == '3')
 {
-
 $res[0]['terms_and_cond1'] = $terms;
-
 }
-  
-
-
-}}
+}
+}
   $status = 1;
 }
 else
 {
   $status = 0;
 } 
-
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
-
-
 }
+
+
+
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
 
@@ -734,70 +591,54 @@ else if($_POST['act'] == "search_job")
  $gender    =urldecode($_POST ['gender']);
  $subs      =urldecode($_POST ['subs']);
  $para      =urldecode($_POST ['para']);
-
 if($para == '') // For Default Search parameters
 {
-
-
 $whereclause = "WHERE"." ";
-
 if($sport_name !="")
 {
-
 $where2= "AND `sport` LIKE '%$sport_name%' ";
-
 }
-if($job_title != ""){
-
-
+if($job_title != "")
+{
 $where1= "`title` LIKE '%$job_title%' ";
 //$fwhere = $whereclause.$whereclause1;
 }
-if($location != ""){
-
+if($location != "")
+{
 $where3 = "AND `city` LIKE '%$location%'"; 
-
 }
- if($gender != ""){
-
+if($gender != "")
+{
 $where4 = "AND  `gender` LIKE '%$gender%'"; 
-
-}//echo $wherenext;
+}
  $wherenext = $where1.$where2.$where3.$where4;
- if($wherenext == "" ){
+if($wherenext == "" )
+{
 $fwhere  = $whereclause."1";
-
- }else
-// echo $fwhere;
+}
+ else
 $fwhere  = $whereclause.$wherenext; 
 }
 else
 {
-
 $fwhere = $para;
-
-}//echo $fwhere;
-
+}
 $search = new userdataservice();
 $search_param = $search->saveparam($id,$job_title,$sport_name,$location);
-//echo $id.$job_title.$sport_name.$location;//die();
 $rev = new userdataservice();
 $res = $rev->jobsearch($fwhere);
 if($res != 0)
 {
-
 if($id != '')
 {
 $recarr = array();
 $size = sizeof($res);
 for($i = 0; $i<$size ; $i++)
 {
-
   $resid= $res[$i]['id'];
   array_push($recarr, $resid);
   $recarr[$i][$resid];
 }
-
 $recdata = implode(",",$recarr);
 if($para == '')
 {
@@ -805,15 +646,12 @@ $rec     = new userdataservice();
 $rec1    = $rec->saverecent($recdata,$type, $id);
 }
 }
-
 $rev1 = new userdataservice();
 $res1 = $rev->getfavForUser($res, $type, $id);
-
 $rev2 = new userdataservice();
 $res2 = $rev->getuserjobs($res1, $type, $id);
 $data = array('data'=>$res2 , 'status'=>'1');
 echo json_encode($data);
-
 if($id !='' && $subs != '0')
 {
 $al1  = new searchdataservice();
@@ -821,17 +659,15 @@ $al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
 echo $al2;
 die();
 }
-
 }
 else
 {
 $data = array('data'=>'0' , 'status'=>'0');
 echo json_encode($data);
 }
-
-
-//echo json_encode($data);
 }
+
+
 
 //********* CODE FOR SEARCHING EVENTS **********//
 
@@ -844,7 +680,8 @@ else if ($_POST['act'] == "search_event" )
  $location    = urldecode($_POST ['location']);
  $subs        = urldecode($_POST ['subs']);
  $para        = urldecode($_POST ['para']);
- if($para == ''){
+ if($para == '')
+ {
  $whereclause = "WHERE"." ";
  if($evtype != "")
  {
@@ -866,12 +703,11 @@ $where3 = "AND `location` LIKE '%$location%'";
  $wherenext = $where1.$where2.$where3;
  if($wherenext == "" )
  {
-$fwhere  = $whereclause."1";
+  $fwhere  = $whereclause."1";
 
  }
  else
 $fwhere  = $whereclause.$wherenext; 
-//echo $fwhere;
 }
 else 
 {
@@ -891,7 +727,6 @@ for($i  = 0; $i<$size ; $i++)
   $res[$i]['eligibility1'] = explode("|",$eligibility);
   $terms = $res[$i]['terms_cond1'];
   $res[$i]['terms_cond1'] = explode("|", $terms);
-
   $resid= $res[$i]['id'];
   array_push($recarr, $resid);
 }
@@ -912,16 +747,13 @@ echo json_encode($data);
 else
 {
 $data = array('data'=>'0' , 'status'=>'0');
-
 }
-
 if($id !='' && $subs != '0')
 {
 $al1  = new searchdataservice();
 $al2  = $al1->savealert($id ,$fwhere , $type , $size , $subs);
 echo $al2;
 die();
-
 }
 echo json_encode($data);
 }
