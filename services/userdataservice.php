@@ -10,7 +10,7 @@
 public function userVarify($where)
 {
 //echo "SELECT `userid`, `name`, `prof_id` FROM `user` ".$where;die();
-$query  = mysql_query("SELECT `userid`,`location` ,`name`, `prof_id` FROM `user` ".$where);
+$query  = $query  = mysql_query("SELECT *FROM `user` $where");
 if(mysql_num_rows($query)>0)
 {
 
@@ -30,6 +30,229 @@ return 0;
 }
 
 }
+
+
+
+
+/*
+| this function are used to signup the New User in Getsporty Lite 
+| when the user is Login[First Time] Using the google or facebook then this function are excute it 
+| becuse this code are store the Information of User
+
+
+*/
+public function UserSignup($data)
+{
+$name               =  $data->name;
+$email              =  $data->email;
+$password           =  $data->password;
+$device_id          =  $data->device_id;
+$userType           =  $data->usertype;
+$logintype          =  $data->logintype;
+$password1          =  md5($password);
+$user_image         =  $data->user_image;
+
+    if($logintype ==2 || $logintype==3)
+     {
+           $status=1;
+           $query =mysql_query("INSERT INTO `user`(`userid`,`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('','$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
+         if($query)
+         {
+            $id = mysql_insert_id();
+             if($id!=NULL)
+            {
+               $data1 = $this->userdata($id);
+            }
+            return $data1;
+         } 
+         else
+         {    
+            return 0;
+         }  
+      }
+      
+else 
+    {
+       $status=0;
+       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`, `name`, `email`, `password`,`device_id`,`status`) VALUES('','$userType','$name','$email','$password1','$device_id','$status')");
+       if($query)
+       {
+              require('class.phpmailer.php');
+              $mail = new PHPMailer();
+              $to=$email;
+              $from="info@getsporty.in";
+              $from_name="Getsporty Lite";
+              $subject="Email varification ";
+              $emailconform="getsporty.in/testingactivation.php?email=";
+              //$emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
+              //global $error;
+              $mail = new PHPMailer();  // create a new object
+              $mail->IsSMTP(); // enable SMTP
+              $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+              $mail->SMTPAuth = true;  // authentication enabled
+              $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+              $mail->Host = 'dezire.websitewelcome.com';
+              //$mail->Host = 'smtp.gmail.com';
+              $mail->Port = 465; 
+              $mail->Username ="info@getsporty.in";  
+              $mail->Password = "%leq?xgq;D?v";           
+              $mail->SetFrom($from, $from_name);
+              $mail->Subject = $subject;
+              // $mail->Body = ' 
+              //            <h1> Click here </h1>'.$emailconform.''.$email.'<br><b>Note:- Please varification of this email</b>
+              // '; 
+$mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Please verify your email Address.</h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click activate to login</br> <a href="'.$emailconform.''.$email.'">Activate<br></strong>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting</p></br><p>GetSporty Team</p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="center" valign="middle">
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</div>'; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+
+             $id = mysql_insert_id();
+             if($id!=NULL)
+             {
+               $data1 = $this->userdata($id);
+             }
+            return $data1;
+          }
+          else
+          {
+            return 0;
+          }
+        }
+      
+} // End Funtction 
+
+
+
+/*
+| This function are used to Login using the GetsportyLite|
+|
+*/
+
+
+
+
+  /***************************Login***************************/
+
+  public function gsSignIn($email,$password1)
+    {
+      $query = mysql_query("SELECT  *FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+          if($query)
+          {
+            while($row = mysql_fetch_assoc($query))
+            {   
+               $data1= $row; 
+               return $data1;
+             }
+           }
+            else
+            {
+               return 0;
+            }
+    } // end function
+
+
+
+// This function are use to get the all Information from the User Table
+
+/***************************************************************************/
+
+    public function userdata($id)
+    {
+       $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
 
      * function For User Registration
@@ -200,15 +423,30 @@ return 0;
 public function create_job($item)
 {
 
+$image =$item->image;
 $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
-
-
-if($query)
-  return true;
-else
-  return false;
-
+ 
+ if($query)
+        { 
+          $id = mysql_insert_id();
+          if($id!=NULL && $image!=NULL)
+          {
+           $image = $this->imageupload($image,$id);
+          }
+        return 1;
+        }
+        else
+          {
+            return 0;
+          }
 }
+
+
+
+
+
+/***********************************Create Tournament Function****************/
+
 
 public function create_tournament($item)
 {
@@ -245,7 +483,7 @@ if($type == 1)
 {
 
 
-$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
+$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link, IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
 }
 else if ($type == 2) 
 {
@@ -426,7 +664,7 @@ $rows[] = $row;
 public function jobsearch($fwhere)
 {
 
-$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` ".$fwhere." ORDER BY `date_created` DESC";
+$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` ".$fwhere." ORDER BY `date_created` DESC";
 //echo $query;
 $query1 = mysql_query($query);
 if(mysql_num_rows($query1) > 0)
@@ -590,7 +828,7 @@ $id= $favdata;
 if($type == '1'){
 
 	//$table = 'gs_jobInfo';
-  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE `id` = '$id' ");
+  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE `id` = '$id' ");
  // $id1    = 'id';
 }else if($type == '2'){
 
@@ -696,7 +934,7 @@ public function get_recentdata($data1, $type)
 if($type == 1)
 {
 
-  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link FROM `gs_jobInfo` WHERE `id` = '$data1' ORDER BY `date_created` ASC");
+  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE `id` = '$data1' ORDER BY `date_created` ASC");
 }
 else if($type == 2)
 {
@@ -838,23 +1076,16 @@ for($i = 0 ; $i<$size ; $i++)
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
-
- // print_r($registatoin_ids);
- // print_r($message);die();
-
     //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
             'registration_ids' => $registatoin_ids,
             'data' => $message,
         );
-        //$registatoin_ids = '/topics/global';
-        //echo $registatoin_ids;
-       $message = array('data1'=>$message);
+          $message = array('data1'=>$message);
       $data = array('data'=>$message,'to'=>$registatoin_ids);
 
-     // print_r($data);
-      
+     
         json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
@@ -877,8 +1108,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         }
         curl_close($ch);
         return $result;
-        //print_r($result);
-    }
+          }
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -1182,55 +1412,63 @@ public function createResources($data)
   $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`userid`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
 
   if($query)
-  { 
-    $id = mysql_insert_id();
-    if($id!=NULL && $image!=NULL)
-    {
-     $image = $this->imageupload($image,$id,$title);
-    }
-  return 1;
-  }
-  else
-    {
-      return 0;
-    }
-
-
+        { 
+          $id = mysql_insert_id();
+          if($id!=NULL && $image!=NULL)
+          {
+           $image = $this->imageupload($image,$id);
+          }
+        return 1;
+        }
+        else
+          {
+            return 0;
+          }
 }
 
 
-public function imageupload($image,$id,$title)
-{
 
-  define('UPLOAD_DIR','gs_images/Resources/');
-  $img = $image;
-  $img = str_replace('data:image/png;base64,', '', $img);
-  $img = str_replace('$filepath,', '', $img);
-  $img = str_replace(' ', '+', $img);
-  $data = base64_decode($img);
-  $img_name = $id.'_'.$title;
-  $success=move_uploaded_file($img, $filepath);
-  $file = UPLOAD_DIR .$img_name. '.png';
-  $success = file_put_contents($file, $data);
-  if($success)
-  {
-    $img_name = $img_name. '.png';
-    $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-  if($updateImage)
-  {
-    return true;
-  }
-  }
-  else
+
+
+/***************Function for Upload Image in Create Resource***********************/
+
+
+ public function imageupload($image,$id)
     {
-      echo "image not uploaded";
-      return false;
+      define('UPLOAD_DIR','../staging/uploads/job/');
+      $now = new DateTime();
+      $time=$now->getTimestamp(); 
+      $img = $image;
+      $img = str_replace('data:image/png;base64,', '', $img);
+      $img = str_replace('$filepath,', '', $img);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+      $img_name= "res"."_".$time;
+      $success=move_uploaded_file($img, $filepath);
+      $file = UPLOAD_DIR.$img_name.'.png';
+      $success = file_put_contents($file, $data);
+      if($success)
+      {
+        $img_name = $img_name. '.png';
+        // This code is Used for Create Resource for Uploading the Image
+       // $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
+         $updateImage = mysql_query("update `gs_jobInfo` set `image`='$img_name' where `id`='$id'");
+      if($updateImage)
+      {
+        return 1;
+      }
+      }
+      else
+        {
+          $res = array('data' =>'Image is Not Upload' ,'status' => 0);
+          echo json_encode($res);
+          return 0;
+          //echo "image not uploaded";
+         
+        }
     }
-
-
-}
-
-
+ 
+   
 /*****************************************************************/
 
    public function getResources_search($fwhere)
@@ -1468,137 +1706,134 @@ else if($data['userType']=='104')
     $userid=$data['userid'];
     $query = mysql_query("UPDATE `user` SET `userType`='103' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
 
+}
+}}
+
+
+//  ***************User is view apply  our JOB , EVENT ,TOURNAMENT**********************
+
+
+
+
+  public function view_apply($userid,$type)
+  {
+switch ($type) 
+{
+
+  case '1':
+       $query = "SELECT `gs_jobInfo`.`id`,`TITLE`,`description`,`image` FROM `gs_jobInfo`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_jobs`.`userid`=$userid AND `user_jobs`.`STATUS`>=1";
+   $query1 = mysql_query($query);
+
+    if(mysql_num_rows($query1) > 0)
+      {
+      while($row = mysql_fetch_assoc($query1))
+      {
+      $rows[] = $row; 
+      }
+
+      return $rows;
+       } 
+      
+        else
+       {
+      return 0;
+       }
+break;
+case '2':
+
+
+  break;
+
+case '3':
+      break;
+      default:
+     } //End Switch
+
+}//End Function
+
+
+
+
+
+/***************************************New Apply function Job Event Tournament*****************/
+
+// This code is Only for Local System Please Ignore it if Functionaly is Complite then code is replace the Code Server
+
+
+public function apply($userid , $id , $type,$module)
+{
+switch ($module)
+ {
+   case '1':
+     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+     break;
+   case '2':
+       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+     break;
+     case '3':
+       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+       break;
+  
+ }  //End Switch
+    if($query)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+}// End Function
+
+
+
+
+
+
+
+//  *************** New Code for User is view apply  our JOB , EVENT ,TOURNAMENT**********************
+// This code for view Apply when the User is apply  our JOB , EVENT ,TOURNAMENT so Pleas Ignore this Code
+ public function v_apply($userid,$type)
+  {
+switch ($type) 
+{
+case '1':
+      $query = mysql_query("SELECT `ji`.`id`,`ji`.`TITLE`,`ji`.`description`,`ji`.`image` FROM `gs_jobInfo` AS ji, `user_jobs` AS uj WHERE `ji`.`id`=`uj`.`userjob` AND `uj`.`userid`=$userid AND `uj`.`status`>=1");
+      break;
+case '2':
+       $query = mysql_query("SELECT `ei`.`id`,`TITLE`,`description`,`image` FROM ` gs_eventinfo` AS ei ,`user_events` ue WHERE `ei`.`id`=`ue`.`userevent` AND `ue`.`userid`=$userid AND `ue`.`status`>=1");
+
+      break;
+case '3':
+    $query = mysql_query("SELECT `gs_tournament_info`.`id`,`TITLE`,`description`,`image` FROM `gs_tournament_info`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_tournaments`.`userid`=$userid AND `user_tournaments`.`status`>=1");
+
+      break;
+      default:
+      $resp['status'] = "Falure";
+      echo json_encode($resp);
+   break;
+
+     } //End Switch
+
+      if(mysql_num_rows($query) > 0)
+      {
+      while($row = mysql_fetch_assoc($query))
+      {
+      $rows[] = $row; 
+      }
+      return $rows;
+      } 
+      else
+      {
+      return 0;
+      }
+}//End Function
+
 
 //###################### welcome email send to user ##############################################
 
        
- $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
-
- <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
-<tbody><tr>
-<td align="center" valign="top">
-<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
-<tbody><tr>
-
-<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr>
-<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
-</td>
-</tr>
-<tr>
-<td style="padding-bottom:20px" valign="top">
-<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Password Reset</h1>
-</td>
-</tr>
-<tr>
-<td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">welcome in  getsporty family <br>
-
-<br><br><br><br><br>Thanks GetSportyLite Team </p> 
-</td>
-</tr>
-<tr>
-<td align="center" style="padding-bottom:60px" valign="top">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr>
-<td align="center" valign="middle">
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</div>'; 
-
-        // $this->sendEmail($userid);
-     $this->sendEmail_for_password_reset($userid,$body);
-
-         return 2;
-
-        }
-        else{
-          return 3;
-            }
-        }
-        else 
-        {
-
-         // print_r("expression");die;
-    $query = mysql_query("INSERT into `user`(`email`,`contact_no`,`Gender`,`prof_id`,`sport`,`dob`,`userType`,`device_id`) values('$data->email','$data->phone_no','$data->gender','$data->proffession','$data->sport','$data->dob','$data->userType','$data->device_id')");
-         
-       //print_r($query);die;
-       if($query)
-       {
-		    $last_id = mysql_insert_id();
-        //print_r($last_id);die;
-
-       //#######################  password set email send to user ######################
-
-$body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
-
- <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
-<tbody><tr>
-<td align="center" valign="top">
-<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
-<tbody><tr>
-
-<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr>
-<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
-</td>
-</tr>
-<tr>
-<td style="padding-bottom:20px" valign="top">
-<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Password Reset</h1>
-</td>
-</tr>
-<tr>
-<td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">  Please click on the link to reset the password <br>
-
- <a href="http://getsporty.in/user_reg/index.php?id='.$last_id. '">continue reading.</a>
-
-<br><br><br><br><br>Thanks GetSportyLite Team </p> 
-</td>
-</tr>
-<tr>
-<td align="center" style="padding-bottom:60px" valign="top">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr>
-<td align="center" valign="middle">
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</div>'; 
-
-    $this->sendEmail_for_password_reset($last_id,$body);
-    return 4;
-  }
-  else{
-     return 0;
-  }
-
-    }
-}
+ 
 
 
 public function sendEmail_for_password_reset($id,$body)

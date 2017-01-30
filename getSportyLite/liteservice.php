@@ -69,7 +69,7 @@ else
               $from="info@getsporty.in";
               $from_name="Getsporty Lite";
               $subject="Email varification ";
-              $emailconform="getsporty.in/activation.php?email=";
+              $emailconform="getsporty.in/testingactivation.php?email=";
               //$emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
               //global $error;
               $mail = new PHPMailer();  // create a new object
@@ -167,34 +167,34 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function gsSignIn($email,$password1,$device_id)
     {
-    	      
-     $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+      $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
      $row  = mysql_num_rows($query);
-    
-       if($row)
+       if($row=='1')
        {
             while($row = mysql_fetch_assoc($query))
             {   
                 if($row['status'] == '1' )
                 {
-                     if($row['device_id'] != $token  && $row['device_id'] != '')
+                   if($row['device_id'] != $device_id && $device_id !='' )
                      {
-                      mysql_query(" UPDATE `user` SET `device_id` = '$token' WHERE `email` = '$email' AND `password` = '$password1'");
-                          $data= $row; 
-                          return $data;
-                     }
-                     else
-                     {
-                        $data= $row; 
-                        return $data;
-                     }
+                      mysql_query(" UPDATE `user` SET `device_id` = '$device_id' WHERE `email` = '$email' AND `password` = '$password1'");
+                         $row['device_id']=$device_id;
+                         $data= $row;
+                         return $data;
+                      }
+                        else
+                        {
+                        $data1= $row; 
+                        return $data1;
+                        }
+               
                }
-                else
+               else
                {
-                  $data= $row; 
-                  return $data;
-               }
-            }
+                return 0;
+                }
+
+            } // End Loop
 
         }     
         else
@@ -202,7 +202,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
            return 0;
         }
 
-  }
+  } // end function
 
     /****************************Listing Resources GetSporty [Function]*************************/
 
@@ -734,9 +734,6 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
 
 /***************Function for Searching the JOB EVENT and Tournament ***********************/
-// This Code is Transfer in Create Database.php file so Please Check it 
-
-
 
 public function getSearching($where,$module)
 {
