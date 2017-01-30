@@ -992,11 +992,11 @@ echo json_encode($status['failure']);
 
 
 //*********CODE FOR FETCHING THE CREATED DATA***********//
-else if($_POST['act'] == "editcreation")
+else if($_REQUEST['act'] == "editcreation")
 {
-$userid = urldecode($_POST['userid']);
-$type   = urldecode($_POST['type']);
-$id     = urldecode($_POST['id']);
+$userid = urldecode($_REQUEST['userid']);
+$type   = urldecode($_REQUEST['type']);
+$id     = urldecode($_REQUEST['id']);
 if($userid != '')
 {
 $where1 = "`userid`  = '".$userid."'";
