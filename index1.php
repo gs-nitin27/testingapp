@@ -5,26 +5,24 @@
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
 	
-var data = {
-    "userid":"288",
-    "name":"Ramesh",
-    "email":"darkhorses@yahoo.com",
-    "password":"123456",
+
+//var data = {"email":"devendrakumarpandey@gmail.com","status":1,"dob":"2017\/0\/31","userid":"313","gender":"MALE","sport":"SPORT","proffession":"Football","mobile_no":"8546523123",'user_image':"abc"};
+
+ var data = {
+   
+    "email":"devendrakumarpandey@gmail.com",
+    "password":"123456", 
     "device_id":"8888",
     "usertype":"104",
     "logintype":2,
-    "status":0,
-    "mobile_no":89827263,
-    "proffession":"Coach",
-    "sport":"Hockey",
-    "gender":"Male",
-    "dob":"1989/23/43"
- // "userid":"101",
- // "email":"dev@gmail.com",
+  "userid":"101",
+  "user_image":"55555555555555555555555"
+ 
 
 
 
 };
+
 
 
 // var university = "";
@@ -33,7 +31,7 @@ $.ajax({
 
     type: "POST",
    // url: "getListingController.php?act=sportlisting",
-    url: "create_database.php?act=editprofile",
+    url: "create_database.php?act=gs_login",
     data:"data="+JSON.stringify(data),
     //url: "getListingController.php",
 

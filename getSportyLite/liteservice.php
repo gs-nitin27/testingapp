@@ -146,7 +146,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function userdata($id)
     {
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` where `userid` = '$id'");
+       $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
