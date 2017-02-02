@@ -3,6 +3,7 @@ include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
+include('services/emailService.php');
 error_reporting(E_ERROR | E_PARSE);
 
 // SignUp The New User  using the GetsportyLite 
@@ -18,7 +19,6 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == 'gs_signup')
 {
-
 $data1                     =   json_decode($_POST['data']);
 //`$item                      =   new stdClass();
 $email                     =   $data1->email;
@@ -32,21 +32,27 @@ $res                       =   $req->userVarify($where);
       }
       else
       {
-        $req2     = new userdataservice();
-        $res3     = $req2->UserSignup($data1);
-             if($res3)
+        $req1     = new userdataservice();
+        $res1     = $req1->UserSignup($data1);
+        //$req2     = new emailService();
+       // $res2     = $req2->emailVarification($email);
+             if($res1)
             {
-             $res4 =  array('status' => 1,'data'=>$res3,'msg'=>'User registered');
+             $res4 =  array('status' => 1,'data'=>$res1,'msg'=>'User registered');
              echo json_encode($res4);
+             $req2     = new emailService();
+             $res2     = $req2->emailVarification($email);
             }
             else
             {
-             $res5 = array('status' => 0,'data'=>$res3,'msg'=>'User not registered');
+             $res5 = array('status' => 0,'data'=>$res1,'msg'=>'User not registered');
              echo json_encode($res5);  
             }
       }
 } // End of Function
  
+
+
 
 
 // Sign In Using the GetsportyLite 
@@ -62,6 +68,7 @@ $password1                    =  md5($password);
 $device_id                    =  $data1->device_id;
 $logintype                    =  $data1->logintype;
 $where                        =  "WHERE `email`= '$email' ";
+$user_image                   =  $data1->user_image;
 switch ($logintype)
 {
   case '1':
@@ -90,11 +97,17 @@ switch ($logintype)
                     }
         break;
       default:
+                      if ($user_image !='') 
+                     {
+                        $obj = new userdataservice();
+                        $upd = $obj->updateimage($email,$user_image);
+                     }
+
                   $req                     =  new userdataservice();
                   $res                     =  $req->userVarify($where);
                   if($res)
                   { 
-                     
+                                   
                       if($res['device_id'] != $device_id )
                       {
                         $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
@@ -104,9 +117,9 @@ switch ($logintype)
                         $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
                         $obj = new userdataservice();
                         $upd = $obj->updatedevice($device_id ,$email);
-                        $multiple = "1";
-                      }
-                      
+                        //$multiple = "1";
+                     }
+                                          
                       $data = array('status' => 1,'data'=>$res ,'msg'=>'User already registered');
                       echo json_encode($data);
                  }
@@ -122,7 +135,7 @@ switch ($logintype)
                             $multiple = '1';
                             $message = array('message'=>$mes,'multiple'=>"1");
                             $pushobj      = new userdataservice();
-                             $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
+                            $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
                             $obj = new userdataservice();
                             $upd = $obj->updatedevice($device_id ,$email);
                             //$multiple = "1";
@@ -140,6 +153,48 @@ switch ($logintype)
 
 } //End Switch
 } // Function End
+
+
+
+//******************CODE FOR EDIT PROFILE STARTS ******************************/
+// if Status=0 then Email are send to User for varify
+
+else if($_REQUEST['act']=="editprofile")
+{
+$data1                =  json_decode($_POST[ 'data' ]);
+$item                 =  new stdClass();
+$item->userid         =  $data1->userid;
+$item->email          =  $data1->email;
+$item->mobile_no      =  $data1->mobile_no;
+$item->proffession    =  $data1->proffession;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$item->status         =  $data1->status;  
+$req                  = new UserProfileService();
+$res                  = $req->editProfile($item);
+ if ($item->status==0) 
+ {
+ $req2     = new emailService();
+ $res2     = $req2->emailVarification($item->email);
+ }
+if($res==1)
+{
+$req1                 = new userdataservice();
+$req2                 = $req1->getuserdata($item->userid);
+$user = array('status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
+echo json_encode($user);
+}
+else
+{
+$user = array('status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+echo json_encode($user);
+}
+}
+
+
+
+
 
 
 //*********This is a code for Edit the User Profile using the GetsportyLite*********************
@@ -301,7 +356,7 @@ switch ($logintype)
 
 else if($_REQUEST['act']=="manage_Login")
 {
-$data1  = json_decode($_POST[ 'data' ]);
+$data1                = json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
 $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
@@ -319,7 +374,9 @@ else
 $user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
-} 
+
+
+} // End Function
 
 else if($_REQUEST['act']=="create_manage_user")
 {
@@ -340,7 +397,6 @@ $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $req1= new userdataservice();
 $req3 = $req1->create_manage_user_exits($item);
-//print_r($req3);
 if($req3 == 1 )
 {
 $user = array('status' => 1);
@@ -374,6 +430,40 @@ $user = array('status' => 0);
   echo json_encode($user);
 }
 }
+
+
+
+
+// //******************CODE FOR EDIT PROFILE STARTS ******************************/
+
+// else if($_REQUEST['act']=="editprofile")
+// {
+// $data1                = json_decode($_POST[ 'data' ]);
+// $item                 =  new stdClass();
+// $item->userid         =  $data1->userid;
+// $item->email          =  $data1->email;
+// $item->mobile_no      =  $data1->mobile_no;
+// $item->proffession    =  $data1->proffession;
+// $item->sport          =  $data1->sport;
+// $item->gender         =  $data1->gender;
+// $item->dob            =  $data1->dob;
+// $item->status         =  $data1->status;  
+// $req                  = new UserProfileService();
+// $res                  = $req->editProfile($item);
+// $req1                 = new userdataservice();
+// $req2                 =$req1->getuserdata($item->userid);
+// if($res==1)
+// {
+// $user = array('Status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
+// echo json_encode($user);
+// }
+// else
+// {
+// $user = array('Status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+// echo json_encode($user);
+// }
+// }
+
 
 
 // /***********************Get User Data*********************************/
@@ -478,36 +568,36 @@ $user = array('status' => 0);
 // =======
 
 
+
 //******************CODE FOR EDIT PROFILE STARTS ******************************/
 
-else if($_REQUEST['act']=="editprofile")
-{
-$data1                = json_decode($_POST[ 'data' ]);
-
-$item                 =  new stdClass();
-$item->userid         =  $data1->userid;
-$item->email          =  $data1->email;
-$item->mobile_no      =  $data1->mobile_no;
-$item->proffession    =  $data1->proffession;
-$item->sport          =  $data1->sport;
-$item->gender         =  $data1->gender;
-$item->dob            =  $data1->dob;
-$item->status         =  $data1->status;  
-$req = new UserProfileService();
-$res = $req->editProfile($item);
-$req1= new userdataservice();
-$req2=$req1->getuserdata($item->userid);
-if($res==1)
-{
-$user = array('Status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
-echo json_encode($user);
-}
-else
-{
-$user = array('Status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
-echo json_encode($user);
-}
-}
+// else if($_REQUEST['act']=="editprofile")
+// {
+// $data1                = json_decode($_POST[ 'data' ]);
+// $item                 =  new stdClass();
+// $item->userid         =  $data1->userid;
+// $item->email          =  $data1->email;
+// $item->mobile_no      =  $data1->mobile_no;
+// $item->proffession    =  $data1->proffession;
+// $item->sport          =  $data1->sport;
+// $item->gender         =  $data1->gender;
+// $item->dob            =  $data1->dob;
+// $item->status         =  $data1->status;  
+// $req                  = new UserProfileService();
+// $res                  = $req->editProfile($item);
+// $req1                 = new userdataservice();
+// $req2                 =$req1->getuserdata($item->userid);
+// if($res==1)
+// {
+// $user = array('Status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
+// echo json_encode($user);
+// }
+// else
+// {
+// $user = array('Status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+// echo json_encode($user);
+// }
+// }
 
 
 //print_r($item);
@@ -2311,4 +2401,4 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 
 
-?>
+?>  
