@@ -50,11 +50,6 @@ $res                       =   $req->userVarify($where);
             }
       }
 } // End of Function
- 
-
-
-
-
 // Sign In Using the GetsportyLite 
 
 //********************Code for User Login************//
@@ -154,8 +149,6 @@ switch ($logintype)
 } //End Switch
 } // Function End
 
-
-
 //******************CODE FOR EDIT PROFILE STARTS ******************************/
 // if Status=0 then Email are send to User for varify
 
@@ -192,11 +185,6 @@ echo json_encode($user);
 }
 }
 
-
-
-
-
-
 //*********This is a code for Edit the User Profile using the GetsportyLite*********************
 
 // else if($_REQUEST['act']=="gs_editprofile")
@@ -223,14 +211,6 @@ echo json_encode($user);
 //              $res5 = array('status' => 0,'data'=>$res,'msg'=>'Notupdated');
 //              echo json_encode($res5);  
 //             }
-
-
-
-
-
-
-
-
 
 // $_POST['act']=="register" This code is not used because this is Old code for signUp User so Please Ignore this code
 
@@ -278,9 +258,6 @@ echo json_encode($user);
 // }
 // }
 // }
-
-
-
 
 //****CODE FOR USER Login******//
 
@@ -884,11 +861,6 @@ $user = array('status' => 0);
 // }
 // }
 
-
-
-
-
-
 //********* CODE FOR CREATING JOBS **********//
 
 else if($_POST['act']=="createjob")
@@ -934,7 +906,6 @@ else
 echo json_encode($status['failure']);
 }
 }
-
 
 //********* CODE FOR CREATING TOURNAMENTS **********//
 
@@ -1004,9 +975,6 @@ else
 echo json_encode($status['failure']);
 }
 
-
-
-
 //********* CODE FOR CREATING EVENTS **********//
 
 else if ($_POST['act'] == 'createevent') 
@@ -1060,10 +1028,6 @@ echo json_encode($status['success']);
 else
 echo json_encode($status['failure']);
 }
-
-
-
-
 //*********CODE FOR FETCHING THE CREATED DATA***********//
 else if($_REQUEST['act'] == "editcreation")
 {
@@ -1149,10 +1113,6 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
-
-
-
-
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
 
 else if($_POST['act'] == "search_job")
@@ -1240,9 +1200,6 @@ $data = array('data'=>'0' , 'status'=>'0');
 echo json_encode($data);
 }
 }
-
-
-
 //********* CODE FOR SEARCHING EVENTS **********//
 
 else if ($_POST['act'] == "search_event" )
@@ -1331,13 +1288,6 @@ die();
 }
 echo json_encode($data);
 }
-
-
-
-
-
-
-
 
 //********* CODE FOR the view of JOB , EVENT , TOURNAMENT ****//
 
@@ -1676,9 +1626,7 @@ for($i = 0 ; $i<$size ; $i++)
         else
          
                {
-
                   $row[$j]['fav'] = '0';
-           
                }
 
           }
@@ -1697,12 +1645,7 @@ for($i = 0 ; $i<$size ; $i++)
 
           $row[$j]['fav'] = '0';
          }
-
-
          }
-
-
-
         }
 //print_r($row);
 
@@ -1747,9 +1690,7 @@ else
       $res1 = new userdataservice();
       $rev1 = $res1->getfavdata($favdata[$i] , $type);
       $res2[] = $rev1; 
-  
    }
-
 }
 
 if($type == 1)
@@ -1766,11 +1707,7 @@ $data3 = array('status' => 0);
 echo json_encode($data3);
 }
 
-
 /*********    CODE FOR APPLIYING FOR JOB BY THE USER   *************************/
-
-
-
 else if($_POST['act'] == "apply")
 {
 
@@ -1879,7 +1816,6 @@ echo json_encode($data);
 
 // }
 
-
 /*****************************Sending Offer **************************************/
 
 else if($_POST['act']=="select_applicant")
@@ -1937,9 +1873,6 @@ else if($_POST['act']=="select_applicant")
   }
 }
 
-
-
-
 /********************Job OffersList***********************************/
 
 else if($_POST['act'] == 'jobOffersList')
@@ -1961,10 +1894,6 @@ else if($_POST['act'] == 'jobOffersList')
 
 }
 
-
-
-
-
 /* ***********************************************************************************/
 
 else if($_POST['act'] == "create_resource")
@@ -1983,9 +1912,6 @@ else if($_POST['act'] == "create_resource")
   echo json_encode($resp);
   }
 }
-
-
-
 
 /********************************************************************************/
 
@@ -2011,14 +1937,11 @@ else if($_POST['act'] == "create_resource")
     }
     }
   }
-
-
 /*---------------------------------------------------------------------------------------
  | This code for User Point of view when the user is search any Job ,Event ,tournament   |
  | after that the user is apply on job ,Event,or Tournament                              | 
  ----------------------------------------------------------------------------------------
 /*****************************GetsportyLite Searching*****************************/
-
 
 else if($_REQUEST['act'] == "gs_searching")
 {
@@ -2209,11 +2132,7 @@ break;
     } //End Switch
 }//end Function
 
-
-
-
 /******************************View Apply by the User ***************************/
-
 
 else if($_POST['act'] == "gs_viewapply")
 {
@@ -2234,20 +2153,8 @@ echo json_encode($data);
 }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /**********************    New Apply Code  act=apply  *************************/
 // When the Job Event and Tournament is Apply then so used this code Pleas Ignore this Code 
-
 
 else if($_POST['act'] == "newapply")
 {
@@ -2299,17 +2206,10 @@ else
 {
 $resp['status'] = "Failure";
 echo json_encode($resp);
-
 }
-
-
 }  //End Function
 
-
-
 /*************************** New View the User is Apply the Job Event Tournament**********************/
-
-
 
 
 else if($_POST['act'] == "gs_viewapply1")
@@ -2330,22 +2230,6 @@ $data = array('data'=>'0','status'=>'0');
 echo json_encode($data);
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //******************************************//
 //**********GCM TESTING CODE***************//
@@ -2378,27 +2262,4 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  //echo "http://getsporty.in/VideoUpload/".$file_name;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>  

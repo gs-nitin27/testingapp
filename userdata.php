@@ -83,11 +83,20 @@ $res = $obj->edit_educationprofile($item);
 }
 
 
-else if($_POST['act']=="getUserData")
+else if($_REQUEST['act']== "getUserData")
 {
   //echo "in get user data";
 //$userid  = "14";
-$userid = "14";//urldecode($_POST['userid']);
+//urldecode($_POST['userid']);
+
+$data = json_decode($_POST[ 'data' ]);
+
+$userid = $data->userid;
+
+
+
+//print_r($data->userid);die;
+
 $rev = new userdataservice();
 $formaledu = $rev->getformaleducation($userid);
 

@@ -12,9 +12,9 @@ function hit(){
 // var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
 
 var data = {
-           "otp_code" : "2135",
-           "userid"  :  "16",
-           "phone_no" : "7838149085"  
+           
+           "userid"  :  "16"
+        
 };
 
 var data = JSON.stringify(data);
@@ -24,7 +24,7 @@ $.ajax({
 
     type: "POST",
     //url: "otpVarifyController.php",
-    url : "otpVarifyController.php?act=verify_otp",
+    url : "userdata.php?act=getUserData",
 
 // data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
