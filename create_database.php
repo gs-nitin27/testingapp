@@ -468,9 +468,9 @@ $user = array('status' => 0);
 
 // /***********************Get User Data*********************************/
 
-// else if($_POST['act']=="getUserData")
-// {
-// $userid =urldecode($_POST['userid']);
+else if($_REQUEST['act']=="getUserData")
+{//print_r($_REQUEST);
+$userid =urldecode($_REQUEST['userid']);
 // $eduid  = '1';
 // $req1 = new UserProfileService();
 // $res1 = $req1->getUserEducation($userid,$eduid); 
@@ -545,26 +545,28 @@ $user = array('status' => 0);
 // {
 // $other_skills = 0;
 // }
-// $req = new UserProfileService();
-// $res = $req->getuserData($userid);
-// if($res != '0')
-// {
-// $user = $res;
-// }
-// else
-// {
-// $user = 0;
-// }
+$req = new userdataservice();
+$res = $req->getuserData($userid);
+if($res != '0')
+{
+$user = $res;
+}
+else
+{
+$user = 0;
+}
 
-// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-// if(in_array(0, $userdata))
-// {
-//   $userdata['status'] = 0; 
-// }else
-// {
-//   $userdata['status'] = 1;
-// }
-// $user = array('data' => $userdata);
+$userdata = array(/*'formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills ,*/ 'user_info' => $user);
+if(in_array(0, $userdata))
+{
+  $userdata['status'] = 0; 
+}else
+{
+  $userdata['status'] = 1;
+}
+ $user = array('status' => $userdata['status'], 'data'=> $userdata, 'msg'=>'Success');
+ echo json_encode($user);
+}
 // =======
 
 

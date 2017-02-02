@@ -83,13 +83,11 @@ $res = $obj->edit_educationprofile($item);
 }
 
 
-else if($_POST['act']=="getUserData")
-{
-  //echo "in get user data";
-//$userid  = "14";
-$userid = "14";//urldecode($_POST['userid']);
+else if($_REQUEST['act']=="getUserData")
+{//p
+$userid = urldecode($_REQUEST['userid']);
 $rev = new userdataservice();
-$formaledu = $rev->getformaleducation($userid);
+$formaledu = $rev->getuserdata($userid);
 
 $rev = new userdataservice();
 $sportsedu = $rev->getsporteducation($userid);
@@ -113,7 +111,7 @@ $sportexp = $rev->getuserExpasPlayer($userid);
 //print_r($sportexp);
 
 $rev = new userdataservice();
-$user_info = $rev->getuserInfo($userid);
+$user_info = $rev->getuserdata($userid);
 
 
 $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $user_exp , 'other_experience' => $otherexp , 'sports_experience' => $sportexp , 'user_info' => $user_info);
