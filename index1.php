@@ -16,7 +16,7 @@ var data = {
            "userid"  :  "16"
         
 };
-
+"16"
 var data = JSON.stringify(data);
 console.log(data);
 
@@ -24,13 +24,16 @@ $.ajax({
 
     type: "POST",
     //url: "otpVarifyController.php",
-    url : "userdata.php?act=getUserData",
-
+// <<<<<<< HEAD
+//     url : "userdata.php?act=getUserData",
+// =======
+    url : "create_database.php?act=getUserData&userid="+16,
+//
 // data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
 //data:"act=getappliedjobs&user_id=176&id=133",
 //data:"act=user_otp&phone=7788888",
- data : "data="+ data,
+ //data : "data="+ data,
 
 
    // url: "useralertcontroller.php",
