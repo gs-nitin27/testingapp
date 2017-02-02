@@ -10,13 +10,11 @@
  **/
 class WAY2SMSClient
 {
-
     var $curl;
     var $timeout = 30;
     var $jsToken;
     var $way2smsHost;
     var $refurl;
-
     /**
      * @param $username
      * @param $password
@@ -24,6 +22,7 @@ class WAY2SMSClient
      */
     function login($username, $password)
     {
+
         $this->curl = curl_init();
         $uid = urlencode($username);
         $pwd = urlencode($password);
@@ -137,11 +136,56 @@ class WAY2SMSClient
 
 function sendWay2SMS($uid, $pwd, $phone, $msg)
 {
+   // print_r($phone); die();
     $client = new WAY2SMSClient();
     $client->login($uid, $pwd);
-    print_r($client);
+   // print_r($client);
     $result = $client->send($phone, $msg);
     $client->logout();
+   // print_r($result);die;
     return $result;
+}
+
+function change_forgot_code($item)
+{
+      $query = mysql_query(" UPDATE `user` SET  `forget_code`='' ,`contact_no`='$item->phone_no', `date_updated`=CURDATE()  WHERE `userid`='$item->userid'");
+      if($query)
+      {
+        return 1;
+      }
+      else {
+          return 0;
+      }
+}
+
+function save_otp_code($userid,$forget_code)
+{
+      $query = mysql_query(" UPDATE `user` SET  `forget_code`='$forget_code'   WHERE `userid`='$userid'");
+      if($query)
+      {
+        return 1;
+      }
+      else {
+          return 0;
+      }
+}
+
+function find_otp_code($userid)
+{
+   // print_r($userid);die;
+    $query = mysql_query("SELECT forget_code FROM `user` WHERE `userid`= '$userid'");
+   
+    if($query)
+          {
+            while($row = mysql_fetch_assoc($query))
+            {   
+               $data1= $row; 
+               return $data1;
+             }
+           }
+            else
+            {
+               return 0;
+            }
 }
 

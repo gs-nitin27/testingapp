@@ -319,26 +319,15 @@ else
 $user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
-
-} // End Function
-
-// <<<<<<< HEAD
-// $sports_edu = (json_decode(json_encode($item->sports_edu),true));
-// $size       = sizeof($sports_edu);
-// for ($i=0; $i <$size ; $i++) 
-// { 
-// $req2  = new UserProfileService();
-// $res2 = $req2->editSportsEducation($userid ,$sports_edu[$i]);
-// if($res2!= '1')
-// {
-// echo "some problem while saving sports education";
-// =======
+} 
 
 else if($_REQUEST['act']=="create_manage_user")
 {
-
 $data1                = json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
+
+$forgot_code =  mt_rand(1000,10000);
+
 $item->email          =  $data1->email;
 $item->phone_no       =  $data1->phone_no;
 $item->proffession    =  $data1->proffession;
@@ -346,6 +335,7 @@ $item->sport          =  $data1->sport;
 $item->gender         =  $data1->gender;
 $item->dob            =  $data1->dob;
 $item->userType       =  103;
+$item->forget_code    =  $forgot_code;
 $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $req1= new userdataservice();
@@ -361,17 +351,6 @@ else if($req3 == 2)
 $user = array('status' => 2);
 echo json_encode($user);
 }
-// <<<<<<< HEAD
-// $education = (json_decode(json_encode($item->other_cert),true));
-// $size = sizeof($education); 
-// for ($i=0; $i <$size ; $i++) 
-// { 
-// $req3 = new UserProfileService();
-// $res3 = $req3->editFormalEducation($userid ,$education[$i]);
-// if($res3 != '1')
-// {
-// echo "some problem while saving other certs info.";
-// =======
 else if($req3 == 3)
 {
   $user = array('status' => 3);
@@ -383,13 +362,17 @@ else if($req3 == 4)
   echo json_encode($user);
 
 }
+else if($req3 == 5)
+{
+  $user = array('status' => 5);
+  echo json_encode($user);
+
+}
 else
 {
 $user = array('status' => 0);
   echo json_encode($user);
 }
-
-
 }
 
 
