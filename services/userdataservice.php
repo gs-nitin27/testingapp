@@ -1562,21 +1562,22 @@ return 0;
 
 
 
-public  function create_manage_user_exits($data)
+public  function create_manage_user_exits($item)
 {
-        $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code` FROM `user`  WHERE `email`='$data->email'");
+        $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code` FROM `user`  WHERE `email`='$item->email'");
         if(mysql_num_rows($query)>0)
         {
           while($row = mysql_fetch_assoc($query))
         {
           $data = $row;
         }
-
         $userid=$data['userid'];
            //print_r($data['password']); die;
         if($data['userType']=='104'  && ($data['password']=='' || $data['password']== NULL ))
         {
-        $query = mysql_query("UPDATE `user` SET `userType`='103' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+          // user register with google or facebook in light app ;
+
+        $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
 
 //###################### password set  email send to user #########################
 
@@ -1628,17 +1629,56 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 </tbody></table>
 </div>'; 
 
-   $this->sendEmail_for_password_reset($userid,$body);
+   
+$this->sendEmail_for_password_reset($userid,$body);
    return 1;
-    }
+}
 
 else if($data['userType']=='104')
-    {
+{
+  // user register in lightapp send welcome mail;
     $userid=$data['userid'];
-    $query = mysql_query("UPDATE `user` SET `userType`='103' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+    $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+    
+    //$this->sendEmail_for_password_reset($userid,$body);
+    return 2;
+}
+else if($data['userType']=='103'  && ($data['password']=='' || $data['password']== NULL ))
+{
+  // new user email not verify or password not set;
+
+  //$this->sendEmail_for_password_reset($userid,$body);
+    return 3;  
+}
+else{
+   //forgot password 
+
+  //$this->sendEmail_for_password_reset($userid,$body);
+  return 4;
+}
+}
+else
+{
+ // new user register then email sent for password set
+
+$query= mysql_query("INSERT into `user`(`email`,`contact_no`,`Gender`,`prof_id`,`dob`,`sport`,`userType`,`device_id`, `forget_code`) values('$item->email','$item->phone_no','$item->gender','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code')");
+
+if($query)
+{
+  
+ $last_id = mysql_insert_id();
+// $this->sendEmail_for_password_reset($userid,$body);
+  return 5;
+}
+else
+{
+    return 0;
+}
 
 }
-}}
+
+
+}
 
 
 //  ***************User is view apply  our JOB , EVENT ,TOURNAMENT**********************
