@@ -15,11 +15,11 @@ $.ajax({
 
     type: "POST",
 
-    url: "create_database.php",
+    url: "getListingService.php",
 
 // data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
-data:"act=getappliedjobs&user_id=176&id=133",
+data:"act=professionlisting",
 //data:"act=user_otp&phone=7788888",
 
 
