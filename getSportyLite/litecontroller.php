@@ -1,7 +1,7 @@
 <?php
-//include('../config.php');
+include('../config.php');
 include('liteservice.php');
-include('config1.php');
+//include('config1.php');
 include('../services/userdataservice.php');
 
 /****************Sign Up in Getsporty***********************/
