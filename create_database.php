@@ -163,7 +163,7 @@ $item                     =  new stdClass();
 $item->userid             =  $data1->userid;
 $item->email              =  $data1->email;
 $item->mobile_no          =  $data1->mobile_no;
-$item->prof_id            =  $data->prof_id;
+$item->prof_id            =  $data1->prof_id;
 $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
 $item->gender             =  $data1->gender;
@@ -172,8 +172,6 @@ $item->status             =  $data1->status;
 $item->link               =  $data1->link; 
 $item->ageGroupCoached    =  $data1->ageGroupCoached; 
 $item->languagesKnown     =  $data1->languagesKnown; 
-
-
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
 

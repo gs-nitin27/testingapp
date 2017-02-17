@@ -331,6 +331,7 @@ $status                  = $userdata->status;  //staus
 $link                    = $userdata->link;
 $ageGroupCoached         = $userdata->ageGroupCoached;
 $languagesKnown          = $userdata->languagesKnown;
+
 $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`Gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown' WHERE `userid`='$userid'");
         if($query)
         {
