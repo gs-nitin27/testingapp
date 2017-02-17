@@ -8,19 +8,29 @@
 function hit(){	
 
 
+//var university = "";
+//var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
 
-// var university = "";
-// var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
+var data = {
+           "userid" : "212",
+           "prof_id"  :  "7",
+           
+};
+
+var data = JSON.stringify(data);
+console.log(data);
+
 $.ajax({
 
     type: "POST",
-
-    url: "getListingService.php",
+    //url: "otpVarifyController.php",
+    url : "userEdit.php?act=getUserProfile",
 
 // data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
-data:"act=professionlisting",
+//data:"act=getappliedjobs&user_id=176&id=133",
 //data:"act=user_otp&phone=7788888",
+ //data : "data="+ data,
 
 
    // url: "useralertcontroller.php",
@@ -36,6 +46,7 @@ data:"act=professionlisting",
     $('#resp').text(JSON.stringify(result));
     }
 });}
+
 </script>
 </head>
 <form id="con" enctype='multipart/form-data' action="Image_upload.php" method="POST">
@@ -48,4 +59,4 @@ data:"act=professionlisting",
 <body>
 	
 </body>
-</html>
+</html>  

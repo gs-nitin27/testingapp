@@ -314,17 +314,24 @@ return 0;
 }
 
 
+/************Function for Edit The user profile in user Table************************/
+
+
 public function editProfile($userdata)
 {
-$userid       = $userdata->userid;
-$email        = $userdata->email;
-$mobile_no    = $userdata->mobile_no;
-$proffession  = $userdata->proffession;
-$sport        = $userdata->sport;
-$gender       = $userdata->gender;
-$dob          = $userdata->dob;
-$status       = $userdata->status;  //staus
-$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$proffession',`sport`='$sport',`dob`=FROM_UNIXTIME ('$dob'),`Gender`='$gender' WHERE `userid`='$userid'");
+$userid                  = $userdata->userid;
+$email                   = $userdata->email;
+$mobile_no               = $userdata->mobile_no;
+$prof_id                 = $userdata->prof_id; 
+$proffession             = $userdata->proffession;
+$sport                   = $userdata->sport;
+$gender                  = $userdata->gender;
+$dob                     = $userdata->dob;
+$status                  = $userdata->status;  //staus
+$link                    = $userdata->link;
+$ageGroupCoached         = $userdata->ageGroupCoached;
+$languagesKnown          = $userdata->languagesKnown;
+$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`Gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
@@ -340,10 +347,13 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
 
 
 
+
+/*************Function for Get The Value of User Information**********************/
+
+
   public function userdata($id)
     {
-      //echo "$id";
-       $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`Gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -360,8 +370,112 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
 
 
 
+/************************Get the Value of Profile Status***************************/
+
+public function listuserdata($userid)
+    {
+      
+       $query  = mysql_query("SELECT `user_detail` FROM `gs_userdata` where `userid` = '$userid'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
 
 
+}
+
+
+/***********************Update the JSON DATA********************************/
+
+
+public function edit_user($userid,$prof_id,$data)
+{
+
+   $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+  if($query)
+       {
+         return 1;
+       } 
+        else
+        {    
+            return 0;
+        }  
+        
+} 
+
+
+
+
+/***************Function for Upload Image in User Table***********************/
+
+ public function imageupload_user($userid,$image)
+ {
+       $url="http://192.168.0.112/testingapp/gs_images/Prof_pic";
+      //PATH for the Image URL:
+       // Please Set the URL on Server because the This is a Local Server and Store the URL in User Table
+     //http://192.168.0.112/testingapp/gs_images/Prof_pic/217_1487058372.png
+
+     //define('UPLOAD_DIR','../staging/uploads/job/');
+      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
+      define('UPLOAD_DIR','gs_images/Prof_pic/');
+      $now = new DateTime();
+      $time=$now->getTimestamp(); 
+      $img = $image;
+      //$img = str_replace('data:image/png;base64,', '', $img);
+      $filepath =str_replace('data:image/png;base64,', '', $img);
+      $img = str_replace('$filepath,', '', $img);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+      $img_name= "$userid"."_".$time; // This is code for upload the Image for User
+      $path= $url."/"."$userid"."_".$time.'.png';
+      $success=move_uploaded_file($img, $filepath);
+      $file = UPLOAD_DIR.$img_name.'.png';
+      $success = file_put_contents($file, $data);
+      if($success)
+      {
+         $img_name = $img_name. '.png';
+         $updateImage = mysql_query("update `user` set `user_image`='$path' where `userid`='$userid'");
+          if($updateImage)
+          {
+            $data1 = $this->get_imageName($userid);
+            return $data1;
+          }
+      }
+      else
+        {
+          $res = array('data' =>'Image is Not Upload' ,'status' => 0);
+          echo json_encode($res);
+          return 0;
+        }
+
+    } // End IF
+
+
+public function get_imageName($userid)
+{
+  $query=mysql_query("SELECT `user_image` FROM `user` where `userid`='$userid'");
+  if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+          return $data;
+          }
+          else 
+          {
+          return 0;
+          }
+
+}// End Function
 
 
 

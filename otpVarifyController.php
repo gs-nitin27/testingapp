@@ -1,5 +1,5 @@
 <?php
-//include('config1.php');
+include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
@@ -9,16 +9,55 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == 'user_otp')
 {
-$phone = 8601807045;//$_REQUEST['phone'];
+$data  = json_decode($_POST[ 'data' ]);
+$phone = $data->phone_no;
+$userid = $data->userid;
 $otp_code = mt_rand(1000,10000);
-echo $otp_code;//die;
+$res1 = save_otp_code($userid,$otp_code);
 $msg = "Welcome to getsporty merchandise app, Your OTP is".$otp_code;
-$res = sendWay2SMS(8601807045, 9711230325, $phone, $msg);
-    if (is_array($res))
-        echo $res[0]['result'] ? 'true' : 'false';
-
+$res = sendWay2SMS(9528454915,8824784642, $phone, $msg);
+  if (is_array($res))
+     { 
+     	if($res[0]['result'] == 1 || $res[0]['result'] == true)
+     	{
+       	 $user = array('status' => 1);
+         echo json_encode($user);
+        }
+       else
+       {
+           $user = array('status' => 0);
+           echo json_encode($user);   
+      } 
+}
 }
 
 
-
+else if($_REQUEST['act'] == 'verify_otp')
+{
+ $data  = json_decode($_POST[ 'data' ]);
+ $item    =  new stdClass();
+ $item->otp_code_server = $data->otp_code;
+ $item->userid = $data->userid;
+ $item->phone_no = $data->phone_no;
+ $res2 = find_otp_code($item->userid);
+ $temp_otp_code = $res2['forget_code'];
+if($temp_otp_code == $item->otp_code_server)
+{
+    $res = change_forgot_code($item);
+    if($res)
+    {
+	 $user = array('status' => 1 );
+     echo json_encode($user);
+   
+   }else{
+   	  $user = array('status' => 0);
+      echo json_encode($user);
+   }
+}
+else
+{
+	  $user = array('status' => 0);
+      echo json_encode($user);
+}
+}
  ?>

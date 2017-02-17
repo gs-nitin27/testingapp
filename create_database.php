@@ -4,7 +4,11 @@ include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
+include('GetsportyLite/liteservice.php');
+
+//include('userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
+
 
 // SignUp The New User  using the GetsportyLite 
 
@@ -34,9 +38,7 @@ $res                       =   $req->userVarify($where);
       {
         $req1     = new userdataservice();
         $res1     = $req1->UserSignup($data1);
-        //$req2     = new emailService();
-       // $res2     = $req2->emailVarification($email);
-             if($res1)
+            if($res1)
             {
              $res4 =  array('status' => 1,'data'=>$res1,'msg'=>'User registered');
              echo json_encode($res4);
@@ -50,11 +52,6 @@ $res                       =   $req->userVarify($where);
             }
       }
 } // End of Function
- 
-
-
-
-
 // Sign In Using the GetsportyLite 
 
 //********************Code for User Login************//
@@ -154,25 +151,33 @@ switch ($logintype)
 } //End Switch
 } // Function End
 
-
-
 //******************CODE FOR EDIT PROFILE STARTS ******************************/
 // if Status=0 then Email are send to User for varify
 
+
 else if($_REQUEST['act']=="editprofile")
 {
-$data1                =  json_decode($_POST[ 'data' ]);
-$item                 =  new stdClass();
-$item->userid         =  $data1->userid;
-$item->email          =  $data1->email;
-$item->mobile_no      =  $data1->mobile_no;
-$item->proffession    =  $data1->proffession;
-$item->sport          =  $data1->sport;
-$item->gender         =  $data1->gender;
-$item->dob            =  $data1->dob;
-$item->status         =  $data1->status;  
-$req                  = new UserProfileService();
-$res                  = $req->editProfile($item);
+
+$data1                    =  json_decode($_POST[ 'data' ]);
+$item                     =  new stdClass();
+$item->userid             =  $data1->userid;
+$item->email              =  $data1->email;
+$item->mobile_no          =  $data1->mobile_no;
+$item->prof_id            =  $data->prof_id;
+$item->proffession        =  $data1->proffession;
+$item->sport              =  $data1->sport;
+$item->gender             =  $data1->gender;
+$item->dob                =  $data1->dob;
+$item->status             =  $data1->status; 
+$item->link               =  $data1->link; 
+$item->ageGroupCoached    =  $data1->ageGroupCoached; 
+$item->languagesKnown     =  $data1->languagesKnown; 
+
+
+$req                      =  new UserProfileService();
+$res                      =  $req->editProfile($item);
+
+
  if ($item->status==0) 
  {
  $req2     = new emailService();
@@ -191,11 +196,6 @@ $user = array('status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
 echo json_encode($user);
 }
 }
-
-
-
-
-
 
 //*********This is a code for Edit the User Profile using the GetsportyLite*********************
 
@@ -223,14 +223,6 @@ echo json_encode($user);
 //              $res5 = array('status' => 0,'data'=>$res,'msg'=>'Notupdated');
 //              echo json_encode($res5);  
 //             }
-
-
-
-
-
-
-
-
 
 // $_POST['act']=="register" This code is not used because this is Old code for signUp User so Please Ignore this code
 
@@ -278,9 +270,6 @@ echo json_encode($user);
 // }
 // }
 // }
-
-
-
 
 //****CODE FOR USER Login******//
 
@@ -375,15 +364,16 @@ $user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
 
+
 } // End Function
-
-
 
 else if($_REQUEST['act']=="create_manage_user")
 {
-
 $data1                = json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
+
+$forgot_code =  mt_rand(1000,10000);
+
 $item->email          =  $data1->email;
 $item->phone_no       =  $data1->phone_no;
 $item->proffession    =  $data1->proffession;
@@ -391,6 +381,7 @@ $item->sport          =  $data1->sport;
 $item->gender         =  $data1->gender;
 $item->dob            =  $data1->dob;
 $item->userType       =  103;
+$item->forget_code    =  $forgot_code;
 $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $req1= new userdataservice();
@@ -416,12 +407,19 @@ else if($req3 == 4)
   echo json_encode($user);
 
 }
+else if($req3 == 5)
+{
+  $user = array('status' => 5);
+  echo json_encode($user);
+
+}
 else
 {
 $user = array('status' => 0);
   echo json_encode($user);
 }
 }
+
 
 
 
@@ -459,15 +457,15 @@ $user = array('status' => 0);
 
 // /***********************Get User Data*********************************/
 
-// else if($_POST['act']=="getUserData")
-// {
-// $userid =urldecode($_POST['userid']);
+else if($_REQUEST['act']=="getUserData")
+{//print_r($_REQUEST);
+$userid =urldecode($_REQUEST['userid']);
 // $eduid  = '1';
 // $req1 = new UserProfileService();
 // $res1 = $req1->getUserEducation($userid,$eduid); 
 // if($res1 != '0')
 // {
-// $formaledu = $res1;
+ $formaledu = 0;//$res1;
 // }
 // else
 // {
@@ -480,7 +478,7 @@ $user = array('status' => 0);
 // $sportsedu = $res2;
 // }else
 // {
-// $sportsedu = 0;
+ $sportsedu = 0;
 // }
 // $eduid  = '3';
 // $req3   = new UserProfileService();
@@ -491,7 +489,7 @@ $user = array('status' => 0);
 // }
 // else
 // {
-// $otheredu = 0;
+ $otheredu = 0;
 // }
 // $user_exp = '1';
 // $req4 = new UserProfileService();
@@ -502,7 +500,7 @@ $user = array('status' => 0);
 // }
 // else
 // {
-// $work_exp = 0;
+ $work_exp = 0;
 // }
 
 // $req5 = new UserProfileService();
@@ -513,7 +511,7 @@ $user = array('status' => 0);
 // }
 // else
 // {
-// $sport_exp = 0;
+ $sport_exp = 0;
 // }
 // $user_exp = '2';
 // $req6 = new UserProfileService();
@@ -524,7 +522,7 @@ $user = array('status' => 0);
 // }
 // else
 // {
-// $other_exp = 0;
+ $other_exp = 0;
 // }
 // $req7         = new UserProfileService();
 // $res7         = $req7->getUserSkill($userid);
@@ -534,28 +532,30 @@ $user = array('status' => 0);
 // }
 // else
 // {
-// $other_skills = 0;
+ $other_skills = 0;
 // }
-// $req = new UserProfileService();
-// $res = $req->getuserData($userid);
-// if($res != '0')
-// {
-// $user = $res;
-// }
-// else
-// {
-// $user = 0;
-// }
+$req = new userdataservice();
+$res = $req->getuserData($userid);
+if($res != '0')
+{
+$user = $res;
+}
+else
+{
+$user = 0;
+}
 
-// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-// if(in_array(0, $userdata))
-// {
-//   $userdata['status'] = 0; 
-// }else
-// {
-//   $userdata['status'] = 1;
-// }
-// $user = array('data' => $userdata);
+$userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
+if(in_array(0, $userdata))
+{
+  $userdata['status'] = 0; 
+}else
+{
+  $userdata['status'] = 1;
+}
+ $user = array('status' => $userdata['status'], 'data'=> $userdata, 'msg'=>'Success');
+ echo json_encode($user);
+}
 // =======
 
 
@@ -728,157 +728,152 @@ $user = array('status' => 0);
 // }
 // }
 
-// else if($_POST['act']=="getUserData")
-// {
+else if($_POST['act']=="getUserData")
+{
 
-// $userid =urldecode($_POST['userid']);
-// $eduid  = '1';
-// $req1 = new UserProfileService();
-// $res1 = $req1->getUserEducation($userid,$eduid); 
+$userid =urldecode($_POST['userid']);
+$eduid  = '1';
+$req1 = new UserProfileService();
+$res1 = $req1->getUserEducation($userid,$eduid); 
 
-// if($res1 != '0')
-// {
+if($res1 != '0')
+{
 
-// $formaledu = $res1;
+$formaledu = $res1;
 
-// }
-// else
-// {
-// $formaledu =  0;
-// }
-
-
-
-// $req2 = new UserProfileService();
-// $res2 = $req2->getSportsEducation($userid);
-// if($res2 != '0')
-// {
-
-// $sportsedu = $res2;
-
-// }else{
-// $sportsedu = 0;
-// }
-
-// $eduid  = '3';
-// $req3   = new UserProfileService();
-// $res3   = $req3->getUserEducation($userid,$eduid);
-// if($res3 != '0')
-// {
-// $otheredu = $res3;
-// }
-// else
-// {
-
-// $otheredu = 0;
-
-// }
-
-// $user_exp = '1';
-
-// $req4 = new UserProfileService();
-// $res4 = $req4->getUserExperience($userid,$user_exp);
-// if($res4 != '0')
-// {
-// $work_exp = $res4;
-// }
-// else
-// {
-
-// $work_exp = 0;
-
-// }
-
-// $req5 = new UserProfileService();
-// $res5 = $req5->getUserSportsExp($userid);
-// if($res5 != '0')
-// {
-
-// $sport_exp = $res5;
-
-// }
-// else
-// {
-
-// $sport_exp = 0;
-
-// }
-
-// $user_exp = '2';
-
-// $req6 = new UserProfileService();
-// $res6 = $req6->getUserExperience($userid,$user_exp);
-// if($res6 != '0')
-// {
-// $other_exp = $res6;
-// }
-// else
-// {
-
-// $other_exp = 0;
-
-// }
-
-// $req7         = new UserProfileService();
-// $res7         = $req7->getUserSkill($userid);
-// if($res7 != 0)
-// {
-
-// $other_skills = $res7;
-
-// }
-// else
-// {
-
-// $other_skills = 0;
-
-// }
-
-
-// $req = new UserProfileService();
-// $res = $req->getuserData($userid);
-// if($res != '0')
-// {
-
-// $user = $res;
-// }
-// else
-// {
-
-// $user = 0;
-
-// }
-
-// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-// if(in_array(0, $userdata)){
-
-//   $userdata['status'] = 0; 
-
-// }else{
-
-//   $userdata['status'] = 1;
-// }
-//print_r($userdata);
-
-// if($res)
-// {
-// // print_r($req2);//die;
-// //$user = array('Status' => 1);
-// $user = array('Status' => 1, 'data'=> $res, 'msg'=>'Updated' );
-// echo json_encode($user);
-// }
-// else
-// {
-// //  $user = array('Status' => 0);
-// $user = array('Status' => 0, 'data'=> $res, 'msg'=>'Notupdated' );
-// echo json_encode($user);
-// }
-// }
+}
+else
+{
+$formaledu =  0;
+}
 
 
 
+$req2 = new UserProfileService();
+$res2 = $req2->getSportsEducation($userid);
+if($res2 != '0')
+{
+
+$sportsedu = $res2;
+
+}else{
+$sportsedu = 0;
+}
+
+$eduid  = '3';
+$req3   = new UserProfileService();
+$res3   = $req3->getUserEducation($userid,$eduid);
+if($res3 != '0')
+{
+$otheredu = $res3;
+}
+else
+{
+
+$otheredu = 0;
+
+}
+
+$user_exp = '1';
+
+$req4 = new UserProfileService();
+$res4 = $req4->getUserExperience($userid,$user_exp);
+if($res4 != '0')
+{
+$work_exp = $res4;
+}
+else
+{
+
+$work_exp = 0;
+
+}
+
+$req5 = new UserProfileService();
+$res5 = $req5->getUserSportsExp($userid);
+if($res5 != '0')
+{
+
+$sport_exp = $res5;
+
+}
+else
+{
+
+$sport_exp = 0;
+
+}
+
+$user_exp = '2';
+
+$req6 = new UserProfileService();
+$res6 = $req6->getUserExperience($userid,$user_exp);
+if($res6 != '0')
+{
+$other_exp = $res6;
+}
+else
+{
+
+$other_exp = 0;
+
+}
+
+$req7         = new UserProfileService();
+$res7         = $req7->getUserSkill($userid);
+if($res7 != 0)
+{
+
+$other_skills = $res7;
+
+}
+else
+{
+
+$other_skills = 0;
+
+}
 
 
+$req = new UserProfileService();
+$res = $req->getuserData($userid);
+if($res != '0')
+{
+
+$user = $res;
+}
+else
+{
+
+$user = 0;
+
+}
+
+$userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
+if(in_array(0, $userdata)){
+
+  $userdata['status'] = 0; 
+
+}else{
+
+  $userdata['status'] = 1;
+}
+print_r($userdata);
+
+if($res)
+{
+// print_r($req2);//die;
+//$user = array('Status' => 1);
+$user = array('Status' => 1, 'data'=> $res, 'msg'=>'Updated' );
+echo json_encode($user);
+}
+else
+{
+//  $user = array('Status' => 0);
+$user = array('Status' => 0, 'data'=> $res, 'msg'=>'Notupdated' );
+echo json_encode($user);
+}
+}
 
 //********* CODE FOR CREATING JOBS **********//
 
@@ -925,7 +920,6 @@ else
 echo json_encode($status['failure']);
 }
 }
-
 
 //********* CODE FOR CREATING TOURNAMENTS **********//
 
@@ -995,9 +989,6 @@ else
 echo json_encode($status['failure']);
 }
 
-
-
-
 //********* CODE FOR CREATING EVENTS **********//
 
 else if ($_POST['act'] == 'createevent') 
@@ -1051,10 +1042,6 @@ echo json_encode($status['success']);
 else
 echo json_encode($status['failure']);
 }
-
-
-
-
 //*********CODE FOR FETCHING THE CREATED DATA***********//
 else if($_REQUEST['act'] == "editcreation")
 {
@@ -1140,10 +1127,6 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
-
-
-
-
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
 
 else if($_POST['act'] == "search_job")
@@ -1231,9 +1214,6 @@ $data = array('data'=>'0' , 'status'=>'0');
 echo json_encode($data);
 }
 }
-
-
-
 //********* CODE FOR SEARCHING EVENTS **********//
 
 else if ($_POST['act'] == "search_event" )
@@ -1322,13 +1302,6 @@ die();
 }
 echo json_encode($data);
 }
-
-
-
-
-
-
-
 
 //********* CODE FOR the view of JOB , EVENT , TOURNAMENT ****//
 
@@ -1555,6 +1528,7 @@ $user_favs =urldecode($_POST['id']);
 
 $rev = new userdataservice();
 $res = $rev->favourites($user_id, $module , $user_favs);
+//print_r($res);die();
 
 if($res == 1)
 {
@@ -1667,9 +1641,7 @@ for($i = 0 ; $i<$size ; $i++)
         else
          
                {
-
                   $row[$j]['fav'] = '0';
-           
                }
 
           }
@@ -1688,12 +1660,7 @@ for($i = 0 ; $i<$size ; $i++)
 
           $row[$j]['fav'] = '0';
          }
-
-
          }
-
-
-
         }
 //print_r($row);
 
@@ -1712,10 +1679,17 @@ echo json_encode($row1);
 
 else if($_POST['act'] == "get_fav")
 {
-$id   = urldecode($_POST ['id']);
+ 
+$id   = urldecode($_POST ['userid']);
 $type = urldecode($_POST ['type']);
 $rev  = new userdataservice();
-$res  = $rev->getfav($id,$type);
+$rev = new   liteservice();
+//es  = $rev->getfav($id,$type);
+//$rev  = new userdataservice();
+
+$res = $rev->getfav($id,$type);
+$res  = $rev->getfavdata($id,$type);
+//print_r($res);die();
 if($res != 0)
 {
 
@@ -1738,9 +1712,7 @@ else
       $res1 = new userdataservice();
       $rev1 = $res1->getfavdata($favdata[$i] , $type);
       $res2[] = $rev1; 
-  
    }
-
 }
 
 if($type == 1)
@@ -1759,8 +1731,6 @@ echo json_encode($data3);
 
 
 /*********    CODE FOR APPLIYING FOR JOB BY THE USER   *************************/
-
-
 
 else if($_POST['act'] == "apply")
 {
@@ -1870,7 +1840,6 @@ echo json_encode($data);
 
 // }
 
-
 /*****************************Sending Offer **************************************/
 
 else if($_POST['act']=="select_applicant")
@@ -1883,7 +1852,7 @@ else if($_POST['act']=="select_applicant")
   $salary         = urldecode($_POST['salary']);
   $joining_date   = urldecode($_POST['joining_date']);
   $other_deatil   = urldecode($_POST['other_deatil']);
-  $status         = urldecode($_POST['status']);
+  $status         = urldecode($_POST['status']);  // status=1 Apply , status=2 Offer, Status =3 Accept
   switch ($status)
   {
   case '2':
@@ -1930,13 +1899,14 @@ else if($_POST['act']=="select_applicant")
 
 
 
-
 /********************Job OffersList***********************************/
+// User see the Job Offer which Company is send
 
 else if($_POST['act'] == 'jobOffersList')
 {
 
   $userid=urldecode($_POST['user_id']);
+
   $req = new userdataservice();
   $res = $req->getOfferList($userid);
   if($res != 0)
@@ -1951,10 +1921,6 @@ else if($_POST['act'] == 'jobOffersList')
   }
 
 }
-
-
-
-
 
 /* ***********************************************************************************/
 
@@ -1974,9 +1940,6 @@ else if($_POST['act'] == "create_resource")
   echo json_encode($resp);
   }
 }
-
-
-
 
 /********************************************************************************/
 
@@ -2002,21 +1965,19 @@ else if($_POST['act'] == "create_resource")
     }
     }
   }
-
-
 /*---------------------------------------------------------------------------------------
  | This code for User Point of view when the user is search any Job ,Event ,tournament   |
  | after that the user is apply on job ,Event,or Tournament                              | 
  ----------------------------------------------------------------------------------------
-/*****************************GetsportyLite Searching*****************************/
 
+/*****************************GetsportyLite Searching*****************************/
 
 else if($_REQUEST['act'] == "gs_searching")
 {
- $id          =urldecode($_POST ['user_id']);  //Apply User Id 
+ $id          =urldecode($_POST ['userid']);  //Apply User Id 
  $type        =urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
  $keyword     =  urldecode($_REQUEST['key']);  // Search the Value by Applicant User
-switch ($type)
+  switch ($type)
     {
       case '1':
               $type        = '1';
@@ -2057,9 +2018,10 @@ $rec1    = $rec->saverecent($recdata,$type, $id);
 
 $rev1 = new userdataservice();
 $res1 = $rev->getfavForUser($res, $type, $id);
-
+//print_r($res1);die();
 $rev2 = new userdataservice();
 $res2 = $rev->getuserjobs($res1, $type, $id);
+//print_r($res2);die();
 $data = array('data'=>$res2 , 'status'=>'1');
 echo json_encode($data);
 
@@ -2200,11 +2162,7 @@ break;
     } //End Switch
 }//end Function
 
-
-
-
 /******************************View Apply by the User ***************************/
-
 
 else if($_POST['act'] == "gs_viewapply")
 {
@@ -2229,16 +2187,8 @@ echo json_encode($data);
 
 
 
-
-
-
-
-
-
-
 /**********************    New Apply Code  act=apply  *************************/
-// When the Job Event and Tournament is Apply then so used this code Pleas Ignore this Code 
-
+// When the Job Event and Tournament is Apply then so used this code Please Ignore this Code 
 
 else if($_POST['act'] == "newapply")
 {
@@ -2290,18 +2240,11 @@ else
 {
 $resp['status'] = "Failure";
 echo json_encode($resp);
-
 }
-
-
 }  //End Function
 
-
-
 /*************************** New View the User is Apply the Job Event Tournament**********************/
-
-
-
+// When the Job Event and Tournament is gs_viewapply then so used this code Please Ignore this Code 
 
 else if($_POST['act'] == "gs_viewapply1")
 {
@@ -2321,22 +2264,6 @@ $data = array('data'=>'0','status'=>'0');
 echo json_encode($data);
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //******************************************//
 //**********GCM TESTING CODE***************//
@@ -2369,27 +2296,4 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  //echo "http://getsporty.in/VideoUpload/".$file_name;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>
+?>  
