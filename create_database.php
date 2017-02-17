@@ -4,7 +4,7 @@ include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
-include('GetsportyLite/liteservice.php');
+include('getSportyLite/liteservice.php');
 
 //include('userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
