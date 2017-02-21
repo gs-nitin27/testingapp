@@ -8,13 +8,13 @@
 function hit(){	
 
 
-// var university = "";
-// var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
+//var university = "";
+//var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
 
 var data = {
-           "otp_code" : "2135",
-           "userid"  :  "16",
-           "phone_no" : "7838149085"  
+           "userid" : "212",
+           "prof_id"  :  "7",
+           
 };
 var data = JSON.stringify(data);
 console.log(data);
@@ -22,10 +22,8 @@ console.log(data);
 $.ajax({
 
     type: "POST",
-    url: "otpVarifyController.php?act=user_otp",
-   // url : "create_database.php?act=getUserData&userid="+16,
-    data: data, 
-// data:"act=gs_signup",
+    //url: "otpVarifyController.php",
+    url : "userEdit.php?act=getUserProfile",// data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
 //data:"act=getappliedjobs&user_id=176&id=133",
 //data:"act=user_otp&phone=7788888",

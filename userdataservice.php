@@ -536,6 +536,7 @@ else
 
 public function getfav($id,$type)
 {
+ 
 $query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
 
 if(mysql_num_rows($query)>0){

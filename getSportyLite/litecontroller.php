@@ -1,6 +1,8 @@
 <?php
 include('../config1.php');
 include('liteservice.php');
+//include('config1.php');
+include('../services/userdataservice.php');
 
 /****************Sign Up in Getsporty***********************/
 
@@ -331,6 +333,66 @@ else if($_POST['act'] == "gs_getfav")
        }
 
 }
+
+
+
+
+/*************** New GET FAVOURATE for JOB ,Event ,and Tournament and Resources* For GetsportLite************/
+/*
+| Type 1 = Job
+| Type 2 = Event
+| Type 3 = Tournament
+| Type 6 = Resources
+*/
+
+
+else if($_POST['act'] == "gs_getfav1")
+{
+  $id   = urldecode($_POST ['user_id']);
+  $type = urldecode($_POST ['type']);
+  $rev  = new liteservice();
+  $res  = $rev->getfav($id,$type);
+   if($res != 0)
+    { 
+     switch ($type)
+      {
+        case '1':
+              $favdata    = $res['userfav'];
+              $rev1       = $rev->get_fvdata1($favdata,$type);
+              $rev2       = new userdataservice();
+              $result     = $rev2->getuserjobs($rev1, $type, $id);
+         break;
+        case '2':
+        
+              $favdata    = $res['userfav'];
+              $result     = $rev->get_fvdata1($favdata,$type);
+              break;
+        case '3':
+              $favdata    = $res['userfav'];
+              $result     = $rev->get_fvdata1($favdata,$type);
+             break;
+          default:
+               $favdata   = $res['userfav'];
+               $result    = $rev->get_fvdata1($favdata,$type);
+              break;
+      }
+         // $req1      =    array('status' => 1,'data'=>$result,'msg'=>'The Record is Found');
+                      //    echo json_encode($req1); 
+  
+//}
+
+            $req1      =    array('status' => 1,'data'=>$result,'msg'=>'The Record is Found');
+                          echo json_encode($req1); 
+ }
+       else
+       {
+             $req1      =    array('status' => 0,'data'=>$result,'msg'=>'The Record is Not  Found');
+                             echo json_encode($req1); 
+       }
+
+}  // End of Statement
+
+
 
 
 

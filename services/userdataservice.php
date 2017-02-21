@@ -355,6 +355,7 @@ public function create_job($item)
 {
 
 $image =$item->image;
+$table ="gs_jobInfo";
 $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' , `pin` = '$item->pin'");
  
  if($query)
@@ -362,7 +363,7 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
           $id = mysql_insert_id();
           if($id!=NULL && $image!=NULL)
           {
-           $image = $this->imageupload($image,$id);
+           $image = $this->imageupload($image,$id,$table);
           }
         return 1;
         }
@@ -625,8 +626,9 @@ $rows[] = $row;
 
   public function getfavForUser($data,$type,$id)
 {
-
-    //print_r($data);
+//echo "dev";ec
+  //echo $id;
+   // print_r($type);die();
   	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
     //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";
   	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
@@ -940,7 +942,6 @@ else
 
 public function getuserjobs($res, $type, $id)
 {
- //echo "SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$id' ";
 $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$id' ");
 if(mysql_num_rows($query)>0)
 {
@@ -1285,7 +1286,6 @@ return 0;
 
 public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 {
-  //echo "UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'";die();
     $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
 
   if($query)
@@ -1302,30 +1302,24 @@ public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 
 
 
+// Status =2 is Check because If Ofer send then Status  =2
+
 public function getOfferList($userid)
 {
-$query = mysql_query("SELECT uj.`id` , uj.`userid` AS 'applicant_id' , uj.`userjob` , ji.`id` AS job_id, ji.`title` AS job_title , ji.`organisation_name` AS employer_name , uj.`status` FROM `user_jobs` AS uj LEFT JOIN `gs_jobInfo` AS ji ON uj.`userjob` = ji.`id` WHERE uj.`userjob` = ji.`id` AND uj.`status` > 0 AND uj.`userid` = '$userid'"); 
 
+$query = mysql_query("SELECT gs_jobinfo.`organisation_name`, gs_jobinfo.`title`,user_jobs.`joining_date`, user_jobs.`salary` FROM gs_jobinfo,user_jobs  WHERE user_jobs.`userjob`=gs_jobinfo.`id` AND user_jobs.`status`=2 AND user_jobs.`userid`='$userid'"); 
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
 $rows[] = $row;
-
 }
-
 return $rows;
-
 }
 else
 {
-
 return 0;
-
 }
-
 }
 
 
@@ -1339,7 +1333,7 @@ public function createResources($data)
   $message      = $data->message;
   $url          = $data->link;
   $image        = $data->image;
-
+  $table        = "gs_resources";
   $query  = mysql_query("INSERT INTO `gs_resources` (`id`,`userid`, `title` , `description` , `url` ,`date_created`) VALUES('','$userid','$title','$message','$url',CURDATE())");
 
   if($query)
@@ -1347,7 +1341,7 @@ public function createResources($data)
           $id = mysql_insert_id();
           if($id!=NULL && $image!=NULL)
           {
-           $image = $this->imageupload($image,$id);
+           $image = $this->imageupload($image,$id,$table);
           }
         return 1;
         }
@@ -1363,27 +1357,37 @@ public function createResources($data)
 
 /***************Function for Upload Image in Create Resource***********************/
 
+//  This functin are used to Upload the image on  gs_resources table and createjob table
+// So Please check the Column name of image and Path 
 
- public function imageupload($image,$id)
+ public function imageupload($image,$userid,$table)
     {
-      define('UPLOAD_DIR','../staging/uploads/job/');
+     define('UPLOAD_DIR','../staging/uploads/job/');
+      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
+    //  define('UPLOAD_DIR','gs_images/Prof_pic/');
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
-      $img = str_replace('data:image/png;base64,', '', $img);
+      //$img = str_replace('data:image/png;base64,', '', $img);
+      $filepath =str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
       $data = base64_decode($img);
-      $img_name= "res"."_".$time;
+
+      $img_name= "$userid"."_".$time; // This is code for upload the Image for User
+     // $img_name= "res"."_".$time;
+
       $success=move_uploaded_file($img, $filepath);
       $file = UPLOAD_DIR.$img_name.'.png';
       $success = file_put_contents($file, $data);
       if($success)
       {
-        $img_name = $img_name. '.png';
-        // This code is Used for Create Resource for Uploading the Image
+         $img_name = $img_name. '.png';
+       // echo "update `$table` set `image`='$img_name' where `userid`='$userid'";die();
+       // This code is Used for Create Resource for Uploading the Image
        // $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-         $updateImage = mysql_query("update `gs_jobInfo` set `image`='$img_name' where `id`='$id'");
+        // This is code for 
+         $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
       if($updateImage)
       {
         return 1;
@@ -1394,11 +1398,17 @@ public function createResources($data)
           $res = array('data' =>'Image is Not Upload' ,'status' => 0);
           echo json_encode($res);
           return 0;
-          //echo "image not uploaded";
-         
         }
     }
  
+
+
+
+
+
+
+
+
    
 /*****************************************************************/
 
@@ -1406,24 +1416,19 @@ public function createResources($data)
   {
 
     $query = "SELECT  IFNull(`title`,'') AS title, IFNull(`description`,'') AS description, IFNull(`url`,'') AS link , IFNull(`image`,'') AS image,IFNull(DATEDIFF(CURDATE(),`date_created`) ,'') AS date, IFNull(`id` , '') AS res_id FROM `gs_resources` ".$fwhere." ";
-
    $query1 = mysql_query($query);
-
     if(mysql_num_rows($query1) > 0)
       {
       while($row = mysql_fetch_assoc($query1))
       {
       $rows[] = $row; 
       }
-
       return $rows;
        } 
-      
-        else
+       else
        {
       return 0;
        }
-
       }  
 
 
@@ -1840,14 +1845,72 @@ public function sendEmail_for_password_reset($id,$body)
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
                $mail->Body = $body;
-              
-
-               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+              $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
             return 1;
 }
+
+
+
+
+
+
+
+
+
+
+/****************This code for Edit Profile [User] 3-Feb-2017**************************/
+
+// public function edit_user($userid,$prof_id,$data)
+// {
+
+//    $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+//   if($query)
+//        {
+//          return 1;
+//        } 
+//         else
+//         {    
+//             return 0;
+//         }  
+        
+// } 
+
+
+
+//  public function listuserdata($userid)
+//     {
+//        $query  = mysql_query("SELECT *FROM `gs_userdata` where `userid` = '$userid'");
+//        if(mysql_num_rows($query)>0)
+//        {
+//           while($row = mysql_fetch_assoc($query))
+//           {
+//             $data = $row;
+//           }
+//         return $data;
+//         }
+//         else 
+//         {
+//          return 0;
+//         }
+
+
+// } //  End of Function
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }//end class
 
