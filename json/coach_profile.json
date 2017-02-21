@@ -1,14 +1,50 @@
 {
             "Education": {
-                          "sportEducation":[ ],
-                          "formalEducation": [ ],
-                          "otherCertification": []
-                          }
-            ,
-            "Experience": {
-                            "workExperience": [ ],
-                            "experienceAsPlayer": []
-                          },
+    "formalEducation": [
+      {
+        "courseDuration": "ENTER THE PEROID HERE",
+        "degree": "NAME OF THE DEGREE OR CERTIFICATE",
+        "organisation": "ORGANISATION NAME",
+        "stream": "STREAM/SPECIALISATION"
+      }
+    ],
+    "otherCertification": [
+      {
+        "courseDuration": "ENTER THE PEROID HERE",
+        "degree": "NAME OF THE DEGREE OR CERTIFICATE",
+        "organisation": "ORGANISATION NAME",
+        "stream": "STREAM/SPECIALISATION"
+      }
+    ],
+    "sportEducation": [
+      {
+        "courseDuration": "ENTER THE PEROID HERE",
+        "degree": "NAME OF THE DEGREE OR CERTIFICATE",
+        "organisation": "ORGANISATION NAME",
+        "stream": "STREAM/SPECIALISATION"
+      }
+    ]
+  },
+  "Experience": {
+    "experienceAsPlayer": [
+      {
+        "dateFrom": "FROM",
+        "dateTo": "TO",
+        "description": "DESCRIPTION",
+        "designation": "DESIGNATION",
+        "organisationName": "INSTITUTION/ORGANISATION NAME"
+      }
+    ],
+    "workExperience": [
+      {
+         "dateFrom": "FROM",
+        "dateTo": "TO",
+        "description": "DESCRIPTION",
+        "designation": "DESIGNATION",
+        "organisationName": "INSTITUTION/ORGANISATION NAME"
+      }
+    ]
+  },
             "HeaderDetails": {
                               "designation": " ",
                     "acamedy": " ",

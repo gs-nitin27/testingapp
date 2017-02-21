@@ -1972,193 +1972,60 @@ else if($_POST['act'] == "create_resource")
 
 else if($_REQUEST['act'] == "gs_searching")
 {
- $id          =urldecode($_POST ['userid']);  //Apply User Id 
- $type        =urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
- $keyword     =  urldecode($_REQUEST['key']);  // Search the Value by Applicant User
-  switch ($type)
-    {
-      case '1':
-              $type        = '1';
-               if($type=='1')
-               {
-                if(empty($keyword))
-                {
-                $fwhere="`WHERE 1` ";
-                 }
-                else
-                {
-                 $fwhere=" WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' ";
-                }
-                $rev = new userdataservice();
-                $res = $rev->jobsearch($fwhere);
-              }
-if($res != 0)
+ $userid        =  urldecode($_POST ['userid']);  //Apply User Id 
+ $module        =  urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
+ $keyword       =  urldecode($_REQUEST['key']);  // Search the Value by Applicant User
+ $request       =  new userdataservice();
+    if(empty($keyword)) 
+   {
+      $keyword   = '' ;
+   }
+   else
+   {
+      $keyword   = $keyword ;
+   }
+   if ($module=='1')
+   {
+       $response   = $request->jobsearch($keyword);
+   }
+   if ($module=='2')
+   {
+      $response   = $request->eventsearch($keyword);
+   }
+   if ($module=='3')
+  {
+      $response   = $request->tournamentsearch($keyword);
+  }  
+if($response)
 {
-
-if($id != '')
-{
-$recarr = array();
-$size = sizeof($res);
-for($i = 0; $i<$size ; $i++)
-{
-  $resid= $res[$i]['id'];
-  array_push($recarr, $resid);
-  $recarr[$i][$resid];
-}
-
-$recdata = implode(",",$recarr);
-if($para == '')
-{
-$rec     = new userdataservice();
-$rec1    = $rec->saverecent($recdata,$type, $id);
-}
-}
-
-$rev1 = new userdataservice();
-$res1 = $rev->getfavForUser($res, $type, $id);
-//print_r($res1);die();
-$rev2 = new userdataservice();
-$res2 = $rev->getuserjobs($res1, $type, $id);
-//print_r($res2);die();
-$data = array('data'=>$res2 , 'status'=>'1');
-echo json_encode($data);
-
-if($id !='' && $subs != '0')
-{
-$al1  = new searchdataservice();
-$al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
-die();
-}
-
+                                $response      = $request->getfavForUser($response,$module, $userid);
+                                if ($module=='1')
+                                {
+                                     $response      = $request ->getuserjobs($response,$module, $userid);
+                                }
+           $Result = array('status' => '0','data'=>$response ,'msg'=>'Searching successfully');
+           echo json_encode($Result);
 }
 else
-{
-$data = array('data'=>'0' , 'status'=>'0');
-echo json_encode($data);
-}
-      break;
+{                     
+        $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Searching successfully');
+        echo json_encode($Result);
+} 
+                     
 
-case '2':
-              $type        = '2';
-               if($type=='2')
-               {
-                if(empty($keyword))
-                {
-                $fwhere="`WHERE 1` ";
-                 }
-                else
-                {
-                 $fwhere=" WHERE `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ";
-                }
-                $rev = new userdataservice();
-                $res = $rev->eventsearch($fwhere);
-                }
-if($res != 0)
-{
-if($id != '')
-{
-$recarr = array();
-$size   = sizeof($res);
-for($i  = 0; $i<$size ; $i++)
-{
-  $eligibility = $res[$i]['eligibility1'];
-  $res[$i]['eligibility1'] = explode("|",$eligibility);
-  $terms = $res[$i]['terms_cond1'];
-  $res[$i]['terms_cond1'] = explode("|", $terms);
+ }   // End Function
 
-  $resid= $res[$i]['id'];
-  array_push($recarr, $resid);
-}
-$recdata = implode(",",$recarr);
 
-if($para == '')
-{
-$rec     = new userdataservice();
-$rec1    = $rec->saverecent($recdata,$type, $id);
-}
-}
-$req = new userdataservice();
 
-$res1 = $rev->getfavForUser($res, $type, $id);
-$data = array('data'=>$res1 , 'status'=>'1');
-echo json_encode($data);
-}
-else
-{
-$data = array('data'=>'0' , 'status'=>'0');
 
-}
+               
 
-if($id !='' && $subs != '0')
-{
-$al1  = new searchdataservice();
-$al2  = $al1->savealert($id ,$fwhere , $type , $size , $subs);
-echo $al2;
-die();
-}
-echo json_encode($data);
-break;
-case '3':
-                $type        = '3';
-               if($type=='3')
-               {
-                if(empty($keyword))
-                {
-                $fwhere="`WHERE 1` ";
-                 }
-                else
-                {
-                 $fwhere=" WHERE `sport` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ";
-                }
-              $rev = new userdataservice();
-              $res = $rev->tournamentsearch($fwhere);
-              }
-if($res != 0)
-{
-$recarr= array();
-$size  = sizeof($res);
-for($i = 0; $i<$size ; $i++)
-{
-  $eligibility = $res[$i]['eligibility1'];
-  $res[$i]['eligibility1'] = explode("|",$eligibility);
-  $terms = $res[$i]['terms_and_cond1'];
-  $res[$i]['terms_and_cond1'] = explode("|", $terms);
 
-  $resid= $res[$i]['id'];
-  array_push($recarr, $resid);
-}
-$recdata = implode(",",$recarr);
-if($id != '' && $para == '')
-{
-$rec     = new userdataservice();
-$rec1    = $rec->saverecent($recdata,$type, $id);
 
-}
-$rev1 = new userdataservice();
-$res1 = $rev->getfavForUser($res, $type, $id);
 
-$data = array('data'=>$res1 , 'status'=>'1');
 
-}
 
-else
-{
-$data = array('data'=>'0' , 'status'=>'0');
-}
-if($id !='' && $subs != '0')
-{
-$al1  = new searchdataservice();
-$al2  = $al1->savealert($id ,$fwhere , $type , $size , $subs);
-//echo $al2;
-die();
-}
-echo json_encode($data);
-break;
-      default:
-                $resp = array('data'=>'0' ,  'status'=>'Record is Found');
-                echo json_encode($resp);
-    } //End Switch
-}//end Function
+
 
 /******************************View Apply by the User ***************************/
 
