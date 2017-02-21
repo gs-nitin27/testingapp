@@ -1840,8 +1840,8 @@ public function sendEmail_for_password_reset($id,$body)
              // $mail->Host = 'dezire.websitewelcome.com';
               $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
-              $mail->Username ="harshvardhan@darkhorsesports.in";  
-              $mail->Password = "New@job2016";           
+              $mail->Username ="info@darkhorsesports.in";  
+              $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
                $mail->Body = $body;
