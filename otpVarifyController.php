@@ -6,9 +6,12 @@ include('services/UserProfileService.php');
 include('services/smsOtpService.php');
 error_reporting(E_ERROR | E_PARSE);
 
-
 if($_REQUEST['act'] == 'user_otp')
 {
+$data = file_get_contents("php://input");
+print_r($data);
+$elv  = new stdClass();
+echo $data->userid;
 $data  = json_decode($_POST[ 'data' ]);
 $phone = $data->phone_no;
 $userid = $data->userid;

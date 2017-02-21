@@ -5,7 +5,6 @@ include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
 error_reporting(E_ERROR | E_PARSE);
-
 // SignUp The New User  using the GetsportyLite 
 
 /*
@@ -20,7 +19,7 @@ error_reporting(E_ERROR | E_PARSE);
 if($_REQUEST['act'] == 'gs_signup')
 {
 $data1                     =   json_decode($_POST['data']);
-//`$item                      =   new stdClass();
+//`$item                   =   new stdClass();
 $email                     =   $data1->email;
 $where                     =   "WHERE `email`= '$email' ";
 $req                       =   new userdataservice();
@@ -143,7 +142,7 @@ switch ($logintype)
 
                           $data = array('status' => 0,'data'=>$res3 ,'msg'=>'User registered');
                            // $data = array('data'=>$res3,'status'=>'1','multip'=>$multiple);
-                            echo json_encode($data);
+                          echo json_encode($data);
                            
                     }
                   }

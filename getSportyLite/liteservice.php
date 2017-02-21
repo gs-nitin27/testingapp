@@ -167,8 +167,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function gsSignIn($email,$password1,$device_id)
     {
-      $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
-     $row  = mysql_num_rows($query);
+       $query = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` ,`device_id` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+       $row  = mysql_num_rows($query);
        if($row=='1')
        {
             while($row = mysql_fetch_assoc($query))
@@ -190,7 +190,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                
                }
                else
-               {
+                {
                 return 0;
                 }
 
@@ -221,7 +221,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                  $row['fav'] = '0';
                  $data[] = $row;
             }
-         return $data;
+          return $data;
         }
         else
         {
@@ -364,26 +364,39 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
      /********** Save Token When user is first instal APPS [Function]********/
 
     public function saveToken($device_id)
-    {
-      $query = mysql_query("SELECT `device_id` FROM `get_token` USE INDEX (`device_id) WHERE `device_id` = '$device_id'");
-      if(mysql_num_rows($query) < 1)
+    { //echo "dsdddsdsd";die;
+      $where = "WHERE `token_id` = '".$device_id."'";
+      if($this->getTokenId($where)!= 0)
       {
-          $insert = mysql_query("INSERT INTO `get_token` (`id`,`device_id`) VALUES ('','$device_id')");
+        return $this->getTokenId($where); 
+      }
+      else if($this->getTokenId($where) == 0);
+      {  $insert = mysql_query("INSERT INTO `get_token` (`id`,`token_id`) VALUES ('','$device_id')");
           if($insert)
-          {
-            return 1;
+          { $id = mysql_insert_id($insert);
+            $where_id = "WHERE `id` = '".$id."'";
+            $row = $this->getTokenId($where_id);
+            return $row;
           }
           else
           {
             return 0;
           }
-      }
-      else
-      {
-        return 1;
+        
       }
     }
+    
+    public function getTokenId($where)
+    {
+      $query = mysql_query("SELECT `token_id` FROM `get_token` ".$where."");
+      if(mysql_num_rows($query)> 0)
+      {
+      $row = mysql_fetch_assoc($query);
+      return $row;
+      }else
+      return 0;
 
+    }
 
     /*****************Get The Favourate [Function]**********************/
 

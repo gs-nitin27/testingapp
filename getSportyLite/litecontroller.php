@@ -1,5 +1,5 @@
 <?php
-include('../config.php');
+include('../config1.php');
 include('liteservice.php');
 
 /****************Sign Up in Getsporty***********************/
@@ -12,7 +12,7 @@ if($_POST['act'] == 'gs_signup')
     $email            =  urldecode($_POST ['email']);
     $password1        =  md5(urldecode(@$_POST ['password']));
     $device_id        =  urldecode($_POST['device_id']);
-    $facebook_status  =   urldecode($_POST['facebook_status']);
+    $facebook_status  =  urldecode($_POST['facebook_status']);
     $where      =  "WHERE `email` = '".$email."'";
     $req        =  new liteservice();
     $res        =  $req->userExits($where);
@@ -336,7 +336,7 @@ else if($_POST['act'] == "gs_getfav")
 
 /***************TOKEN for save*****************/
 
-else if($_POST['act'] == 'get_token')
+else if($_REQUEST['act'] == 'get_token')
 {
   $device_id = $_REQUEST['device_id'];
   $req = new liteservice();
