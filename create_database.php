@@ -368,6 +368,9 @@ else if($_REQUEST['act']=="create_manage_user")
 $data1                = json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
 
+//print_r($data1);die;
+
+
 $forgot_code =  mt_rand(1000,10000);
 
 $item->email          =  $data1->email;
