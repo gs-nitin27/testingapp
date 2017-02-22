@@ -419,14 +419,7 @@ public function edit_user($userid,$prof_id,$data)
 
  public function imageupload_user($userid,$image)
  {
-       $url="http://192.168.0.112/testingapp/gs_images/Prof_pic";
-      //PATH for the Image URL:
-       // Please Set the URL on Server because the This is a Local Server and Store the URL in User Table
-     //http://192.168.0.112/testingapp/gs_images/Prof_pic/217_1487058372.png
-
-     //define('UPLOAD_DIR','../staging/uploads/job/');
-      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
-      define('UPLOAD_DIR','gs_images/Prof_pic/');
+      $url=IMAGE_URL;
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
