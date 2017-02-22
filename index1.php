@@ -16,7 +16,6 @@ var data = {
            "prof_id"  :  "7",
            
 };
-
 var data = JSON.stringify(data);
 console.log(data);
 
@@ -24,9 +23,7 @@ $.ajax({
 
     type: "POST",
     //url: "otpVarifyController.php",
-    url : "userEdit.php?act=getUserProfile",
-
-// data:"act=gs_signup",
+    url : "userEdit.php?act=getUserProfile",// data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
 //data:"act=getappliedjobs&user_id=176&id=133",
 //data:"act=user_otp&phone=7788888",
