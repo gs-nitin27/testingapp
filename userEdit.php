@@ -63,10 +63,12 @@ if($user_res==0)
   echo json_encode($user);
   die();
 }
+
 else
   {
        $req            = new UserProfileService();
-       $res            = $req->listuserdata($userid); 
+       $res            = $req->listuserdata($userid);
+       //print_r($res) ;die();
                if($res == 0)
                {
                     if($prof_id==1) 
