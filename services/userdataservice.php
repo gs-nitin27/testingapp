@@ -1623,8 +1623,8 @@ else
 
 
 
-  public function view_apply($userid,$type)
-  {
+public function view_apply($userid,$type)
+{
 switch ($type) 
 {
 
@@ -1742,8 +1742,6 @@ case '3':
 
        
  
-
-
 public function sendEmail_for_password_reset($id)
 {
 
@@ -1885,9 +1883,6 @@ $rows[] = $row;
   return 0;
    }
 }
-
-
-
 
 
 
