@@ -418,6 +418,8 @@ else if($_REQUEST['act']=="gs_sub")
    $location     =  urldecode($_REQUEST ['location']);
    $topic        =  urldecode($_REQUEST ['topic']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
+
+
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
@@ -452,16 +454,18 @@ else if($_REQUEST['act']=="gs_sub")
     }
    if($key != '')
    {
-     $where[] = " `Description` LIKE '%$key%' ";
+     $where[] = " `description` LIKE '%$key%' ";
      $arr['key'] = $key;    
    }
    else
    {
-     $where[] = " `Description` LIKE '%$key%' ";
+     $where[] = " `description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
    $whereclause = implode('AND', $where);
    $req = new liteservice();
+
+
    $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
 
    if($res != 0)

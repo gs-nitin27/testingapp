@@ -70,4 +70,18 @@ echo json_encode($data);
 }
 
 
+
+
+//*********CODE FOR City  Listing *************//
+
+
+if($_REQUEST['act']=="locationlisting")
+ { 
+    $req           =  new GetListingService();
+    $res           =  $req->Get_Location();
+	$data = array('data'=>$res);
+	echo json_encode($data);
+}
+
+
 ?>

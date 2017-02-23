@@ -277,7 +277,7 @@ else
 }
 public function getuserData($userid)
 {
-$query = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name, IFNull(`password`,'') AS password, IFNull(`email`,'') AS email, IFNull(`contact_no`,'') AS contact_no, IFNull(`sport`,'')AS sport, IFNull(`Gender`,'') AS gender, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2,IFNull(DATE_FORMAT(`dob`, '%D %M %Y'),'') AS dob, IFNull(`prof_id`,'') AS prof_id, IFNull(`user_image`,'') AS user_image, IFNull(`location`,'') AS location, IFNull(`prof_language`,'') AS prof_language,IFNull(`age_catered`,'') AS age_catered , IFNull(`device_id`,'')AS device_id,IFNull(`about_me`,'')AS about_me FROM `user` WHERE `userid` = '$userid'");
+$query = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name, IFNull(`password`,'') AS password, IFNull(`email`,'') AS email, IFNull(`contact_no`,'') AS contact_no, IFNull(`sport`,'')AS sport, IFNull(`gender`,'') AS gender, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2,IFNull(DATE_FORMAT(`dob`, '%D %M %Y'),'') AS dob, IFNull(`prof_id`,'') AS prof_id, IFNull(`user_image`,'') AS user_image, IFNull(`location`,'') AS location, IFNull(`prof_language`,'') AS prof_language,IFNull(`age_catered`,'') AS age_catered , IFNull(`device_id`,'')AS device_id,IFNull(`about_me`,'')AS about_me FROM `user` WHERE `userid` = '$userid'");
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
@@ -332,7 +332,7 @@ $link                    = $userdata->link;
 $ageGroupCoached         = $userdata->ageGroupCoached;
 $languagesKnown          = $userdata->languagesKnown;
 
-$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`Gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown' WHERE `userid`='$userid'");
+$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
@@ -354,7 +354,7 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
 
   public function userdata($id)
     {
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`Gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
