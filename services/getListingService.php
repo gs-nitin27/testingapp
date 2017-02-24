@@ -84,6 +84,29 @@ public function getProfession()
 }
 
 
+/*********************Drop Down for City Listing***************************/
+
+ public function Get_Location()
+    {
+      $query = mysql_query("SELECT `name` FROM `gs_city` where 1 GROUP BY `name` ORDER BY `name` ASC ");
+      $row  = mysql_num_rows($query);
+      if($row)
+      {
+            while ($row = mysql_fetch_assoc($query))
+            {
+              $data[] = $row;
+            }
+        return $data;
+      }
+      else
+      {
+         return 0;
+      }
+    }
+
+
+
+
 } // End Class
 
 

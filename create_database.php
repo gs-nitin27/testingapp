@@ -1127,89 +1127,110 @@ echo json_encode($data);
 
 else if($_POST['act'] == "search_job")
 {
- $id        =urldecode($_POST ['user_id']);
- $type      =urldecode($_POST ['type']);
- $job_title =urldecode($_POST ['job_title']);
- $sport_name=urldecode($_POST ['sport_name']);
- $location  =urldecode($_POST ['location']);
- $gender    =urldecode($_POST ['gender']);
- $subs      =urldecode($_POST ['subs']);
- $para      =urldecode($_POST ['para']);
-if($para == '') // For Default Search parameters
+ $id          =urldecode($_POST ['userid']);
+ $title       =urldecode($_POST ['job_title']);
+ $sport       =urldecode($_POST ['sport_name']);
+ $location    =urldecode($_POST ['location']);
+ $gender      =urldecode($_POST ['gender']);
+ $key         =urldecode($_POST ['key']);
+ $module      =urldecode($_POST ['module']);
+  $request   =   new userdataservice();
+ $where[]      = ' 1=1 ';
+  $arr = array();
+  if($sport != '')
+  {
+    $where[] = "`sport` LIKE '%$sport%' ";
+    $arr['sport'] =  $sport ; 
+  }
+  if($location != '')
+  {
+       $where[] = "`location` LIKE '%$location%' ";
+       $arr['location'] = $location;
+  }
+  if($title != '')
+  {
+     $where[] = "`title` LIKE '%$title%' "; 
+     $arr['title'] = $title ;    
+  }
+
+ if($key  != '')
+  {
+     $where[] = "`description` LIKE '%$key%' "; 
+     $arr['key'] =  $key;    
+  }
+
+if($gender  != '')
+  {
+     $where[]    = "`gender` LIKE '%$gender%' "; 
+     $arr['gender '] =   $gender ;    
+  }
+    $whereclause = implode('AND', $where);
+    $response       = $request ->jobsearch_user($whereclause);
+
+if($response)
 {
-$whereclause = "WHERE"." ";
-if($sport_name !="")
-{
-$where2= "AND `sport` LIKE '%$sport_name%' ";
-}
-if($job_title != "")
-{
-$where1= "`title` LIKE '%$job_title%' ";
-//$fwhere = $whereclause.$whereclause1;
-}
-if($location != "")
-{
-$where3 = "AND `city` LIKE '%$location%'"; 
-}
-if($gender != "")
-{
-$where4 = "AND  `gender` LIKE '%$gender%'"; 
-}
- $wherenext = $where1.$where2.$where3.$where4;
-if($wherenext == "" )
-{
-$fwhere  = $whereclause."1";
-}
- else
-$fwhere  = $whereclause.$wherenext; 
+                                $response      = $request->getfavForUser($response,$module, $userid);
+                                if ($module=='1')
+                                {
+                                     $response      = $request ->getuserjobs($response,$module, $userid);
+                                }
+           $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
+           echo json_encode($Result);
 }
 else
-{
-$fwhere = $para;
-}
-$search = new userdataservice();
-$search_param = $search->saveparam($id,$job_title,$sport_name,$location);
-$rev = new userdataservice();
-$res = $rev->jobsearch($fwhere);
-if($res != 0)
-{
-if($id != '')
-{
-$recarr = array();
-$size = sizeof($res);
-for($i = 0; $i<$size ; $i++)
-{
-  $resid= $res[$i]['id'];
-  array_push($recarr, $resid);
-  $recarr[$i][$resid];
-}
-$recdata = implode(",",$recarr);
-if($para == '')
-{
-$rec     = new userdataservice();
-$rec1    = $rec->saverecent($recdata,$type, $id);
-}
-}
-$rev1 = new userdataservice();
-$res1 = $rev->getfavForUser($res, $type, $id);
-$rev2 = new userdataservice();
-$res2 = $rev->getuserjobs($res1, $type, $id);
-$data = array('data'=>$res2 , 'status'=>'1');
-echo json_encode($data);
-if($id !='' && $subs != '0')
-{
-$al1  = new searchdataservice();
-$al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
-echo $al2;
-die();
-}
-}
-else
-{
-$data = array('data'=>'0' , 'status'=>'0');
-echo json_encode($data);
-}
-}
+{                     
+        $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Searching successfully');
+        echo json_encode($Result);
+} 
+                     
+} // End of Function
+//  }
+
+// if($res != 0)
+// {
+// if($id != '')
+// {
+// $recarr = array();
+// $size = sizeof($res);
+// for($i = 0; $i<$size ; $i++)
+// {
+//   $resid= $res[$i]['id'];
+//   array_push($recarr, $resid);
+//   $recarr[$i][$resid];
+// }
+// $recdata = implode(",",$recarr);
+// if($para == '')
+// {
+// $rec     = new userdataservice();
+// $rec1    = $rec->saverecent($recdata,$type, $id);
+// }
+// }
+// $rev1 = new userdataservice();
+// $res1 = $rev->getfavForUser($res, $type, $id);
+// $rev2 = new userdataservice();
+// $res2 = $rev->getuserjobs($res1, $type, $id);
+// $data = array('status' => '1','data'=>$res2 , 'msg'=>'Searching successfully');
+// echo json_encode($data);
+
+// if($id !='' && $subs != '0')
+// {
+// $al1  = new searchdataservice();
+// $al2  = $al1->savealert($id ,$fwhere , $type , $size, $subs);
+// //echo $al2;
+// die();
+// }
+// }
+// else
+// {
+// $data = array('status' => '1','data'=>'0' , 'msg'=>'Not Found');
+// echo json_encode($data);
+// }
+// }
+
+
+
+
+
 //********* CODE FOR SEARCHING EVENTS **********//
 
 else if ($_POST['act'] == "search_event" )
@@ -1968,13 +1989,13 @@ else if($_POST['act'] == "create_resource")
 
 else if($_REQUEST['act'] == "gs_searching")
 {
- $userid        =  urldecode($_POST ['userid']);  //Apply User Id 
- $module        =  urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
- $keyword       =  urldecode($_REQUEST['key']);  // Search the Value by Applicant User
- $request       =  new userdataservice();
-    if(empty($keyword)) 
+ $userid        =   urldecode($_POST ['userid']);  //Apply User Id 
+ $module        =   urldecode($_POST ['module']);  //Type Job=1 Event=2 Tournament=3 
+ $keyword       =   urldecode($_POST ['key']);   // Search the Value by Applicant User
+ $request       =   new userdataservice();
+     if(empty($keyword)) 
    {
-      $keyword   = '' ;
+       $keyword    = '' ;
    }
    else
    {
@@ -1982,7 +2003,7 @@ else if($_REQUEST['act'] == "gs_searching")
    }
    if ($module=='1')
    {
-       $response   = $request->jobsearch($keyword);
+        $response   = $request->jobsearch($keyword);
    }
    if ($module=='2')
    {
@@ -1999,7 +2020,7 @@ if($response)
                                 {
                                      $response      = $request ->getuserjobs($response,$module, $userid);
                                 }
-           $Result = array('status' => '0','data'=>$response ,'msg'=>'Searching successfully');
+           $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
            echo json_encode($Result);
 }
 else
@@ -2009,6 +2030,53 @@ else
 } 
  }   // End Function
 
+
+/************************  More About the User****************************/
+
+else if($_REQUEST['act'] == "professional")
+{
+  $userid          =   urldecode($_REQUEST ['userid']);
+  $prof_id       =   urldecode($_REQUEST ['prof_id']); 
+  $sport           =   urldecode($_REQUEST ['sport']); 
+  $location        =   urldecode($_REQUEST ['location']); 
+  $request         =   new userdataservice();
+  $where[]      = ' 1=1 ';
+  $arr = array();
+  if($sport != '')
+  {
+    $where[] = " `sport` = '$sport' ";
+    $arr['sport'] =  $sport ; 
+  }
+  if($location != '')
+  {
+       $where[] = "`location` = '$location' ";
+       $arr['location'] = $location;
+  }
+  if($prof_id != '')
+  {
+     $where[] = "`prof_id` = '$prof_id' "; 
+     $arr['prof_id'] = $prof_id;    
+  }
+    $whereclause = implode('AND', $where);
+    $response   = $request->user_Info($whereclause);
+if($response)
+{
+                                $response      = $request->getfavForUser($response,$module, $userid);
+                              //  if (!empty($userid))
+                               // {
+                                    
+                               // }
+           $Result = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
+           echo json_encode($Result);
+}
+else
+{                     
+        $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
+        echo json_encode($Result);
+} 
+                     
+
+ }   // End Function
 
 /******************************View Apply by the User ***************************/
 
@@ -2092,24 +2160,24 @@ echo json_encode($resp);
 /*************************** New View the User is Apply the Job Event Tournament**********************/
 // When the Job Event and Tournament is gs_viewapply then so used this code Please Ignore this Code 
 
-else if($_POST['act'] == "gs_viewapply1")
-{
-$userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
-$type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
-$rev = new userdataservice();
-$res = $rev->v_apply($userid,$type);
-$res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
-if($res1)
-{
- $data = array('data'=>$res1,'status'=>'1');
- echo json_encode($data);
-}
-else
-{
-$data = array('data'=>'0','status'=>'0');
-echo json_encode($data);
-}
-}
+// else if($_POST['act'] == "gs_viewapply1")
+// {
+// $userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
+// $type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
+// $rev = new userdataservice();
+// $res = $rev->v_apply($userid,$type);
+// $res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
+// if($res1)
+// {
+//  $data = array('data'=>$res1,'status'=>'1');
+//  echo json_encode($data);
+// }
+// else
+// {
+// $data = array('data'=>'0','status'=>'0');
+// echo json_encode($data);
+// }
+// }
 
 //******************************************//
 //**********GCM TESTING CODE***************//
