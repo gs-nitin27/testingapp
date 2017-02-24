@@ -149,40 +149,6 @@ $user_image         =  $data->user_image;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
 
      * function For User Registration
@@ -994,17 +960,17 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
             'data' => $message,
         );
           $message = array('data1'=>$message);
-      $data = array('data'=>$message,'to'=>$registatoin_ids);
+          $data = array('data'=>$message,'to'=>$registatoin_ids);
+          json_encode($data);
 
-     
-        json_encode($data);
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
-    define("GOOGLE_API", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
+        define("GOOGLE_API", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
         $headers = array(
             'Authorization: key=' . GOOGLE_API,
             'Content-Type: application/json'
         );
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);

@@ -23,16 +23,15 @@ if($_REQUEST['act'] == 'connect')
      $notification = $userdata->sendPushNotificationToGCM($device_id,$json_data);
      $alerts = $req->alerts($user_responser_id ,$json_data); 
      $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'msg' => 'Request is sent');
-      echo json_encode($userresponse);
+
+     echo json_encode($userresponse);
     }
     else
     {
-       $userresponse = array('status' =>0 ,  'connection_status' => 0 , 'msg' => 'Request is Not sent');
+       $userresponse = array('status' =>0 , 'connection_status' => 0 , 'msg' => 'Request is  not sent');
        echo json_encode($userresponse);
     }
 }
-
-
 
  else if($_REQUEST['act'] == 'request_response')
  { 
@@ -56,6 +55,7 @@ if($_REQUEST['act'] == 'connect')
         $json_data = array('title'=> 'New Connection ', 'msg'=> $response_user_name.' is connected with you' , 'device_id' => $device_id);
 
           $json_data = json_encode($json_data);
+
           $notification = $userdata->sendLitePushNotificationToGCM($device_id,$json_data);
 
            $alerts =$req->alerts($userid,$json_data) ;
