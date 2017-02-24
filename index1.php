@@ -14,7 +14,8 @@ function hit(){
 var data = {
          
          
-           "email"    :  "harshvardhan@darkhorsesports.in"
+           "lite_user_id"    : "100046",
+           "prof_user_id"  : "100045"
            
 };
 var data = JSON.stringify(data);
@@ -24,7 +25,7 @@ $.ajax({
 
     type: "POST",
     //url: "otpVarifyController.php",
-    url : "create_database.php?act=create_manage_user",// data:"act=gs_signup",
+    url : "connect_user.php?act=connect",// data:"act=gs_signup",
  //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
 //data:"act=getappliedjobs&user_id=176&id=133",
 //data:"act=user_otp&phone=7788888",
