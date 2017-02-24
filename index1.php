@@ -11,7 +11,7 @@ function hit(){
 //var university = "";
 //var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
  
-var data = {
+var data = {  
          
          
            "lite_user_id"    : "100046",
