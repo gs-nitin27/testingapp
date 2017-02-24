@@ -354,6 +354,7 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
 
   public function userdata($id)
     {
+    
        $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
@@ -368,6 +369,41 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
          return 0;
         }
     }
+
+/************************Function for Connect the User**************************/
+
+  public function getConnectUser($lite_user_id,$prof_user_id)
+  {
+       $query  = mysql_query("SELECT `id`,`req_status` FROM `gs_connect` where `lite_user_id` = '$lite_user_id' AND `prof_user_id`='$prof_user_id'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+/*********************************************************/
+
+
+
 
 
 
