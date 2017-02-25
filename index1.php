@@ -15,21 +15,20 @@ var data = {
          
          
            "lite_user_id"    : "100046",
-           "prof_user_id"  : "100045"
+           "prof_user_id"    : "100045"
            
 };
 var data = JSON.stringify(data);
 console.log(data);
 
 $.ajax({
-
-    type: "POST",
-    //url: "otpVarifyController.php",
-    url : "connect_user.php?act=connect",// data:"act=gs_signup",
- //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
-//data:"act=getappliedjobs&user_id=176&id=133",
-//data:"act=user_otp&phone=7788888",
-   data : "data="+ data,
+     type: "POST",
+     //url: "otpVarifyController.php",
+     url : "connect_user.php?act=connect",// data:"act=gs_signup",
+    //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
+    //data:"act=getappliedjobs&user_id=176&id=133",
+    //data:"act=user_otp&phone=7788888",
+    data : "data="+ data,
 
 
    // url: "useralertcontroller.php",

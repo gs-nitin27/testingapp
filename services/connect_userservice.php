@@ -57,13 +57,14 @@ class connect_userservice
    }
  }
 
- public function alerts($userid,$jsondata)
+ public function alerts($userid,$user_app,$jsondata)
  {
  	//print_r($userid);die;
-  $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`alert_data`,`date_alerted`) VALUES('$userid','$jsondata',CURDATE())");
+  $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES('$userid','$user_app','$jsondata',CURDATE())");
   if($query)
   {
-  	return 1;
+  	$data = mysql_insert_id();
+  	return $data;
   }
   else
   {
@@ -88,6 +89,22 @@ class connect_userservice
 
  }
 
+
+public function updateseennotification($id)
+{
+
+	$query = mysql_query("UPDATE `gs_alerts` SET `seen` = 1  WHERE `id` = '$id'");
+	if($query)
+	{
+		return 1 ;
+	}
+	else
+	{
+		return 0;
+	}
+    
+
+}
 
 
 }

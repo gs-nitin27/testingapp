@@ -30,21 +30,19 @@
     }
 ?>
 <?php
-	
 	//this block is to post message to GCM on-click
-	$pushStatus = "";	
-	if(!empty($_GET["push"])) {	
+	    $pushStatus = "";	
+	    if(!empty($_GET["push"])) {	
 		$gcmRegID  = file_get_contents("GCMRegId.txt");
 		$pushMessage = $_POST["message"];	
 		if (isset($gcmRegID) && isset($pushMessage)) {		
-			$gcmRegIds = array($gcmRegID);
-			$message = array("m" => $pushMessage);	
-			$pushStatus = sendPushNotificationToGCM($gcmRegIds, $message);
+		$gcmRegIds = array($gcmRegID);
+		$message = array("m" => $pushMessage);	
+		$pushStatus = sendPushNotificationToGCM($gcmRegIds, $message);
 		}		
 	}
-	
 	//this block is to receive the GCM regId from external (mobile apps)
-	if(!empty($_GET["shareRegId"])) {
+	    if(!empty($_GET["shareRegId"])) {
 		$gcmRegID  = $_POST["regId"]; 
 		file_put_contents("GCMRegId.txt",$gcmRegID);
 		echo "Ok!";
