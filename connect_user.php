@@ -6,11 +6,9 @@ include('services/connect_userservice.php');
 
 if($_REQUEST['act'] == 'connect')
 {
-    //$data = json_decode($_REQUEST['data']);
     $user_request_id = $_REQUEST['lite_user_id'];
     $user_responser_id = $_REQUEST['prof_user_id'];
     $user_app = $_REQUEST['user_app'];
-
     $req = new connect_userservice();
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
@@ -20,6 +18,7 @@ if($_REQUEST['act'] == 'connect')
     $device_id = $user_data['device_id'];
     $json_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
     $json_data = json_encode($json_data);
+
     if($connection_id)
     {
      $notification = $userdata->sendPushNotificationToGCM($device_id,$json_data);
@@ -52,10 +51,8 @@ if($_REQUEST['act'] == 'connect')
          $request_user = $userdata->getuserdata($userid);
          $response_user = $userdata->getuserdata($user_id['prof_user_id']);
          $response_user_name = $response_user['name'];
-
          $device_id = $request_user['device_id'];
          $json_data = array('title'=> 'New Connection ', 'msg'=> $response_user_name.' is connected with you' , 'device_id' => $device_id);
-
          $json_data = json_encode($json_data);
          $notification = $userdata->sendLitePushNotificationToGCM($device_id,$json_data);
          $alerts =$req->alerts($userid ,$user_app , $json_data) ;

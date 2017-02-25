@@ -10,14 +10,19 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == 'notificationlisting')
 {
-	$userid      	=  @$_REQUEST['userid'];
-	$user_app      	=  @$_REQUEST['user_app'];
-	$request        =  new GetListingService();
-	$response       =  $request->getAlertListing($userid,$user_app);
+	$userid                	=  @$_REQUEST['userid'];
+	$user_app              	=  @$_REQUEST['user_app'];
+	$request                =  new GetListingService();
+	$response               =  $request->getAlertListing($userid,$user_app);
+  $num                    =  sizeof($response);
+            for($i = 0 ; $i< $num ; $i++)
+            {    
+             $response [$i]['alert_data'] = json_decode($response[$i]['alert_data']);
+            }
             if($response)
             {
-            $Result = array('status' => '1','data'=>$response ,'msg'=>'Notification  is Listing');
-             echo json_encode($Result);
+              $Result = array('status' => '1','data'=>$response,'msg'=>'Notification  is Listing');
+              echo json_encode($Result);
              }
             else
             {                     

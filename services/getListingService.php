@@ -117,9 +117,9 @@ public function getProfession()
             while ($row = mysql_fetch_assoc($query))
             {
               $data[] = $row;
-            }
-        return $data;
-      }
+              }
+              return $data;
+     }
       else
       {
          return 0;
