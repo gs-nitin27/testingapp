@@ -92,11 +92,11 @@ switch ($logintype)
                     }
         break;
       default:
-                      if ($user_image !='') 
-                     {
-                        $obj = new userdataservice();
-                        $upd = $obj->updateimage($email,$user_image);
-                     }
+                     //  if ($user_image !='')  // This is comment because the Image is Updated
+                     // {
+                     //    $obj = new userdataservice();
+                     //  //  $upd = $obj->updateimage($email,$user_image);
+                     // }
 
                   $req                     =  new userdataservice();
                   $res                     =  $req->userVarify($where);
@@ -2036,12 +2036,18 @@ else
 else if($_REQUEST['act'] == "professional")
 {
   $userid          =   urldecode($_REQUEST ['userid']);
-  $prof_id       =   urldecode($_REQUEST ['prof_id']); 
+  $prof_id         =   urldecode($_REQUEST ['prof_id']); 
   $sport           =   urldecode($_REQUEST ['sport']); 
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
   $where[]      = ' 1=1 ';
   $arr = array();
+  if($userid != '')
+  {
+    $where[] = " `userid` NOT IN ($userid) ";
+    $arr['userid'] =  $userid ; 
+  }
+
   if($sport != '')
   {
     $where[] = " `sport` = '$sport' ";
@@ -2059,6 +2065,8 @@ else if($_REQUEST['act'] == "professional")
   }
     $whereclause = implode('AND', $where);
     $response   = $request->user_Info($whereclause);
+
+  // echo "$whereclause";die();
 if($response)
 {
                                 $response      = $request->getfavForUser($response,$module, $userid);
@@ -2077,6 +2085,30 @@ else
                      
 
  }   // End Function
+
+
+/*******************Get Coonect the User and Professional**********************/
+
+
+else if($_REQUEST['act'] == 'connection_status')
+{
+ 
+$lite_user_id       =  @$_REQUEST['lite_user_id'];
+$prof_user_id       =  @$_REQUEST['prof_user_id'];
+$request            =  new UserProfileService();
+$response           =  $request->getConnectUser($lite_user_id,$prof_user_id);
+            if($response)
+            {
+            $Result = array('status' => '1','data'=>$response ,'msg'=>'User is Connected');
+             echo json_encode($Result);
+             }
+            else
+            {                     
+              $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connect');
+              echo json_encode($Result);
+            }
+
+}  // End of Statement
 
 /******************************View Apply by the User ***************************/
 

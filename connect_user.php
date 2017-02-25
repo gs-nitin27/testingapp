@@ -25,6 +25,7 @@ if($_REQUEST['act'] == 'connect')
      $notification = $userdata->sendPushNotificationToGCM($device_id,$json_data);
      $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data); 
      $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'msg' => 'Request is sent');
+
      echo json_encode($userresponse);
     }
     else
