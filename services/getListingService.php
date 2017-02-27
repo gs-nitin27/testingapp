@@ -105,6 +105,28 @@ public function getProfession()
     }
 
 
+/*********************Listing the Alert by the User***************************/
+
+
+   public function getAlertListing($userid,$user_app)
+    {
+      $query = mysql_query("SELECT *FROM `gs_alerts` where `userid` = '$userid' AND `user_app`='$user_app' ORDER BY `date_alerted` DESC");
+      $row  = mysql_num_rows($query);
+      if($row)
+      {
+            while ($row = mysql_fetch_assoc($query))
+            {
+              $data[] = $row;
+              }
+              return $data;
+     }
+      else
+      {
+         return 0;
+      }
+    }
+
+
 
 
 } // End Class
