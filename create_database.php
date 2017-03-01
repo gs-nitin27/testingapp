@@ -2112,17 +2112,6 @@ $response           =  $request->getConnectUser($lite_user_id,$prof_user_id);
 }  // End of Statement
 
 
-
-
-
-
-
-
-
-
-
-
-
 /******************************View Apply by the User ***************************/
 
 else if($_POST['act'] == "gs_viewapply")
