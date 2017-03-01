@@ -3,7 +3,7 @@ include('config1.php');
 include('services/userdataservice.php');
 include('services/connect_userservice.php');
 
-
+ 
 if($_REQUEST['act'] == 'connect')
 {
     $user_request_id = $_REQUEST['lite_user_id'];
@@ -16,12 +16,12 @@ if($_REQUEST['act'] == 'connect')
     $name = $request_user['name'];
     $user_data = $userdata->getuserdata($user_responser_id);
     $device_id = $user_data['device_id'];
-    $json_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
-    $json_data = json_encode($json_data);
+    $array_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
+    $json_data = json_encode($array_data);
 
     if($connection_id)
     {
-     $notification = $userdata->sendPushNotificationToGCM($device_id,$json_data);
+     $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
      $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data); 
      $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'msg' => 'Request is sent');
 

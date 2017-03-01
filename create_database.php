@@ -54,6 +54,7 @@ $res                       =   $req->userVarify($where);
 
 //********************Code for User Login************//
 
+
 else if($_REQUEST['act']=="gs_login")
 {
 $data1                        =  json_decode($_POST['data']);
