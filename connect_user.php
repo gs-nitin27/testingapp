@@ -21,7 +21,7 @@ if($_REQUEST['act'] == 'connect')
     // $array_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
     // $json_data = json_encode($array_data);
 
-    $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id, 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
+    $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id, 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'message'=> $name.' wants to connect with you' , 'device_id' => $device_id , 'indicator' => 1);
     $json_data = json_encode($array_data);
 
 
