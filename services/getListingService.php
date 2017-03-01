@@ -66,9 +66,17 @@ $query = mysql_query("SELECT DISTINCT `sports` FROM `gs_sports`");
 
 /*********************Drop Down for Profession***************************/
 
-public function getProfession()
+public function getProfession($prof_type)
 {
- $query = mysql_query("SELECT DISTINCT `id`,`profession` FROM `gs_profession`");
+if (isset($prof_type)) 
+{
+   $query = mysql_query("SELECT DISTINCT `id`,`profession`,`profession_type` FROM `gs_profession` where `profession_type` LIKE 'P'");
+}
+else
+{
+ $query = mysql_query("SELECT DISTINCT `id`,`profession`,`profession_type` FROM `gs_profession`");
+}
+
 	if(mysql_num_rows($query) > 0)
 	{
 		while($row = mysql_fetch_assoc($query))

@@ -63,8 +63,9 @@ echo json_encode($data);
 
 if($_REQUEST['act'] == "professionlisting")
 {
+$prof_type =@$_REQUEST['prof_type'];
 $req = new GetListingService();
-$res = $req->getProfession();
+$res = $req->getProfession($prof_type);
 $data = array('data'=>$res);
 echo json_encode($data);
 }

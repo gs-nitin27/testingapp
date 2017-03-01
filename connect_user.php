@@ -13,11 +13,17 @@ if($_REQUEST['act'] == 'connect')
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
     $request_user = $userdata->getuserdata($user_request_id);
-    $name = $request_user['name'];
+    $name      = $request_user['name'];
+    $prof_id   = $request_user['prof_id'];
     $user_data = $userdata->getuserdata($user_responser_id);
     $device_id = $user_data['device_id'];
-    $array_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
-    $json_data = json_encode($array_data);
+
+    // $array_data = array('connection_id' => $connection_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
+    // $json_data = json_encode($array_data);
+
+    $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id, 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'msg'=> $name.' wants to connect with you' , 'device_id' => $device_id);
+    $json_data = json_encode($json_data);
+
 
     if($connection_id)
     {
@@ -43,8 +49,8 @@ if($_REQUEST['act'] == 'connect')
 
    $req = new connect_userservice();
    $res = $req->connect_user_response($request_id , $req_status);
-   if($res == 1){
-
+   if($res == 1)
+   {
          $user_id =  $req->getuserid($request_id);
          $userid = $user_id['lite_user_id'];
          $userdata = new userdataservice();
@@ -57,27 +63,68 @@ if($_REQUEST['act'] == 'connect')
          $notification = $userdata->sendLitePushNotificationToGCM($device_id,$json_data);
          $alerts =$req->alerts($userid ,$user_app , $json_data) ;
          $message_seen = $req->updateseennotification($alerts);
-           
          $user = array('status' => 1, 'msg'=>'User Connected' );
          echo json_encode($user);
 
    }
    else if($res == 2)
    {
-    $user = array('status' => 2, 'msg'=>'User Not Connected' );
+    $user = array('status' => 0, 'msg'=>'User Not Connected' );
    echo json_encode($user);
    }
    else if($res == 3)
    {
-     $user = array('status' => 3,  'msg' => 'Request is cancelled');
+     $user = array('status' => 2,  'msg' => 'Request is cancelled');
      echo json_encode($user);
    }
    else
    {
-     $user = array('status' => 4, 'msg' =>'Request is not cancelled');
+     $user = array('status' => 0, 'msg' =>'Request is not cancelled');
    }
 }
 
 
 
+/*****************************Get All Connected Users*******************************/
 
+ else if($_REQUEST['act'] == 'get_connected_users')
+ { 
+
+ $userid         =  @$_REQUEST['userid'];
+ $usertype       =  @$_REQUEST['usertype'];
+ $request        =  new connect_userservice();
+ $response       =  $request->getConnectedUser($userid,$usertype);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connected');
+          echo json_encode($Result);
+   } 
+}
+
+
+
+/********************************Get All Requested Users************************/
+
+
+ else if($_REQUEST['act'] == 'get_requested_users')
+ { 
+ $userid         =  @$_REQUEST['userid'];
+ $usertype       =  @$_REQUEST['usertype'];
+ $request        =  new connect_userservice();
+ $response       =  $request->getRequestedUser($userid,$usertype);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'No User is Connected');
+          echo json_encode($Result);
+   } 
+}
