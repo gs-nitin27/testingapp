@@ -118,7 +118,7 @@ else
 
    public function getAlertListing($userid,$user_app)
     {
-      $query = mysql_query("SELECT *FROM `gs_alerts` where `userid` = '$userid' AND `user_app`='$user_app' ORDER BY `date_alerted` DESC");
+      $query = mysql_query("SELECT *FROM `gs_alerts` where `userid` = '$userid'  ORDER BY `date_alerted` DESC");
       $row  = mysql_num_rows($query);
       if($row)
       {

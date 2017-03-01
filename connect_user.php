@@ -89,7 +89,6 @@ if($_REQUEST['act'] == 'connect')
 
  else if($_REQUEST['act'] == 'get_connected_users')
  { 
-
  $userid         =  @$_REQUEST['userid'];
  $usertype       =  @$_REQUEST['usertype'];
  $request        =  new connect_userservice();
@@ -125,6 +124,28 @@ if($_REQUEST['act'] == 'connect')
    else
    {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No User is Connected');
+          echo json_encode($Result);
+   } 
+}
+
+
+
+/******************display Coach Profile and Total Student *******************/
+
+else if($_REQUEST['act'] == 'get_organized_classes')
+ { 
+
+ $userid         =  @$_REQUEST['userid'];
+ $request        =  new connect_userservice();
+ $response       =  $request->getClass($userid);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
           echo json_encode($Result);
    } 
 }
