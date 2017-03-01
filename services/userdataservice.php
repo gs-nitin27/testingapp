@@ -1564,7 +1564,7 @@ else
 {
  // new user register then email sent for password set
 
-$query= mysql_query("INSERT into `user`(`email`,`contact_no`,`Gender`,`prof_id`,`dob`,`sport`,`userType`,`device_id`, `forget_code`) values('$item->email','$item->phone_no','$item->gender','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code')");
+$query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`Gender`,`prof_id`,`dob`,`sport`,`userType`,`device_id`, `forget_code`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code')");
 
 if($query)
 {

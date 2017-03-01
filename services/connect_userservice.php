@@ -81,7 +81,7 @@ class connect_userservice
    {
      while($data = mysql_fetch_assoc($query))
       {
-      $result = $data;
+      $result[] = $data;
       }
        
         return $result;
@@ -102,9 +102,79 @@ public function updateseennotification($id)
 	{
 		return 0;
 	}
-    
-
-}
+ }
 
 
-}
+
+
+/****************This Function Show Connected  Usrs **************/
+
+public function getConnectedUser($userid,$usertype)
+{
+  if($usertype=='L')
+  {
+      $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid AND `req_status`= 1) ");
+  }
+
+  if($usertype=='M')
+  {
+  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
+  }
+   $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_assoc($query))
+      {
+      $result[] = $data;
+      }
+      return $result;
+   }
+ }
+
+
+/****************This Function Show Requested Users  **************/
+
+ public function getRequestedUser($userid,$usertype)
+ {
+   if($usertype=='L')
+    {
+        $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid AND `req_status`= 0) ");
+    }
+    if($usertype=='M')
+    {
+    $query = mysql_query( "SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 0) ");
+    }
+   $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_assoc($query))
+      {
+      $result[] = $data;
+      }
+      return $result;
+   }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // End Class
