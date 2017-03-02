@@ -58,7 +58,7 @@ if($_REQUEST['act'] == 'connect')
          $response_user = $userdata->getuserdata($user_id['prof_user_id']);
          $response_user_name = $response_user['name'];
          $device_id = $request_user['device_id'];
-         $array_data = array('title'=> 'New Connection ', 'msg'=> $response_user_name.' is connected with you' , 'device_id' => $device_id);
+         $array_data = array('title'=> 'New Connection ', 'message'=> $response_user_name.' is connected with you' , 'device_id' => $device_id , 'indicator' =>2);
          $json_data = json_encode($array_data);
          $notification = $userdata->sendLitePushNotificationToGCM($device_id,$array_data);
          $alerts =$req->alerts($userid ,$user_app , $json_data) ;
