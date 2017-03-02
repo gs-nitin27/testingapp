@@ -29,13 +29,13 @@ if($_REQUEST['act'] == 'connect')
     {
      $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
      $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data); 
-     $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'msg' => 'Request is sent');
+     $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'message' => 'Request is sent');
 
      echo json_encode($userresponse);
     }
     else
     {
-       $userresponse = array('status' =>0 , 'connection_status' => 0 , 'msg' => 'Request is  not sent');
+       $userresponse = array('status' =>0 , 'connection_status' => 0 , 'message' => 'Request is  not sent');
        echo json_encode($userresponse);
     }
 }
@@ -63,23 +63,23 @@ if($_REQUEST['act'] == 'connect')
          $notification = $userdata->sendLitePushNotificationToGCM($device_id,$array_data);
          $alerts =$req->alerts($userid ,$user_app , $json_data) ;
          $message_seen = $req->updateseennotification($alerts);
-         $user = array('status' => 1, 'msg'=>'User Connected' );
+         $user = array('status' => 1, 'message'=>'User Connected' );
          echo json_encode($user);
 
    }
    else if($res == 2)
    {
-    $user = array('status' => 0, 'msg'=>'User Not Connected' );
+    $user = array('status' => 0, 'message'=>'User Not Connected' );
    echo json_encode($user);
    }
    else if($res == 3)
    {
-     $user = array('status' => 2,  'msg' => 'Request is cancelled');
+     $user = array('status' => 2,  'message' => 'Request is cancelled');
      echo json_encode($user);
    }
    else
    {
-     $user = array('status' => 0, 'msg' =>'Request is not cancelled');
+     $user = array('status' => 0, 'message' =>'Request is not cancelled');
    }
 }
 
