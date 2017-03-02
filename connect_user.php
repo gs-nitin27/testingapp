@@ -93,8 +93,10 @@ if($_REQUEST['act'] == 'connect')
  $usertype       =  @$_REQUEST['usertype'];
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
+ $response       =  $request->getConnectedStatus($response, $userid);
    if($response)
    {
+
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
              echo json_encode($Result);
    }
