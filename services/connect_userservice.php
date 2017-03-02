@@ -113,12 +113,41 @@ public function getConnectedUser($userid,$usertype)
 {
   if($usertype=='L')
   {
-      $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid AND `req_status`= 1) ");
-  }
+
+     // $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` LEFT JOIN `gs_connect` `user`.`userid` = `gs_connect`.`prof_user_id` ");
+
+
+     $query = mysql_query("SELECT  `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid ) ");
+
+    $num=mysql_num_rows($query);
+
+    if ($num!=0) 
+     {
+          for ($i=0; $i <$num ; $i++) 
+          {
+            $row=mysql_fetch_assoc($query);
+            $row['req_status']='0';
+            $data[]=$row;
+          }
+
+        //  print_r($data);die();
+    return $data;  
+    }
+    else
+    {
+     return 0;
+    }
+
+}
+
+
+
+
+  
 
   if($usertype=='M')
   {
-  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
+  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached`,`gs_connect`.`req_status` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
   }
    $row = mysql_num_rows($query);
    if($row)
@@ -126,6 +155,7 @@ public function getConnectedUser($userid,$usertype)
      while($data = mysql_fetch_assoc($query))
       {
       $result[] = $data;
+
       }
       return $result;
    }
@@ -138,11 +168,11 @@ public function getConnectedUser($userid,$usertype)
  {
    if($usertype=='L')
     {
-        $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid AND `req_status`= 0) ");
+        $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached`,`gs_connect`.`req_status` FROM `user` WHERE `userid` IN(SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid AND `req_status`= 0) ");
     }
     if($usertype=='M')
     {
-    $query = mysql_query( "SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 0) ");
+    $query = mysql_query( "SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached`,`gs_connect`.`req_status` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 0) ");
     }
    $row = mysql_num_rows($query);
    if($row)
@@ -158,13 +188,27 @@ public function getConnectedUser($userid,$usertype)
 
 
 
+/********************* This Function are used to find Class and Timing of Student**********/
 
+public function getClass($userid)
+{
+ $query= mysql_query("SELECT CH.`userid`, CH.`id`, CH.`class_title`, CH.`class_start_timing`,CH.`class_end_timing`, CH.`class_start_date` ,CH.`class_end_date`,CH.`class_fee` ,CH.`class_strength` , COUNT(CL.`classid`) AS totalStudent FROM `gs_coach_class` AS CH , `gs_class_data` AS CL WHERE CH.`userid`=$userid AND CH.`id`=CL.`classid` GROUP BY CL.`classid` ");
+ $num=mysql_num_rows($query);
+  if ($num!=0) 
+ {
+      for ($i=0; $i <$num ; $i++) 
+      {
+        $row=mysql_fetch_assoc($query);
+        $data[]=$row;
+      }
+return $data;  
+}
+else
+{
+ return 0;
+}
 
-
-
-
-
-
+}
 
 
 
