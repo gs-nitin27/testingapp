@@ -230,8 +230,27 @@ public function getConnectedStatus($response, $userid)
 
 
 
+/************ This Function are used to find Class  Informantion Created by Coach*******/
 
 
+public function getClassInfo($class_id)
+{
+ $query= mysql_query("SELECT *FROM `gs_coach_class` where `id` =$class_id ");
+ $num=mysql_num_rows($query);
+ if ($num!=0) 
+ {
+      for ($i=0; $i <$num ; $i++) 
+      {
+        $row=mysql_fetch_assoc($query);
+        $data[]=$row;
+      }
+  return $data;  
+  }
+  else
+  {
+   return 0;
+  }
+}
 
 
 

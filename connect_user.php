@@ -151,3 +151,26 @@ else if($_REQUEST['act'] == 'get_organized_classes')
           echo json_encode($Result);
    } 
 }
+
+
+
+/******************* Display Class Information Created By Coach*************/
+
+
+ else if($_REQUEST['act'] == 'get_classes_info')
+ { 
+ $class_id         =  @$_REQUEST['class_id'];
+ $request        =  new connect_userservice();
+ $response       =  $request->getClassInfo($class_id);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
+          echo json_encode($Result);
+   } 
+}
+
