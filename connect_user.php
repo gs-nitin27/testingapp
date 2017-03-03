@@ -38,7 +38,6 @@ if($_REQUEST['act'] == 'connect')
 
  else if($_REQUEST['act'] == 'request_response')
  { 
-
    $request_id  = $_REQUEST['id'];
    $req_status  = $_REQUEST['req_status'];
    $user_app    = $_REQUEST['user_app'];
@@ -160,8 +159,8 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  else if($_REQUEST['act'] == 'get_classes_info')
  { 
  $class_id         =  @$_REQUEST['class_id'];
- $request        =  new connect_userservice();
- $response       =  $request->getClassInfo($class_id);
+ $request          =  new connect_userservice();
+ $response         =  $request->getClassInfo($class_id);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
@@ -173,4 +172,30 @@ else if($_REQUEST['act'] == 'get_organized_classes')
           echo json_encode($Result);
    } 
 }
+
+
+
+
+
+/*******************************************************************/
+  else if($_REQUEST['act'] == 'join_student')
+  { 
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $request           =  new connect_userservice();
+  $response          =  $request->joinStudentData($userdata);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'Successfuly Insert Record');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Record is not Insert');
+          echo json_encode($Result);
+   } 
+}
+
+
+
 
