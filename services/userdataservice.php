@@ -1027,7 +1027,6 @@ public function sendLitePushNotificationToGCM($registatoin_ids, $message)
     }
 
 
-
 public function savealert($employerid ,$type,$message , $title, $applicantId)
 {
 

@@ -122,7 +122,7 @@ public function getConnectedUser($userid,$usertype)
             $row=mysql_fetch_assoc($query);
             $data[]=$row;
           }
-   
+
     return $data;  
     }
     else
@@ -197,8 +197,8 @@ else
 {
  return 0;
 }
-
 }
+
 
 
 /*********************This Function are used to find the Status is 1 or 0 *******************/
@@ -257,6 +257,7 @@ public function getClassInfo($class_id)
 
 
 
+
 /************ This Function are used to Insert the Student Record*******/
 
 public function joinStudentData($userdata)
@@ -279,6 +280,7 @@ public function joinStudentData($userdata)
   }
 
 }
+
 
 
 } // End Class
