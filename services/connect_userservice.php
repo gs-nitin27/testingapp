@@ -129,7 +129,6 @@ public function getConnectedUser($userid,$usertype)
             $row['req_status']='0';
             $data[]=$row;
           }
-
         //  print_r($data);die();
     return $data;  
     }
@@ -137,13 +136,8 @@ public function getConnectedUser($userid,$usertype)
     {
      return 0;
     }
-
 }
 
-
-
-
-  
 
   if($usertype=='M')
   {
@@ -207,18 +201,5 @@ else
 {
  return 0;
 }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
 } // End Class

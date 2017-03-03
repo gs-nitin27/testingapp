@@ -106,9 +106,7 @@ if($_REQUEST['act'] == 'connect')
 }
 
 
-
 /********************************Get All Requested Users************************/
-
 
  else if($_REQUEST['act'] == 'get_requested_users')
  { 
