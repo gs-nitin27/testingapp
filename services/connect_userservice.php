@@ -113,23 +113,16 @@ public function getConnectedUser($userid,$usertype)
 {
   if($usertype=='L')
   {
-
-     // $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` LEFT JOIN `gs_connect` `user`.`userid` = `gs_connect`.`prof_user_id` ");
-
-
-     $query = mysql_query("SELECT  `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid ) ");
-
+      $query = mysql_query("SELECT userid,name,email,sport,gender,dob,user_image,location,prof_id,prof_name FROM user WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid)");
     $num=mysql_num_rows($query);
-
     if ($num!=0) 
      {
           for ($i=0; $i <$num ; $i++) 
           {
             $row=mysql_fetch_assoc($query);
-            $row['req_status']='0';
             $data[]=$row;
           }
-        //  print_r($data);die();
+
     return $data;  
     }
     else
@@ -202,4 +195,61 @@ else
  return 0;
 }
 }
+
+
+
+/*********************This Function are used to find the Status is 1 or 0 *******************/
+
+
+public function getConnectedStatus($response, $userid)
+{
+  $query= mysql_query("SELECT `prof_user_id`,req_status FROM `gs_connect` WHERE `lite_user_id`=$userid");
+   $num=mysql_num_rows($query);
+  if ($num!=0) 
+  {
+            for ($i=0; $i <$num ; $i++) 
+            {
+              $row=mysql_fetch_assoc($query);
+              $data[]=$row;
+            }
+            for ($i=0; $i <$num ; $i++) 
+            {
+                if ($response[$i]['userid']==$data[$i]['prof_user_id'])
+                {
+                     $response[$i]['req_status']=$data[$i]['req_status'];
+                }
+            }
+            return $response;  
+  }
+   else
+  {
+   return 0;
+  }
+
+}
+
+
+
+/************ This Function are used to find Class  Informantion Created by Coach*******/
+
+
+public function getClassInfo($class_id)
+{
+ $query= mysql_query("SELECT *FROM `gs_coach_class` where `id` =$class_id ");
+ $num=mysql_num_rows($query);
+ if ($num!=0) 
+ {
+      for ($i=0; $i <$num ; $i++) 
+      {
+        $row=mysql_fetch_assoc($query);
+        $data[]=$row;
+      }
+  return $data;  
+  }
+  else
+  {
+   return 0;
+  }
+}
+
 } // End Class
