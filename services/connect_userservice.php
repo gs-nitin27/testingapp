@@ -59,7 +59,7 @@ class connect_userservice
 
  public function alerts($userid,$user_app,$jsondata)
  {
- 	//print_r($userid);die;
+ 
   $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES('$userid','$user_app','$jsondata',CURDATE())");
   if($query)
   {
@@ -255,6 +255,40 @@ public function getClassInfo($class_id)
   }
 }
 
+/**************************************************************/
+
+
+public function getClassJoinStudent($response, $student_id)
+{
+  $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`=$student_id");
+  $num=count($response);
+  if ($num!=0) 
+  {
+            for ($i=0; $i <$num ; $i++) 
+            {
+              $row=mysql_fetch_assoc($query);
+              $data[]=$row;
+            }
+            for ($i=0; $i <$num ; $i++) 
+            {
+                if ($response[$i]['id']==$data[0]['classid'])
+                {
+                     $response[$i]['join_status']='1';
+                }
+                else
+                {
+                  $response[$i]['join_status']='0';
+                }
+            }
+             return $response;  
+  }
+   else
+  {
+   return 0;
+  }
+
+}
+
 
 
 
@@ -275,7 +309,7 @@ public function joinStudentData($userdata)
   }
   else
   {
-   $query= mysql_query("INSERT INTO gs_class_data(`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`) VALUES('$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment')");
+    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment')");
   return 1;
   }
 
@@ -283,4 +317,25 @@ public function joinStudentData($userdata)
 
 
 
+/***************************Function for get the Joined Student****************************/
+
+
+// public function getJoinStudent($student_id,$class_id)
+// {
+//        $query =mysql_query("SELECT *FROM `gs_class_data` where `student_id`= '$student_id' AND `classid`= '$class_id' ");
+//      $num=mysql_num_rows($query);
+//      if ($num!=0) 
+//      {
+//          return 1;    
+//      }
+//       else
+//       {
+//        return 0;
+//       }
+// }
+
+
+
 } // End Class
+
+

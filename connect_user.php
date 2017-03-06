@@ -131,17 +131,22 @@ if($_REQUEST['act'] == 'connect')
 
 /******************display Coach Profile and Total Student *******************/
 
+
 else if($_REQUEST['act'] == 'get_organized_classes')
  { 
-
- $userid         =  @$_REQUEST['userid'];
+ $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
+ $student_id     =  $_REQUEST['student_userid'];  // Student User Id
  $request        =  new connect_userservice();
  $response       =  $request->getClass($userid);
+ if ($response)
+ {
+   $response       =  $request->getClassJoinStudent($response, $student_id);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
              echo json_encode($Result);
    }
+ }
    else
    {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
@@ -154,11 +159,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 /******************* Display Class Information Created By Coach*************/
 
 
- else if($_REQUEST['act'] == 'get_classes_info')
+  else if($_REQUEST['act'] == 'get_classes_info')
  { 
  $class_id         =  @$_REQUEST['class_id'];
+ $student_id       =  $_REQUEST['student_userid'];
  $request          =  new connect_userservice();
  $response         =  $request->getClassInfo($class_id);
+ $response         =  $request->getClassJoinStudent($response, $student_id);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
@@ -175,7 +182,9 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 
 
-/*******************************************************************/
+/****************************Join the Student**********************************/
+
+
   else if($_REQUEST['act'] == 'join_student')
   { 
   $data              =  file_get_contents("php://input");
@@ -190,6 +199,28 @@ else if($_REQUEST['act'] == 'get_organized_classes')
    else
    {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'Record is not Insert');
+          echo json_encode($Result);
+   } 
+}
+
+
+/*************************Get Join Student Information *******************************/
+
+
+ else if($_REQUEST['act'] == 'get_join_student')
+ { 
+ $student_id           =  $_REQUEST['userid'];
+ $class_id             =  $_REQUEST['class_id'];
+ $request              =  new connect_userservice();
+ $response             =  $request->getJoinStudent($student_id,$class_id);
+   if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'Join Student Information ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Student is Not Enrolment');
           echo json_encode($Result);
    } 
 }
