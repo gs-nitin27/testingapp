@@ -12,19 +12,28 @@ function hit(){
 //var data = '{"class_name":"Test Class3","start_date":"2016-02-15","end_date":"2016-02-16","user_id":"16","start_time":"09 am"}';
  
 var data = {  
-         
-         
-           "lite_user_id"    : "100046",
-           "prof_user_id"    : "100045"
-           
-};
+            "class_name"     : "new class", 
+            "description"    : "new class",
+            "days"           : "1,2,3,4,5,6",
+            "address"        : "new class",
+            "start_date"     : "15-6-2017", 
+            "end_date"       : "15-6-2017",
+            "start_time"     : "08 a.m",
+            "end_time"       : "09 a.m",
+            "user_id"        : "58",
+            "location"       : "noida",
+            "duration"       : "3"
+
+
+ 
+           };
 var data = JSON.stringify(data);
 console.log(data);
 
 $.ajax({
      type: "POST",
      //url: "otpVarifyController.php",
-     url : "connect_user.php?act=connect",// data:"act=gs_signup",
+     url : "ManageSchedule_classController.php?act=create_class",// data:"act=gs_signup",
     //data:"act=register&email=devendrakumarpandey@gmail.com&password=12345",
     //data:"act=getappliedjobs&user_id=176&id=133",
     //data:"act=user_otp&phone=7788888",

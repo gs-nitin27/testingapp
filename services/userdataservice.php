@@ -921,14 +921,9 @@ for($j = 0 ; $j< $size ; $j++)
   
           array_push($res[$j]['job'], "1");
         
-          $res[$j]['job'] = "1";
-          
+          $res[$j]['job'] = "1";   
       }
-    
-      
-      }
-
-
+    }
 }
 
 return $res;//print_r($res);

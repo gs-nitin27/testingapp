@@ -4,26 +4,30 @@ include('services/manageSchedulingService.php');
 include('services/userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
 
-if($_POST['act'] == "create_class")
-{
 
-							$data  = json_decode($_REQUEST['data']);
+
+if($_REQUEST['act'] == "create_class")
+{
+							$data  = json_decode($_POST['data']);
 							$item  = new stdClass();
-							
+
+                            $date = date_create($data->start_date);
+                            date_add($date, date_interval_create_from_date_string($data->duration.'months'));
+                            $ndate = date_format($date, 'Y-m-d');
 							$item->class_name   = $data->class_name;
+							$item->description  = $data->description;
+							$item->days         = $data->days;
+							$item->duration     = $data->duration;
 							$item->start_date   = strtotime($data->start_date);
-							$item->end_date     = strtotime($data->end_date);
+							$item->end_date     = strtotime($ndate);
 							$item->start_time   = $data->start_time;
 							$item->end_time     = $data->end_time;
 							$item->address      = $data->address;
 							$item->user_id      = $data->user_id;
 							$item->location     = $data->location;
-					
 
-
-                    $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
-                       
-					   // echo $data->start_date ;die();
+                            $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
+                            
                             $req2 = new manageSchedulingService();
                             $res2 = $req2->CheckforExistingClass($item);
               if($res2 == 1)
@@ -94,13 +98,17 @@ else if($_POST['act'] == "update_class")
 			 }
 
 
-else if($_POST['act'] == "get_studentlist")
+else if($_REQUEST['act'] == "get_studentlist")
  {
-						
-
-						$id = urldecode($_POST['classid']);
+                           // print_r($_REQUEST);die;
+						//$id = urldecode($_POST['classid']);
+						$data  = json_decode($_POST['data']);
+                        $id = $data->classid;
 						$req = new manageSchedulingService();
 						$res = $req->getstudentlist($id);
+                      
+                         // print_r($res);die;
+
 						if($res != 0){
 						$data= array('data'=>$res);
 						echo json_encode($data);
@@ -111,10 +119,10 @@ else if($_POST['act'] == "get_studentlist")
 						}
 	}
 
+
+
 else if($_POST['act'] == "add_student")
 {
-
-					 
 						 $data               = json_decode($_REQUEST['data']);
 						 $item               = new stdClass();
 						 $item->fees         = $data->fees;
@@ -130,10 +138,10 @@ $res = $req->addstudent($item);
 if($res == 1)
 {
 //echo $res;
-						$class = $item->classid;
-						$req1 = new manageSchedulingService();
-						$res1 = $req1->getStudents($class);
-						$data = array('data'=>$res1);
+						$class  = $item->classid;
+						$req1   = new manageSchedulingService();
+						$res1   = $req1->getStudents($class);
+						$data   = array('data'=>$res1);
 						echo json_encode($data); 
 }
 else 
@@ -191,24 +199,14 @@ else if($_POST['act'] == "get_classlisting")
 					    $orig_start = $res[$j]['class_start_timing'];
 					    $orig_end   = $res[$j]['class_end_timing'];
 
-
-
 					    if($classid == $res[$j]['id'])
 					{
-
-
 					    $res[$j]['class_start_timing'] = $start;
 					    $res[$j]['class_end_timing']   = $end;
-					    $res[$j]['status']             = $resc1[$i]['resc_type'];
-					     
+					    $res[$j]['status']             = $resc1[$i]['resc_type'];   
 					}
-					   
-					             }
-
-					       }
-
-					 
-
+					        }
+					     }
 
 					}        for($k = 0 ; $k<sizeof($res) ;$k++)
 					         {
