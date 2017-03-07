@@ -2042,8 +2042,15 @@ else if($_REQUEST['act'] == "professional")
   $sport           =   urldecode($_REQUEST ['sport']); 
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
-  $where[]      = ' 1=1 ';
+  $userType        =   '103';
+  $where[]         =   '1 =1 ';
   $arr = array();
+ if($userType != '')
+ {
+    $where[] = " `userType` = '$userType' ";
+    $arr['userType'] =  $userType ; 
+ }
+
   if($userid != '')
   {
     $where[] = " `userid` NOT IN ($userid) ";
@@ -2067,8 +2074,7 @@ else if($_REQUEST['act'] == "professional")
   }
     $whereclause = implode('AND', $where);
     $response   = $request->user_Info($whereclause);
-
-  // echo "$whereclause";die();
+  
 if($response)
 {
                                 $response      = $request->getfavForUser($response,$module, $userid);

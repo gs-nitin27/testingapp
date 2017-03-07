@@ -10,7 +10,6 @@
 public function userVarify($where)
 {
 
-
 //echo "SELECT `userid`, `name`, `prof_id` FROM `user` ".$where;die();
 $query  = $query  = mysql_query("SELECT *FROM `user` $where");
 if(mysql_num_rows($query)>0)
@@ -1587,7 +1586,6 @@ public function view_apply($userid,$type)
 {
 switch ($type) 
 {
-
   case '1':
        $query = "SELECT `gs_jobInfo`.`id`,`TITLE`,`description`,`image` FROM `gs_jobInfo`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_jobs`.`userid`=$userid AND `user_jobs`.`STATUS`>=1";
    $query1 = mysql_query($query);

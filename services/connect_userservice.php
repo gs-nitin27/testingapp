@@ -59,7 +59,7 @@ class connect_userservice
 
  public function alerts($userid,$user_app,$jsondata)
  {
- 	//print_r($userid);die;
+ 
   $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES('$userid','$user_app','$jsondata',CURDATE())");
   if($query)
   {
@@ -179,7 +179,10 @@ public function getConnectedUser($userid,$usertype)
 
 public function getClass($userid)
 {
- $query= mysql_query("SELECT CH.`userid`, CH.`id`, CH.`class_title`, CH.`class_start_timing`,CH.`class_end_timing`, CH.`class_start_date` ,CH.`class_end_date`,CH.`class_fee` ,CH.`class_strength` , COUNT(CL.`classid`) AS totalStudent FROM `gs_coach_class` AS CH , `gs_class_data` AS CL WHERE CH.`userid`=$userid AND CH.`id`=CL.`classid` GROUP BY CL.`classid` ");
+  // This is comment for some Time so Please add after coding is complite
+// $query="SELECT CH.`userid`, CH.`id`, CH.`class_title`, CH.`class_start_timing`,CH.`class_end_timing`, CH.`class_start_date` ,CH.`class_end_date`,CH.`class_fee` ,CH.`class_strength` , COUNT(CL.`classid`) AS totalStudent FROM `gs_coach_class` AS CH , `gs_class_data` AS CL WHERE CH.`userid`=$userid AND CH.`id`=CL.`classid` GROUP BY CL.`classid`";die();
+
+ $query= mysql_query("SELECT *FROM gs_coach_class where `userid`=$userid");
  $num=mysql_num_rows($query);
   if ($num!=0) 
  {
@@ -235,7 +238,7 @@ public function getConnectedStatus($response, $userid)
 
 public function getClassInfo($class_id)
 {
- $query= mysql_query("SELECT *FROM `gs_coach_class` where `id` =$class_id ");
+ $query= mysql_query("SELECT *FROM `gs_coach_class` where `id` = $class_id ");
  $num=mysql_num_rows($query);
  if ($num!=0) 
  {
@@ -252,4 +255,87 @@ public function getClassInfo($class_id)
   }
 }
 
+/**************************************************************/
+
+
+public function getClassJoinStudent($response, $student_id)
+{
+  $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`=$student_id");
+  $num=count($response);
+  if ($num!=0) 
+  {
+            for ($i=0; $i <$num ; $i++) 
+            {
+              $row=mysql_fetch_assoc($query);
+              $data[]=$row;
+            }
+            for ($i=0; $i <$num ; $i++) 
+            {
+                if ($response[$i]['id']==$data[0]['classid'])
+                {
+                     $response[$i]['join_status']='1';
+                }
+                else
+                {
+                  $response[$i]['join_status']='0';
+                }
+            }
+             return $response;  
+  }
+   else
+  {
+   return 0;
+  }
+
+}
+
+
+
+
+/************ This Function are used to Insert the Student Record*******/
+
+public function joinStudentData($userdata)
+{
+  $classid           =  $userdata->classid;
+  $student_id        =  $userdata->userid;
+  $student_name      =  $userdata->student_name;
+  $student_dob       =  $userdata->student_dob;
+  $location          =  $userdata->location;
+  $gender            =  $userdata->gender;
+  $mode_of_payment   =  $userdata->mode_of_payment;
+  if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment))
+  {
+    return 0;
+  }
+  else
+  {
+    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment')");
+  return 1;
+  }
+
+}
+
+
+
+/***************************Function for get the Joined Student****************************/
+
+
+// public function getJoinStudent($student_id,$class_id)
+// {
+//        $query =mysql_query("SELECT *FROM `gs_class_data` where `student_id`= '$student_id' AND `classid`= '$class_id' ");
+//      $num=mysql_num_rows($query);
+//      if ($num!=0) 
+//      {
+//          return 1;    
+//      }
+//       else
+//       {
+//        return 0;
+//       }
+// }
+
+
+
 } // End Class
+
+
