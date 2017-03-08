@@ -8,6 +8,9 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == "create_class")
 {
+
+
+	//print_r("expression");die;
 							$data  = json_decode($_POST['data']);
 							$item  = new stdClass();
 
@@ -28,6 +31,11 @@ if($_REQUEST['act'] == "create_class")
 							$item->location     = $data->location;
 							$item->fee          = $data->fee;
 							$item->age_group    = $data->age_group;
+							$item->class_strength = $data->class_strength;
+							$item->class_host     = $data->class_host;
+							$item->phone_no     = $data->contact_no;
+
+                              //print_r($data->contact_no);die;
 
                             $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
                             

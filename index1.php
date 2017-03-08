@@ -16,18 +16,18 @@ var data = {
             "description"    : "new class",
             "days"           : "1,2,3,4,5,6",
             "address"        : "new class",
-            "start_date"     : "15-8-2017", 
+            "start_date"     : "15-9-2017", 
             "end_date"       : "15-6-2017",
-            "start_time"     : "10 a.m",
-            "end_time"       : "11 a.m",
+            "start_time"     : "11 a.m",
+            "end_time"       : "12 a.m",
             "user_id"        : "58",
             "location"       : "noida",
             "duration"       : "3",
             "fee"            : "6000",
-            "age_group"      : "4 and above"
-
-
- 
+            "age_group"      : "4 and above",
+            "contact_no"     : "8956237412",
+            "class_strength" :"50",
+            "class_host"     :"Nitin"
            };
 var data = JSON.stringify(data);
 console.log(data);
