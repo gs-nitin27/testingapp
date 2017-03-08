@@ -16,13 +16,15 @@ var data = {
             "description"    : "new class",
             "days"           : "1,2,3,4,5,6",
             "address"        : "new class",
-            "start_date"     : "15-6-2017", 
+            "start_date"     : "15-8-2017", 
             "end_date"       : "15-6-2017",
-            "start_time"     : "08 a.m",
-            "end_time"       : "09 a.m",
+            "start_time"     : "10 a.m",
+            "end_time"       : "11 a.m",
             "user_id"        : "58",
             "location"       : "noida",
-            "duration"       : "3"
+            "duration"       : "3",
+            "fee"            : "6000",
+            "age_group"      : "4 and above"
 
 
  

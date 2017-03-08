@@ -10,7 +10,7 @@ $start_date = $item->start_date;
 $end_date = $item->end_date;
 
 
-$query = mysql_query("INSERT INTO `gs_coach_class`(`id`, `userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `venue`,`location`,`description`,`date_created`,`days`) VALUES ('','$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time',FROM_UNIXTIME ('$start_date'),FROM_UNIXTIME ('$end_date'),'$item->address','$item->location','$item->description',CURDATE(),'$item->days')");
+$query = mysql_query("INSERT INTO `gs_coach_class`(`id`, `userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `venue`,`location`,`description`,`date_created`,`days`,`age_group`,`class_fee`) VALUES ('','$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time',FROM_UNIXTIME ('$start_date'),FROM_UNIXTIME ('$end_date'),'$item->address','$item->location','$item->description',CURDATE(),'$item->days','$item->age_group','$item->fee')");
 if($query)
 {
 return true;

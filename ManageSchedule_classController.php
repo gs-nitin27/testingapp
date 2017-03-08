@@ -14,6 +14,7 @@ if($_REQUEST['act'] == "create_class")
                             $date = date_create($data->start_date);
                             date_add($date, date_interval_create_from_date_string($data->duration.'months'));
                             $ndate = date_format($date, 'Y-m-d');
+
 							$item->class_name   = $data->class_name;
 							$item->description  = $data->description;
 							$item->days         = $data->days;
@@ -25,6 +26,8 @@ if($_REQUEST['act'] == "create_class")
 							$item->address      = $data->address;
 							$item->user_id      = $data->user_id;
 							$item->location     = $data->location;
+							$item->fee          = $data->fee;
+							$item->age_group    = $data->age_group;
 
                             $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
                             
