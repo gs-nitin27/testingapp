@@ -8,8 +8,6 @@ error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == "create_class")
 {
-
-
 	//print_r("expression");die;
 							$data  = json_decode($_POST['data']);
 							$item  = new stdClass();
@@ -84,19 +82,40 @@ if($_REQUEST['act'] == "create_class")
 
 		}
 
-else if($_POST['act'] == "update_class")
+
+else if($_REQUEST['act'] == "update_class")
  {
 
-
-							$data  = json_decode($_REQUEST['data']);
+							$data  = json_decode($_POST['data']);
 							$item = new stdClass();
-							$item->class_name   = $data->class_name;
-							$item->start_date   = strtotime($data->start_date);
-							$item->end_date     = strtotime($data->end_date);
-							$item->start_time   = $data->start_time;
-							$item->end_time     = $data->end_time;
-							$item->address      = $data->address;
-							$item->class_id     = $data->class_id;
+							//print_r($data);
+							//$test = $_REQUEST['data'];
+							//print_r($data);
+							//die;
+
+
+							$date = date_create($data->start_date);
+                            date_add($date, date_interval_create_from_date_string($data->duration.'months'));
+                            $ndate = date_format($date, 'Y-m-d');
+
+                            $item->user_id      = $data->user_id;
+							$item->class_name     = $data->class_name;
+							$item->description    = $data->description;
+							$item->days           = $data->days;
+							$item->duration       = $data->duration;
+							$item->start_date     = strtotime($data->start_date);
+							$item->end_date       = strtotime($ndate);
+							$item->start_time     = $data->start_time;
+							$item->end_time       = $data->end_time;
+							$item->address        = $data->address;
+							$item->class_id       = $data->class_id;
+							$item->fee            = $data->fee;
+							$item->age_group      = $data->age_group;
+							$item->class_strength = $data->class_strength;
+							$item->class_host     = $data->class_host;
+							$item->phone_no       = $data->contact_no;
+							$item->location       = $data->location;
+
 	
 							
 	                        $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
@@ -107,7 +126,7 @@ else if($_POST['act'] == "update_class")
 
 
 			 }
-
+ 
 
 else if($_REQUEST['act'] == "get_studentlist")
  {
