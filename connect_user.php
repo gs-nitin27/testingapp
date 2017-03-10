@@ -16,9 +16,10 @@ if($_REQUEST['act'] == 'connect')
     $request_user = $userdata->getuserdata($user_request_id);
     $name      = $request_user['name'];
     $prof_id   = $request_user['prof_id'];
+    $sport     = $request_user['sport'];
     $user_data = $userdata->getuserdata($user_responser_id);
     $device_id = $user_data['device_id'];
-    $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id, 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'message'=> $name.' wants to connect with you' , 'device_id' => $device_id , 'indicator' => 1);
+    $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id,'sport'=> $sport , 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'message'=> $name.' wants to connect with you' , 'device_id' => $device_id , 'indicator' => 1);
     $json_data = json_encode($array_data);
     if($connection_id)
     {
@@ -94,9 +95,8 @@ if($_REQUEST['act'] == 'connect')
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
  $response       =  $request->getConnectedStatus($response, $userid);
-   if($response)
-   {
-
+  if($response)
+  {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
              echo json_encode($Result);
    }
@@ -205,26 +205,64 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 }
 
 
+
+
+
+/*
+When the User is view the All Class Information input our User Id and Get All Class
+Student Id and Result is display all Class Information
+*/
+
 /*************************Get Join Student Information *******************************/
 
 
- else if($_REQUEST['act'] == 'get_join_student')
+ else if($_REQUEST['act'] == 'class_info' ) 
  { 
  $student_id           =  $_REQUEST['userid'];
- $class_id             =  $_REQUEST['class_id'];
+ 
  $request              =  new connect_userservice();
- $response             =  $request->getJoinStudent($student_id,$class_id);
+ $response             =  $request->ClassInfo($student_id);
    if($response)
    {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'Join Student Information ');
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Student is Not Enrolment');
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
           echo json_encode($Result);
    } 
 }
+
+
+
+
+
+
+// This Act are used to view all class created By User
+
+/*********************************View All Class************************/
+
+else if($_REQUEST['act'] == 'view_class')
+{ 
+$userid           =  $_REQUEST['userid'];
+$request        =  new connect_userservice();
+$response       =  $request->getClass($userid);
+  if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'All Class ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not any Class');
+          echo json_encode($Result);
+   } 
+}
+
+
+
+
 
 
 
