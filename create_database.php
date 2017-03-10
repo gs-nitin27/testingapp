@@ -5,6 +5,7 @@ include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
 include('getSportyLite/liteservice.php');
+include('services/connect_userservice.php');
   
 //include('userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
@@ -22,7 +23,6 @@ error_reporting(E_ERROR | E_PARSE);
 if($_REQUEST['act'] == 'gs_signup')
 {
 $data1                     =   json_decode($_POST['data']);
-//`$item                   =   new stdClass();
 $email                     =   $data1->email;
 $where                     =   "WHERE `email`= '$email' ";
 $req                       =   new userdataservice();
@@ -173,8 +173,6 @@ $item->ageGroupCoached    =  $data1->ageGroupCoached;
 $item->languagesKnown     =  $data1->languagesKnown; 
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
-
-
  if ($item->status==0) 
  {
  $req2     = new emailService();
@@ -368,9 +366,7 @@ else if($_REQUEST['act']=="create_manage_user")
 {
 $data1                = json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
-
-$forgot_code =  mt_rand(1000,10000);
-
+$forgot_code          =  mt_rand(1000,10000);
 $item->email          =  $data1->email;
 $item->phone_no       =  $data1->phone_no;
 $item->proffession    =  $data1->proffession;
@@ -382,6 +378,7 @@ $item->forget_code    =  $forgot_code;
 $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
+$item->prof_id        =  $data1->prof_id;
 $req1= new userdataservice();
 $req3 = $req1->create_manage_user_exits($item);
 if($req3 == 1 )
@@ -1751,41 +1748,41 @@ echo json_encode($data3);
 
 /*********    CODE FOR APPLIYING FOR JOB BY THE USER   *************************/
 
-else if($_POST['act'] == "apply")
-{
+// else if($_POST['act'] == "apply")
+// {
 
-$userid      = urldecode($_POST ['user_id']);// Applicant User Id
-$id          = urldecode($_POST ['id']);       // Job id   
-$type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1    
-//$employerid  = urldecode($_POST ['employerid']);// Employer Id
+// $userid      = urldecode($_POST ['user_id']);// Applicant User Id
+// $id          = urldecode($_POST ['id']);       // Job id   
+// $type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1    
+// //$employerid  = urldecode($_POST ['employerid']);// Employer Id
 
-$rev         = new userdataservice();
-$res         = $rev->jobsapplied($userid , $id , $type);
-//die();
-$rev1        = new userdataservice();
-$res1        = $rev1->getEmpdeviceid($id);
+// $rev         = new userdataservice();
+// $res         = $rev->jobsapplied($userid , $id , $type);
+// //die();
+// $rev1        = new userdataservice();
+// $res1        = $rev1->getEmpdeviceid($id);
 
-$rev2        = new userdataservice();
-$res2        = $rev2->getdeviceid($userid);
-$date        = date("F j, Y, g:i a");
-$message = array('message'=>$res2['name']." "." has applied for a job" , 'Module'=>'8','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
-$empdevice_id =  $res1['device_id'];
-if($empdevice_id != '')
-{
-$pushobj      = new userdataservice();
-$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
-}
-$employerid   = $res1['userid'];
-$title        = 'job application';
-$savealertobj = new userdataservice();
-$message      = $message['message'];
-$type = '8'; // Applied for Job Alert Type recognition No. 
-$savealert    = $savealertobj->savealert($employerid , $type ,$message , $title , $userid);
-$resp['status'] = "Success";
-echo json_encode($resp);
-//echo $savealert;
-//echo json_encode($res);
-}
+// $rev2        = new userdataservice();
+// $res2        = $rev2->getdeviceid($userid);
+// $date        = date("F j, Y, g:i a");
+// $message = array('message'=>$res2['name']." "." has applied for a job" , 'Module'=>'8','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+// $empdevice_id =  $res1['device_id'];
+// if($empdevice_id != '')
+// {
+// $pushobj      = new userdataservice();
+// $pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
+// }
+// $employerid   = $res1['userid'];
+// $title        = 'job application';
+// $savealertobj = new userdataservice();
+// $message      = $message['message'];
+// $type = '8'; // Applied for Job Alert Type recognition No. 
+// $savealert    = $savealertobj->savealert($employerid , $type ,$message , $title , $userid);
+// $resp['status'] = "Success";
+// echo json_encode($resp);
+// //echo $savealert;
+// //echo json_encode($res);
+// }
 
 
 /******************************** CODE FOR GET APPLY JOBS *******************************************************/
@@ -2045,12 +2042,11 @@ else if($_REQUEST['act'] == "professional")
   $userType        =   '103';
   $where[]         =   '1 =1 ';
   $arr = array();
- if($userType != '')
- {
-    $where[] = " `userType` = '$userType' ";
-    $arr['userType'] =  $userType ; 
- }
-
+   if($userType != '')
+   {
+      $where[] = " `userType` = '$userType' ";
+      $arr['userType'] =  $userType ; 
+   }
   if($userid != '')
   {
     $where[] = " `userid` NOT IN ($userid) ";
@@ -2074,7 +2070,8 @@ else if($_REQUEST['act'] == "professional")
   }
     $whereclause = implode('AND', $where);
     $response   = $request->user_Info($whereclause);
-  
+
+  // echo "$whereclause";die();
 if($response)
 {
                                 $response      = $request->getfavForUser($response,$module, $userid);
@@ -2100,7 +2097,6 @@ else
 
 else if($_REQUEST['act'] == 'connection_status')
 {
- 
 $lite_user_id       =  @$_REQUEST['lite_user_id'];
 $prof_user_id       =  @$_REQUEST['prof_user_id'];
 $request            =  new UserProfileService();
@@ -2143,60 +2139,73 @@ echo json_encode($data);
 
 
 
-
 /**********************    New Apply Code  act=apply  *************************/
-// When the Job Event and Tournament is Apply then so used this code Please Ignore this Code 
 
-else if($_POST['act'] == "newapply")
+else if($_POST['act'] == "apply")
 {
-$userid      = urldecode($_POST ['user_id']);// Applicant User Id
+$userid      = urldecode($_POST ['user_id']); // Applicant User Id
 $id          = urldecode($_POST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
 $type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1 
 $module      = urldecode($_POST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
-$rev         = new userdataservice();
-$res         = $rev->apply($userid , $id ,$type,$module);
-if($res)
-{
-$rev1        = new userdataservice();
-$res1        = $rev1->getEmpdeviceid($id);
-$rev2        = new userdataservice();
-$res2        = $rev2->getdeviceid($userid);
+$request     = new userdataservice();
+$req         = new connect_userservice();
+$req1        = new emailService();
+$response    =  $request->apply($userid,$id,$type,$module);
 $date        = date("F j, Y, g:i a");
-switch ($module) 
-{
-case '1':
-  $message = array('message'=>$res2['name']." "." has applied for a job" , 'Module'=>'1','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
-     break;
-case '2':
-  $message = array('message'=>$res2['name']." "." has applied for a Event  " , 'Module'=>'2','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);    
-     break;
-case '3':
-  $message = array('message'=>$res2['name']." "." has applied for a  Tournament*** " , 'Module'=>'3','date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
-     break;
-} // End Switch
+$user_app    = 'L';
+    if ($response)
+    {
+    $response                  =  $request->FindDeviceId($id,$module);
+       if ($response == '')
+        {
+         $Result = array('status' => '0','data'=>'0' ,'msg'=>'Invalid');
+         echo json_encode($Result);die();
+        }
+        $device_id_Emp             =  $response['device_id'];
+        $email_id_Emp              =   $response['email'];
+        if ($device_id_Emp)
+        {
+          $response     = $request->userdata($userid);
+          $username     = $response['name'];
+          $email         = $response['email'];
+           if ($module=='1')
+           {
+              $message      = array('message'=>$username." "." has applied for a job" , 'Module'=>$module ,'date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+            }  
+          if ($module=='2')
+           {
+              $message      = array('message'=>$username." "." has applied for a Event" , 'Module'=>$module ,'date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+           }
+          if ($module=='3')
+           {
+             $message      = array('message'=>$username." "." has applied for a Tournament" , 'Module'=>$module ,'date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
+           }
+          $jsondata      = json_encode($message );
+         $response       = $req->alerts($userid,$user_app,$json_data); 
+          if ($response)
+          {
+             $response     = $request->sendPushNotificationToGCM($empdevice_id, $message);
+             $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success');
+             echo json_encode($Result);
+          }
+     }
+      
+             // $res2     = $req1->emailForApply($email_id_Emp,$email,$module);
+   
+    }
+    else
+    {
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not Apply');
+       echo json_encode($Result);
+    }
 
-$empdevice_id =  $res1['device_id'];
-echo "$empdevice_id";
-if($empdevice_id != '')
-{
-$pushobj      = new userdataservice();
-$pushnote     = $pushobj ->sendPushNotificationToGCM($empdevice_id, $message);
-}
-$employerid   = $res1['userid'];
-$title        = 'job application';
-$savealertobj = new userdataservice();
-$message      = $message['message'];
-$type = $module; // Applied for Job Alert Type recognition No. 
-$savealert    = $savealertobj->savealert($employerid , $type ,$message , $title , $userid);
-$resp['status'] = "Success";
-echo json_encode($resp);
-}
-else
-{
-$resp['status'] = "Failure";
-echo json_encode($resp);
-}
-}  //End Function
+
+} // End Function
+
+
+
+
+
 
 /*************************** New View the User is Apply the Job Event Tournament**********************/
 // When the Job Event and Tournament is gs_viewapply then so used this code Please Ignore this Code 

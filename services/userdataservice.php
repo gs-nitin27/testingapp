@@ -269,16 +269,12 @@ public function getdeviceid($id)
 
 public function getEmpdeviceid($id)
 {
-
 $query = mysql_query("SELECT ji.`userid` , us.`device_id` , us.`email`FROM `gs_jobInfo` AS ji LEFT JOIN `user` AS us ON ji.`userid` = us.`userid` WHERE ji.`id` = '$id'");
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
 $data = $row;
-
 }
 
 return $data;
@@ -1633,16 +1629,17 @@ case '3':
 
 public function apply($userid , $id , $type,$module)
 {
+
 switch ($module)
  {
    case '1':
-     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
      break;
    case '2':
-       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
      break;
      case '3':
-       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
+       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
        break;
   
  }  //End Switch
@@ -1655,6 +1652,67 @@ switch ($module)
       return 0;
     }
 }// End Function
+
+
+/********************This Function are used to find device Id**********************/
+
+public function  FindDeviceId($id,$module)
+{
+  //echo "ram";
+  //echo "$id";
+  //echo "$module";die();
+    if ($module==1)
+    {
+      $table ="`gs_jobinfo`";
+    } 
+    if ($module==2)
+    {
+      $table ="`gs_eventinfo`";
+    } 
+    if ($module==3)
+    {
+      $table ="`gs_tournament_info`";
+    } 
+       $query=mysql_query("SELECT  *FROM user WHERE userid=(SELECT userid FROM $table WHERE id=$id)");
+       $num=mysql_num_rows($query);
+        if ($num!=0) 
+       {
+            for ($i=0; $i <$num ; $i++) 
+            {
+              $row=mysql_fetch_assoc($query);
+              $data=$row;
+            }
+      return $data;  
+      }
+      else
+      {
+       return 0;
+      }
+}//End Function
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************/
+
+
 
 
 
