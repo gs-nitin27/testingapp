@@ -16,15 +16,10 @@ class connect_userservice
      {
      	$data =mysql_insert_id();
      	return $data;
-
-
-
      }
      else 
      {
-     	
-     	  return 0 ;
-
+       	  return 0 ;
      }
  }
 
@@ -329,32 +324,25 @@ public function joinStudentData($userdata)
 
 public function ClassInfo($student_id)
 {
- $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`=$student_id");
+ $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
   $num=mysql_num_rows($query);
   if ($num!=0) 
   {
-            // $a=array();
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
-              $a= a$row[$i]['classid'];
               $data[]   = $row ;
             }
-
-            print_r($data);die();
-            
-            $a=array();
-
-            print_r($data);
-            array_push($a,$data);
-
-//array_push($a,$data);
-print_r($a);
-die();
-
-//print_r($data);
+        return $data;
   }
 }
+
+
+
+
+
+
+
 
 
 

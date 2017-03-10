@@ -489,17 +489,13 @@ if($query)
 public function eventsearch($keyword)
 {
 $query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%'  ORDER BY `dateCreated` DESC ";
-//echo $query;
 $query1 = mysql_query($query);
 if($query1)
 {
-
 while($row = mysql_fetch_assoc($query1))
 {
 
 $rows[] = $row;
-//$res = array('data'=>$rows);
-
 }
   return $rows;
  } 
@@ -566,12 +562,8 @@ $rows[] = $row;
 
   public function getfavForUser($data,$type,$id)
 {
-//echo "dev";ec
-  //echo $id;
-   // print_r($type);die();
   	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
-    //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";
-  	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
+    	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
 
         if($type == '1' || $type == '2' || $type == '3')
         {
@@ -610,25 +602,7 @@ $rows[] = $row;
             	array_push($data[$i]['fav'], 0);
             	$data[$i]['fav'] = "0";
             }
-
-              // if($type != 1 && $type != ""){
-              // $end = $data[$i]['entry_end_date'];
-              // $now = date("Y-m-d");
-              // $date1=date_create($st);
-              // $date2=date_create($end);
-              // $diff=date_diff($date2,$date1);
-              // if($diff > 0)
-              // {
-              // //echo $diff->format("%a");
-              // $dayremain = $diff->format("%a");
-              // $data[$i]['days'] = $dayremain;}
-
-              // else{
-                 
-              //    $data[$i]['days'] = 0;
-
-              // }
-              // }
+             
                 }
        return $data;
         
@@ -644,30 +618,10 @@ else
         for($i = 0 ; $i< $num ; $i++)
         {    
             $val = $data[$i][$type];
-            //echo $val;
-            array_push($data[$i]['fav'], 1);
-            	$data[$i]['fav'] = "0";
-              // if($type != 1   && $type != ""){
-              // $end = $data[$i]['entry_end_date'];
-              // $now = date("Y-m-d");
-              // $date1=date_create($st);
-              // $date2=date_create($end);
-              // $diff=date_diff($date2,$date1);
-              // if($diff > 0){
-              // //echo $diff->format("%a");
-              // $dayremain = $diff->format("%a");
-              // $data[$i]['days'] = $dayremain;}
-
-              // else{
-                 
-              //    $data[$i]['days'] = 0;
-
-              //     }
-              //   }
-
+             array_push($data[$i]['fav'], 1);
+           	$data[$i]['fav'] = "0";
         }
-         //print_r($data);
-         return $data;
+            return $data;
       }
    }
 
@@ -677,19 +631,16 @@ else
 public function a($id,$type)
 {
 $query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
-
-if(mysql_num_rows($query)>0){
-
+if(mysql_num_rows($query)>0)
+{
    while($row = mysql_fetch_assoc($query))
    {
-     
-      $data = $row;
-
+         $data = $row;
    }
 return $data;
 }
-else{
-
+else
+{
 	return 0;
    }
 }
@@ -1726,11 +1677,9 @@ case '1':
       break;
 case '2':
        $query = mysql_query("SELECT `ei`.`id`,`TITLE`,`description`,`image` FROM ` gs_eventinfo` AS ei ,`user_events` ue WHERE `ei`.`id`=`ue`.`userevent` AND `ue`.`userid`=$userid AND `ue`.`status`>=1");
-
       break;
 case '3':
     $query = mysql_query("SELECT `gs_tournament_info`.`id`,`TITLE`,`description`,`image` FROM `gs_tournament_info`,`user_jobs` WHERE `gs_jobInfo`.`id`=`user_jobs`.`userjob` AND `user_tournaments`.`userid`=$userid AND `user_tournaments`.`status`>=1");
-
       break;
       default:
       $resp['status'] = "Falure";
@@ -1754,6 +1703,8 @@ case '3':
 }//End Function
 
 
+
+
 //###################### welcome email send to user ##############################################
 
        
@@ -1761,10 +1712,7 @@ case '3':
 public function sendEmail_for_password_reset($id)
 {
 
- // print_r($id);
-// die;
 $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
-
  <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
 <tbody><tr>
 <td align="center" valign="top">
@@ -1817,16 +1765,12 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
    $email=$row['email'];
    $user_name= $row['name'];
    }
-                //print_r($email);
-               // die;
-               require('class.phpmailer.php');
+              require('class.phpmailer.php');
               $mail = new PHPMailer();
               $to=$email;
               $from="info@darkhorsesports.in";
               $from_name="Getsporty";
               $subject="Welcome to Getsporty Manage app";
-
-
               $mail = new PHPMailer();  // create a new object
               $mail->IsSMTP(); // enable SMTP
               $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
@@ -1853,11 +1797,11 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 
 public function jobsearch_user($fwhere)
 {
+
 //echo $fwhere;die();
 //$fwhere   =" WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' ";
 
 $query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` where $fwhere  ORDER BY `date_created` DESC";
-//echo $query;
 $query1 = mysql_query($query);
 if(mysql_num_rows($query1) > 0)
 {
@@ -1875,24 +1819,19 @@ $rows[] = $row;
 
 
 
+
+
 /**********************************************************************/
-
-
 public function user_Info($whereclause)
 {
- // echo "$whereclause";die();
-//echo "SELECT  *FROM `user` WHERE $whereclause";die();
  $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
-
 if(mysql_num_rows($query) > 0)
 {
 while($row = mysql_fetch_assoc($query))
 {
 $rows[] = $row;
 }
-  
-
-  return $rows;
+    return $rows;
  } 
   else
  {
@@ -1904,53 +1843,20 @@ $rows[] = $row;
 
 
 
-
-
-
-
-
-
-
-
-/****************This code for Edit Profile [User] 3-Feb-2017**************************/
-
-// public function edit_user($userid,$prof_id,$data)
-// {
-
-//    $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
-//   if($query)
-//        {
-//          return 1;
-//        } 
-//         else
-//         {    
-//             return 0;
-//         }  
-        
-// } 
-
-
-
-//  public function listuserdata($userid)
-//     {
-//        $query  = mysql_query("SELECT *FROM `gs_userdata` where `userid` = '$userid'");
-//        if(mysql_num_rows($query)>0)
-//        {
-//           while($row = mysql_fetch_assoc($query))
-//           {
-//             $data = $row;
-//           }
-//         return $data;
-//         }
-//         else 
-//         {
-//          return 0;
-//         }
-
-
-// } //  End of Function
-
-
+public function searchEvent($where)
+{
+  $query =mysql_query("SELECT *FROM gs_eventinfo where $where");
+  $num=mysql_num_rows($query);
+  if ($num!=0) 
+  {
+            for ($i=0; $i <$num ; $i++) 
+            {
+              $row=mysql_fetch_assoc($query);
+              $data[]   = $row ;
+            }
+        return $data;
+  }
+}
 
 
 
