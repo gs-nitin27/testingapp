@@ -9,7 +9,9 @@ public function createClass($item,$code)
 $start_date = $item->start_date;
 $end_date = $item->end_date;
 
-$query = mysql_query("INSERT INTO `gs_coach_class`(`id`, `userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `venue`,`location`,`date_created`) VALUES ('','$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time',FROM_UNIXTIME ('$start_date'),FROM_UNIXTIME ('$end_date'),'$item->address','$item->location',CURDATE())");
+
+
+$query = mysql_query("INSERT INTO `gs_coach_class`(`userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `venue`,`location`,`description`,`date_created`,`days`,`age_group`,`class_fee`,`class_strength`,`contact_no`,`class_host`) VALUES ('$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time',FROM_UNIXTIME ('$start_date'),FROM_UNIXTIME ('$end_date'),'$item->address','$item->location','$item->description',CURDATE(),'$item->days','$item->age_group','$item->fee','$item->class_strength','$item->phone_no','$item->class_host')");
 if($query)
 {
 return true;
@@ -23,10 +25,8 @@ return false;
 
 public function CheckforExistingClass($item)
 {
-
 	$end_date   = "FROM_UNIXTIME(".$item->end_date.")";
 	$start_date = "FROM_UNIXTIME(".$item->start_date.")";
-
 
 $query = mysql_query("SELECT `class_title` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , $start_date) < 0 OR DATEDIFF(`class_start_date` , $start_date) = 0) AND (DATEDIFF(`class_end_date` , $end_date) > 0 OR DATEDIFF(`class_end_date` , $end_date) = 0) AND (`class_start_timing` = '$item->start_time')AND (`class_end_timing` = '$item->end_time')ORDER BY `class_start_timing` DESC");
 
@@ -83,25 +83,19 @@ return false;
 }
 public function getstudentlist($id)
 {
-
-$query = mysql_query("SELECT * FROM `user` WHERE `userid` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `classid` = '$id') AND `prof_id` = 'Athletes'");
+ $query = mysql_query("SELECT `student_id` FROM `gs_class_data` WHERE `classid`= $id ");
+// $query = mysql_query("SELECT * FROM `user` WHERE `userid` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `classid` = '$id') AND `prof_id` = 'Athletes'");
 if($query)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
-
 $data[] = $row;
-
-
 }
+//print_r($data);die;
 return $data;
 }
 else 
 	return 0;
-
-
 }
 
 public function addstudent($item)

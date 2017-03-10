@@ -9,6 +9,7 @@ if($_REQUEST['act'] == 'connect')
     $user_request_id = $_REQUEST['lite_user_id'];
     $user_responser_id = $_REQUEST['prof_user_id'];
     $user_app = $_REQUEST['user_app'];
+    
     $req = new connect_userservice();
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
