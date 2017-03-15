@@ -271,9 +271,9 @@ $response       =  $request->getClass($userid);
 
 else if($_REQUEST['act'] == 'daily_log')
 {
- 
- $data           =  file_get_contents("php://input");
- $userdata       =  json_decode(file_get_contents("php://input"));
+
+  $data           =  file_get_contents("php://input");
+  $userdata       =  json_decode(file_get_contents("php://input"));
   $request           =  new connect_userservice();
   $response          =  $request->createdDailyLog($userdata);
 if($response)

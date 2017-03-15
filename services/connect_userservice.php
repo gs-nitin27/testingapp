@@ -342,13 +342,14 @@ public function createdDailyLog($userdata)
   $activity         =  $userdata->activity;
   $unit             =  $userdata->unit;
   $volume           =  $userdata->volume;
-if (empty($userid) || empty($activity) || empty($unit) || empty($volume))
+  $date             =  $userdata->date;
+if (empty($userid) || empty($activity) )
   {
     return 0;
   }
 else
 {
-    $query= mysql_query("INSERT INTO gs_athlit_dailylog (`id`,`userid`,`activity`, `unit`,`volume`,`date`) VALUES ('0',' $userid','$activity ','$unit','$volume',CURDATE())");
+    $query= mysql_query("INSERT INTO gs_athlit_dailylog (`id`,`userid`,`activity`, `unit`,`volume`,`date`) VALUES ('0',' $userid','$activity ','$unit','$volume','$date')");
 return 1;
 }
 
