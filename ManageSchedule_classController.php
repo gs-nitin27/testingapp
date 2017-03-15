@@ -98,7 +98,7 @@ else if($_REQUEST['act'] == "update_class")
                             date_add($date, date_interval_create_from_date_string($data->duration.'months'));
                             $ndate = date_format($date, 'Y-m-d');
 
-                            $item->user_id      = $data->user_id;
+                            $item->user_id        = $data->user_id;
 							$item->class_name     = $data->class_name;
 							$item->description    = $data->description;
 							$item->days           = $data->days;
@@ -126,14 +126,15 @@ else if($_REQUEST['act'] == "update_class")
 
 
 			 }
- 
+  
 
 else if($_REQUEST['act'] == "get_studentlist")
  {
-                           // print_r($_REQUEST);die;
+                          //print_r($_POST);die;
 						//$id = urldecode($_POST['classid']);
 						$data  = json_decode($_POST['data']);
                         $id = $data->classid;
+                        //print_r($id);die;
 						$req = new manageSchedulingService();
 						$res = $req->getstudentlist($id);
                       

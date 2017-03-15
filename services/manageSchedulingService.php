@@ -109,15 +109,13 @@ return false;
 }
 public function getstudentlist($id)
 {
- $query = mysql_query("SELECT `student_id` FROM `gs_class_data` WHERE `classid`= $id ");
-// $query = mysql_query("SELECT * FROM `user` WHERE `userid` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `classid` = '$id') AND `prof_id` = 'Athletes'");
+$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user INNER JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
 if($query)
 {
 while($row = mysql_fetch_assoc($query))
 {
 $data[] = $row;
 }
-//print_r($data);die;
 return $data;
 }
 else 
