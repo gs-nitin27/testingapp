@@ -274,18 +274,8 @@ else if($_REQUEST['act'] == 'daily_log')
  
  $data           =  file_get_contents("php://input");
  $userdata       =  json_decode(file_get_contents("php://input"));
- $userid         =  @$_REQUEST['userid'];
- $title          =  @$_REQUEST['title'];
- $description    =  @$_REQUEST['description'];
- 
-
-
-
-
-
-
-$request        =  new connect_userservice();
-$response       =  $request->createdDailyLog($userid);
+  $request           =  new connect_userservice();
+  $response          =  $request->createdDailyLog($userdata);
 if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Create Daily Log ');
@@ -296,9 +286,6 @@ if($response)
           $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Create Daily Log');
           echo json_encode($Result);
    } 
-
-
-
 }
 
 
