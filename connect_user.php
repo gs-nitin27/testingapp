@@ -241,9 +241,6 @@ Student Id and Result is display all Class Information
 
 
 
-
-
-
 // This Act are used to view all class created By User
 
 /*********************************View All Class************************/

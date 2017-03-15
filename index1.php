@@ -13,12 +13,12 @@ function hit(){
  
 var data = {   
        "class_id" : "86"  ,
-        "class_name"     : "test  new test  class", 
+        "class_name"     : "test  new test test test class", 
         "description"    : "new class",   
         "days"           : "1,2,3,4,5,6",   
         "address"        : "new class", 
-        "start_date"     : "2017-12-1",  
-          "end_date"       : "2019-4-1",             "start_time"     : "11 a.m",             "end_time"       : "12 a.m",             "user_id"        : "58",             "location"       : "noida",             "duration"       : "3",             "fee"            : "6000",             "age_group"      : "4 and above",             "contact_no"     : "8956237412",             "class_strength" :"50",             "class_host"     :"Nitin"            };
+        "start_date"     : "2017-12-10",  
+          "end_date"       : "2019-4-10",             "start_time"     : "12 a.m",             "end_time"       : "1 p.m",             "user_id"        : "58",             "location"       : "noida",             "duration"       : "3",             "fee"            : "6000",             "age_group"      : "4 and above",             "contact_no"     : "8956237412",             "class_strength" :"50",             "class_host"     :"Nitin"            };
 var data = JSON.stringify(data);
 console.log(data);
 
