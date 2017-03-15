@@ -90,10 +90,11 @@ if($_REQUEST['act'] == 'connect')
 
  else if($_REQUEST['act'] == 'get_connected_users')
  { 
- $userid         =  @$_REQUEST['userid'];
+ $userid         =  @$_REQUEST['userid'];   // Lite user id
  $usertype       =  @$_REQUEST['usertype'];
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
+ //print_r($response);die();
  $response       =  $request->getConnectedStatus($response, $userid);
   if($response)
   {
@@ -166,12 +167,16 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $student_id       =  $_REQUEST['student_userid'];
  $request          =  new connect_userservice();
  $response         =  $request->getClassInfo($class_id);
- $response         =  $request->getClassJoinStudent($response, $student_id);
+ 
+ if ($response)
+ {
+  $response         =  $request->getClassJoinStudent($response, $student_id);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
              echo json_encode($Result);
    }
+}
    else
    {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
@@ -257,6 +262,28 @@ $response       =  $request->getClass($userid);
    } 
 }
 
+
+
+/*********************************Daily Log************************/
+
+else if($_REQUEST['act'] == 'daily_log')
+{
+ 
+ $data           =  file_get_contents("php://input");
+ $userdata       =  json_decode(file_get_contents("php://input"));
+  $request           =  new connect_userservice();
+  $response          =  $request->createdDailyLog($userdata);
+if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'Create Daily Log ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Create Daily Log');
+          echo json_encode($Result);
+   } 
+}
 
 
 

@@ -189,6 +189,7 @@ public function getClass($userid)
       for ($i=0; $i <$num ; $i++) 
       {
         $row=mysql_fetch_assoc($query);
+        $row['join_status']=0;
         $data[]=$row;
       }
 return $data;  
@@ -206,7 +207,9 @@ else
 
 public function getConnectedStatus($response, $userid)
 {
-  $query= mysql_query("SELECT `prof_user_id`,req_status FROM `gs_connect` WHERE `lite_user_id`=$userid");
+//echo "SELECT `prof_user_id`,req_status FROM `gs_connect` WHERE `lite_user_id`=$userid";die();
+
+  $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `lite_user_id`=$userid");
    $num=mysql_num_rows($query);
   if ($num!=0) 
   {
@@ -221,8 +224,12 @@ public function getConnectedStatus($response, $userid)
                 {
                      $response[$i]['req_status']=$data[$i]['req_status'];
                 }
+                else
+                {
+                 $response[$i]['req_status']=$data[$i]['req_status'];
+                }
             }
-            return $response;  
+              return $response;  
   }
    else
   {
@@ -230,7 +237,6 @@ public function getConnectedStatus($response, $userid)
   }
 
 }
-
 
 
 /************ This Function are used to find Class  Informantion Created by Coach*******/
@@ -257,47 +263,32 @@ public function getClassInfo($class_id)
 
 /**************************************************************/
 
-
-public function getClassJoinStudent($response, $student_id)
-{
-
+ public function getClassJoinStudent($response, $student_id)
+ {
   $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`=$student_id");
+  $num1 =mysql_num_rows($query);
   $num=count($response);
-  if ($num!=0) 
-  {
-            for ($i=0; $i <=$num ; $i++) 
-            {
-              $row=mysql_fetch_assoc($query);
-              $data[]=$row;
+     if ($num!=0) 
+     {             
+              while($row = mysql_fetch_assoc($query))
+              {
+                 for ($i=0; $i < sizeof($response); $i++)
+                  { 
+                       if($row['classid'] == $response[$i]['id'])
+                       {
+                        $response[$i]['join_status'] = 1;
+                        break;
+                       }
+                 }
             }
-            for ($i=0; $i <=$num ; $i++) 
-            {
-              for ($j=$i+1; $j <=$num ; $j++) 
-              { 
-               
-                if ($response[$i]['id']==$data[$j]['classid'])
-                {
-                     $response[$i]['join_status']='1';
-                }
-                else
-                {
-                  $response[$i]['join_status']='0';
-                }
-
-            }
-          }
-
-             return $response;  
-  }
-   else
-  {
-   return 0;
-  }
-
+            return $response;
+     }
+    else
+    {
+        return 0;
+    }
 }
-
-
-
+//End Function 
 
 /************ This Function are used to Insert the Student Record*******/
 
@@ -326,35 +317,54 @@ public function joinStudentData($userdata)
 
 /********************This Function are used to find the Class informatino********************/
 
-
 public function ClassInfo($student_id)
 {
- $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`=$student_id");
+ $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
   $num=mysql_num_rows($query);
   if ($num!=0) 
   {
-            // $a=array();
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
-              $a= $row[$i]['classid'];
+
+             // $a= $row[$i]['classid'];
               $data[]   = $row ;
             }
-
-            print_r($data);die();
-            
-            $a=array();
-
-            print_r($data);
-            array_push($a,$data);
-
-//array_push($a,$data);
-print_r($a);
-die();
-
-//print_r($data);
+        return $data;
   }
 }
+
+
+
+/************************Create Daily Log**************************************/
+
+public function createdDailyLog($userdata)
+{
+  $userid           =  $userdata->userid;
+  $activity         =  $userdata->activity;
+  $unit             =  $userdata->unit;
+  $volume           =  $userdata->volume;
+if (empty($userid) || empty($activity) || empty($unit) || empty($volume))
+  {
+    return 0;
+  }
+else
+{
+    $query= mysql_query("INSERT INTO gs_athlit_dailylog (`id`,`userid`,`activity`, `unit`,`volume`,`date`) VALUES ('0',' $userid','$activity ','$unit','$volume',CURDATE())");
+return 1;
+}
+
+} // End Function
+
+
+
+
+
+
+
+
+
+
 
 
 
