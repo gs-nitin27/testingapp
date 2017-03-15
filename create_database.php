@@ -19,6 +19,7 @@ error_reporting(E_ERROR | E_PARSE);
  |                                   UserType =104
  | When the user is Signup then the Device Id are store in User Table
 */
+ 
 
 if($_REQUEST['act'] == 'gs_signup')
 {
