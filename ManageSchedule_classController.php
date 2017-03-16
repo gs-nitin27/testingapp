@@ -143,8 +143,8 @@ else if($_REQUEST['act'] == "get_studentlist")
  {
                           //print_r($_POST);die;
 						//$id = urldecode($_POST['classid']);
-						$data  = json_decode($_POST['data']);
-                        $id = $data->classid;
+						$data  = json_decode($_REQUEST['classid']);
+                        $id = $data;
                         //print_r($id);die;
 						$req = new manageSchedulingService();
 						$res = $req->getstudentlist($id);
