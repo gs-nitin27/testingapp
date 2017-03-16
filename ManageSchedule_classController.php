@@ -54,30 +54,23 @@ if($_REQUEST['act'] == "create_class")
 		    {
 						 $data= array('data'=>$res1, 'status'=>1);
 						 echo json_encode($data);
-		     
-						
 		    }
 		    else
 		    {
                          $data= array('data'=>0 , 'status'=>1);
 						 echo json_encode($data); 
-                 }
+            }
 		    }
 		    else    
 		    {
-
 					     $data= array('data'=>0 , 'status'=>0);
 						 echo json_encode($data); 
-
 			}
-
 			    }
 			 else
 			    {
-			            
 				           $data= array('data'=>$res2, 'status'=>2, 'message'=>'already exist for same schedule');
 				 		  echo json_encode($data); 
-
 				}
 
 		}
@@ -88,11 +81,6 @@ else if($_REQUEST['act'] == "update_class")
 
 							$data  = json_decode($_POST['data']);
 							$item = new stdClass();
-							//print_r($data);
-							//$test = $_REQUEST['data'];
-							//print_r($data);
-							//die;
-
 
 							$date = date_create($data->start_date);
                             date_add($date, date_interval_create_from_date_string($data->duration.'months'));
@@ -116,13 +104,36 @@ else if($_REQUEST['act'] == "update_class")
 							$item->phone_no       = $data->contact_no;
 							$item->location       = $data->location;
 
-	
+	 
 							
 	                        $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
 
 							$req = new manageSchedulingService();
-							$res = $req->updateClass($item,$code);
-							echo $res;
+
+                             $cheakClass_timing = $req->cheakclass_exist_update($item);
+
+                             if($cheakClass_timing == 0)
+                             {
+							  $res = $req->updateClass($item,$code);
+                            if($res)
+                            {
+							$cdata =$req->get_updated_classdata($item);
+
+							$data= array('status'=>$res , 'data' => $cdata);
+						    echo json_encode($data);
+							}
+							else
+							{
+								 $data = array('status' => $res);
+								 echo json_encode($data);
+							}
+							//echo $res;
+						}
+						else
+						{
+							     $data = array('status' => 2);
+								 echo json_encode($data);
+						}
 
 
 			 }
@@ -137,20 +148,19 @@ else if($_REQUEST['act'] == "get_studentlist")
                         //print_r($id);die;
 						$req = new manageSchedulingService();
 						$res = $req->getstudentlist($id);
-                      
+               
                          // print_r($res);die;
-
-						if($res != 0){
-						$data= array('data'=>$res);
-						echo json_encode($data);
-						}else
+						if($res != 0)
 						{
-
-							echo $res;
+						$data= array('status' =>1,'data'=>$res);
+						echo json_encode($data);
 						}
-	}
-
-
+						else
+						{
+					       $data= array('status' =>0,'data'=>0);
+						   echo json_encode($data);
+						}
+}
 
 else if($_POST['act'] == "add_student")
 {
@@ -236,8 +246,8 @@ else if($_POST['act'] == "get_classlisting")
 					    $res[$j]['class_end_timing']   = $end;
 					    $res[$j]['status']             = $resc1[$i]['resc_type'];   
 					}
-					        }
-					     }
+				}
+			 }
 
 					}        for($k = 0 ; $k<sizeof($res) ;$k++)
 					         {
@@ -247,7 +257,7 @@ else if($_POST['act'] == "get_classlisting")
 					    
 					             $res[$k]['status']   = '4';
 
-					            }
+					             }
 
 
 					         }
@@ -264,10 +274,13 @@ else if($_POST['act'] == "get_classlisting")
 
 
 
-else if($_POST['act'] == "class_resc")
+else if($_REQUEST['act'] == "class_resc")
 {
 					$data1 = json_decode($_POST['data']);
 					$item  = new stdClass();
+                     
+                     // print_r($data1);die;
+
 
 					$item->userid              = $data1->userid;
 					$item->date                = strtotime($data1->date);
@@ -298,8 +311,6 @@ else if($_POST['act'] == "class_resc")
 }
 
 echo $res1;
-
-
 
 }
 
