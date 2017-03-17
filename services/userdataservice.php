@@ -1604,12 +1604,9 @@ switch ($module)
 
 public function  FindDeviceId($id,$module)
 {
-  //echo "ram";
-  //echo "$id";
-  //echo "$module";die();
-    if ($module==1)
+ if ($module==1)
     {
-      $table ="`gs_jobinfo`";
+      $table ="`gs_jobInfo`";
     } 
     if ($module==2)
     {
@@ -1618,8 +1615,8 @@ public function  FindDeviceId($id,$module)
     if ($module==3)
     {
       $table ="`gs_tournament_info`";
-    } 
-       $query=mysql_query("SELECT  *FROM user WHERE userid=(SELECT userid FROM $table WHERE id=$id)");
+    }  
+       $query=mysql_query("SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)");
        $num=mysql_num_rows($query);
         if ($num!=0) 
        {
