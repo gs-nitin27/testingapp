@@ -77,7 +77,7 @@ $user_image         =  $data->user_image;
             $status=0;
      }
     
-       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('','$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
+       $query =mysql_query("INSERT INTO `user`(`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
        if($query)
        {
              $id = mysql_insert_id();
@@ -1633,35 +1633,8 @@ public function  FindDeviceId($id,$module)
       }
 }//End Function
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /***************************************************/
-
-
-
-
-
-
-
-
 
 //  *************** New Code for User is view apply  our JOB , EVENT ,TOURNAMENT**********************
 // This code for view Apply when the User is apply  our JOB , EVENT ,TOURNAMENT so Pleas Ignore this Code
