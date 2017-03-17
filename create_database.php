@@ -2073,12 +2073,12 @@ echo json_encode($data);
 
 /**********************    New Apply Code  act=apply  *************************/
 
-else if($_POST['act'] == "apply")
+else if($_REQUEST['act'] == "apply")
 {
-$userid      = urldecode($_POST ['user_id']); // Applicant User Id
-$id          = urldecode($_POST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
-$type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1 
-$module      = urldecode($_POST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
+$userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
+$id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
+$type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
+$module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();
