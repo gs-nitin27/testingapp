@@ -436,5 +436,34 @@ else if($_POST['act'] == "send_notification")
 
 }
 
+else if($_REQUEST['act'] == 'update_fees') 
+{
+    	//$data = json_decode($_REQUEST['student_userid']);
+    	$item = new stdClass();
+          
+       //print_r($data);die;
+
+    	$item->student_userid   = $_REQUEST['student_userid'];
+    	$item->class_id         = $_REQUEST['class_id'];
+    	$item->paid             = $_REQUEST['paid'];
+
+    	$res = new manageSchedulingService();
+
+    	$req = $res->update_fees($item);
+
+    	if($res)
+    	{
+          
+          $data = array('status' =>1 , 'msg' => 'Fees updated');
+          echo json_encode($data);
+    	}
+    	else
+    	{
+    		$data = array('status' =>0 ,'msg'=>'Fees not updated');
+    		echo json_encode($data);
+    	}
+    	
+}
+
 
 ?>

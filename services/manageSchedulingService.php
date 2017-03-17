@@ -420,7 +420,20 @@ if($query1)
   }
 
 
+public function update_fees($item)
+{
+    // print_r($item);die;
+    $query = mysql_query("UPDATE `gs_class_data` SET `paid` = '$item->paid'  WHERE `classid` ='$item->class_id' AND `student_id` = '$item->student_userid' ");
 
+    if($query)
+    {
+       return 1 ;
+    }else
+    {
+      return 0;
+    }
+
+}
 
 
 
