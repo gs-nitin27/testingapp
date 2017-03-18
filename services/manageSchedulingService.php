@@ -1,7 +1,7 @@
 <?php
 class manageSchedulingService
 {
-
+ 
 
 public function createClass($item,$code)
 {
@@ -84,10 +84,31 @@ $end_date =   $item->end_date;
 $query = mysql_query("UPDATE `gs_coach_class` SET `class_title` = '$item->class_name',`description`='$item->description',`days` = '$item->days',`class_fee` = '$item->fee',`age_group` = '$item->age_group',`class_strength` = '$item->class_strength',`class_host`= '$item->class_host',`contact_no` = '$item->phone_no' , `location` = '$item->location' ,`class_code`='$code', `class_start_timing`='$item->start_time',`class_end_timing`='$item->end_time',`class_start_date` = FROM_UNIXTIME ($start_date),`class_end_date` = FROM_UNIXTIME ($end_date), `venue` = '$item->address' WHERE `id` = '$item->class_id'");
 if($query)
 {
-return true;
+return 1;
 }
 else 
-return false;
+return 0;
+}
+
+public function cheakclass_exist_update($item,$code)
+{
+   $query = mysql_query("SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (`class_start_timing` = '$item->start_time' OR `class_end_timing`= '$item->end_time')");
+
+if(mysql_num_rows($query)>0)
+{
+while($rows = mysql_fetch_assoc($query))
+{
+$data[] = $rows;
+
+}
+return $data;
+
+}
+else{
+
+return 0;
+
+        }
 }
 
 public function getclassdata($item)
@@ -107,17 +128,35 @@ else
 return false;
 
 }
+
+public function get_updated_classdata($item)
+{
+
+$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$item->class_id'");
+if(mysql_num_rows($query) == 1){
+	while($row = mysql_fetch_assoc($query))
+	{
+       $data = $row;
+       return $data;
+
+	}
+      }
+else 
+
+return false;
+
+}
+
+
 public function getstudentlist($id)
 {
- $query = mysql_query("SELECT `student_id` FROM `gs_class_data` WHERE `classid`= $id ");
-// $query = mysql_query("SELECT * FROM `user` WHERE `userid` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `classid` = '$id') AND `prof_id` = 'Athletes'");
+$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user INNER JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
 if($query)
 {
 while($row = mysql_fetch_assoc($query))
 {
 $data[] = $row;
 }
-//print_r($data);die;
 return $data;
 }
 else 
@@ -130,16 +169,12 @@ $date = $item->joining_date;
 $query = mysql_query("INSERT INTO `gs_class_data`(`id`, `classid`, `student_id`, `joining_date`, `fees`, `paid`, `date_added`) VALUES ('','$item->classid','$item->student_id',FROM_UNIXTIME ('$date'),'$item->fees','',CURDATE())");
 if($query)
 {
-
 return true;
-
 }
 else{
 
 	return false;
           }
-
-
   }
 
 public function getStudents($class)
@@ -170,29 +205,19 @@ if($date == ""){
 
 }else if($date != "")
 {
-
 $date = "FROM_UNIXTIME(".$date.")";
-
 }
 
 $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` GROUP BY `class_code` HAVING `userid` = '$userid' AND (DATEDIFF(`class_start_date` , $date) < 0 OR DATEDIFF(`class_start_date` , $date) = 0) AND (DATEDIFF(`class_end_date` , $date) > 0 OR DATEDIFF(`class_end_date` , $date) = 0) ORDER BY `class_start_timing` DESC");
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
 $data[] = $row; 
-
-
 }
 return $data;
-
 }else
 return false;
-
-
-
 }
 
 public function varify_existing($item, $data)
@@ -200,16 +225,11 @@ public function varify_existing($item, $data)
 {
 	if($data != "")
 	{
-     
-     $classid = $item->existing_classid;
-
-    
-
+       $classid = $item->existing_classid;
 	}
 	else
 	{
-
-     $classid = $item->classid;
+       $classid = $item->classid;
 	}
 //echo "SELECT * FROM `class_reschedule` WHERE `classid` = '$classid' AND `userid` = '$item->userid' AND `resc_date` = FROM_UNIXTIME($item->date)";
 $query  = mysql_query("SELECT * FROM `class_reschedule` WHERE `classid` = '$classid' AND `userid` = '$item->userid' AND `resc_date` = FROM_UNIXTIME($item->date)");
@@ -226,8 +246,7 @@ $query1 = mysql_query("DELETE FROM `class_reschedule` WHERE `classid` = '$classi
 
 public function create_reschedule($item)
 {
-
-$query = mysql_query("INSERT INTO `class_reschedule`(`id`, `classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('','$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
+$query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
 if($query)
 {
 
@@ -243,8 +262,6 @@ return false;
 
 public function get_reschedule($date)
 {
-	//echo "SELECT * FROM `class_reschedule` WHERE `resc_date` = FROM_UNIXTIME($date)";
-
 $query = mysql_query("SELECT * FROM `class_reschedule` WHERE `resc_date` = FROM_UNIXTIME($date) ORDER BY `start_time` ASC");
 if(mysql_num_rows($query)>0)
 {
@@ -403,7 +420,20 @@ if($query1)
   }
 
 
+public function update_fees($item)
+{
+    // print_r($item);die;
+    $query = mysql_query("UPDATE `gs_class_data` SET `paid` = '$item->paid'  WHERE `classid` ='$item->class_id' AND `student_id` = '$item->student_userid' ");
 
+    if($query)
+    {
+       return 1 ;
+    }else
+    {
+      return 0;
+    }
+
+}
 
 
 

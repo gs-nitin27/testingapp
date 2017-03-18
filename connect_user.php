@@ -166,8 +166,7 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $student_id       =  $_REQUEST['student_userid'];
  $request          =  new connect_userservice();
  $response         =  $request->getClassInfo($class_id);
- 
- if ($response)
+  if ($response)
  {
   $response         =  $request->getClassJoinStudent($response, $student_id);
    if($response)
@@ -266,9 +265,9 @@ $response       =  $request->getClass($userid);
 
 else if($_REQUEST['act'] == 'daily_log')
 {
-
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
+  print_r($userdata);die();
   $request           =  new connect_userservice();
   $response          =  $request->createdDailyLog($userdata);
   if($response)

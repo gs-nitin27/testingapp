@@ -875,7 +875,7 @@ echo json_encode($user);
 
 else if($_POST['act']=="createjob")
 {
-$status = array('failure' => 0 , 'success' => 1);
+//$status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
 $item = new stdClass(); 
 $item->id                    = $data1->id;
@@ -908,11 +908,13 @@ $item->image                 = $data1->image;
 $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
-{
+{ 
+//$status = array('success' => 1);
 echo json_encode($status['success']);
 }
 else
 {
+//$status = array('failure' => 0 , 'success' => 1);  
 echo json_encode($status['failure']);
 }
 }
@@ -1361,18 +1363,18 @@ echo json_encode($data);
 
 //********* CODE FOR SEARCHING TOURNAMENTS **********//
 
-else if ($_POST['act'] == "search_tournament" )
+else if ($_REQUEST['act'] == "search_tournament" )
 {
  $id        = urldecode($_POST ['user_id']);
  $type      = urldecode($_POST ['type']);
  $age_group = urldecode($_POST ['age_group']);
  $level     = urldecode($_POST ['level']);
- $location  = urldecode($_POST ['location']);
+ $location  = urldecode($_REQUEST ['location']);
  $gender    = urldecode($_POST ['gender']);
  $sport     = urldecode($_POST ['sport']);
  $subs      = urldecode($_POST['subs']);
  $para      = urldecode($_POST['para']);
- 
+//echo $location;print_r($_REQUEST);
 if($para == '')
 {
 
@@ -2071,12 +2073,12 @@ echo json_encode($data);
 
 /**********************    New Apply Code  act=apply  *************************/
 
-else if($_POST['act'] == "apply")
+else if($_REQUEST['act'] == "apply")
 {
-$userid      = urldecode($_POST ['user_id']); // Applicant User Id
-$id          = urldecode($_POST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
-$type        = urldecode($_POST ['type']);   // when user is Apply the Status/ is Set the 1 
-$module      = urldecode($_POST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
+$userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
+$id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
+$type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
+$module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();

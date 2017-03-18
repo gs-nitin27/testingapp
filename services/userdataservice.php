@@ -77,7 +77,7 @@ $user_image         =  $data->user_image;
             $status=0;
      }
     
-       $query =mysql_query("INSERT INTO `user`(`userid`,`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('','$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
+       $query =mysql_query("INSERT INTO `user`(`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
        if($query)
        {
              $id = mysql_insert_id();
@@ -1604,12 +1604,9 @@ switch ($module)
 
 public function  FindDeviceId($id,$module)
 {
-  //echo "ram";
-  //echo "$id";
-  //echo "$module";die();
-    if ($module==1)
+ if ($module==1)
     {
-      $table ="`gs_jobinfo`";
+      $table ="`gs_jobInfo`";
     } 
     if ($module==2)
     {
@@ -1618,8 +1615,8 @@ public function  FindDeviceId($id,$module)
     if ($module==3)
     {
       $table ="`gs_tournament_info`";
-    } 
-       $query=mysql_query("SELECT  *FROM user WHERE userid=(SELECT userid FROM $table WHERE id=$id)");
+    }  
+    $query=mysql_query("SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)");
        $num=mysql_num_rows($query);
         if ($num!=0) 
        {
@@ -1636,35 +1633,8 @@ public function  FindDeviceId($id,$module)
       }
 }//End Function
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /***************************************************/
-
-
-
-
-
-
-
-
 
 //  *************** New Code for User is view apply  our JOB , EVENT ,TOURNAMENT**********************
 // This code for view Apply when the User is apply  our JOB , EVENT ,TOURNAMENT so Pleas Ignore this Code
