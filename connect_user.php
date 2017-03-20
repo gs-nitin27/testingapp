@@ -267,7 +267,6 @@ else if($_REQUEST['act'] == 'daily_log')
 {
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
-  print_r($userdata);die();
   $request           =  new connect_userservice();
   $response          =  $request->createdDailyLog($userdata);
   if($response)
@@ -287,21 +286,23 @@ else if($_REQUEST['act'] == 'daily_log')
 
 /*********************************View Daily Log************************/
 
-// else if($_REQUEST['act'] == 'view_dailylog')
-// {
-//   $userid           =   @$_REQUEST['userid'];
-//   $request           =  new connect_userservice();
-//   $response         =  $request->finddate($userid);
-//   $response          =  $request->viewDailyLog($userid,$response);
-//   if($response)
-//      {     
 
-//                $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
-//                echo json_encode($Result);
-//      }
-//      else
-//      {                     
-//             $Result = array('status' => '0','data'=>$response ,'msg'=>'No Daily Log');
-//             echo json_encode($Result);
-//      } 
-//   }
+else if($_REQUEST['act'] == 'view_dailylog')
+{
+  $userid           =   @$_REQUEST['userid'];
+  $request           =  new connect_userservice();
+ // $response         =  $request->finddate($userid);
+ // $response          =  $request->viewDailyLog($userid,$response);
+  $response          =  $request->viewDailyLog($userid);
+  if($response)
+     {     
+
+               $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
+               echo json_encode($Result);
+     }
+     else
+     {                     
+            $Result = array('status' => '0','data'=>$response ,'msg'=>'No Daily Log');
+            echo json_encode($Result);
+     } 
+  }

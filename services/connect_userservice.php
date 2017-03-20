@@ -207,8 +207,6 @@ else
 
 public function getConnectedStatus($response, $userid)
 {
-//echo "SELECT `prof_user_id`,req_status FROM `gs_connect` WHERE `lite_user_id`=$userid";die();
-
   $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `lite_user_id`=$userid");
    $num=mysql_num_rows($query);
   if ($num!=0) 
@@ -244,7 +242,7 @@ public function getConnectedStatus($response, $userid)
 
 public function getClassInfo($class_id)
 {
- $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration FROM `gs_coach_class` where `id` = $class_id ");
+ $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group  FROM `gs_coach_class` where `id` = $class_id ");
  $num=mysql_num_rows($query);
  if ($num!=0) 
  {
@@ -326,13 +324,13 @@ public function ClassInfo($student_id)
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
-
-             // $a= $row[$i]['classid'];
               $data[]   = $row ;
             }
         return $data;
   }
 }
+
+
 
 
 
@@ -348,15 +346,12 @@ public function createdDailyLog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $date             =  $userdata->date;
-  
-//if (empty($userid) || empty($activity) )
+  //if (empty($userid) || empty($activity) )
   //{
    // return 0;
 //}
 //else
 //{  
-
-
     $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
     if ($query)
      {
@@ -376,79 +371,25 @@ public function createdDailyLog($userdata)
 
 /*******************Function are used to View the Daily Log*****************/
 
-//SELECT DISTINCT(date) FROM `gs_athlit_dailylog` WHERE userid=1
-
-
-// public function viewDailyLog($userid,$response)
-// {
-//  // print_r($response);die();
-//  // echo json_encode($response);die();
-//     $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
-//     $total=count($response);
-//     $num = mysql_num_rows($query);
-//     if ($num!=0) 
-//     {    
-//            for ($i=0; $i <$num ; $i++) 
-//           {
-//             $row=mysql_fetch_assoc($query);
-//             $data[] = $row;
-            
-//           }
- 
-//  foreach($data as $key => $item)
-// { 
-//   $arr[$item['date']][$key] = $item;
-// }
-
-// ksort($arr, SORT_NUMERIC);
-// $count=1;
-// $data1 = array();
-// foreach ($arr as $key => $value) {
-//   $data1
-//   $data1['activity'.$count] = $value;
-//   $count++;
-// }
-// echo json_encode($data1);die;
-//    return $data;
-//    }
-//    else
-//    {
-//     return 0;
-//    }       
-// }
-
-
-
-
-/*************************Find the Date**********/
-
-  public function   finddate($userid)    
-  {
-$query=mysql_query("SELECT DISTINCT(date) FROM `gs_athlit_dailylog` WHERE userid=$userid");
- $num = mysql_num_rows($query);
+public function viewDailyLog($userid)
+{
+     $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
+      $num = mysql_num_rows($query);
     if ($num!=0) 
-    {
-          for ($i=0; $i <$num ; $i++) 
+    {    
+           for ($i=0; $i <$num ; $i++) 
           {
             $row=mysql_fetch_assoc($query);
-            $row= array('date'=>$row['date'],'activities'=>[array('id'=>'','activity'=>'')] );
-
-            $data[]=$row;
+            $data[] = $row;
+            
           }
           return $data;
-      }     
-      else
-      {
-        return 0;
-      }
-} // End Function
-
-         
-
-
-
-
-
+    }
+    else
+    {
+      return 0;
+    }          
+}
 
 
 
