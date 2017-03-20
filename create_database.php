@@ -909,12 +909,13 @@ $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
 { 
-//$status = array('success' => 1);
-echo json_encode($status['success']);
+$status = array('status' => 'success');
+echo json_encode($status);
+//echo json_encode($status['success']);
 }
 else
 {
-//$status = array('failure' => 0 , 'success' => 1);  
+$status = array('status' => 'failure');
 echo json_encode($status['failure']);
 }
 }
@@ -2112,8 +2113,8 @@ $user_app    = 'L';
            {
              $message      = array('message'=>$username." "." has applied for a Tournament" , 'Module'=>$module ,'date_Applyed'=>$date,'userid'=>$userid,'id'=>$id);
            }
-          $jsondata      = json_encode($message );
-         $response       = $req->alerts($userid,$user_app,$json_data); 
+          $jsondata       = json_encode($message );
+          $response       = $req->alerts($userid,$user_app,$json_data); 
           if ($response)
           {
              $response     = $request->sendPushNotificationToGCM($empdevice_id, $message);

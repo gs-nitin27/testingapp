@@ -9,6 +9,7 @@ if($_REQUEST['act'] == 'connect')
     $user_request_id = $_REQUEST['lite_user_id'];
     $user_responser_id = $_REQUEST['prof_user_id'];
     $user_app = $_REQUEST['user_app'];
+    
     $req = new connect_userservice();
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
@@ -166,7 +167,8 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $student_id       =  $_REQUEST['student_userid'];
  $request          =  new connect_userservice();
  $response         =  $request->getClassInfo($class_id);
-  if ($response)
+ 
+ if ($response)
  {
   $response         =  $request->getClassJoinStudent($response, $student_id);
    if($response)
@@ -222,6 +224,7 @@ Student Id and Result is display all Class Information
  else if($_REQUEST['act'] == 'class_info' ) 
  { 
  $student_id           =  $_REQUEST['userid'];
+ 
  $request              =  new connect_userservice();
  $response             =  $request->ClassInfo($student_id);
    if($response)
@@ -265,11 +268,12 @@ $response       =  $request->getClass($userid);
 
 else if($_REQUEST['act'] == 'daily_log')
 {
-  $data              =  file_get_contents("php://input");
-  $userdata          =  json_decode(file_get_contents("php://input"));
+ 
+ $data               =  file_get_contents("php://input");
+ $userdata           =  json_decode(file_get_contents("php://input"));
   $request           =  new connect_userservice();
   $response          =  $request->createdDailyLog($userdata);
-  if($response)
+if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Create Daily Log ');
              echo json_encode($Result);
@@ -282,8 +286,6 @@ else if($_REQUEST['act'] == 'daily_log')
 }
 
 
-
-
 /*********************************View Daily Log************************/
 
 
@@ -291,8 +293,6 @@ else if($_REQUEST['act'] == 'view_dailylog')
 {
   $userid           =   @$_REQUEST['userid'];
   $request           =  new connect_userservice();
- // $response         =  $request->finddate($userid);
- // $response          =  $request->viewDailyLog($userid,$response);
   $response          =  $request->viewDailyLog($userid);
   if($response)
      {     
@@ -306,3 +306,10 @@ else if($_REQUEST['act'] == 'view_dailylog')
             echo json_encode($Result);
      } 
   }
+
+
+
+
+
+
+

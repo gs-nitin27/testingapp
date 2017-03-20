@@ -352,7 +352,7 @@ public function createdDailyLog($userdata)
 //}
 //else
 //{  
-    $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
+      $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
     if ($query)
      {
       return 1;
