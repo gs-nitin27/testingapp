@@ -9,7 +9,6 @@ if($_REQUEST['act'] == 'connect')
     $user_request_id = $_REQUEST['lite_user_id'];
     $user_responser_id = $_REQUEST['prof_user_id'];
     $user_app = $_REQUEST['user_app'];
-    
     $req = new connect_userservice();
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
@@ -291,7 +290,7 @@ if($response)
 
 else if($_REQUEST['act'] == 'view_dailylog')
 {
-  $userid           =   @$_REQUEST['userid'];
+  $userid            =   @$_REQUEST['userid'];
   $request           =  new connect_userservice();
   $response          =  $request->viewDailyLog($userid);
   if($response)

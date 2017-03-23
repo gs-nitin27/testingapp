@@ -1,4 +1,6 @@
 <?php 
+
+
  class userdataservice 
 {
 /**
@@ -25,6 +27,114 @@ else
 return 0;
 }
 }
+
+
+
+
+/*****************Cheack The Profile Status***********************/
+
+
+public function checkprofile($userid)
+{
+$user_res       = $this->userdata($userid);
+$Total_profile  =0;
+if($user_res==0)
+{
+  $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
+  echo json_encode($user);
+  die();
+}
+else
+  {
+       $req            = new UserProfileService();
+       $res            = $req->listuserdata($userid);
+               if($res == 0)
+               {
+                    if($prof_id==1) 
+                    {
+                      $data = file_get_contents('json/Athletes.json');
+                    }
+                    if ($prof_id==2) 
+                    {
+                      $data = file_get_contents('json/coach_profile.json');
+                    }
+               }
+                else
+                {
+                  $data = $res['user_detail'];
+                }
+                  $data = json_decode($data); 
+                  $count = 0;
+                  $count1 = 0; 
+                  if (is_array($data) || is_object($data))
+                  {
+                  foreach ($data as  $value) 
+                  {
+                    if (is_array($value) || is_object($value))
+                     {
+                  
+                        foreach ($value as  $value1)
+                         {
+                         if (is_array($value1) || is_object($value1))
+                         {
+                              foreach ($value1 as $value2) 
+                              {
+                                  
+                                    if (is_array($value2) || is_object($value2))
+                                     {
+
+                                      foreach ($value2 as  $value3) 
+                                      {
+                                            if($value3 != '')
+                                            {
+                                                ++$count;
+                                            }
+                                            else
+                                            {
+                                                ++$count1;
+                                            }
+                                      }                          
+                              }
+                            
+                        }
+                  }
+}
+}
+}
+}
+                     $comp = ($count/($count+$count1+1))*100;
+                     $comp1=round($comp,2);
+                     //$prof_status=$comp1.''.'%';
+                    }
+      
+            $data->user = $user_res; 
+            if (is_array($data->user) || is_object($data->user))
+            {
+                foreach ($data->user as $value) 
+                {
+                  if($value != '')
+                  {
+                     ++$count;
+                   }
+                   else
+                   {
+                   ++$count1;
+                    }
+                 }    
+                    $comp = ($count/($count+$count1+1))*100;
+                     $comp2=round($comp,2);
+                    // $user_status=$comp1.''.'%';
+            }
+
+$Total_profile = ($comp1+$comp2)/200*100;   
+return $Total_profile;
+}
+
+
+
+
+/****************************************************/
+
 
 
 // When the user is singn In using the Google and Facebook then change the Image URL
@@ -219,40 +329,7 @@ public function getdeviceid($id)
 }
 
 
-/**********************************************************************/
-
-
-
-
-
-
-/*****************Old Device Id Find code***********************************/
-// public function getdeviceid($id)
-// {
-// //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die();
-// $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
-// $row = mysql_num_rows($query);
-// if($row == 1)
-// {
-
-// while($data = mysql_fetch_assoc($query))
-// {
-
-// $dev = $data;
-// }
-// //if($dev['device_id'] != "")
-// return $dev;
-// else 
-// return 0;
-// }
-
-// }
-// else return 0;
-
-
-// }
-
-/****************************************************************************************/
+/******************************************************************************/
 /**
 
      * function For fetching Device token id to send GCM message
@@ -335,6 +412,29 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
 }
 
 
+/******************Function for Pulish and Unpublish**********************/
+
+public function publish($userdata)
+{
+$userid           =  $userdata->userid;
+$id               =  $userdata->id;
+$module           =  $userdata->module; // 1= Job 2=Event 3=Tournament
+$publish          =  $userdata->publish;
+$query            =  mysql_query("UPDATE  `gs_jobInfo` set `publish`=$publish  where `userid`= $userid  AND `id` =$id");
+$num=mysql_affected_rows(); 
+  if ($num> 0)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+
+
+
 
 
 
@@ -344,7 +444,6 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
 public function create_tournament($item)
 {
   //print_r($item);die();
-
 $query = mysql_query("INSERT INTO `gs_tournament_info`(`id`, `userid`, `name`, `address_1`, `address_2`, `location`,`state`, `pin`, `description`,`sport` ,`level`, `age_group`, `gender`, `eligibility1`,`eligibility2`, `terms_and_cond1`,`organiser_name`, `mobile`, `landline`, `email`, `org_address1`, `org_address2`, `org_city`, `org_pin`, `tournaments_link`, `start_date`, `end_date`, `event_entry_date`, `event_end_date`, `file_name`, `file`, `email_app_collection`, `phone_app_collection`,`date_created`) VALUES ('$item->id','$item->userid','$item->tournament_name','$item->address_line1','$item->address_line2','$item->city','$item->state','$item->pin','$item->description','$item->sport','$item->tournament_level','$item->tournament_ageGroup','$item->gender','$item->eligibility1','$item->eligibility2','$item->terms_and_conditions1','$item->organizer_name','$item->mobile','$item->landline','$item->emailid','$item->organizer_address_line1','$item->organizer_address_line2','$item->organizer_city','$item->organizer_pin','$item->tournament_links',FROM_UNIXTIME ('$item->start_date'),FROM_UNIXTIME ('$item->end_date'),FROM_UNIXTIME('$item->entry_start_date') ,FROM_UNIXTIME ('$item->entry_end_date'),'$item->file_name','$item->file','$item->email_app_collection','$item->phone_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `name` = '$item->tournament_name', `address_1` = '$item->address_line1' , `address_2` = '$item->address_line2' , `location` = '$item->city' ,`state`='$item->state' ,`pin` = '$item->pin' , `description` = '$item->description',`sport`='$item->sport',`level` = '$item->tournament_level',`age_group`='$item->tournament_ageGroup',`gender` = '$item->gender',`eligibility1` = '$item->eligibility1' ,`eligibility2` = '$item->eligibility2', `terms_and_cond1` = '$item->terms_and_conditions1',`organiser_name` = '$item->organizer_name' , `mobile` = '$item->mobile' ,`landline` = '$item->landline' , `email` = '$item->emailid' , `org_address1` = '$item->organizer_address_line1' , `org_address2` = '$item->organizer_address_line2' , `org_city` = '$item->organizer_city', `org_pin` = '$item->organizer_pin' , `tournaments_link` = '$item->tournament_links' ,`start_date` = FROM_UNIXTIME ('$item->start_date') , `end_date` = FROM_UNIXTIME ('$item->end_date') , `event_entry_date` = FROM_UNIXTIME ('$item->entry_start_date') , `event_end_date` = FROM_UNIXTIME ('$item->entry_end_date'), `file_name` = '$item->file_name' , `file` = '$item->file' , `email_app_collection` = '$item->email_app_collection' , `phone_app_collection` = '$item->phone_app_collection'");
 
 if($query){
@@ -376,7 +475,7 @@ if($type == 1)
 {
 
 
-$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link, IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
+$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link, IFNull(`image`, '') AS image, IFNull(`publish`, '') AS publish FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
 }
 else if ($type == 2) 
 {
@@ -488,13 +587,14 @@ if($query)
 
 public function eventsearch($keyword)
 {
-$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%'  ORDER BY `dateCreated` DESC ";
+$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE `publish` = '1' AND `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%'  ORDER BY `dateCreated` DESC ";
 $query1 = mysql_query($query);
 if($query1)
 {
 while($row = mysql_fetch_assoc($query1))
 {
-
+$row['event']='0';
+$row['fav']='0';
 $rows[] = $row;
 }
   return $rows;
@@ -514,11 +614,13 @@ $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`
 (`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2
 , IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
 , IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'')AS org_city , IFNull(`org_pin`,'')
- AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ORDER BY `date_created` DESC");
+ AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `publish` = '1' AND `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%' ORDER BY `date_created` DESC");
 if($query1)
 {
 while($row = mysql_fetch_assoc($query1))
 {
+  $row['tour']='0';
+  $row['fav']='0';
 $rows[] = $row;
 }
   return $rows;
@@ -535,13 +637,14 @@ public function jobsearch($keyword)
 //echo"dev";echo $keyword;die();
 //$fwhere   =" WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' ";
 
-$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo`  WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%'   ORDER BY `date_created` DESC";
+$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobinfo`  WHERE  `publish` = '1' AND `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%'   ORDER BY `date_created` DESC";
 //echo $query;
 $query1 = mysql_query($query);
 if(mysql_num_rows($query1) > 0)
 {
 while($row = mysql_fetch_assoc($query1))
 {
+  $row['fav']='0';
 $rows[] = $row;
 }
   return $rows;
@@ -562,8 +665,16 @@ $rows[] = $row;
 
   public function getfavForUser($data,$type,$id)
 {
+ 
+//echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";die();
+
   	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
     	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
+
+
+
+
+
 
         if($type == '1' || $type == '2' || $type == '3')
         {
@@ -644,6 +755,8 @@ else
 	return 0;
    }
 }
+
+
 
 public function getfavdata($favdata, $type)
 {
@@ -854,7 +967,7 @@ for($j = 0 ; $j< $size ; $j++)
               $val1 = "0";
               if($res[$j]['job'] != "1"){
               $res[$j]['job'] = $val1;
-             }else{
+              }else{
 
               $res[$j]['job'] = "1";
              }
@@ -891,6 +1004,13 @@ for($i = 0 ; $i<$size ; $i++)
   return $res;
   }
   }
+
+
+
+
+
+
+
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
