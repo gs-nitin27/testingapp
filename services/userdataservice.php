@@ -1372,8 +1372,8 @@ public function sendEmail($id)
              // $mail->Host = 'dezire.websitewelcome.com';
               $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
-              $mail->Username ="harshvardhan@darkhorsesports.in";  
-              $mail->Password = "New@job2016";           
+              $mail->Username =$from;  
+              $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
               $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
