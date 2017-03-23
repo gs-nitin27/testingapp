@@ -286,6 +286,28 @@ if($response)
 }
 
 
+/*********************************View Daily Log************************/
+
+
+else if($_REQUEST['act'] == 'view_dailylog')
+{
+  $userid           =   @$_REQUEST['userid'];
+  $request           =  new connect_userservice();
+  $response          =  $request->viewDailyLog($userid);
+  if($response)
+     {     
+
+               $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
+               echo json_encode($Result);
+     }
+     else
+     {                     
+            $Result = array('status' => '0','data'=>$response ,'msg'=>'No Daily Log');
+            echo json_encode($Result);
+     } 
+  }
+
+
 
 
 

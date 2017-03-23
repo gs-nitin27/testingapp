@@ -250,7 +250,7 @@ else if($_REQUEST['act']=="gs_detail")
 
 /******FAVOURITE BY THE USER****************/
 
-else if ($_POST['act'] == "gs_fav" )
+else if ($_REQUEST['act'] == "gs_fav" )
 {
   $user_id   =urldecode(@$_POST['user_id']);
   $module    =urldecode(@$_POST['type']);
@@ -304,7 +304,7 @@ else if ($_POST['act'] == "gs_fav" )
 
 /***************GET FAVOURATE*******************/
 
-else if($_POST['act'] == "gs_getfav")
+else if($_REQUEST['act'] == "gs_getfav")
 {
   $id   = urldecode($_POST ['user_id']);
   $type = urldecode($_POST ['type']);
@@ -346,7 +346,7 @@ else if($_POST['act'] == "gs_getfav")
 */
 
 
-else if($_POST['act'] == "gs_getfav1")
+else if($_REQUEST['act'] == "gs_getfav1")
 {
   $id   = urldecode($_POST ['user_id']);
   $type = urldecode($_POST ['type']);

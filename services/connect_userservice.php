@@ -207,8 +207,6 @@ else
 
 public function getConnectedStatus($response, $userid)
 {
-//echo "SELECT `prof_user_id`,req_status FROM `gs_connect` WHERE `lite_user_id`=$userid";die();
-
   $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `lite_user_id`=$userid");
    $num=mysql_num_rows($query);
   if ($num!=0) 
@@ -326,8 +324,6 @@ public function ClassInfo($student_id)
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
-
-             // $a= $row[$i]['classid'];
               $data[]   = $row ;
             }
         return $data;
@@ -336,26 +332,64 @@ public function ClassInfo($student_id)
 
 
 
+
+
 /************************Create Daily Log**************************************/
 
 public function createdDailyLog($userdata)
 {
   $userid           =  $userdata->userid;
+  $phase            =  $userdata->phase;
   $activity         =  $userdata->activity;
-  $unit             =  $userdata->unit;
-  $volume           =  $userdata->volume;
-if (empty($userid) || empty($activity) || empty($unit) || empty($volume))
-  {
-    return 0;
-  }
-else
-{
-    $query= mysql_query("INSERT INTO gs_athlit_dailylog (`id`,`userid`,`activity`, `unit`,`volume`,`date`) VALUES ('0',' $userid','$activity ','$unit','$volume',CURDATE())");
-return 1;
-}
+  $duration         =  $userdata->duration;
+  $distance         =  $userdata->distance;
+  $performance      =  $userdata->performance;
+  $remarks          =  $userdata->remarks;
+  $date             =  $userdata->date;
+  //if (empty($userid) || empty($activity) )
+  //{
+   // return 0;
+//}
+//else
+//{  
+      $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
+    if ($query)
+     {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+
 
 } // End Function
 
+
+
+
+
+/*******************Function are used to View the Daily Log*****************/
+
+public function viewDailyLog($userid)
+{
+     $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
+      $num = mysql_num_rows($query);
+    if ($num!=0) 
+    {    
+           for ($i=0; $i <$num ; $i++) 
+          {
+            $row=mysql_fetch_assoc($query);
+            $data[] = $row;
+            
+          }
+          return $data;
+    }
+    else
+    {
+      return 0;
+    }          
+}
 
 
 

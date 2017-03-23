@@ -321,13 +321,13 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
  
  if($query)
         { 
-          $id = mysql_insert_id();
-          if($id!=NULL && $image!=NULL)
-          {
-           $image = $this->imageupload($image,$id,$table);
-          }
-        return 1;
-        }
+             $id = mysql_insert_id();
+           if($id!=NULL && $image!=NULL)
+             {
+              $image = $this->imageupload($image,$id,$table);
+              return $image;
+             }
+           } 
         else
           {
             return 0;
@@ -1245,11 +1245,12 @@ public function createResources($data)
 //  This functin are used to Upload the image on  gs_resources table and createjob table
 // So Please check the Column name of image and Path 
 
+
  public function imageupload($image,$userid,$table)
     {
-     define('UPLOAD_DIR','../staging/uploads/job/');
-      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
-    //  define('UPLOAD_DIR','gs_images/Prof_pic/');
+
+      //echo $userid;
+     // echo $table;die();
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
@@ -1258,26 +1259,52 @@ public function createResources($data)
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
       $data = base64_decode($img);
-
       $img_name= "$userid"."_".$time; // This is code for upload the Image for User
+      $path= $url."/"."$userid"."_".$time.'.png';
+      $success =move_uploaded_file($img, $filepath);
+      $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+      // echo "$file";die();
+     // echo "-----";
+     // echo "dev";
+     // $data="RAM";
+      $success = file_put_contents($file, $data);
+    //  echo "$success";die();
+     
+   //  define('UPLOAD_DIR','../staging/uploads/job/');
+      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
+    //  define('UPLOAD_DIR','gs_images/Prof_pic/');
+     // $now = new DateTime();
+     // $time=$now->getTimestamp(); 
+     // $img = $image;
+      //$img = str_replace('data:image/png;base64,', '', $img);
+     // $filepath =str_replace('data:image/png;base64,', '', $img);
+    //  $img = str_replace('$filepath,', '', $img);
+     // $img = str_replace(' ', '+', $img);
+     // $data = base64_decode($img);
+
+     // $img_name= "$userid"."_".$time; // This is code for upload the Image for User
      // $img_name= "res"."_".$time;
 
-      $success=move_uploaded_file($img, $filepath);
-      $file = UPLOAD_DIR.$img_name.'.png';
-      $success = file_put_contents($file, $data);
-      if($success)
-      {
+     // $success=move_uploaded_file($img, $filepath);
+     // $file = UPLOAD_DIR_JOB.$img_name.'.png';
+     // $success = file_put_contents($file, $data);
+
+      //if($success)
+      //{
          $img_name = $img_name. '.png';
        // echo "update `$table` set `image`='$img_name' where `userid`='$userid'";die();
        // This code is Used for Create Resource for Uploading the Image
        // $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
         // This is code for 
-         $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
+       $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
+     // }
       if($updateImage)
       {
+
         return 1;
+      
       }
-      }
+    //}
       else
         {
           $res = array('data' =>'Image is Not Upload' ,'status' => 0);
