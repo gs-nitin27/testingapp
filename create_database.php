@@ -212,7 +212,7 @@ echo json_encode($user);
 }
 
 
-
+ 
 else if($_REQUEST['act']=="manage_Login")
 {
 $data1                = json_decode($_POST[ 'data' ]);
@@ -239,7 +239,11 @@ echo json_encode($user);
 
 else if($_REQUEST['act']=="create_manage_user")
 {
+
+
 $data1                = json_decode($_POST[ 'data' ]);
+
+
 $item                 =  new stdClass();
 $forgot_code          =  mt_rand(1000,10000);
 $item->email          =  $data1->email;
@@ -255,15 +259,19 @@ $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
 $item->prof_id        =  $data1->prof_id;
 $req1= new userdataservice();
+
 $req3 = $req1->create_manage_user_exits($item);
-if($req3 == 1 )
+
+//print_r($req3);//die;
+
+if($req3 ==1)
 {
-$user = array('status' => 1);
+$user = array('status' => 6);
 echo json_encode($user);
 }
 else if($req3 == 2)
 {
-$user = array('status' => 2);
+$user = array('status' => 6);
 echo json_encode($user);
 }
 else if($req3 == 3)
@@ -283,10 +291,16 @@ else if($req3 == 5)
   echo json_encode($user);
 
 }
-else
+else if($req3 == 1)
 {
 $user = array('status' => 0);
   echo json_encode($user);
+}
+else
+{
+  $user = array('status' => 6 , "prof_name" => $req3);
+  echo json_encode($user);
+
 }
 }
 

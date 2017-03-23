@@ -1492,8 +1492,8 @@ public function sendEmail($id)
              // $mail->Host = 'dezire.websitewelcome.com';
               $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
-              $mail->Username ="harshvardhan@darkhorsesports.in";  
-              $mail->Password = "New@job2016";           
+              $mail->Username =$from;  
+              $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
               $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
@@ -1573,7 +1573,7 @@ return 0;
 public function manage_Login($item)
 {
 
-$query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND `userType`= '103' ");
+$query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ");
 {
 if(mysql_num_rows($query)>0)
 {
@@ -1601,7 +1601,8 @@ return 0;
 
 public  function create_manage_user_exits($item)
 {
-    $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code` FROM `user`  WHERE `email`='$item->email'");
+
+    $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code`,`prof_name` FROM `user`  WHERE `email`='$item->email'");
         if(mysql_num_rows($query)>0)
         {
           while($row = mysql_fetch_assoc($query))
@@ -1612,27 +1613,33 @@ public  function create_manage_user_exits($item)
            //print_r($data['password']); die;
         if($data['userType']=='104'  && ($data['password']=='' || $data['password']== NULL ))
         {
+
+          //print_r("expression");die;
           // user register with google or facebook in light app ;
 
-        $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+        // $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
 
 //###################### password set  email send to user #########################
 
 
-
+  $prof_name = $data['prof_name'];
    
-$this->sendEmail_for_password_reset($userid);
-   return 1;
+// $this->sendEmail_for_password_reset($userid);
+   return $prof_name;
 }
 
 else if($data['userType']=='104')
 {
+     
+    $prof_name = $data['prof_name'];
+
+   // print_r($prof_name);die;
   // user register in lightapp send welcome mail;
-    $userid=$data['userid'];
-    $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+    // $userid=$data['userid'];
+    // $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
     
-    $this->sendEmail_for_password_reset($userid,$body);
-    return 2;
+    // $this->sendEmail_for_password_reset($userid,$body);
+    return $prof_name;
 }
 else if($data['userType']=='103'  && ($data['password']=='' || $data['password']== NULL ))
 {
@@ -1662,7 +1669,7 @@ if($query)
 }
 else
 {
-    return 0;
+    return 1;
 }
 
 }

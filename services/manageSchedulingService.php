@@ -5,7 +5,6 @@ class manageSchedulingService
 
 public function createClass($item,$code)
 {
-//$classtime = $item->start_time."-".$item->end_time;
 $start_date = $item->start_date;
 $end_date = $item->end_date;
 
@@ -43,10 +42,7 @@ return $data;
 }
 else
 return '1';
-
-
 }
-
 
 public function CheckforExistingClass_update($item)
 {

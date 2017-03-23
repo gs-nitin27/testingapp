@@ -1,5 +1,5 @@
 <?php
-include('config1.php');
+include('config.php');
 include('services/getListingService.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
@@ -21,12 +21,12 @@ if($_REQUEST['act'] == 'notificationlisting')
             }
             if($response)
             {
-              $Result = array('status' => '1','data'=>$response,'msg'=>'Notification  is Listing');
+              $Result = array('status' => '1','data'=>$response,'msg'=>'Success');
               echo json_encode($Result);
-             }
+            }
             else
-            {                     
-              $Result = array('status' => '0','data'=>$response ,'msg'=>' Notification is  Not Listing');
+            { $data = [];                  
+              $Result = array('status' => '0','data'=>$data ,'msg'=>'No data');
               echo json_encode($Result);
             }
 
