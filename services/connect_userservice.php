@@ -134,7 +134,7 @@ public function getConnectedUser($userid,$usertype)
 
   if($usertype=='M')
   {
-  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached`,`gs_connect`.`req_status` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
+  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
   }
    $row = mysql_num_rows($query);
    if($row)
@@ -207,8 +207,10 @@ else
 
 public function getConnectedStatus($response, $userid)
 {
-  $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `lite_user_id`=$userid");
+  $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `prof_user_id`=$userid");
+   
    $num=mysql_num_rows($query);
+   $data = [];
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -231,7 +233,7 @@ public function getConnectedStatus($response, $userid)
   }
    else
   {
-   return 0;
+   return $data;
   }
 
 }

@@ -100,8 +100,8 @@ if($_REQUEST['act'] == 'connect')
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
              echo json_encode($Result);
    }
-   else
-   {                     
+   else 
+   {                       
           $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connected');
           echo json_encode($Result);
    } 
