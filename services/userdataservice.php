@@ -904,33 +904,24 @@ else if($type == 3)
  AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `id` = '$data1' ORDER BY `date_created` ASC" );
 }
 
-//echo "SELECT * FROM `".$table."` WHERE `id` = '$data1'";
-
-//$query = mysql_query("SELECT * FROM `".$table."` WHERE `id` = '$data1'");
-if($query){
-while($row = mysql_fetch_assoc($query)){
-
-
+if($query)
+{
+while($row = mysql_fetch_assoc($query))
+{
 $data = $row;
-
 }
-
 return $data;
 }
-else{
-
-
+else
+{
   return 0;
 }
-
 }
 
 
 
 public function jobsapplied($userid , $id , $type)
 {
-
-//echo"INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),$type)";die();
 $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('','$userid','$id',CURDATE(),'$type')");
 if($query)
 {
@@ -942,74 +933,225 @@ else
 }
 }
 
+/*************************Function for Get The Job***************************/
 
 
-public function getuserjobs($res, $type, $id)
+public function getuserjobs($res,$userid)
 {
-$query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$id' ");
-if(mysql_num_rows($query)>0)
-{
-
-while($row = mysql_fetch_assoc($query))
-{
-$data = $row;
-$value =$data['userjob']; 
-$size = sizeof($res);
-for($j = 0 ; $j< $size ; $j++)
- {  
-      $keyval = $res[$j]['id'];
-
-      if($keyval != $value)
-      {
-         // echo $keyval." != ".$value."= false"."<>";
-    
-           array_push($res[$j]['job'], 0);
-              $val1 = "0";
-              if($res[$j]['job'] != "1"){
-              $res[$j]['job'] = $val1;
-              }else{
-
-              $res[$j]['job'] = "1";
-             }
-      }
-     
-
-     else if($keyval == $value)
-      {      
-           //echo $keyval." == ".$value."= true"."<>";
-  
-          array_push($res[$j]['job'], "1");
-        
-          $res[$j]['job'] = "1";   
-      }
+$query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` >= '1' ");
+    if(mysql_num_rows($query)>0)
+    {
+          while($row = mysql_fetch_assoc($query))
+          {
+                    $data = $row;
+                    $value =$data['userjob']; 
+                    $size = sizeof($res);
+                    for($j = 0 ; $j< $size ; $j++)
+                    {  
+                          $keyval = $res[$j]['id'];
+                          if($keyval != $value)
+                          {
+                                 array_push($res[$j]['job'], 0);
+                                  $val1 = "0";
+                                  if($res[$j]['job'] != "1")
+                                  {
+                                   $res[$j]['job'] = $val1;
+                                  }
+                                  else
+                                  {
+                                     $res[$j]['job'] = "1";
+                                  }
+                          }
+                          else if($keyval == $value)
+                          {      
+                              array_push($res[$j]['job'], "1");
+                              $res[$j]['job'] = "1";   
+                          }
+                     }
+          }
+           return $res;
     }
-}
-
-return $res;//print_r($res);
-     }
-  else
-  {
-
-
-$size = sizeof($res);
-for($i = 0 ; $i<$size ; $i++)
- {
-
- array_push($res[$i]['job'], 0);
-        
-          $res[$i]['job'] = "0";
+    else
+    {
+          $size = sizeof($res);
+          for($i = 0 ; $i<$size ; $i++)
+          {
+           array_push($res[$i]['job'], 0);
+                    $res[$i]['job'] = "0";
+          }
+          return $res;
+    }
 
 
-}
-  return $res;
-  }
-  }
+}// End Function
+
+/*************************Function for Get The Event***************************/
+
+
+public function getuserEvent($res,$userid)
+{
+$query  = mysql_query("SELECT `userevent` FROM `user_events` WHERE `userid` = '$userid' AND `status` >= '1' ");
+    if(mysql_num_rows($query)>0)
+    {
+          while($row = mysql_fetch_assoc($query))
+          {
+                    $data = $row;
+                    $value =$data['userevent']; 
+                    $size = sizeof($res);
+                    for($j = 0 ; $j< $size ; $j++)
+                    {  
+                          $keyval = $res[$j]['id'];
+                          if($keyval != $value)
+                          {
+                                 array_push($res[$j]['event'], 0);
+                                  $val1 = "0";
+                                  if($res[$j]['event'] != "1")
+                                  {
+                                   $res[$j]['event'] = $val1;
+                                  }
+                                  else
+                                  {
+                                     $res[$j]['event'] = "1";
+                                  }
+                          }
+                          else if($keyval == $value)
+                          {      
+                              array_push($res[$j]['event'], "1");
+                              $res[$j]['event'] = "1";   
+                          }
+                     }
+          }
+           return $res;
+    }
+    else
+    {
+          $size = sizeof($res);
+          for($i = 0 ; $i<$size ; $i++)
+          {
+           array_push($res[$i]['event'], 0);
+                    $res[$i]['event'] = "0";
+          }
+          return $res;
+    }
+
+
+}// End Function
+
+
+/*****************************Get User Tournament**************************/
+
+public function getuserTournament($res,$userid)
+{
+$query  = mysql_query("SELECT `usertournament` FROM `user_tournaments` WHERE `userid` = '$userid' AND `status` >= '1' ");
+    if(mysql_num_rows($query)>0)
+    {
+          while($row = mysql_fetch_assoc($query))
+          {
+                    $data = $row;
+                    $value =$data['usertournament']; 
+                    $size = sizeof($res);
+                    for($j = 0 ; $j< $size ; $j++)
+                    {  
+                          $keyval = $res[$j]['id'];
+                          if($keyval != $value)
+                          {
+                                 array_push($res[$j]['tour'], 0);
+                                  $val1 = "0";
+                                  if($res[$j]['tour'] != "1")
+                                  {
+                                   $res[$j]['tour'] = $val1;
+                                  }
+                                  else
+                                  {
+                                     $res[$j]['tour'] = "1";
+                                  }
+                          }
+                          else if($keyval == $value)
+                          {      
+                              array_push($res[$j]['tour'], "1");
+                              $res[$j]['tour'] = "1";   
+                          }
+                     }
+          }
+           return $res;
+    }
+    else
+    {
+          $size = sizeof($res);
+          for($i = 0 ; $i<$size ; $i++)
+          {
+           array_push($res[$i]['tour'], 0);
+                    $res[$i]['tour'] = "0";
+          }
+          return $res;
+    }
+
+
+}// End Function
+
+
+
+
+/*************************Function for Get The Job***************************/
+
+
+public function getuserOffer($res, $userid)
+{
+$query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` = '2' ");
+    if(mysql_num_rows($query)>0)
+    {
+          while($row = mysql_fetch_assoc($query))
+          {
+                    $data = $row;
+                    $value =$data['userjob']; 
+                    $size = sizeof($res);
+                    for($j = 0 ; $j< $size ; $j++)
+                    {  
+                          $keyval = $res[$j]['id'];
+                          if($keyval != $value)
+                          {
+                                 array_push($res[$j]['offer'], 0);
+                                  $val1 = "0";
+                                  if($res[$j]['offer'] != "1")
+                                  {
+                                   $res[$j]['offer'] = $val1;
+                                  }
+                                  else
+                                  {
+                                     $res[$j]['offer'] = "1";
+                                  }
+                          }
+                          else if($keyval == $value)
+                          {      
+                              array_push($res[$j]['offer'], "1");
+                              $res[$j]['offer'] = "1";   
+                          }
+                     }
+          }
+           return $res;
+    }
+    else
+    {
+          $size = sizeof($res);
+          for($i = 0 ; $i<$size ; $i++)
+          {
+           array_push($res[$i]['offer'], 0);
+                    $res[$i]['offer'] = "0";
+          }
+          return $res;
+    }
+
+
+}// End Function
 
 
 
 
 
 
+
+
+/*************************************************************************/
 
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 

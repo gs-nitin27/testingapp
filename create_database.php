@@ -1444,21 +1444,30 @@ else if($_POST['act'] == "create_resource")
     }
     }
   }
+
+  
 /*---------------------------------------------------------------------------------------
- | This code for User Point of view when the user is search any Job ,Event ,tournament   |
- | after that the user is apply on job ,Event,or Tournament                              | 
+ |                      When The user is Search Then Output is
+ | User is Search The Job ,Event, Tournament then use this act
+ | If User is Not Login then Only view Job, Event, Tournament
+ | If User is Login Then view Job , Event, Tournament is Apply or Not
+ | If User is Login Then view Job , Event, Tournament is Fav  or Not
+ | If User is Apply The Job then job=1 show
+ | If User is Fav  The Job then fav=1  show
+ | If User is Apply The Event then event=1 show
+ | If User is Appply The Tournament then tour=1 show
  ----------------------------------------------------------------------------------------
 
 /*****************************GetsportyLite Searching*****************************/
 
 else if($_REQUEST['act'] == "gs_searching")
 {
-  $userid       =   urldecode($_REQUEST['userid']);  //Apply User Id 
+ $userid        =   urldecode($_REQUEST['userid']);  //Apply User Id 
  $module        =   urldecode($_REQUEST['module']);  //Type Job=1 Event=2 Tournament=3 
  $keyword       =   urldecode($_REQUEST ['key']);   // Search the Value by Applicant User
  $request       =   new userdataservice();
  $req           =   new liteservice();
-     if(empty($keyword)) 
+   if(empty($keyword)) 
    {
        $keyword    = '' ;
    }
@@ -1479,7 +1488,7 @@ else if($_REQUEST['act'] == "gs_searching")
   {
       $response   = $request->tournamentsearch($keyword);
   }  
-if($response)
+ if($response)
  {
   $req           =  new liteservice();
   $res2          = $req->getfav($userid,$module);
@@ -1500,11 +1509,20 @@ if($response)
                 }
               }
 
-                                if ($module=='1')
-                                {
-                                     $response      = $request ->getuserjobs($response,$module, $userid);
-                                }
-        
+                         if ($module=='1')
+                         {
+                             $response      = $request ->getuserjobs($response,$userid);
+                             $response      = $request ->getuserOffer($response,$userid);
+                         }
+                         if ($module=='2')
+                          {
+                            $response      = $request ->getuserEvent($response, $userid);
+                          } 
+                          if ($module=='3') 
+                          {
+                            $response      = $request ->getuserTournament($response, $userid);
+                          }
+    
            $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
            echo json_encode($Result);
 }
@@ -1643,7 +1661,7 @@ $user_app    = 'M';
     if ($response)
     {
     $response                  =  $request->FindDeviceId($id,$module);
-       if ($response == '')
+      if ($response == '')
         {
          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Invalid');
          echo json_encode($Result);die();
