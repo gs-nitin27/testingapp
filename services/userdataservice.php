@@ -1184,10 +1184,12 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         $result = curl_exec($ch);       
         if ($result === FALSE) {
-            die('Curl failed: ' . curl_error($ch));
+            //die('Curl failed: ' . curl_error($ch));
+        return 0;
         }
         curl_close($ch);
-        return $result;
+       // return $result;
+       return 1;
           }
 
 

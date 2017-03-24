@@ -1339,18 +1339,32 @@ else if($_POST['act']=="select_applicant")
   $joining_date   = urldecode($_POST['joining_date']);
   $other_deatil   = urldecode($_POST['other_deatil']);
   $status         = urldecode($_POST['status']);  // status=1 Apply , status=2 Offer, Status =3 Accept
+  $date           = date("F j, Y, g:i a");
+  $user_app       = 'L';
   switch ($status)
   {
   case '2':
    $req = new userdataservice();
-   $res =$req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
+   $res = $req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
+   $req1      = new connect_userservice();
     //$date    = date("F j, Y, g:i a");
-   $message = array('name'=>$name,'salary'=>$salary,'joining_date'=>$joining_date,'message'=>"has sent you a job offer" , 'Module'=>'8');
-   $pushobj  = new userdataservice();
-   $getid    = $pushobj->getdeviceid($applicant_id);
+  // $message = array('name'=>$name,'salary'=>$salary,'joining_date'=>$joining_date,'message'=>"has sent you a job offer" , 'Module'=>'8');
+
+
+$message      = array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$emp_id,'id'=>$job_id,'indicator' => 3);
+
+   $jsondata       = json_encode($message);
+   $response       = $req1->alerts( $applicant_id,$user_app,$jsondata);
+
+   //     $jsondata       = json_encode($message);
+     //     $response       = $req->alerts($userid_Emp,$user_app, $jsondata); 
+
+
+   $pushobj        = new userdataservice();
+   $getid          = $pushobj->getdeviceid($applicant_id);
    $device_id_apply=$getid['device_id'];
    $pushobj     = new userdataservice();
-   $pushnote    = $pushobj ->sendLitePushNotificationToGCM($device_id_apply, $message);
+   $pushnote    = $pushobj ->sendLitePushNotificationToGCM($device_id_apply, $jsondata);
 
    $resp['status'] = "Success";
    echo json_encode($resp);
@@ -1372,7 +1386,7 @@ else if($_POST['act']=="select_applicant")
    $req = new userdataservice();
    $salary='0';
    $joining_date='0';
-   $res      =$req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
+   $res      = $req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
    $resp['status'] = "Failure";
    echo json_encode($resp);
   }
@@ -1661,11 +1675,12 @@ $user_app    = 'M';
     if ($response)
     {
     $response                  =  $request->FindDeviceId($id,$module);
-      if ($response == '')
+        if ($response == 0)
         {
-         $Result = array('status' => '0','data'=>'0' ,'msg'=>'Invalid');
+         $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>'0');
          echo json_encode($Result);die();
         }
+
         $userid_Emp                =  $response['userid'];
         $device_id_Emp             =  $response['device_id'];
         $email_id_Emp              =  $response['email'];
@@ -1686,12 +1701,12 @@ $user_app    = 'M';
            {
              $message      = array('message'=>$username." "." has applied for a Tournament" ,'title'=>'Tournament Application','date_applied'=>$date,'userid'=>$userid,'id'=>$id,'indicator' => 5);
            }
-          $jsondata       = json_encode($message );
+          $jsondata       = json_encode($message);
           $response       = $req->alerts($userid_Emp,$user_app, $jsondata); 
           if ($response)
           {
              $response     = $request->sendPushNotificationToGCM($empdevice_id, $message);
-             $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success');
+             $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>$response);
              echo json_encode($Result);
           }
      }
