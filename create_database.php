@@ -1307,7 +1307,7 @@ echo json_encode($data3);
 /******************************** CODE FOR GET APPLY JOBS ***********************/
 
 
-else if($_POST['act'] == "getappliedjobs")
+else if($_REQUEST['act'] == "getappliedjobs")
 {
 $userid = urldecode($_POST['user_id']);
 $jobid  =urldecode($_POST['id']);   // JOb id
