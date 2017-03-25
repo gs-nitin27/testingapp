@@ -78,11 +78,24 @@ echo json_encode($data);
 
 if($_REQUEST['act']=="locationlisting")
  { 
+
     $req           =  new GetListingService();
     $res           =  $req->Get_Location();
 	$data = array('data'=>$res);
 	echo json_encode($data);
 }
 
+//*********CODE FOR City  Listing *************//
 
+
+if($_REQUEST['act']=="agegrouplisting")
+ { 
+ 	$req           =  new GetListingService();
+    $res           =  $req->Age_Group();
+	$data = array('data'=>$res);
+	echo json_encode($data);
+}
+
+
+http://192.168.0.116/testingapp/create_database.php?
 ?>

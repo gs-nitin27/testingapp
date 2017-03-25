@@ -476,6 +476,8 @@ if($type == 1)
 
 
 $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link, IFNull(`image`, '') AS image, IFNull(`publish`, '') AS publish FROM `gs_jobInfo` WHERE ".$where." ORDER BY `date_created` ASC");
+
+
 }
 else if ($type == 2) 
 {
@@ -520,14 +522,15 @@ if(mysql_num_rows($query) > 0)
 while($row = mysql_fetch_assoc($query))
 {
 
-
+$row['job']='0';
 $data[] = $row;
-
 }
 return $data;
 }
 else 
+{
   return 0;
+}
 
 
 
@@ -644,7 +647,7 @@ if(mysql_num_rows($query1) > 0)
 {
 while($row = mysql_fetch_assoc($query1))
 {
-  $row['fav']='0';
+$row['fav']='0';
 $rows[] = $row;
 }
   return $rows;
@@ -1143,6 +1146,84 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 }// End Function
+
+
+
+
+/***********************Search the Article From Resources Table*****************/
+
+public function findArticle($whereclause)
+{
+$query      = mysql_query("SELECT  * FROM `gs_resources` WHERE $whereclause ");
+ $num       =  mysql_num_rows($query);
+         if($num>=0) 
+         {
+               while($row = mysql_fetch_assoc($query))
+               {
+                $row['fav']='0';
+                $data[]=$row;
+               }
+               return $data;
+          } 
+         else
+         {
+          return 0;
+         }
+}
+
+
+
+
+
+
+
+/**********************Filter the Tournament**************************/
+
+public function findTournament($whereclause)
+{
+$query      = mysql_query("SELECT  * FROM `gs_tournament_info` WHERE $whereclause ");
+ $num       =  mysql_num_rows($query);
+ if($num>=0) 
+ {
+       while($row = mysql_fetch_assoc($query))
+       {
+        $row['fav']='0';
+          $data[]=$row;
+       }
+       return $data;
+}
+ else
+ {
+  return 0;
+ }
+}
+
+
+
+
+
+
+/*******************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2075,6 +2156,7 @@ if(mysql_num_rows($query1) > 0)
 {
 while($row = mysql_fetch_assoc($query1))
 {
+  $row['fav']='0';
 $rows[] = $row;
 }
   return $rows;

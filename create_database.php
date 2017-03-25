@@ -803,7 +803,8 @@ else if($_POST['act'] == "search_job")
  $gender      =urldecode($_POST['gender']);
  $key         =urldecode($_POST['key']);
  $module      =urldecode($_POST['module']);
-  $request   =   new userdataservice();
+ $request   =   new userdataservice();
+ $req           =   new liteservice();
  $where[]      = ' 1=1 ';
   $arr = array();
   if($sport != '')
@@ -835,14 +836,36 @@ if($gender  != '')
   }
     $whereclause = implode('AND', $where);
     $response       = $request ->jobsearch_user($whereclause);
-
 if($response)
 {
-                                $response      = $request->getfavForUser($response,$module, $userid);
-                                if ($module=='1')
-                                {
-                                     $response      = $request ->getuserjobs($response,$module, $userid);
-                                }
+  $req           =  new liteservice();
+  $res2          = $req->getfav($userid,$module);
+               if($res2 != 0 && $res2['userfav'] != '')
+              {
+                $res2 = split(",", $res2['userfav']);
+                foreach ($response as $key => $value)
+                {
+                    if(in_array($response[$key]['id'], $res2))
+                    {
+                       $response[$key]['fav'] = '1';
+                    }
+                    else
+                    {
+                      $response[$key]['fav'] = '0';
+                    }
+
+                }
+              }
+                         if ($module=='1')
+                         {
+                            $response      = $request ->getuserjobs($response,$userid);
+                            $response      = $request ->getuserOffer($response,$userid);
+                         }
+                              //  $response      = $request->getfavForUser($response,$module, $userid);
+                              //  if ($module=='1')
+                              //  {
+                                //     $response      = $request ->getuserjobs($response,$module, $userid);
+                               // }
            $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
            echo json_encode($Result);
 }
@@ -994,24 +1017,40 @@ else if($_POST['act'] == "getsearchview")
           $res[0]['terms_and_cond1'] = $terms;
         
           }
-     //print_r($res);die;
+  $req           =  new liteservice();
+  $res2          = $req->getfav($user_id,$type);
+               if($res2 != 0 && $res2['userfav'] != '')
+              {
+                $res2 = split(",", $res2['userfav']);
+                foreach ($res as $key => $value)
+                {
+                    if(in_array($res[$key]['id'], $res2))
+                    {
+                       $res[$key]['fav'] = '1';
+                    }
+                    else
+                    {
+                      $res[$key]['fav'] = '0';
+                    }
 
-// *****New code add for user job apply ********
-$rev1 = new userdataservice();
-$res1 = $req->getfavForUser($res, $type, $user_id);
-$rev2 = new userdataservice();
-$res2 = $req->getuserjobs($res1, $type, $user_id);
-$data = array('data'=>$res2 , 'status'=>'1');
-echo json_encode($data);
+                }
+              }
+                                              
+                             $request       =   new userdataservice();
+                             $response      = $request->getuserjobs($res,$user_id);
+                             $response      = $request->getuserOffer($response ,$user_id);
+   $data = array('data'=>$response  , 'status'=>'1');
+   echo json_encode($data);
 }
-
        else
        {
-       $data = array('data'=>$res, 'status'=>'0');
+       $data = array('data'=>$response, 'status'=>'0');
        echo json_encode($data);
        }
        
       }
+
+
 
 
 
@@ -1113,7 +1152,6 @@ echo json_encode($data);
 
 else if ($_REQUEST['act'] == "fav" )
 {
-
 $user_id   =urldecode($_REQUEST['user_id']);
 $module    =urldecode($_REQUEST['type']);
 $user_favs =urldecode($_REQUEST['id']);
@@ -1525,8 +1563,8 @@ else if($_REQUEST['act'] == "gs_searching")
 
                          if ($module=='1')
                          {
-                             $response      = $request ->getuserjobs($response,$userid);
-                             $response      = $request ->getuserOffer($response,$userid);
+                            $response      = $request ->getuserjobs($response,$userid);
+                            $response      = $request ->getuserOffer($response,$userid);
                          }
                          if ($module=='2')
                           {
@@ -1547,6 +1585,145 @@ else
 } 
 }   // End Function
 
+
+
+/*********************************************************************/
+
+  else if($_REQUEST['act'] == "filter_article")
+ {
+  $userid        =   urldecode($_REQUEST ['userid']);
+  $title         =   urldecode($_REQUEST ['title']);
+  $topic         =   urldecode($_REQUEST ['topic']);  // Topic of the Article
+  $sport         =   urldecode($_REQUEST ['sport']); 
+  $key           =   urldecode($_REQUEST ['key']); 
+  $module ='6';                                       //  For Resources Then Module
+  $request       =   new userdataservice();
+  $where[]         =   '1 =1 ';
+  $arr = array();
+
+   if($key  != '')
+   {
+      $where[] = " `description` LIKE '%$key%' ";
+      $arr['description'] =  $key  ; 
+   }
+   if($title != '')
+   {
+      $where[] = " `title` LIKE '%$title%' ";
+      $arr['title'] =  $title ; 
+   }
+  if($type != '')
+  {
+    $where[] = " `topic_of_artical` LIKE '%$type%' ";
+    $arr['topic_of_artical'] =  $type ; 
+  }
+  if($sport != '')
+  {
+    $where[] = " `sport` LIKE '%$sport%' ";
+    $arr['sport'] =  $sport ; 
+  }
+    $whereclause   = implode('AND', $where);
+    $response      = $request->findArticle($whereclause);
+    $req           =  new liteservice();
+    $res2          = $req->getfav($userid,$module);
+              if($res2 != 0 && $res2['userfav'] != '')
+              {
+                $res2 = split(",", $res2['userfav']);
+                foreach ($response as $key => $value)
+                {
+                    if(in_array($response[$key]['id'], $res2))
+                    {
+                       $response[$key]['fav'] = '1';
+                    }
+                    else
+                    {
+                      $response[$key]['fav'] = '0';
+                    }
+                }
+              }
+    if($response)
+    {
+            $Result = array('status' => '1','data'=>$response ,'msg'=>'Article Search successfully');
+               echo json_encode($Result);
+    }
+    else
+    {                     
+            $Result = array('status' => '0','data'=>$response ,'msg'=>'Article is Not Found');
+            echo json_encode($Result);
+    } 
+}   // End Function
+
+/********************************************************************/
+
+ else if($_REQUEST['act'] == "filter_tournament")
+ {
+  $userid        =   urldecode($_REQUEST ['userid']);
+  $title         =   urldecode($_REQUEST ['title']);
+  $level         =   urldecode($_REQUEST ['level']);  // Topic of the Article
+  $sport         =   urldecode($_REQUEST ['sport']); 
+  $age_group     =   urldecode($_REQUEST ['age_group']); 
+  $gender        =   urldecode($_REQUEST ['gender']);
+  $module        =  '3'; 
+  $request       =   new userdataservice();
+  $where[]         =   '1 =1 ';
+  $arr = array();
+   if($title  != '')
+   {
+      $where[] = " `title` LIKE '%$title%' ";
+      $arr['title'] =  $key  ; 
+   }
+   if($level != '')
+   {
+      $where[] = " `level` LIKE '%$level%' ";
+      $arr['level'] =  $level ; 
+   }
+  if($sport != '')
+  {
+    $where[] = " `sport` LIKE '%$sport%' ";
+    $arr['sport'] =  $sport ; 
+  }
+   if($age_group != '')
+  {
+    $where[] = " `age_group` LIKE '%$age_group%' ";
+    $arr['age_group'] =  $type ; 
+  }
+ 
+ if($gender != '')
+  {
+    $where[] = " `gender` LIKE '%$gender%' ";
+    $arr['gender'] =  $type ; 
+  }
+$whereclause    =   implode('AND', $where);
+$response       =   $request->findTournament($whereclause);
+$req            =    new liteservice();
+$res2           =   $req->getfav($userid,$module);
+              if($res2 != 0 && $res2['userfav'] != '')
+              {
+                $res2 = split(",", $res2['userfav']);
+                foreach ($response as $key => $value)
+                {
+                    if(in_array($response[$key]['id'], $res2))
+                    {
+                       $response[$key]['fav'] = '1';
+                    }
+                    else
+                    {
+                      $response[$key]['fav'] = '0';
+                    }
+                }
+              }
+if($response)
+{
+           $Result = array('status' => '1','data'=>$response ,'msg'=>'Tournament Search successfully');
+           echo json_encode($Result);
+}
+else
+{                     
+            $Result = array('status' => '0','data'=>$response ,'msg'=>'Tournament is Not Found');
+            echo json_encode($Result);
+}
+
+
+} // End
 
 
 
@@ -1590,6 +1767,7 @@ else if($_REQUEST['act'] == "professional")
   }
     $whereclause = implode('AND', $where);
     $response   = $request->user_Info($whereclause);
+
 if($response)
 {
                                 $response      = $request->getfavForUser($response,$module, $userid);
