@@ -205,12 +205,20 @@ else
 /*********************This Function are used to find the Status is 1 or 0 *******************/
 
 
-public function getConnectedStatus($response, $userid)
+public function getConnectedStatus($response,$userid,$usertype)
 {
-  $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `prof_user_id`=$userid");
-   
-   $num=mysql_num_rows($query);
-   $data = [];
+//print_r($response);
+if ($usertype=='L')
+{
+ $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
+    $filed =`lite_user_id`; 
+}
+if ($usertype=='M')
+{
+   $query= mysql_query("SELECT `lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
+}
+    $num=mysql_num_rows($query);
+     $data = [];
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -218,11 +226,17 @@ public function getConnectedStatus($response, $userid)
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
+           //   print_r($data);die();
+
             for ($i=0; $i <$num ; $i++) 
             {
                 if ($response[$i]['userid']==$data[$i]['prof_user_id'])
                 {
                      $response[$i]['req_status']=$data[$i]['req_status'];
+                }
+                if ($response[$i]['userid']==$data[$i]['lite_user_id']) 
+                {
+                  $response[$i]['req_status']=$data[$i]['req_status'];
                 }
                 else
                 {

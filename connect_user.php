@@ -94,7 +94,7 @@ if($_REQUEST['act'] == 'connect')
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
  //print_r($response);die();
- $response       =  $request->getConnectedStatus($response, $userid);
+ $response       =  $request->getConnectedStatus($response,$userid,$usertype);
   if($response)
   {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
