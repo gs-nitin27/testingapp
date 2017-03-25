@@ -514,14 +514,11 @@ else if($type == '4')
 {
 $query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`title`,'')AS title, IFNull(`description`,'') AS description, IFNull(`url`,'') AS url, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created  FROM `gs_resources`  WHERE ".$where."  ORDER BY `date_created` ASC");
 } 
-
-//$query = mysql_query("SELECT * FROM `".$table."` WHERE `userid` = '$userid' ");
 if(mysql_num_rows($query) > 0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
+$row['fav']='0';
 $row['job']='0';
 $data[] = $row;
 }
@@ -531,10 +528,6 @@ else
 {
   return 0;
 }
-
-
-
-
 }
 
 
