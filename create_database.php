@@ -796,13 +796,13 @@ echo json_encode($data);
 
 else if($_POST['act'] == "search_job")
 {
- $id          =urldecode($_POST['userid']);
+ $userid      =urldecode($_POST['userid']);
  $title       =urldecode($_POST['job_title']);
  $sport       =urldecode($_POST['sport_name']);
  $location    =urldecode($_POST['location']);
  $gender      =urldecode($_POST['gender']);
  $key         =urldecode($_POST['key']);
- $module      =urldecode($_POST['module']);
+ $module      = '1' ;                            // This is Job Module
  $request   =   new userdataservice();
  $req           =   new liteservice();
  $where[]      = ' 1=1 ';
@@ -822,7 +822,6 @@ else if($_POST['act'] == "search_job")
      $where[] = "`title` LIKE '%$title%' "; 
      $arr['title'] = $title ;    
   }
-
  if($key  != '')
   {
      $where[] = "`description` LIKE '%$key%' "; 
@@ -856,18 +855,11 @@ if($response)
 
                 }
               }
-                         if ($module=='1')
-                         {
-                            $response      = $request ->getuserjobs($response,$userid);
-                            $response      = $request ->getuserOffer($response,$userid);
-                         }
-                              //  $response      = $request->getfavForUser($response,$module, $userid);
-                              //  if ($module=='1')
-                              //  {
-                                //     $response      = $request ->getuserjobs($response,$module, $userid);
-                               // }
-           $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
-           echo json_encode($Result);
+                                       
+      $response      = $request ->getuserjobs($response,$userid);
+      $response      = $request ->getuserOffer($response,$userid);
+      $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
+      echo json_encode($Result);
 }
 else
 {                     
@@ -876,6 +868,8 @@ else
 } 
                      
 } // End of Function
+
+
 
 
 //********* CODE FOR SEARCHING EVENTS **********//
