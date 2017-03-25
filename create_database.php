@@ -258,6 +258,7 @@ $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
 $item->prof_id        =  $data1->prof_id;
+
 $req1= new userdataservice();
 
 $req3 = $req1->create_manage_user_exits($item);
