@@ -539,7 +539,7 @@ else
      $record = mysql_query("SELECT * FROM `users_fav` WHERE `userid` = '$user_id' AND `module` = '$module' ");
      if(mysql_num_rows($record) < 1)
      {
-     $query = mysql_query("INSERT INTO `users_fav`(`id`, `userid`, `userfav`, `module`) VALUES ('','$user_id','$user_favs','$module')");
+     $query = mysql_query("INSERT INTO `users_fav`(`id`, `userid`, `userfav`, `module`) VALUES ('0','$user_id','$user_favs','$module')");
       if ($query){
         return 1;
       }else{
