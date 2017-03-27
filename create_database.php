@@ -309,7 +309,7 @@ else
 
 else if($_REQUEST['act']=="getUserData")
 {
-  $userid =urldecode($_REQUEST['userid']);
+ $userid =urldecode($_REQUEST['userid']);
  $formaledu = 0;//$res1;
  $sportsedu = 0;
  $otheredu = 0;
