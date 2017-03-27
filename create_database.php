@@ -1323,7 +1323,7 @@ else
 if($type == 1)
 {
 $req = new userdataservice();
-$res2 = $req->getuserjobs($res2, $type, $id);
+$res2 = $req->getuserjobs($res2, $id);
 }
 
 $data = array('data'=>$res2,'status' => 1);
@@ -1342,18 +1342,21 @@ echo json_encode($data3);
 
 else if($_REQUEST['act'] == "getappliedjobs")
 {
-$userid = urldecode($_POST['user_id']);
-$jobid  =urldecode($_POST['id']);   // JOb id
-$req = new userdataservice();
-$res  = $req->getAppliedJobListing($userid,$jobid);
-if($res)
+$userid = urldecode($_REQUEST['user_id']);
+$jobid  = urldecode($_REQUEST['id']);   // JOb id
+$type   =  '1';
+$req    = new userdataservice();
+$res    = $req->getAppliedJobListing($userid,$jobid);
+$req    = new userdataservice();
+$res1   = $req->getuserjobs($res,$jobid);
+if($res1)
 {
- $data = array('data'=>$res,'status'=>'1');
+ $data = array('data'=>$res1,'status'=>'1');
  echo json_encode($data);
 }
 else
 {
-$data = array('data'=>'0','status'=>'0');
+$data = array('data'=>[],'status'=>'0');
 echo json_encode($data);
 }
 }
@@ -1590,6 +1593,7 @@ else
   $title         =   urldecode($_REQUEST ['title']);
   $topic         =   urldecode($_REQUEST ['topic']);  // Topic of the Article
   $sport         =   urldecode($_REQUEST ['sport']); 
+  $location      =   urldecode($_REQUEST ['location']); 
   $key           =   urldecode($_REQUEST ['key']); 
   $module ='6';                                       //  For Resources Then Module
   $request       =   new userdataservice();
@@ -1601,6 +1605,12 @@ else
       $where[] = " `description` LIKE '%$key%' ";
       $arr['description'] =  $key  ; 
    }
+  if($location  != '')
+   {
+      $where[] = "`location` LIKE '%$location%' ";
+      $arr['location'] =  $location; 
+   }
+
    if($title != '')
    {
       $where[] = " `title` LIKE '%$title%' ";
