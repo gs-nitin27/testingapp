@@ -309,7 +309,7 @@ else
 
 else if($_REQUEST['act']=="getUserData")
 {
-  $userid =urldecode($_REQUEST['userid']);
+ $userid =urldecode($_REQUEST['userid']);
  $formaledu = 0;//$res1;
  $sportsedu = 0;
  $otheredu = 0;
@@ -1347,11 +1347,9 @@ $jobid  = urldecode($_REQUEST['id']);   // JOb id
 $type   =  '1';
 $req    = new userdataservice();
 $res    = $req->getAppliedJobListing($userid,$jobid);
-$req    = new userdataservice();
-$res1   = $req->getuserjobs($res,$jobid);
-if($res1)
+if($res)
 {
- $data = array('data'=>$res1,'status'=>'1');
+ $data = array('data'=>$res,'status'=>'1');
  echo json_encode($data);
 }
 else
