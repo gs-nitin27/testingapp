@@ -56,7 +56,7 @@ $userid         =  @$_REQUEST['userid'];
 $prof_id        =  @$_REQUEST['prof_id'];
 $req            =  new UserProfileService();
 $user_res       = $req->userdata($userid);
-//echo $prof_id;die();
+
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
@@ -78,6 +78,10 @@ else
                     if ($prof_id==2) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
+                    }
+                    if ($prof_id==13) 
+                    {
+                      $data = file_get_contents('json/other_profile.json');
                     }
                }
                 else
