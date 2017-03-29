@@ -4,8 +4,9 @@ class UserPerformanceService
 
 /***************This Function are used to find Performance****************************/
 
-public function userPerformance($age,$sport,$gender)
+public function userPerformance($id,$age,$sport,$gender)
 {
+	//print_r($id);die();
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
@@ -14,6 +15,7 @@ public function userPerformance($age,$sport,$gender)
 	{
 
 		$row['question']=json_decode($row['question']);
+		$row['performance_id'] = $id['id'];
 		$data = $row;
 	}
 	return $data;
@@ -23,6 +25,31 @@ public function userPerformance($age,$sport,$gender)
 		return 0;
 	}
 }	
+
+
+
+
+/******************************Save ***************************************/
+
+public function  save($coachid,$athleteid)
+{
+
+$query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURDATE())");
+	if ($query)
+	{
+	 $last_id = mysql_insert_id();
+     $Result  = $this->findData($last_id);
+	  return $Result;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+
+
 
 /******************************Find Age Group************************/
 

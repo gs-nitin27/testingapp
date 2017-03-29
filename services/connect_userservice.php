@@ -134,7 +134,7 @@ public function getConnectedUser($userid,$usertype)
 
   if($usertype=='M')
   {
-  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
+  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid ) ");
   }
    $row = mysql_num_rows($query);
    if($row)
@@ -226,7 +226,7 @@ if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-           //   print_r($data);die();
+           
 
             for ($i=0; $i <$num ; $i++) 
             {

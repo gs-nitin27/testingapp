@@ -9,9 +9,13 @@ if($_REQUEST['act'] == 'get_modules')
    $sport         =  $userdata->sport;
    $gender        =  $userdata->gender;
    $dob		        =  $userdata->dob;
+   $coachid       =  $userdata->coachid;
+   $athleteid     =  $userdata->athleteid;
    $req           =  new UserPerformanceService();
+   $id            =  $req->save($coachid,$athleteid);
+  // print_r($id);die();
    $age           =  $req->ageGropup($dob);
-   $res           =  $req->userPerformance($age,$sport,$gender);
+   $res           =  $req->userPerformance($id,$age,$sport,$gender);
         if($res)
         {
           $data = array('status' => 1, 'data'=> $res  , 'msg'=>'Success');
