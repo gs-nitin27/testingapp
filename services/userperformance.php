@@ -6,7 +6,6 @@ class UserPerformanceService
 
 public function userPerformance($id,$age,$sport,$gender)
 {
-	//print_r($id);die();
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)

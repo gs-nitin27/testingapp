@@ -233,14 +233,17 @@ if ($usertype=='M')
                 if ($response[$i]['userid']==$data[$i]['prof_user_id'])
                 {
                      $response[$i]['req_status']=$data[$i]['req_status'];
+                     $response[$i]['connection_id']=$data[$i]['id'];
                 }
                 if ($response[$i]['userid']==$data[$i]['lite_user_id']) 
                 {
                   $response[$i]['req_status']=$data[$i]['req_status'];
+                  $response[$i]['connection_id']=$data[$i]['id'];
                 }
                 else
                 {
                  $response[$i]['req_status']=$data[$i]['req_status'];
+                 $response[$i]['connection_id']=$data[$i]['id'];
                 }
             }
               return $response;  

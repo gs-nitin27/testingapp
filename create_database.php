@@ -1030,10 +1030,27 @@ else if($_POST['act'] == "getsearchview")
 
                 }
               }
-                                              
+
+                        if($type=='1')
+                         {
+
                              $request       =   new userdataservice();
                              $response      = $request->getuserjobs($res,$user_id);
                              $response      = $request->getuserOffer($response ,$user_id);
+                         }
+                         if($type=='2')
+                          {
+                            $request       =   new userdataservice();
+                            $response      =   $request ->getuserEvent($res,$user_id);
+                          } 
+                          if($type=='3') 
+                          {
+                            $response      = $request ->getuserTournament($res, $user_id);
+                          }
+                                            
+                          //   $request       =   new userdataservice();
+                            // $response      = $request->getuserjobs($res,$user_id);
+                            // $response      = $request->getuserOffer($response ,$user_id);
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
 }
@@ -1870,9 +1887,10 @@ $user_app    = 'M';
           $response     = $request->userdata($userid);
           $username     = $response['name'];
           $email        = $response['email'];
+
            if ($module=='1')
            {
-              $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid_Emp ,'id'=>$id,'indicator' => 3);
+              $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$id,'indicator' => 3);
             }  
           if ($module=='2')
            {
@@ -1886,7 +1904,7 @@ $user_app    = 'M';
           $response       = $req->alerts($userid_Emp,$user_app, $jsondata); 
           if ($response)
           {
-             $response     = $request->sendPushNotificationToGCM($empdevice_id, $message);
+             $response     = $request->sendPushNotificationToGCM($device_id_Emp, $message);
              $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>$response);
              echo json_encode($Result);
           }

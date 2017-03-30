@@ -1208,12 +1208,14 @@ $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
     //Google cloud messaging GCM-API url
+
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
-            'registration_ids' => $registatoin_ids,
-            'data' => $message,
+            //'registration_ids' => $registatoin_ids,
+           // 'data' => $message,
         );
           $message = array('data1'=>$message);
+
           $data = array('data'=>$message,'to'=>$registatoin_ids);
           json_encode($data);
 
@@ -1242,6 +1244,12 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
        // return $result;
        return 1;
           }
+
+
+
+
+
+
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -1921,19 +1929,19 @@ case '3':
 // This code is Only for Local System Please Ignore it if Functionaly is Complite then code is replace the Code Server
 
 
-public function apply($userid , $id , $type,$module)
+public function apply($userid , $id ,$status,$module)
 {
 
 switch ($module)
  {
    case '1':
-     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
+     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
    case '2':
-       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
+       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
      case '3':
-       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$type')");
+       $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
        break;
   
  }  //End Switch
