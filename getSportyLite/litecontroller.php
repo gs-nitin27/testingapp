@@ -8,13 +8,13 @@ include('../services/userdataservice.php');
 
 
 
-if($_POST['act'] == 'gs_signup')
+if($_REQUEST['act'] == 'gs_signup')
 {
-    $name             =  urldecode($_POST ['name']);
-    $email            =  urldecode($_POST ['email']);
-    $password1        =  md5(urldecode(@$_POST ['password']));
-    $device_id        =  urldecode($_POST['device_id']);
-    $facebook_status  =  urldecode($_POST['facebook_status']);
+    $name             =  urldecode($_REQUEST ['name']);
+    $email            =  urldecode($_REQUEST ['email']);
+    $password1        =  md5(urldecode(@$_REQUEST ['password']));
+    $device_id        =  urldecode($_REQUEST['device_id']);
+    $facebook_status  =  urldecode($_REQUEST['facebook_status']);
     $where      =  "WHERE `email` = '".$email."'";
     $req        =  new liteservice();
     $res        =  $req->userExits($where);
@@ -86,6 +86,7 @@ else if($_REQUEST['act']=="gs_list")
         else
         { 
         $userid        =  urldecode($_REQUEST['user_id']);
+       
         $res2          = $req->getfav($userid,$module);
               if($res2 != 0 && $res2['userfav'] != '')
               {
@@ -252,9 +253,9 @@ else if($_REQUEST['act']=="gs_detail")
 
 else if ($_REQUEST['act'] == "gs_fav" )
 {
-  $user_id   =urldecode(@$_POST['user_id']);
-  $module    =urldecode(@$_POST['type']);
-  $user_favs =urldecode(@$_POST['id']);
+  $user_id   =urldecode(@$_REQUEST['user_id']);
+  $module    =urldecode(@$_REQUEST['type']);
+  $user_favs =urldecode(@$_REQUEST['id']);
   $rev = new liteservice();
   $res = $rev->favourites($user_id, $module , $user_favs);
   if($res == 1)
@@ -306,8 +307,8 @@ else if ($_REQUEST['act'] == "gs_fav" )
 
 else if($_REQUEST['act'] == "gs_getfav")
 {
-  $id   = urldecode($_POST ['user_id']);
-  $type = urldecode($_POST ['type']);
+  $id   = urldecode($_REQUEST['user_id']);
+  $type = urldecode($_REQUEST ['type']);
   $rev  = new liteservice();
   $res  = $rev->getfav($id,$type);
    if($res != 0)
@@ -348,16 +349,18 @@ else if($_REQUEST['act'] == "gs_getfav")
 
 else if($_REQUEST['act'] == "gs_getfav1")
 {
-  $id   = urldecode($_POST ['user_id']);
-  $type = urldecode($_POST ['type']);
-  $rev  = new liteservice();
-  $res  = $rev->getfav($id,$type);
+  $id     = urldecode($_REQUEST ['user_id']);
+  $type   = urldecode($_REQUEST['type']);
+  $rev    = new liteservice();
+  $res    = $rev->getfav($id,$type);
+  //print_r($res);die();
    if($res != 0)
     { 
      switch ($type)
       {
         case '1':
               $favdata    = $res['userfav'];
+             // print_r($favdata);die();
               $rev1       = $rev->get_fvdata1($favdata,$type);
               $rev2       = new userdataservice();
               $result     = $rev2->getuserjobs($rev1, $type, $id);

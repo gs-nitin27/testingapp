@@ -135,6 +135,29 @@ else
     }
 
 
+/*********************Listing The Age Group***************************/
+
+
+ public function Age_Group()
+ {
+      $query = mysql_query("SELECT *FROM `gs_age_group` ");
+      $row  = mysql_num_rows($query);
+      if($row)
+      {
+            while ($row = mysql_fetch_assoc($query))
+            {
+              $data[] = $row;
+            }
+        return $data;
+      }
+      else
+      {
+         return 0;
+      }
+    }
+
+
+
 
 
 } // End Class

@@ -134,7 +134,7 @@ public function getConnectedUser($userid,$usertype)
 
   if($usertype=='M')
   {
-  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached`,`gs_connect`.`req_status` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid AND `req_status`= 1) ");
+  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid ) ");
   }
    $row = mysql_num_rows($query);
    if($row)
@@ -205,10 +205,20 @@ else
 /*********************This Function are used to find the Status is 1 or 0 *******************/
 
 
-public function getConnectedStatus($response, $userid)
+public function getConnectedStatus($response,$userid,$usertype)
 {
-  $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE `lite_user_id`=$userid");
-   $num=mysql_num_rows($query);
+//print_r($response);
+if ($usertype=='L')
+{
+ $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
+    $filed =`lite_user_id`; 
+}
+if ($usertype=='M')
+{
+   $query= mysql_query("SELECT `lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
+}
+    $num=mysql_num_rows($query);
+     $data = [];
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -216,22 +226,31 @@ public function getConnectedStatus($response, $userid)
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
+           
+
             for ($i=0; $i <$num ; $i++) 
             {
                 if ($response[$i]['userid']==$data[$i]['prof_user_id'])
                 {
                      $response[$i]['req_status']=$data[$i]['req_status'];
+                     $response[$i]['connection_id']=$data[$i]['id'];
+                }
+                if ($response[$i]['userid']==$data[$i]['lite_user_id']) 
+                {
+                  $response[$i]['req_status']=$data[$i]['req_status'];
+                  $response[$i]['connection_id']=$data[$i]['id'];
                 }
                 else
                 {
                  $response[$i]['req_status']=$data[$i]['req_status'];
+                 $response[$i]['connection_id']=$data[$i]['id'];
                 }
             }
               return $response;  
   }
    else
   {
-   return 0;
+   return $data;
   }
 
 }
