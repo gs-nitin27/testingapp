@@ -369,7 +369,7 @@ else if($_REQUEST['act']=="create_manage_user")
 
 $data1                = json_decode($_POST[ 'data' ]);
 
-
+ 
 $item                 =  new stdClass();
 $forgot_code          =  mt_rand(1000,10000);
 $item->email          =  $data1->email;
@@ -384,8 +384,10 @@ $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
 $item->prof_id        =  $data1->prof_id;
-$req1= new userdataservice();
 
+
+
+$req1= new userdataservice();
 $req3 = $req1->create_manage_user_exits($item);
 
 //print_r($req3);//die;
