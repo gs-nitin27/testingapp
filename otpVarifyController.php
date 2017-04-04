@@ -17,7 +17,7 @@ $phone = $data->phone_no;
 $userid = $data->userid;
 $otp_code = mt_rand(1000,10000);
 $res1 = save_otp_code($userid,$otp_code);
-$msg = "Welcome to getsporty merchandise app, Your OTP is".$otp_code;
+$msg = $otp_code." This is OTP code for login";
 $res = sendWay2SMS(9528454915,8824784642, $phone, $msg);
   if (is_array($res))
      { 

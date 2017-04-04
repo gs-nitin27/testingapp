@@ -19,8 +19,6 @@ error_reporting(E_ERROR | E_PARSE);
  | When the user is Signup then the Device Id are store in User Table
 */
  
-
-
 if($_REQUEST['act'] == 'gs_signup')
 {
   $data1                     =   json_decode($_POST['data']);
@@ -249,8 +247,6 @@ echo json_encode($user);
 } // End Function
 
 
-
-
 else if($_REQUEST['act']=="create_manage_user")
 {
 $data1                = json_decode($_POST[ 'data' ]);
@@ -268,6 +264,7 @@ $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
 $item->prof_id        =  $data1->prof_id;
+$item->access_module  = "1,2,3";
 $req1= new userdataservice();
 $req3 = $req1->create_manage_user_exits($item);
 if($req3 ==1)
