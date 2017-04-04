@@ -194,8 +194,19 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   { 
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
+  $coach_id          =  $userdata->coach_id ;
+   //                 =   userdata($coach_id); This code are used to send Notification
+  $student_id        =  $userdata->userid;  
   $request           =  new connect_userservice();
-  $response          =  $request->joinStudentData($userdata);
+  $response          =  $request->alreadyStudent($student_id);
+  if($response)
+   {
+            $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
+             echo json_encode($Result);
+   }
+else
+{
+   $response          =  $request->joinStudentData($userdata);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Successfuly Insert Record');
@@ -203,10 +214,14 @@ else if($_REQUEST['act'] == 'get_organized_classes')
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Record is not Insert');
+          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Record is not Inserted');
           echo json_encode($Result);
    } 
 }
+
+}
+
+
 
 
 
@@ -279,7 +294,7 @@ if($response)
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Create Daily Log');
+          $Result = array('status' => '0','data'=>[] ,'msg'=>'Not Create Daily Log');
           echo json_encode($Result);
    } 
 }

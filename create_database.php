@@ -6,11 +6,10 @@ include('services/UserProfileService.php');
 include('services/emailService.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
-  
-//include('userdataservice.php');
 error_reporting(E_ERROR | E_PARSE);
-// SignUp The New User  using the GetsportyLite 
 
+
+// SignUp The New User  using the GetsportyLite 
 /*
  | When the user is SignUp if user   LoginType=1 Then User is Normal User
  |                                   LoginType=2 Then User is Google User
@@ -21,43 +20,44 @@ error_reporting(E_ERROR | E_PARSE);
 */
  
 
+
 if($_REQUEST['act'] == 'gs_signup')
 {
-$data1                     =   json_decode($_POST['data']);
-$email                     =   $data1->email;
-$where                     =   "WHERE `email`= '$email' ";
-$req                       =   new userdataservice();
-$res                       =   $req->userVarify($where);
+  $data1                     =   json_decode($_POST['data']);
+  $email                     =   $data1->email;
+  $where                     =   "WHERE `email`= '$email' ";
+  $req                       =   new userdataservice();
+  $res                       =   $req->userVarify($where);
       if($res)
       {
-          $req1      =    array('status' => 0,'data'=>$res,'msg'=>'User already registered');
-          echo json_encode($req1); 
+          $req1    =    array('status' => 0,'data'=>$res,'msg'=>'User already registered');
+                        echo json_encode($req1); 
       }
       else
       {
-        $req1     = new userdataservice();
-        $res1     = $req1->UserSignup($data1);
+        $req1     =   new userdataservice();
+        $res1     =   $req1->UserSignup($data1);
             if($res1)
             {
-             $res4 =  array('status' => 1,'data'=>$res1,'msg'=>'User registered');
-             echo json_encode($res4);
-             $req2     = new emailService();
-             $res2     = $req2->emailVarification($email);
+                $res4 =  array('status' => 1,'data'=>$res1,'msg'=>'User registered');
+                echo json_encode($res4);
+                $req2     = new emailService();
+                $res2     = $req2->emailVarification($email);
             }
             else
             {
-             $res5 = array('status' => 0,'data'=>$res1,'msg'=>'User not registered');
-             echo json_encode($res5);  
+                $res5 = array('status' => 0,'data'=>$res1,'msg'=>'User not registered');
+                echo json_encode($res5);  
             }
       }
 } // End of Function
-// Sign In Using the GetsportyLite 
 
 
 
-//********************Code for User Login************//
 
+/*  Login The User is using GetsportyLite   
 
+//********************Code for User Login************/
 else if($_REQUEST['act']=="gs_login")
 {
 $data1                        =  json_decode($_POST['data']);
@@ -67,6 +67,11 @@ $password1                    =  md5($password);
 $device_id                    =  $data1->device_id;
 $logintype                    =  $data1->logintype;
 $where                        =  "WHERE `email`= '$email' ";
+$req                          =  new userdataservice();
+$checkdeviceid                =  $req->checkdeviceid($email,$device_id);
+//die();
+//die();
+
 $user_image                   =  $data1->user_image;
 switch ($logintype)
 {
@@ -85,9 +90,12 @@ switch ($logintype)
                       $message      = array('message'=>$mes,'multiple'=>"1");
                       $pushobj      = new userdataservice();
                       $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
-                      $obj          = new userdataservice();
-                      $upd          = $obj->updatedevice($device_id ,$email);
-                      $multiple = "1";
+                      $req                       =  new userdataservice();
+                      $checkdeviceid             =  $req->checkdeviceid($email,$device_id);
+
+                    //  $upd          = $obj->updatedevice($device_id ,$email);
+
+                      //$multiple = "1";
                       }
                       $data = array('status' => 1,'data'=>$res ,'msg'=>'User Successfull Log In');
                       echo json_encode($data);
@@ -109,20 +117,24 @@ switch ($logintype)
                   $res                    =  $req->userVarify($where);
                  if($res)
                   { 
-                      if($res['device_id'] != $device_id )
-                      {
-                        $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
-                        $multiple = '1';
-                        $message = array('message'=>$mes,'multiple'=>"1");
-                        $pushobj      = new userdataservice();
-                        $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
-                        $obj = new userdataservice();
-                        $upd = $obj->updatedevice($device_id ,$email);
+
+
+                      //if($res['device_id'] != $device_id )
+                     // {
+                      //  $mes  = 'Multiple Logins not allowed, You have been successfully Logged Out';
+                      //  $multiple = '1';
+                      //  $message = array('message'=>$mes,'multiple'=>"1");
+                      //  $pushobj      = new userdataservice();
+                       // $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
+
+                       // $obj = new userdataservice();
+                       // $upd = $obj->updatedevice($device_id ,$email);
                         //$multiple = "1";
-                     }
-                         
-                        $userid                 =  $res['userid'] ;
-                        $profle                =  $req->checkprofile($userid);
+                     //}
+                        $req                          =  new userdataservice();
+                        $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
+                        $userid                       =  $res['userid'] ;
+                        $profle                       =  $req->checkprofile($userid);
                         $res['profile']=$profle ;
                         $data = array('status' => 1,'data'=>$res ,'msg'=>'User already registered');
                         echo json_encode($data);
@@ -144,21 +156,21 @@ switch ($logintype)
                             $message = array('message'=>$mes,'multiple'=>"1");
                             $pushobj      = new userdataservice();
                             $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
-                            $obj = new userdataservice();
-                            $upd = $obj->updatedevice($device_id ,$email);
+                          
+                            $req                          =  new userdataservice();
+                            $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
+                          //  $obj = new userdataservice();
+                           // $upd = $obj->updatedevice($device_id ,$email);
                             //$multiple = "1";
                          }
 
                           $data = array('status' => 0,'data'=>$res2,'msg'=>'User registered');
-                           // $data = array('data'=>$res3,'status'=>'1','multip'=>$multiple);
-                          echo json_encode($data);
+                           echo json_encode($data);
                            
                     }
                   }
     break;
-     
-
-
+  
 } //End Switch
 } // Function End
 
@@ -175,7 +187,6 @@ switch ($logintype)
 
 else if($_REQUEST['act']=="editprofile")
 {
-
 $data1                    =  json_decode($_POST[ 'data' ]);
 $item                     =  new stdClass();
 $item->userid             =  $data1->userid;
@@ -188,6 +199,7 @@ $item->gender             =  $data1->gender;
 $item->dob                =  $data1->dob;
 $item->status             =  $data1->status; 
 $item->link               =  $data1->link; 
+$item->link               =  $data1->location; 
 $item->ageGroupCoached    =  $data1->ageGroupCoached; 
 $item->languagesKnown     =  $data1->languagesKnown; 
 $req                      =  new UserProfileService();
@@ -212,7 +224,7 @@ echo json_encode($user);
 }
 
 
- 
+/******************************This Act for Manage Application*************************/
 else if($_REQUEST['act']=="manage_Login")
 {
 $data1                = json_decode($_POST[ 'data' ]);
@@ -222,7 +234,6 @@ $item->password       =  md5($data1->password);
 $item->device_id      =  $data1->device_id;
 $req1= new userdataservice();
 $req3 = $req1->manage_Login($item);
-
 if($req3 != 0 )
 {
 $user = array('status' => 1, 'data'=> $req3, 'msg'=>'Updated' );
@@ -237,13 +248,12 @@ echo json_encode($user);
 
 } // End Function
 
+
+
+
 else if($_REQUEST['act']=="create_manage_user")
 {
-
-
 $data1                = json_decode($_POST[ 'data' ]);
-
-
 $item                 =  new stdClass();
 $forgot_code          =  mt_rand(1000,10000);
 $item->email          =  $data1->email;
@@ -258,13 +268,8 @@ $item->device_id      =  $data1->device_id;
 $item->token_id       =  $data1->token_id;
 $item->name           =  $data1->name;
 $item->prof_id        =  $data1->prof_id;
-
 $req1= new userdataservice();
-
 $req3 = $req1->create_manage_user_exits($item);
-
-//print_r($req3);//die;
-
 if($req3 ==1)
 {
 $user = array('status' => 6);
@@ -304,6 +309,8 @@ else
 
 }
 }
+
+
 
 //***********************Get User Data*********************************/
 
@@ -476,14 +483,11 @@ print_r($userdata);
 
 if($res)
 {
-// print_r($req2);//die;
-//$user = array('Status' => 1);
 $user = array('Status' => 1, 'data'=> $res, 'msg'=>'Updated' );
 echo json_encode($user);
 }
 else
 {
-//  $user = array('Status' => 0);
 $user = array('Status' => 0, 'data'=> $res, 'msg'=>'Notupdated' );
 echo json_encode($user);
 }
@@ -493,7 +497,6 @@ echo json_encode($user);
 
 else if($_POST['act']=="createjob")
 {
-//$status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
 $item = new stdClass(); 
 $item->id                    = $data1->id;
@@ -529,7 +532,6 @@ if($res != 0)
 { 
 $status = array('status' => 'success');
 echo json_encode($status);
-//echo json_encode($status['success']);
 }
 else
 {
@@ -569,14 +571,6 @@ else if($_REQUEST['act'] == 'publish')
      } 
   }
 
-
-
-
-
-
-
-
-/*******************************************************************/
 
 
 
@@ -652,6 +646,8 @@ else
 echo json_encode($status['failure']);
 }
 
+
+
 //********* CODE FOR CREATING EVENTS **********//
 
 else if ($_POST['act'] == 'createevent') 
@@ -705,6 +701,10 @@ echo json_encode($status['success']);
 else
 echo json_encode($status['failure']);
 }
+
+
+
+
 //*********CODE FOR FETCHING THE CREATED DATA***********//
 
 else if($_REQUEST['act'] == "editcreation")
@@ -791,6 +791,7 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
+
 
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
@@ -912,8 +913,7 @@ else if ($_REQUEST['act'] == "search_event" )
        $where[] = "`location` LIKE '%$location%' ";
        $arr['location'] = $location;
   }
-
-  
+ 
     $whereclause = implode('AND', $where);
    // echo "$whereclause";die();
   $response = $request->searchEvent($whereclause);
@@ -1047,10 +1047,6 @@ else if($_POST['act'] == "getsearchview")
                           {
                             $response      = $request ->getuserTournament($res, $user_id);
                           }
-                                            
-                          //   $request       =   new userdataservice();
-                            // $response      = $request->getuserjobs($res,$user_id);
-                            // $response      = $request->getuserOffer($response ,$user_id);
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
 }
@@ -1160,6 +1156,8 @@ die();
 echo json_encode($data);
 }
 
+
+
 //*********CODE FOR MARKING SEARCH RECORDS AS FAVOURITE BY THE USER **********//
 
 else if ($_REQUEST['act'] == "fav" )
@@ -1169,6 +1167,7 @@ $module    =urldecode($_REQUEST['type']);
 $user_favs =urldecode($_REQUEST['id']);
 $rev = new userdataservice();
 $res = $rev->favourites($user_id, $module , $user_favs);
+
 if($res == 1)
 {
 echo json_encode($res);
@@ -1873,6 +1872,7 @@ $user_app    = 'M';
     if ($response)
     {
     $response                  =  $request->FindDeviceId($id,$module);
+    //print_r($response);die();
         if ($response == 0)
         {
          $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>'0');
@@ -1881,6 +1881,8 @@ $user_app    = 'M';
 
         $userid_Emp                =  $response['userid'];
         $device_id_Emp             =  $response['device_id'];
+       //print_r (explode("|",$device_id_Emp));die();
+        //print_r($device_id_Emp);die();
         $email_id_Emp              =  $response['email'];
         if ($device_id_Emp)
         {
