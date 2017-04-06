@@ -5,7 +5,7 @@ class UserPerformanceService
 /***************This Function are used to find Performance****************************/
 
 public function userPerformance($id,$age,$sport,$gender)
-{
+{ 
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
@@ -52,13 +52,13 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 
 /******************************Find Age Group************************/
 
-	public function ageGropup($dob)
+	public function ageGropup($dob,$gender)
 	{
 		$date_1 = new DateTime($dob);
 		$date_2 = new DateTime( date( 'd-m-Y' ));
 		$difference = $date_2->diff( $date_1 );
 		$year=(string)$difference->y;
-			$query 	= mysql_query("SELECT age_group FROM gs_age_group ");
+			$query 	= mysql_query("SELECT age_group FROM gs_age_group WHERE `gender` = '$gender' ");
 			$num = mysql_num_rows($query);
 			if ($num>0)
 			{
