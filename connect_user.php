@@ -141,12 +141,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $response       =  $request->getClass($userid);
  if ($response)
  {
-   $response       =  $request->getClassJoinStudent($response, $student_id);
-   if($response)
-   {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
-             echo json_encode($Result);
-   }
+
+ 	if (!empty($student_id))
+ 	{
+ 		$response       =  $request->getClassJoinStudent($response, $student_id);
+ 	}
+	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
+        echo json_encode($Result);
  }
    else
    {                     
@@ -164,17 +165,29 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  { 
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
+ $coach_id         =  $_REQUEST['coach_id'] ;
  $request          =  new connect_userservice();
  $response         =  $request->getClassInfo($class_id);
- 
  if ($response)
  {
-  $response         =  $request->getClassJoinStudent($response, $student_id);
-   if($response)
-   {
+  	if (!empty($student_id))
+ 	{
+ 		$response       =  $request->getClassJoinStudent($response, $student_id);
+ 	}
+  $con_res          =  $request->getConnect($student_id,$coach_id);
+            if ($con_res) 
+            {
+              $response[0]['connection_status']='1';
+            }
+            else
+            {
+              $response[0]['connection_status']='0';
+            }
+           
+
+  
              $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
              echo json_encode($Result);
-   }
 }
    else
    {                     

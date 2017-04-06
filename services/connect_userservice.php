@@ -326,6 +326,29 @@ $num =mysql_num_rows($query);
 }
 
 
+/**************************************************************************************/
+
+
+public function getConnect($student_id,$coach_id)
+{
+$query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
+  $num =mysql_num_rows($query);
+  if ($num>0)
+  {
+    while($row = mysql_fetch_assoc($query))
+     {
+       $data[] = $row;
+      }
+        return $data;
+      //print_r($data);die();
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+
 
 
 
