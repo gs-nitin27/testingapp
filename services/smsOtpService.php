@@ -173,7 +173,7 @@ function save_otp_code($userid,$forget_code)
 function find_otp_code($userid)
 {
    // print_r($userid);die;
-    $query = mysql_query("SELECT forget_code FROM `user` WHERE `userid`= '$userid'");
+    $query = mysql_query("SELECT *FROM `user` WHERE `userid`= '$userid'");
    
     if($query)
           {
