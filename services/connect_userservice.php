@@ -210,12 +210,12 @@ public function getConnectedStatus($response,$userid,$usertype)
 //print_r($response);
 if ($usertype=='L')
 {
- $query= mysql_query("SELECT `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
+ $query= mysql_query("SELECT `id`, `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
     $filed =`lite_user_id`; 
 }
-if ($usertype=='M')
+else if ($usertype=='M')
 {
-   $query= mysql_query("SELECT `lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
+   $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
     $num=mysql_num_rows($query);
      $data = [];
@@ -227,15 +227,15 @@ if ($usertype=='M')
               $data[]=$row;
             }
            
-
+             
             for ($i=0; $i <$num ; $i++) 
-            {
-                if ($response[$i]['userid']==$data[$i]['prof_user_id'])
-                {
+            {   
+                if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
+                {    //print_r($data);
                      $response[$i]['req_status']=$data[$i]['req_status'];
                      $response[$i]['connection_id']=$data[$i]['id'];
                 }
-                if ($response[$i]['userid']==$data[$i]['lite_user_id']) 
+               else if (isset($data[$i]['lite_user_id']) && $response[$i]['userid']==$data[$i]['lite_user_id']) 
                 {
                   $response[$i]['req_status']=$data[$i]['req_status'];
                   $response[$i]['connection_id']=$data[$i]['id'];

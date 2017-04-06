@@ -162,7 +162,7 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 
   else if($_REQUEST['act'] == 'get_classes_info')
- { 
+ {
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
  $coach_id         =  $_REQUEST['coach_id'] ;
