@@ -338,7 +338,7 @@ else if($_REQUEST['act'] == 'view_dailylog')
 else if($_REQUEST['act'] == 'get_paidclasslisting')
 {
   $coach_id          =  @$_REQUEST['coach_id'];
-  $flag              =  @$_REQUEST['flag'];
+  $flag              =  @$_REQUEST['flag'];             // flag =1 Paid and and flag =0 for Not Paid
   $request           =  new connect_userservice();
   $response          =  $request->accounting($coach_id,$flag);
   if($response)
@@ -358,7 +358,7 @@ else if($_REQUEST['act'] == 'get_paidclasslisting')
 else if($_REQUEST['act'] == 'get_studentpaidlisting')
 {
 $class_id                =  @$_REQUEST['class_id'];
-$flag                    =  @$_REQUEST['flag'];
+$flag                    =  @$_REQUEST['flag'];        // flag =1 Paid and and flag =0 for Not Paid
 $request                 =  new connect_userservice();
 $response                =  $request->studentPaidListing($class_id,$flag);
 if($response)
