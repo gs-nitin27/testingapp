@@ -44,13 +44,13 @@ else if($_REQUEST['act'] == 'verify_otp')
  $item->phone_no = $data->phone_no;
  $res2 = find_otp_code($item->userid);
  $temp_otp_code = $res2['forget_code'];
-if($temp_otp_code == $item->otp_code_server)
+ if($temp_otp_code == $item->otp_code_server)
 {
     $res = change_forgot_code($item);
     if($res)
     {
-	 $user = array('status' => 1 );
-     echo json_encode($user);
+      $user = array('status' => 1 ,'data'=>$res2);
+      echo json_encode($user);
    
    }else{
    	  $user = array('status' => 0);

@@ -210,10 +210,10 @@ public function getConnectedStatus($response,$userid,$usertype)
 //print_r($response);
 if ($usertype=='L')
 {
- $query= mysql_query("SELECT `id`, `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
+ $query= mysql_query("SELECT `id`,`prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
     $filed =`lite_user_id`; 
 }
-else if ($usertype=='M')
+if ($usertype=='M')
 {
    $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
@@ -227,15 +227,14 @@ else if ($usertype=='M')
               $data[]=$row;
             }
            
-             
             for ($i=0; $i <$num ; $i++) 
-            {   
-                if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
-                {    //print_r($data);
+            {
+                if ($response[$i]['userid']==$data[$i]['prof_user_id'])
+                {
                      $response[$i]['req_status']=$data[$i]['req_status'];
                      $response[$i]['connection_id']=$data[$i]['id'];
                 }
-               else if (isset($data[$i]['lite_user_id']) && $response[$i]['userid']==$data[$i]['lite_user_id']) 
+                if ($response[$i]['userid']==$data[$i]['lite_user_id']) 
                 {
                   $response[$i]['req_status']=$data[$i]['req_status'];
                   $response[$i]['connection_id']=$data[$i]['id'];
@@ -261,7 +260,7 @@ else if ($usertype=='M')
 
 public function getClassInfo($class_id)
 {
- $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration FROM `gs_coach_class` where `id` = $class_id ");
+ $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group,IFNull(`duration`,'') AS duration  FROM `gs_coach_class` where `id` = $class_id ");
  $num=mysql_num_rows($query);
  if ($num!=0) 
  {
@@ -307,89 +306,13 @@ public function getClassInfo($class_id)
 }
 //End Function 
 
-/**************************************************************************************/
-
-
-public function getConnect($student_id,$coach_id)
-{
-$query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
-  $num =mysql_num_rows($query);
-  if ($num>0)
-  {
-    while($row = mysql_fetch_assoc($query))
-     {
-       $data[] = $row;
-      }
-        return $data;
-      //print_r($data);die();
-  }
-  else
-  {
-    return 0;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-/********************************************************************/
-public function  alreadyStudent($student_id)
-{
-$query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`='$student_id'");
-$num =mysql_num_rows($query);
-    if ($num>0)
-    {
-    return 1;
-    }
-    else
-    {
-      return 0;
-    }
-
-}
-
-
-/**************************************************************************************/
-
-
-// public function getConnect($student_id,$coach_id)
-// {
-// $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
-//   $num =mysql_num_rows($query);
-//   if ($num>0)
-//   {
-//     while($row = mysql_fetch_assoc($query))
-//      {
-//        $data[] = $row;
-//       }
-//         return $data;
-//       //print_r($data);die();
-//   }
-//   else
-//   {
-//     return 0;
-//   }
-// }
-
-
-
-
-
-
-
 /************ This Function are used to Insert the Student Record*******/
 
 public function joinStudentData($userdata)
 {
   $classid           =  $userdata->classid;
   $student_id        =  $userdata->userid;
+  $coach_id          =  $userdata->coach_id;
   $student_name      =  $userdata->student_name;
   $student_dob       =  $userdata->student_dob;
   $location          =  $userdata->location;
@@ -397,7 +320,7 @@ public function joinStudentData($userdata)
   $mode_of_payment   =  $userdata->mode_of_payment;
   $fees              =  $userdata->fees;
 
-   if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees))
+  if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees))
   {
     return 0;
   }
@@ -491,67 +414,7 @@ public function viewDailyLog($userid)
 
 
 
-/***************************Paid and Unpaid***************************/
 
-public function accounting($coach_id,$flag)
-{
-
-if ($flag==1)
-{
-  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `fees`=`paid`");
- }
-else
-{
-  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `fees`!=`paid`");
- }
-        $num=mysql_num_rows($query);
-        if ($num!=0) 
-        {
-                   while($row=mysql_fetch_assoc($query))
-                   {
-                    
-                     $data[]   = $row ;
-                   }
-                   return $data;
-
-         }
-         else
-         {
-           return 0;
-         }
-}
-
-
-
-/*****************************Function for Paid Listing ********************/
-
-public function studentPaidListing($class_id,$flag)
-{
-  if ($flag==1) 
-  {
-    
-    $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `fees`=`paid`");
-  }
-  else
-  {
-   $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `fees`!=`paid`"); 
-  }
-  $num = mysql_num_rows($query);
-  if ($num)
-  {
-     while($row=mysql_fetch_assoc($query))
-                   {
-                    
-                     $data[]   = $row ;
-                   }
-                   return $data;
-  }
-  else
-  {
-     return 0;
-  }
-
-}
 
 
 

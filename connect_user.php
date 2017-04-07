@@ -141,12 +141,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $response       =  $request->getClass($userid);
  if ($response)
  {
-   $response       =  $request->getClassJoinStudent($response, $student_id);
-   if($response)
-   {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
-             echo json_encode($Result);
-   }
+
+ 	if (!empty($student_id))
+ 	{
+ 		$response       =  $request->getClassJoinStudent($response, $student_id);
+ 	}
+	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
+        echo json_encode($Result);
  }
    else
    {                     
@@ -161,20 +162,33 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 
   else if($_REQUEST['act'] == 'get_classes_info')
- { 
+ {
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
+ $coach_id         =  $_REQUEST['coach_id'] ;
  $request          =  new connect_userservice();
+ $con_res          =  $request->getConnect($student_id,$coach_id);
  $response         =  $request->getClassInfo($class_id);
- 
  if ($response)
  {
-  $response         =  $request->getClassJoinStudent($response, $student_id);
-   if($response)
-   {
+  	if (!empty($student_id))
+ 	{
+ 		$response       =  $request->getClassJoinStudent($response, $student_id);
+ 	}
+  $con_res          =  $request->getConnect($student_id,$coach_id);
+  if ($con_res) 
+  {
+    $response[0]['connection_status']='1';
+  }
+  else
+  {
+    $response[0]['connection_status']='0';
+  }
+           
+
+  
              $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
              echo json_encode($Result);
-   }
 }
    else
    {                     
@@ -194,8 +208,19 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   { 
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
+  $coach_id          =  $userdata->coach_id ;
+   //                 =   userdata($coach_id); This code are used to send Notification
+  $student_id        =  $userdata->userid;  
   $request           =  new connect_userservice();
-  $response          =  $request->joinStudentData($userdata);
+  $response          =  $request->alreadyStudent($student_id);
+  if($response)
+   {
+            $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
+             echo json_encode($Result);
+   }
+else
+{
+   $response          =  $request->joinStudentData($userdata);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Successfuly Insert Record');
@@ -203,10 +228,14 @@ else if($_REQUEST['act'] == 'get_organized_classes')
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Record is not Insert');
+          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Record is not Inserted');
           echo json_encode($Result);
    } 
 }
+
+}
+
+
 
 
 
@@ -279,7 +308,7 @@ if($response)
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Create Daily Log');
+          $Result = array('status' => '0','data'=>[] ,'msg'=>'Not Create Daily Log');
           echo json_encode($Result);
    } 
 }
@@ -295,20 +324,58 @@ else if($_REQUEST['act'] == 'view_dailylog')
   $response          =  $request->viewDailyLog($userid);
   if($response)
      {     
-
                $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
                echo json_encode($Result);
      }
      else
      {                     
-            $Result = array('status' => '0','data'=>$response ,'msg'=>'No Daily Log');
+            $Result = array('status' => '0','data'=>[] ,'msg'=>'No Daily Log');
             echo json_encode($Result);
      } 
   }
 
 
 
+/****************************List of paid **********************************/
 
+else if($_REQUEST['act'] == 'get_paidclasslisting')
+{
+  $coach_id          =  @$_REQUEST['coach_id'];
+  $flag              =  @$_REQUEST['flag'];
+  $request           =  new connect_userservice();
+  $response          =  $request->accounting($coach_id,$flag);
+  if($response)
+     {     
+               $Result = array('status'=>'1','data'=>$response ,'msg'=>'Get Paid Listing');
+               echo json_encode($Result);
+     }
+     else
+     {                     
+            $Result = array('status' => '0','data'=>[] ,'msg'=>'No Paid Listing');
+            echo json_encode($Result);
+     } 
+  }
+
+/**************************************************************/
+
+else if($_REQUEST['act'] == 'get_studentpaidlisting')
+{
+$class_id                =  @$_REQUEST['class_id'];
+$flag                    =  @$_REQUEST['flag'];
+$request                 =  new connect_userservice();
+$response                =  $request->studentPaidListing($class_id,$flag);
+if($response)
+    {     
+
+               $Result = array('status'=>'1','data'=>$response ,'msg'=>'Student Paid Listing');
+               echo json_encode($Result);
+     }
+     else
+     {                     
+            $Result = array('status' => '0','data'=>[] ,'msg'=>'No Paid');
+            echo json_encode($Result);
+     } 
+  }
 
 
 

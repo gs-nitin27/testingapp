@@ -5,7 +5,7 @@ class UserPerformanceService
 /***************This Function are used to find Performance****************************/
 
 public function userPerformance($id,$age,$sport,$gender)
-{
+{ 
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
@@ -52,7 +52,7 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 
 /******************************Find Age Group************************/
 
-	public function ageGropup($dob)
+	public function ageGropup($dob,$gender)
 	{
 
 		//print_r($dob);die;
@@ -60,7 +60,7 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 		$date_2 = new DateTime( date( 'd-m-Y' ));
 		$difference = $date_2->diff( $date_1 );
 		$year=(string)$difference->y;
-			$query 	= mysql_query("SELECT age_group FROM gs_age_group ");
+			$query 	= mysql_query("SELECT age_group FROM gs_age_group WHERE `gender` = '$gender' ");
 			$num = mysql_num_rows($query);
 			if ($num>0)
 			{
@@ -92,22 +92,24 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 
 public function  savePerformance($userdata)
 {
+	$id       		 =  $userdata->id;	
 	$coachid         =  $userdata->coachid;
 	$athleteid       =  $userdata->athleteid;
 	$data       	 =  $userdata->data;
 	$status       	 =  $userdata->status;
-	$query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','$data','$status',CURDATE())");
-	if ($query)
+	$query 			 =	mysql_query("UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`date_created`= CURDATE() WHERE `id`=$id");
+	$num=mysql_affected_rows(); 
+	if ($num)
 	{
-	 $last_id = mysql_insert_id();
-     $Result  = $this->findData($last_id);
-	  return $Result;
+	  return 1;
 	}
 	else
 	{
 		return 0;
 	}
 } //End function
+
+
 
 
 
@@ -133,10 +135,11 @@ public function findData($last_id)
 		
 public function  publishPerformance($userdata)
 {
-	$id         =  $userdata->id;
-	$data       =  $userdata->data;
-	$status     =  $userdata->status;
-	$query =mysql_query("UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE() WHERE `id`='$id'");
+	$id 		        =  $userdata->id;
+	$data 		      	=  $userdata->data;
+	$status     		=  $userdata->status;
+	$next_assessment 	=	date('Y/m/d', strtotime('+3 months'));
+	$query =mysql_query("UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'");
 	$num=mysql_affected_rows();
 	if ($num)
 	{
@@ -158,14 +161,22 @@ public function  publishPerformance($userdata)
 public function viewPerformance($athleteid)
 {
 
-$query= mysql_query("SELECT user.`name` , gs_athlit_performance.* FROM user INNER JOIN gs_athlit_performance ON `user`.`userid`=`gs_athlit_performance`.coachid WHERE `athlitid`=$athleteid ");
-
+$query= mysql_query("SELECT `user`.`name` , `gs_athlit_performance`.* FROM user INNER JOIN `gs_athlit_performance` ON `user`.`userid`=`gs_athlit_performance`.coachid WHERE `athlitid`='$athleteid' ORDER BY `date_publish` DESC");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-		$data[]=$row;
+
+    $startTimeStamp 	= date("Y/m/d") ;
+    $startTimeStamp 	= strtotime($startTimeStamp);
+    $next_assessment 	= $row['next_assessment'];
+    $endTimeStamp    	= strtotime($next_assessment);
+	$timeDiff 			= abs($endTimeStamp - $startTimeStamp);
+	$numberDays 		= $timeDiff/86400;  // 86400 seconds in one day
+	$numberDays 		= intval($numberDays);
+	$row['next_assessment']=$numberDays;
+	$data[]=$row;
 	}
 	return $data;
 	}

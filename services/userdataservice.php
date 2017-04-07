@@ -211,9 +211,6 @@ $user_image         =  $data->user_image;
 |
 */
 
-
-
-
   /***************************Login***************************/
 
   public function gsSignIn($email,$password1)
@@ -232,6 +229,41 @@ $user_image         =  $data->user_image;
                return 0;
             }
     } // end function
+
+
+
+
+
+// This function are used to find the Device Id and store the Device id using con catenate
+
+public function  checkdeviceid($email,$device_id)
+{
+ 
+$query  = mysql_query("SELECT `device_id` FROM `user` WHERE `email` = '$email'");
+if(mysql_num_rows($query)>0)
+{
+$row = mysql_fetch_assoc($query);
+$device_stack = explode('|', $row['device_id']);
+if(!in_array($device_id, $device_stack))
+{
+array_push($device_stack, $device_id);
+$device_id = implode('|',$device_stack);
+}
+else
+{
+  $device_id = $row['device_id'];
+}
+$device_id = ltrim($device_id, '|');
+$update = mysql_query("UPDATE `user` SET `device_id` = '$device_id' WHERE `email` = '$email'");
+if($update)
+{
+  return true;
+}
+}
+ return false;
+
+}
+
 
 
 
@@ -1207,16 +1239,29 @@ $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
-    //Google cloud messaging GCM-API url
 
+  $device=(explode("|",$registatoin_ids));
+
+  foreach ($device as $key => $value) {
+    $registration_ids = $value;
+   $this->sendNotification($registration_ids, $message);
+  //  return $Notification;
+  }
+
+    
+} //End function
+
+
+public function sendNotification($registration_ids, $message)
+{
+   //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
         $fields = array(
-            //'registration_ids' => $registatoin_ids,
-           // 'data' => $message,
+            'registration_ids' => $registration_ids,
+            'data' => $message,
         );
           $message = array('data1'=>$message);
-
-          $data = array('data'=>$message,'to'=>$registatoin_ids);
+          $data = array('data'=>$message,'to'=>$registration_ids);
           json_encode($data);
 
         //print_r($fields);
@@ -1243,13 +1288,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
         curl_close($ch);
        // return $result;
        return 1;
-          }
-
-
-
-
-
-
+}
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
@@ -1820,6 +1859,7 @@ public  function create_manage_user_exits($item)
           // user register with google or facebook in light app ;
 
         // $query = mysql_query("UPDATE `user` SET `userType`='103' , `forget_code`='$item->forget_code' , `date_updated`=CURDATE()  WHERE `userid`='$userid'");
+
 
 //###################### password set  email send to user #########################
 

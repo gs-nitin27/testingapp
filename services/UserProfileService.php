@@ -331,8 +331,9 @@ $status                  = $userdata->status;  //staus
 $link                    = $userdata->link;
 $ageGroupCoached         = $userdata->ageGroupCoached;
 $languagesKnown          = $userdata->languagesKnown;
+$location                = $userdata->location; 
 
-$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown' WHERE `userid`='$userid'");
+$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown',`location`='$location' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
@@ -385,7 +386,7 @@ $query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_n
         }
         else 
         {
-         return 0;
+         return $data;
         }
     }
 
