@@ -121,11 +121,11 @@ else if ($_REQUEST['act'] == 'view_guidelines')
 
           if($res)
           {
-              $array = array('status' => 1, 'data'=>$res, 'msg'=>'Guidelines');
+              $array = array('status' => 1, 'data'=>$res, 'msg'=>'Success');
               echo json_encode($array);
           }
           else {
-              $array = array('status' => 0, 'data'=>$res, 'msg'=>'Record Not Found');
+              $array = array('status' => 0, 'data'=>$res, 'msg'=>'failure');
                     echo json_encode($array);
               }
 }
