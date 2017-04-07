@@ -54,6 +54,8 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 
 	public function ageGropup($dob)
 	{
+
+		//print_r($dob);die;
 		$date_1 = new DateTime($dob);
 		$date_2 = new DateTime( date( 'd-m-Y' ));
 		$difference = $date_2->diff( $date_1 );
@@ -171,7 +173,38 @@ $query= mysql_query("SELECT user.`name` , gs_athlit_performance.* FROM user INNE
 	{
 		return 0;
 	}
-}					
+}	
+
+
+
+public function viewPerformanceguide($item,$agegropup)
+{
+
+	//print_r($agegropup);die;
+   $query = mysql_query("SELECT `guidelines` FROM `gs_performance_guide` WHERE `sport`='$item->sport' AND `age_group`='$agegropup' AND `gender` = '$item->gender'");
+
+   $num = mysql_num_rows($query);
+	if ($num>0)
+	{
+	while ($row=mysql_fetch_assoc($query))
+	{
+		$data[]=$row;
+	}
+	return $data[0];
+	}
+	else
+	{
+		return 0;
+	}
+
+
+
+
+
+
+
+
+}				
 
 
 
