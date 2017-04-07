@@ -3,7 +3,7 @@ include('config1.php');
 include('services/userperformance.php');
 
 if($_REQUEST['act'] == 'get_modules')	
-{
+{  //print_r($_POST);
    $data 			    =  file_get_contents("php://input");
    $userdata 	    =  json_decode(file_get_contents("php://input"));
    $sport         =  $userdata->sport;
@@ -13,7 +13,7 @@ if($_REQUEST['act'] == 'get_modules')
    $athleteid     =  $userdata->athleteid;
    $req           =  new UserPerformanceService();
    $id            =  $req->save($coachid,$athleteid);
-   $age           =  $req->ageGropup($dob);
+   $age           =  $req->ageGropup($dob,$gender);
    $res           =  $req->userPerformance($id,$age,$sport,$gender);
         if($res)
         {
