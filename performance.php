@@ -113,17 +113,11 @@ else if($_REQUEST['act'] == 'view_performance')
 /**************************************** View Guidelines ************************/
 
 else if ($_REQUEST['act'] == 'view_guidelines') 
-{
-          $data = json_decode($_POST['data']);
-            
+{         
+          $data      =  json_decode(file_get_contents("php://input"));
           $req = new UserPerformanceService();
-          
-          $age           =  $req->ageGropup($data->dob);
-
-
+          $age           =  $req->ageGropup($data->dob,$data->gender);
           $res = $req->viewPerformanceguide($data,$age);
-
-         // print_r($res);die;
 
           if($res)
           {
@@ -131,18 +125,9 @@ else if ($_REQUEST['act'] == 'view_guidelines')
               echo json_encode($array);
           }
           else {
-            
               $array = array('status' => 0, 'data'=>$res, 'msg'=>'Record Not Found');
                     echo json_encode($array);
-
               }
-
-
-
-
-
-
-
 }
 
 
