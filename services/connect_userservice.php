@@ -218,7 +218,7 @@ else if ($usertype=='M')
    $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
     $num=mysql_num_rows($query);
-     $data = [];
+  //   $data = [];
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -226,12 +226,15 @@ else if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-           
+             // $num1=count($data);
+            //  echo "$num1";die();
+         // print_r($data);
+           //print_r($response)       ;die();
              
-            for ($i=0; $i <$num ; $i++) 
+            for ($i=0; $i <$num; $i++) 
             {   
                 if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
-                {    //print_r($data);
+                {   
                      $response[$i]['req_status']=$data[$i]['req_status'];
                      $response[$i]['connection_id']=$data[$i]['id'];
                 }
