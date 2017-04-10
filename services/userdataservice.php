@@ -1230,8 +1230,6 @@ $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`
 }
 
 
-/*******************************************************************/
-
 
 
 /*************************************************************************/
@@ -1244,7 +1242,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
   foreach ($device as $key => $value) {
     $registration_ids = $value;
-   $this->sendNotification($registration_ids, $message);
+    $google_api = "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8";
+   $this->sendNotification($registration_ids, $message,$google_api);
   //  return $Notification;
   }
 
@@ -1252,7 +1251,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 } //End function
 
 
-public function sendNotification($registration_ids, $message)
+public function sendNotification($registration_ids, $message,$google_api)
 {
    //Google cloud messaging GCM-API url
         $url = 'https://gcm-http.googleapis.com/gcm/send';
@@ -1266,7 +1265,7 @@ public function sendNotification($registration_ids, $message)
 
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
-        define("GOOGLE_API", "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8");    
+        define("GOOGLE_API", $google_api);    
         $headers = array(
             'Authorization: key=' . GOOGLE_API,
             'Content-Type: application/json'
@@ -1293,41 +1292,15 @@ public function sendNotification($registration_ids, $message)
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
 {
-    //Google cloud messaging GCM-API url
-        $url = 'https://gcm-http.googleapis.com/gcm/send';
-        $fields = array(
-            'registration_ids' => $registatoin_ids,
-            'data' => $message,
-        );
-        //$registatoin_ids = '/topics/global';
-        //echo $registatoin_ids;
-       $message = array('data1'=>$message);
-      $data = array('data'=>$message,'to'=>$registatoin_ids);
-     // print_r($data);
-        json_encode($data);
-        //print_r($fields);
-    // Google Cloud Messaging GCM API Key
-   define("API_KEY", "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU");    
-        $headers = array(
-            'Authorization: key=' . API_KEY,
-            'Content-Type: application/json'
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        $result = curl_exec($ch);       
-        if ($result === FALSE) {
-            die('Curl failed: ' . curl_error($ch));
-        }
-        curl_close($ch);
-        return $result;
-        //print_r($result);
-    }
+     $device=(explode("|",$registatoin_ids));
+
+  foreach ($device as $key => $value) {
+    $registration_ids = $value;
+    $google_api = "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU";
+   $this->sendNotification($registration_ids, $message,$google_api);
+  }
+
+}
 
 
 public function savealert($employerid ,$type,$message , $title, $applicantId)
@@ -1811,9 +1784,10 @@ return 0;
 }
 }
 
+
+
 public function manage_Login($item)
 {
-
 $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ");
 {
 if(mysql_num_rows($query)>0)
@@ -1827,8 +1801,6 @@ if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
 {
    $userid= $data[0]['userid'];
    $query = mysql_query("UPDATE `user` SET `device_id`='$item->device_id' WHERE `userid`='$userid'");
-    
-
 }
 //die;
 return $data;
