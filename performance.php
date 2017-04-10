@@ -89,7 +89,7 @@ else if($_REQUEST['act'] == 'view_performance')
   $assessment     =  $userdata->assessment;
   $req           =  new UserPerformanceService();
   $res           =  $req->viewPerformance($athleteid,$assessment);
-   if ($assessment==0)
+   if($assessment==0)
    {
     $day =-1;
    }

@@ -209,10 +209,11 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
   $coach_id          =  $userdata->coach_id ;
+  $classid           =  $userdata->classid;
    //                 =   userdata($coach_id); This code are used to send Notification
   $student_id        =  $userdata->userid;  
   $request           =  new connect_userservice();
-  $response          =  $request->alreadyStudent($student_id);
+  $response          =  $request->alreadyStudent($student_id,$classid);
   if($response)
    {
             $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');

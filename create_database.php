@@ -1042,6 +1042,7 @@ else if($_POST['act'] == "getsearchview")
                           } 
                           if($type=='3') 
                           {
+                            $request       =   new userdataservice();
                             $response      = $request ->getuserTournament($res, $user_id);
                           }
    $data = array('data'=>$response  , 'status'=>'1');
