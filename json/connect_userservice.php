@@ -418,11 +418,6 @@ public function viewDailyLog($userid)
 
 
 
-
-
-
-
-
 } // End Class
 
 

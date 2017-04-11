@@ -54,9 +54,6 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 
 	public function ageGropup($dob,$gender)
 	{
-
-		//print_r($dob);die;
-		
 		$date_1 = new DateTime($dob);
 		$date_2 = new DateTime( date( 'd-m-Y' ));
 		$difference = $date_2->diff( $date_1 );
@@ -84,8 +81,6 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 				return $sum;
 			}
 	}
-
-
 
 
 /*********************************************************/
