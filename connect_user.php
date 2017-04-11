@@ -2,6 +2,7 @@
 include('config1.php');
 include('services/userdataservice.php');
 include('services/connect_userservice.php');
+include('services/manageSchedulingService.php');
 
  
 if($_REQUEST['act'] == 'connect')
@@ -379,7 +380,6 @@ $request                 =  new connect_userservice();
 $response                =  $request->studentPaidListing($class_id,$flag);
 if($response)
     {     
-
                $Result = array('status'=>'1','data'=>$response ,'msg'=>'Student Paid Listing');
                echo json_encode($Result);
      }
@@ -390,5 +390,160 @@ if($response)
      } 
   }
 
+ /****************************create log  **********************************/
+
+ else if ($_REQUEST['act'] == 'create_log_assign') 
+{
+    $data   = json_decode($_POST['data']);
+    $item    =  new stdClass();
+
+    $item->userid       =   $data->userid; 
+    $item->phase        =   $data->phase;
+    $item->activity     =   $data->activity;
+    $item->duration     =   $data->duration;
+    $item->distance     =   $data->distance;
+    $item->time_of_day  =   $data->time_of_day;
+    $item->remark       =   $data->remark;
+    $item->mesurement   =   $data->mesurement;
+    $item->performance  =   $data->performance;
+
+    $req                 =  new connect_userservice();
+    $res                 =  $req->coach_log_assign($item);
+
+    if($res)
+    {
+       $result = array('status' => 1);
+       echo json_encode($result);
+    }
+    else
+    {
+       $result  = array('status' => 0);
+       echo json_encode($result);
+    }    
+} 
+
+ /****************************For  Log list filters   **********************************/
+
+else if ($_REQUEST['act'] == 'coach_log_student_list')
+{
+       $data = json_decode($_POST['data']);
+       $req = new  connect_userservice();
+      if($data->indicator == 'studentlist')
+      {
+        $res = $req->getClass($data->userid);
+        if($res)
+        {
+        $arr=[];
+        foreach ($res as $key ) {
+          $studentlist = $req->studentlist($key['id']);
+          array_push($arr,$studentlist);
+      }
+        $result = array('status' =>1 , 'data' =>$arr);
+        echo json_encode($result);
+         }
+         else
+         {
+           $result = array('status' =>0 , 'data' =>[]);
+           echo json_encode($result);
+         }
+      }
+      else if($data->indicator == 'class')
+      {
+        $res = $req->getClass($data->userid);
+        $result = array('status' =>1 , 'data' =>$res);
+        echo json_encode($result); 
+      }
+      else if($data->indicator == 'gender')
+      {
+       $res = $req->getClass($data->userid);
+        if($res)
+        {
+        $arr=[];
+        $i=0;
+        foreach ($res as $key ) {
+          $studentlist = $req->studentlistgender($key['id'],$data->parameter);
+          array_push($arr,$studentlist);
+        }
+        $result = array('status' =>1 , 'data' =>$arr);
+        echo json_encode($result);
+         }
+         else
+         {
+           $result = array('status' =>0 , 'data' =>[]);
+           echo json_encode($result);
+         }
+      }
+      else if($data->indicator == 'age_group')
+      {
+        $agegrp =  explode("-",$data->parameter);
+        $res = $req->getClass($data->userid);
+        if($res)
+        {
+        $arr=[];
+        $temp = [];
+        foreach ($res as $key ) {
+          $studentlist = $req->studentlist($key['id']);
+            $arr[] = $studentlist;
+        }
+           for ($i=0; $i <sizeof($arr[0]) ; $i++) { 
+                 $date_1 = new DateTime($arr[0][$i]['student_dob']);
+                 $date_2 = new DateTime( date( 'd-m-Y' ));
+                 $difference = $date_2->diff( $date_1 );
+                 $year=(string)$difference->y;
+
+                 if($year > $agegrp[0] && $year < $agegrp[1])
+                 {
+                    $temp[] =  $arr[0][$i];
+                 }
+           }
+         $result = array('status' =>1 , 'data' =>$temp);
+         echo json_encode($result);
+         }
+     else
+       {
+        $result = array('status' =>0 , 'data' =>[]);
+        echo json_encode($result);
+     }
+      }
+}
+
+ /****************************create log list   **********************************/
+
+else if ($_REQUEST['act'] == 'coach_log_list')
+{
+       $data = json_decode($_POST['data']);
+       $req = new  connect_userservice();
+       $res = $req->coach_log_list($data->userid);
+       if($res)
+       {
+         $result = array('status' => 1, 'data' => $res);
+         echo json_encode($result);
+       }
+       else
+       {
+        $result = array('status' => 0, 'data' => []);
+        echo json_encode($result);
+       }
+}
+
+ /****************************activity search for autocomplete  **********************************/
+
+else if($_REQUEST['act'] == 'activity_search')
+{
+       $data = json_decode($_POST['data']);
+
+       $req = new  connect_userservice();
+       $res = $req->search_activity($data->activity);
+       if($res)
+       {
+        $result = array('status' => 1, 'data' => $res);
+        echo json_encode($result);
+       }
+       else
+       {
+           $result = array('status' => 0, 'data' => []);
+           echo json_encode($result);
+       }
+}
 
 

@@ -557,12 +557,117 @@ public function studentPaidListing($class_id,$flag)
 }
 
 
+/*****************************Function Create log ********************/
+public function coach_log_assign($item)
+{
+
+ $insert  = mysql_query("INSERT `gs_coach_assign`(`userid`,`phase`,`activity`,`mesurement`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->userid','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->mesurement','$item->performance',CURDATE())");
 
 
+ if($insert)
+ {
+  return 1;
+ }
+ else
+ {
+  return 0;
+ }
+
+}
+
+/*****************************Function for log Listing ********************/
+public function coach_log_list($coachid)
+{
+   $query = mysql_query("SELECT * FROM `gs_coach_assign` WHERE `userid`='$coachid'");
+
+    $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
 
 
+}
+
+/*****************************Function for student list based on classid Listing ********************/
+
+public function studentlist($classid)
+{
+
+ // print_r($classid);
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid'");
+
+    $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+}
 
 
+/*****************************Function for student list based on classid and gender Listing********************/
+
+public function studentlistgender($classid,$gender)
+{
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+}
+
+
+/*****************************Function for activity search  ********************/
+
+public function search_activity($data)
+{
+  //print_r($data);die;
+  $query = mysql_query("SELECT `activity` FROM `gs_coach_assign` WHERE `activity` LIKE '$data%'");
+  $num = mysql_num_rows($query);
+  $data = [];
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+}
 } // End Class
 
 
