@@ -163,7 +163,6 @@ $query= mysql_query("SELECT `user`.`name` , `gs_athlit_performance`.* FROM user 
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-
     $startTimeStamp 	= date("Y/m/d") ;
     $startTimeStamp 	= strtotime($startTimeStamp);
     $next_assessment 	= $row['next_assessment'];

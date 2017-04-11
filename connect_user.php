@@ -7,9 +7,19 @@ include('services/manageSchedulingService.php');
  
 if($_REQUEST['act'] == 'connect')
 {
-    $user_request_id = $_REQUEST['lite_user_id'];
-    $user_responser_id = $_REQUEST['prof_user_id'];
-    $user_app = $_REQUEST['user_app'];
+
+    $user_request_id    = $_REQUEST['lite_user_id'];
+    $user_responser_id  = $_REQUEST['prof_user_id'];
+    $user_app           = $_REQUEST['user_app'];
+    $req                = new connect_userservice();
+    $response           = $req->getConnect($user_request_id,$user_responser_id);
+    if ($response)
+    {
+      $userresponse = array('status' =>0 , 'msg' => 'already connected');
+       echo json_encode($userresponse);
+    }
+    else
+    {
     $req = new connect_userservice();
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
     $userdata = new userdataservice();
@@ -34,6 +44,8 @@ if($_REQUEST['act'] == 'connect')
        $userresponse = array('status' =>0 , 'connection_status' => 0 , 'message' => 'Request is  not sent');
        echo json_encode($userresponse);
     }
+  }
+
 }
 
 
@@ -210,10 +222,11 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
   $coach_id          =  $userdata->coach_id ;
+  $classid           =  $userdata->classid;
    //                 =   userdata($coach_id); This code are used to send Notification
   $student_id        =  $userdata->userid;  
   $request           =  new connect_userservice();
-  $response          =  $request->alreadyStudent($student_id);
+  $response          =  $request->alreadyStudent($student_id,$classid);
   if($response)
    {
             $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
@@ -342,7 +355,7 @@ else if($_REQUEST['act'] == 'view_dailylog')
 else if($_REQUEST['act'] == 'get_paidclasslisting')
 {
   $coach_id          =  @$_REQUEST['coach_id'];
-  $flag              =  @$_REQUEST['flag'];
+  $flag              =  @$_REQUEST['flag'];             // flag =1 Paid and and flag =0 for Not Paid
   $request           =  new connect_userservice();
   $response          =  $request->accounting($coach_id,$flag);
   if($response)
@@ -362,7 +375,7 @@ else if($_REQUEST['act'] == 'get_paidclasslisting')
 else if($_REQUEST['act'] == 'get_studentpaidlisting')
 {
 $class_id                =  @$_REQUEST['class_id'];
-$flag                    =  @$_REQUEST['flag'];
+$flag                    =  @$_REQUEST['flag'];        // flag =1 Paid and and flag =0 for Not Paid
 $request                 =  new connect_userservice();
 $response                =  $request->studentPaidListing($class_id,$flag);
 if($response)

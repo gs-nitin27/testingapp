@@ -218,7 +218,7 @@ else if ($usertype=='M')
    $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
     $num=mysql_num_rows($query);
-     $data = [];
+  //   $data = [];
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -226,12 +226,15 @@ else if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-           
+             // $num1=count($data);
+            //  echo "$num1";die();
+         // print_r($data);
+           //print_r($response)       ;die();
              
-            for ($i=0; $i <$num ; $i++) 
+            for ($i=0; $i <$num; $i++) 
             {   
                 if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
-                {    //print_r($data);
+                {   
                      $response[$i]['req_status']=$data[$i]['req_status'];
                      $response[$i]['connection_id']=$data[$i]['id'];
                 }
@@ -340,9 +343,9 @@ $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_i
 
 
 /********************************************************************/
-public function  alreadyStudent($student_id)
+public function  alreadyStudent($student_id,$classid)
 {
-$query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`='$student_id'");
+$query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`='$student_id' AND `classid`='$classid'");
 $num =mysql_num_rows($query);
     if ($num>0)
     {
@@ -498,11 +501,11 @@ public function accounting($coach_id,$flag)
 
 if ($flag==1)
 {
-  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `fees`=`paid`");
+  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `gs_class_data`.`fees`=`gs_class_data`.`paid`");
  }
 else
 {
-  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `fees`!=`paid`");
+  $query= mysql_query("SELECT gs_class_data.* , `gs_coach_class`.`class_title` FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `userid`=$coach_id  AND `gs_class_data`.`fees`!=`gs_class_data`.`paid`");
  }
         $num=mysql_num_rows($query);
         if ($num!=0) 
@@ -530,11 +533,11 @@ public function studentPaidListing($class_id,$flag)
   if ($flag==1) 
   {
     
-    $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `fees`=`paid`");
+    $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `gs_class_data`.`fees`=`paid`");
   }
   else
   {
-   $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `fees`!=`paid`"); 
+   $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `gs_class_data`.`fees`!=`paid`"); 
   }
   $num = mysql_num_rows($query);
   if ($num)

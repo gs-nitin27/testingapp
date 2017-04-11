@@ -223,13 +223,17 @@ echo json_encode($user);
 
 
 /******************************This Act for Manage Application*************************/
+
 else if($_REQUEST['act']=="manage_Login")
 {
-$data1                = json_decode($_POST[ 'data' ]);
+$data1                =  json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
 $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
 $item->device_id      =  $data1->device_id;
+$device_id            =  $item->device_id;  
+$req                  =  new userdataservice();
+$checkdeviceid        =  $req->checkdeviceid($email,$device_id);
 $req1= new userdataservice();
 $req3 = $req1->manage_Login($item);
 if($req3 != 0 )
@@ -245,6 +249,8 @@ echo json_encode($user);
 
 
 } // End Function
+
+
 
 
 else if($_REQUEST['act']=="create_manage_user")
@@ -306,6 +312,8 @@ else
 
 }
 }
+
+
 
 
 
@@ -1042,6 +1050,7 @@ else if($_POST['act'] == "getsearchview")
                           } 
                           if($type=='3') 
                           {
+                            $request       =   new userdataservice();
                             $response      = $request ->getuserTournament($res, $user_id);
                           }
    $data = array('data'=>$response  , 'status'=>'1');
