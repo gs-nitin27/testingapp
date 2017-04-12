@@ -710,9 +710,9 @@ public function logdata($logid)
 
 /*************************************View Log************************************/
 
-public function  view_coach_log($coach_id,$coach_assignment_id)
+public function  view_coach_log($coach_assignment_id)
 {
- $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
+ $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' ");
   $num = mysql_num_rows($query);
   if ($num)
   {

@@ -577,10 +577,9 @@ else if($_REQUEST['act'] == "view_coach_log")
 {
   $data                   =  file_get_contents("php://input");
   $userdata               =  json_decode(file_get_contents("php://input"));
-  $coach_id               =  $userdata->coach_id ;
   $coach_assignment_id    =  $userdata->coach_assignment_id;
   $request                =  new connect_userservice();
-  $response               = $request->view_coach_log($coach_id,$coach_assignment_id); 
+  $response               =  $request->view_coach_log($coach_assignment_id); 
   if ($response)
   {
     $Result = array('status' => '1','data'=>$response,'msg'=>'view coach log ');
