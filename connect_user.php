@@ -396,6 +396,7 @@ if($response)
 {
     $data   = json_decode($_POST['data']);
     $item    =  new stdClass();
+
     $item->coach_id                =   $data->coach_id; 
     $item->phase                   =   $data->phase;
     $item->activity                =   $data->activity;
@@ -403,10 +404,10 @@ if($response)
     $item->distance                =   $data->distance;
     $item->time_of_day             =   $data->time_of_day;
     $item->remark                  =   $data->remark;
-    $item->target_repetition       =   $data->repetition;
+    $item->repetition              =   $data->repetition;
     $item->performance             =   $data->performance;
-    $req                 =  new connect_userservice();
-    $res                 =  $req->coach_log_assign($item);
+    $req                           =  new connect_userservice();
+    $res                           =  $req->coach_log_assign($item);
 
     if($res)
     {
@@ -567,9 +568,9 @@ else if($_REQUEST['act'] == 'activity_search')
     {
        $result =  array('status' =>0);
        echo json_encode($result);
-
     }
  }
+
 
 /****************************View the Coach Log***************************/
 
