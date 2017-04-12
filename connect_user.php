@@ -591,6 +591,28 @@ else if($_REQUEST['act'] == "view_coach_log")
 
 
 
+/******************************** UPDATE THE COACH LOG FILE**************************/
+
+
+else if($_REQUEST['act'] == 'update_log')
+{
+ 
+  $data               =  file_get_contents("php://input");
+  $userdata           =  json_decode(file_get_contents("php://input"));
+  $request           =  new connect_userservice();
+  $response          =  $request->updatelog($userdata);
+if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'Updated Log');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Not Updated Log');
+          echo json_encode($Result);
+   } 
+}
+
 
 
 
