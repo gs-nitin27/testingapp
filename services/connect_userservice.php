@@ -668,6 +668,39 @@ public function search_activity($data)
      return 0;
   }
 }
+
+
+/*****************************View the Coach assignment********************************************/
+
+public function  view_coach_log($coach_id,$coach_assignment_id)
+{
+
+ $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+
+
+}
+
+
+
+
+
+
+
 } // End Class
 
 

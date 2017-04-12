@@ -547,3 +547,26 @@ else if($_REQUEST['act'] == 'activity_search')
 }
 
 
+/****************************View the Coach Log***************************/
+
+
+else if($_REQUEST['act'] == "view_coach_log")
+{
+  $data                   =  file_get_contents("php://input");
+  $userdata               =  json_decode(file_get_contents("php://input"));
+  $coach_id               =  $userdata->coach_id ;
+  $coach_assignment_id    =  $userdata->coach_assignment_id;
+  $request                =  new connect_userservice();
+  $response               = $request->view_coach_log($coach_id,$coach_assignment_id); 
+  if ($response)
+  {
+    $Result = array('status' => '1','data'=>$response,'msg'=>'view coach log ');
+          echo json_encode($Result);      
+  }
+  else
+  {
+  $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Any Log ');
+          echo json_encode($Result);      
+  }
+}
+
