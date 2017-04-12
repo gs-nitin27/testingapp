@@ -606,12 +606,12 @@ else if($_REQUEST['act'] == 'update_log')
   $response          =  $request->updatelog($userdata);
 if($response)
    {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'Updated Log');
+             $Result = array('status' => '1','data'=>'1' ,'msg'=>'Updated Log');
              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Updated Log');
+          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not Updated Log');
           echo json_encode($Result);
    } 
 }
