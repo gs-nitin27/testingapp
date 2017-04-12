@@ -561,7 +561,7 @@ public function studentPaidListing($class_id,$flag)
 public function coach_log_assign($item)
 {
 
- $insert  = mysql_query("INSERT `gs_coach_assign`(`userid`,`phase`,`activity`,`mesurement`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->userid','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->mesurement','$item->performance',CURDATE())");
+ $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`mesurement`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->mesurement','$item->performance',CURDATE())");
 
 
  if($insert)
@@ -578,7 +578,7 @@ public function coach_log_assign($item)
 /*****************************Function for log Listing ********************/
 public function coach_log_list($coachid)
 {
-   $query = mysql_query("SELECT * FROM `gs_coach_assign` WHERE `userid`='$coachid'");
+   $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `coach_id`='$coachid'");
 
     $num = mysql_num_rows($query);
   if ($num)
@@ -649,9 +649,10 @@ public function studentlistgender($classid,$gender)
 
 /*****************************Function for activity search  ********************/
 
-public function search_activity($data)
+public function search_activity()
 {
-  $query = mysql_query("SELECT `activity` FROM `gs_coach_assignment` WHERE `activity` LIKE '$data%'");
+
+  $query = mysql_query("SELECT DISTINCT(activity) FROM `gs_coach_assignment`");
   $num = mysql_num_rows($query);
   $data = [];
   if ($num)
@@ -668,12 +669,48 @@ public function search_activity($data)
   }
 }
 
+public function log_assign($studentid,$data)
+{
+      $phase     = $data[0]['phase'];
+      $activity  = $data[0]['activity'];
+      $id        = $data[0]['id'];
+      $date      = $data[0]['date'];
+
+    $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$id','$date')");
+    if($insert)
+    {
+      return 1;
+    }
+    else{
+      return 0;
+    }    
+
+}
 
 
+public function logdata($logid)
+{
+  $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$logid'");
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+}
+
+
+/*************************************View Log************************************/
 
 public function  view_coach_log($coach_id,$coach_assignment_id)
 {
-
  $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
   $num = mysql_num_rows($query);
   if ($num)
@@ -689,10 +726,8 @@ public function  view_coach_log($coach_id,$coach_assignment_id)
   {
      return 0;
   }
-
-
-
 }
+
 
 
 
