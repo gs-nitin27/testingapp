@@ -611,7 +611,7 @@ if($response)
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Not Updated Log');
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Updated Log');
           echo json_encode($Result);
    } 
 }
