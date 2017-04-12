@@ -424,13 +424,7 @@ public function createdDailyLog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $date             =  $userdata->date;
-  //if (empty($userid) || empty($activity) )
-  //{
-   // return 0;
-//}
-//else
-//{  
-      $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
+        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
     if ($query)
      {
       return 1;
@@ -669,16 +663,16 @@ public function logdata($logid)
 
 /*************************************View Log************************************/
 
-public function  view_coach_log($coach_id,$coach_assignment_id)
+public function  view_coach_log($coach_assignment_id)
 {
- $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
+ $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' ");
   $num = mysql_num_rows($query);
   if ($num)
   {
      while($row=mysql_fetch_assoc($query))
                    {
                     
-                     $data[]   = $row ;
+                     $data  = $row ;
                    }
                    return $data;
   }
