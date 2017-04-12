@@ -111,7 +111,7 @@ public function  savePerformance($userdata)
 
 public function findData($last_id)
 {
-	$query 	= mysql_query("SELECT `id`,`status` FROM `gs_athlit_performance` WHERE `id`=$last_id ");
+	$query 	= mysql_query("SELECT `id`,`status` FROM `gs_athlit_performance` WHERE `id`='$last_id' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{

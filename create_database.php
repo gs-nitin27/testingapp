@@ -174,6 +174,34 @@ switch ($logintype)
 
 
 
+/*************************Logout*******************************************/
+
+
+else if($_REQUEST['act'] == "logout")
+{
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $userid            =  $userdata->userid ;
+  $device_id         =  $userdata->device_id;
+  $request           = new userdataservice();
+  $response          = $request->deleteDeviceId($userid,$device_id ); 
+  if ($response)
+  {
+    $Result = array('status' => '1','data'=>'','msg'=>'Logout');
+          echo json_encode($Result);      
+  }
+  else
+  {
+  $Result = array('status' => '0','data'=>'' ,'msg'=>'No Logout');
+          echo json_encode($Result);      
+  }
+}
+
+
+
+
+
+
 
 
 
@@ -232,10 +260,11 @@ $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
 $item->device_id      =  $data1->device_id;
 $device_id            =  $item->device_id;  
+$email                = $item->email ;
 $req                  =  new userdataservice();
 $checkdeviceid        =  $req->checkdeviceid($email,$device_id);
-$req1= new userdataservice();
-$req3 = $req1->manage_Login($item);
+$req1                 = new userdataservice();
+$req3                 = $req1->manage_Login($item);
 if($req3 != 0 )
 {
 $user = array('status' => 1, 'data'=> $req3, 'msg'=>'Updated' );
@@ -1929,12 +1958,6 @@ $user_app    = 'M';
 
 
 } // End Function
-
-
-
-
-
-
 
 
 

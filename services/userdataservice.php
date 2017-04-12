@@ -206,6 +206,8 @@ $user_image         =  $data->user_image;
 
 
 
+
+
 /*
 | This function are used to Login using the GetsportyLite|
 |
@@ -229,6 +231,52 @@ $user_image         =  $data->user_image;
                return 0;
             }
     } // end function
+
+
+
+/**************************************Logut Function*******************************/
+public function  deleteDeviceId($userid,$device_id )
+{
+$query = mysql_query("SELECT  `device_id`FROM `user` WHERE `userid` = '$userid' ");
+if(mysql_num_rows($query)>0)
+{
+$row = mysql_fetch_assoc($query);
+$device_stack = explode('|', $row['device_id']);
+        if (($key = array_search($device_id, $device_stack)) !== false) 
+        {
+              unset($device_stack[$key]);
+        }
+        $device_id = implode('|',$device_stack);
+        $update = mysql_query("UPDATE `user` SET `device_id` ='$device_id' WHERE `userid` = '$userid'");
+        if($update)
+        {
+          return true;
+        }
+        else
+        {
+         return false;
+        }
+}
+else
+{
+  return false;
+}        
+
+
+}// End Function
+
+
+
+
+
+
+
+
+
+
+
+
+/*****************************************************************************************/
 
 
 
@@ -1797,11 +1845,11 @@ while ($row = mysql_fetch_assoc($query))
   $data[] = $row;
 }
 
-if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
-{
-   $userid= $data[0]['userid'];
-   $query = mysql_query("UPDATE `user` SET `device_id`='$item->device_id' WHERE `userid`='$userid'");
-}
+//if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
+//{
+  // $userid= $data[0]['userid'];
+   //$query = mysql_query("UPDATE `user` SET `device_id`='$item->device_id' WHERE `userid`='$userid'");
+//}
 //die;
 return $data;
 }
