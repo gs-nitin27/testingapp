@@ -651,6 +651,7 @@ public function studentlistgender($classid,$gender)
 
 public function search_activity()
 {
+
   $query = mysql_query("SELECT DISTINCT(activity) FROM `gs_coach_assignment`");
   $num = mysql_num_rows($query);
   $data = [];
@@ -667,8 +668,6 @@ public function search_activity()
      return 0;
   }
 }
-
-
 
 public function log_assign($studentid,$data)
 {
@@ -688,6 +687,7 @@ public function log_assign($studentid,$data)
 
 }
 
+
 public function logdata($logid)
 {
   $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$logid'");
@@ -705,6 +705,32 @@ public function logdata($logid)
      return 0;
   }
 }
+
+
+/*************************************View Log************************************/
+
+public function  view_coach_log($coach_id,$coach_assignment_id)
+{
+ $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+}
+
+
+
+
 
 
 } // End Class

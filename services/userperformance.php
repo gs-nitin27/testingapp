@@ -159,6 +159,7 @@ public function viewPerformance($athleteid)
 
 $query= mysql_query("SELECT `user`.`name` , `gs_athlit_performance`.* FROM user INNER JOIN `gs_athlit_performance` ON `user`.`userid`=`gs_athlit_performance`.coachid WHERE `athlitid`='$athleteid' ORDER BY `date_publish` DESC");
 	$num = mysql_num_rows($query);
+	
 	if ($num>0)
 	{
 	while ($row=mysql_fetch_assoc($query))
