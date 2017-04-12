@@ -397,15 +397,15 @@ if($response)
     $data   = json_decode($_POST['data']);
     $item    =  new stdClass();
 
-    $item->userid       =   $data->userid; 
-    $item->phase        =   $data->phase;
-    $item->activity     =   $data->activity;
-    $item->duration     =   $data->duration;
-    $item->distance     =   $data->distance;
-    $item->time_of_day  =   $data->time_of_day;
-    $item->remark       =   $data->remark;
-    $item->mesurement   =   $data->mesurement;
-    $item->performance  =   $data->performance;
+    $item->coach_id        =   $data->coach_id; 
+    $item->phase           =   $data->phase;
+    $item->activity        =   $data->activity;
+    $item->duration        =   $data->duration;
+    $item->distance        =   $data->distance;
+    $item->time_of_day     =   $data->time_of_day;
+    $item->remark          =   $data->remark;
+    $item->mesurement      =   $data->mesurement;
+    $item->performance     =   $data->performance;
 
     $req                 =  new connect_userservice();
     $res                 =  $req->coach_log_assign($item);
@@ -423,7 +423,6 @@ if($response)
 } 
 
  /****************************For  Log list filters   **********************************/
-
 else if ($_REQUEST['act'] == 'coach_log_student_list')
 {
        $data = json_decode($_POST['data']);
@@ -513,7 +512,7 @@ else if ($_REQUEST['act'] == 'coach_log_list')
 {
        $data = json_decode($_POST['data']);
        $req = new  connect_userservice();
-       $res = $req->coach_log_list($data->userid);
+       $res = $req->coach_log_list($data->coach_id);
        if($res)
        {
          $result = array('status' => 1, 'data' => $res);
@@ -530,20 +529,41 @@ else if ($_REQUEST['act'] == 'coach_log_list')
 
 else if($_REQUEST['act'] == 'activity_search')
 {
-       $data = json_decode($_POST['data']);
-
        $req = new  connect_userservice();
-       $res = $req->search_activity($data->activity);
+       $res = $req->search_activity();
        if($res)
        {
-        $result = array('status' => 1, 'data' => $res);
-        echo json_encode($result);
+          $result = array('status' => 1, 'data' => $res);
+          echo json_encode($result);
        }
        else
        {
-           $result = array('status' => 0, 'data' => []);
-           echo json_encode($result);
+          $result = array('status' => 0, 'data' => []);
+          echo json_encode($result);
        }
 }
+ /****************************Log Assign by coach  **********************************/
 
+ else if($_REQUEST['act'] == 'log_assign')
+ {
+     $data = json_decode($_POST['data']);
+     $req = new connect_userservice();
+     $log = $req->logdata($data->logid);
+     $student_list = explode(",", $data->student_id_list);
+     for ($i=0; $i <sizeof($student_list) ; $i++) 
+      {
+           $res = $req->log_assign($student_list[$i] ,$log);
+      }
+    if($res)
+    {
+       $result =  array('status' =>1);
+       echo json_encode($result);
+    }
+    else
+    {
+       $result =  array('status' =>0);
+       echo json_encode($result);
+
+    }
+ }
 
