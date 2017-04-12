@@ -396,15 +396,15 @@ if($response)
 {
     $data   = json_decode($_POST['data']);
     $item    =  new stdClass();
-    $item->coach_id        =   $data->coach_id; 
-    $item->phase           =   $data->phase;
-    $item->activity        =   $data->activity;
-    $item->duration        =   $data->duration;
-    $item->distance        =   $data->distance;
-    $item->time_of_day     =   $data->time_of_day;
-    $item->remark          =   $data->remark;
-  //  $item->mesurement      =   $data->mesurement;
-    $item->performance     =   $data->performance;
+    $item->coach_id                =   $data->coach_id; 
+    $item->phase                   =   $data->phase;
+    $item->activity                =   $data->activity;
+    $item->duration                =   $data->duration;
+    $item->distance                =   $data->distance;
+    $item->time_of_day             =   $data->time_of_day;
+    $item->remark                  =   $data->remark;
+    $item->target_repetition       =   $data->repetition;
+    $item->performance             =   $data->performance;
     $req                 =  new connect_userservice();
     $res                 =  $req->coach_log_assign($item);
 
