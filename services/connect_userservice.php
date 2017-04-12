@@ -255,9 +255,7 @@ else if ($usertype=='M')
   {
    return $data;
   }
-
 }
-
 
 /************ This Function are used to find Class  Informantion Created by Coach*******/
 
@@ -312,7 +310,6 @@ public function getClassInfo($class_id)
 
 /**************************************************************************************/
 
-
 public function getConnect($student_id,$coach_id)
 {
 $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
@@ -334,14 +331,6 @@ $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_i
 
 
 
-
-
-
-
-
-
-
-
 /********************************************************************/
 public function  alreadyStudent($student_id,$classid)
 {
@@ -355,9 +344,7 @@ $num =mysql_num_rows($query);
     {
       return 0;
     }
-
 }
-
 
 /**************************************************************************************/
 
@@ -380,11 +367,6 @@ $num =mysql_num_rows($query);
 //     return 0;
 //   }
 // }
-
-
-
-
-
 
 
 /************ This Function are used to Insert the Student Record*******/
@@ -412,8 +394,6 @@ public function joinStudentData($userdata)
 
 }
 
-
-
 /********************This Function are used to find the Class informatino********************/
 
 public function ClassInfo($student_id)
@@ -430,9 +410,6 @@ public function ClassInfo($student_id)
         return $data;
   }
 }
-
-
-
 
 
 /************************Create Daily Log**************************************/
@@ -467,9 +444,6 @@ public function createdDailyLog($userdata)
 } // End Function
 
 
-
-
-
 /*******************Function are used to View the Daily Log*****************/
 
 public function viewDailyLog($userid)
@@ -491,8 +465,6 @@ public function viewDailyLog($userid)
       return 0;
     }          
 }
-
-
 
 /***************************Paid and Unpaid***************************/
 
@@ -516,7 +488,6 @@ else
                      $data[]   = $row ;
                    }
                    return $data;
-
          }
          else
          {
@@ -524,15 +495,12 @@ else
          }
 }
 
-
-
 /*****************************Function for Paid Listing ********************/
 
 public function studentPaidListing($class_id,$flag)
 {
   if ($flag==1) 
   {
-    
     $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `gs_class_data`.`fees`=`paid`");
   }
   else
@@ -553,16 +521,13 @@ public function studentPaidListing($class_id,$flag)
   {
      return 0;
   }
-
 }
-
 
 /*****************************Function Create log ********************/
 public function coach_log_assign($item)
 {
 
  $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`mesurement`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->mesurement','$item->performance',CURDATE())");
-
 
  if($insert)
  {
@@ -572,7 +537,6 @@ public function coach_log_assign($item)
  {
   return 0;
  }
-
 }
 
 /*****************************Function for log Listing ********************/
@@ -594,7 +558,6 @@ public function coach_log_list($coachid)
   {
      return 0;
   }
-
 
 }
 
@@ -623,8 +586,7 @@ public function studentlist($classid)
 
 }
 
-
-/*****************************Function for student list based on classid and gender Listing********************/
+/*****************************Function for student list based on classid and gender Listing******************/
 
 public function studentlistgender($classid,$gender)
 {
@@ -668,6 +630,7 @@ public function search_activity()
      return 0;
   }
 }
+/********************* Assign log to athlete **********************************/
 
 public function log_assign($studentid,$data)
 {
@@ -687,7 +650,7 @@ public function log_assign($studentid,$data)
     }    
 
 }
-
+/*******************Get log data  ********************/
 
 public function logdata($logid)
 {
@@ -706,7 +669,6 @@ public function logdata($logid)
      return 0;
   }
 }
-
 
 /*************************************View Log************************************/
 
