@@ -396,7 +396,6 @@ if($response)
 {
     $data   = json_decode($_POST['data']);
     $item    =  new stdClass();
-
     $item->coach_id        =   $data->coach_id; 
     $item->phase           =   $data->phase;
     $item->activity        =   $data->activity;
@@ -406,7 +405,6 @@ if($response)
     $item->remark          =   $data->remark;
     $item->mesurement      =   $data->mesurement;
     $item->performance     =   $data->performance;
-
     $req                 =  new connect_userservice();
     $res                 =  $req->coach_log_assign($item);
 
@@ -423,6 +421,7 @@ if($response)
 } 
 
  /****************************For  Log list filters   **********************************/
+
 else if ($_REQUEST['act'] == 'coach_log_student_list')
 {
        $data = json_decode($_POST['data']);
@@ -575,10 +574,8 @@ else if($_REQUEST['act'] == 'activity_search')
 
 else if($_REQUEST['act'] == "view_coach_log")
 {
-  $data                   =  file_get_contents("php://input");
-  $userdata               =  json_decode(file_get_contents("php://input"));
-  $coach_assignment_id    =  $userdata->coach_assignment_id;
-  $request                =  new connect_userservice();
+  $coach_assignment_id    =  @$_REQUEST['coach_assignment_id'];
+   $request               =  new connect_userservice();
   $response               =  $request->view_coach_log($coach_assignment_id); 
   if ($response)
   {
