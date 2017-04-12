@@ -542,14 +542,16 @@ else if($_REQUEST['act'] == 'activity_search')
           $result = array('status' => 0, 'data' => []);
           echo json_encode($result);
        }
-}
+}  
  /****************************Log Assign by coach  **********************************/
 
  else if($_REQUEST['act'] == 'log_assign')
  {
      $data = json_decode($_POST['data']);
      $req = new connect_userservice();
+
      $log = $req->logdata($data->logid);
+     
      $student_list = explode(",", $data->student_id_list);
      for ($i=0; $i <sizeof($student_list) ; $i++) 
       {
