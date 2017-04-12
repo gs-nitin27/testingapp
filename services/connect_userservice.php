@@ -512,7 +512,6 @@ public function studentPaidListing($class_id,$flag)
   {
      while($row=mysql_fetch_assoc($query))
                    {
-                    
                      $data[]   = $row ;
                    }
                    return $data;
@@ -526,8 +525,7 @@ public function studentPaidListing($class_id,$flag)
 /*****************************Function Create log ********************/
 public function coach_log_assign($item)
 {
-
- $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`mesurement`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->mesurement','$item->performance',CURDATE())");
+ $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`target_duration`,`target_distance`,`target_performance`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->time_of_day','$item->remark','$item->performance',CURDATE())");
 
  if($insert)
  {
@@ -586,7 +584,7 @@ public function studentlist($classid)
 
 }
 
-/*****************************Function for student list based on classid and gender Listing******************/
+/********************Function for student list based on classid and gender Listing******************/
 
 public function studentlistgender($classid,$gender)
 {
@@ -605,7 +603,6 @@ public function studentlistgender($classid,$gender)
   {
      return 0;
   }
-
 }
 
 

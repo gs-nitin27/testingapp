@@ -404,7 +404,7 @@ if($response)
     $item->distance        =   $data->distance;
     $item->time_of_day     =   $data->time_of_day;
     $item->remark          =   $data->remark;
-    $item->mesurement      =   $data->mesurement;
+  //  $item->mesurement      =   $data->mesurement;
     $item->performance     =   $data->performance;
 
     $req                 =  new connect_userservice();
@@ -422,24 +422,26 @@ if($response)
     }    
 } 
 
- /****************************For  Log list filters   **********************************/
+
+/****************************For  Log list filters   **********************************/
 else if ($_REQUEST['act'] == 'coach_log_student_list')
 {
-       $data = json_decode($_POST['data']);
-       $req = new  connect_userservice();
+      $data = json_decode($_POST['data']);
+      $req = new  connect_userservice();
       if($data->indicator == 'studentlist')
       {
         $res = $req->getClass($data->userid);
         if($res)
         {
         $arr=[];
-        foreach ($res as $key ) {
+        foreach ($res as $key ) 
+        {
           $studentlist = $req->studentlist($key['id']);
           array_push($arr,$studentlist);
-      }
+        }
         $result = array('status' =>1 , 'data' =>$arr);
         echo json_encode($result);
-         }
+        }
          else
          {
            $result = array('status' =>0 , 'data' =>[]);
@@ -458,7 +460,6 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
         if($res)
         {
         $arr=[];
-        $i=0;
         foreach ($res as $key )
          {
           $studentlist = $req->studentlistgender($key['id'],$data->parameter);
