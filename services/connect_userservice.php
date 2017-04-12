@@ -424,8 +424,8 @@ public function createdDailyLog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $date             =  $userdata->date;
-  $date             =  $userdata->reps;
-        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
+  $reps             =  $userdata->reps;
+        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date','$reps')");
     if ($query)
      {
       return 1;
