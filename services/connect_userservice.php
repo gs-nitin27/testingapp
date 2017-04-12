@@ -651,8 +651,7 @@ public function studentlistgender($classid,$gender)
 
 public function search_activity($data)
 {
-  //print_r($data);die;
-  $query = mysql_query("SELECT `activity` FROM `gs_coach_assign` WHERE `activity` LIKE '$data%'");
+  $query = mysql_query("SELECT `activity` FROM `gs_coach_assignment` WHERE `activity` LIKE '$data%'");
   $num = mysql_num_rows($query);
   $data = [];
   if ($num)
@@ -668,6 +667,37 @@ public function search_activity($data)
      return 0;
   }
 }
+
+
+
+
+public function  view_coach_log($coach_id,$coach_assignment_id)
+{
+
+ $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `id`='$coach_assignment_id' AND `coach_id`='$coach_id'");
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]   = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+
+
+}
+
+
+
+
+
 } // End Class
 
 
