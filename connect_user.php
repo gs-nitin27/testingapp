@@ -7,7 +7,6 @@ include('services/manageSchedulingService.php');
  
 if($_REQUEST['act'] == 'connect')
 {
-
     $user_request_id    = $_REQUEST['lite_user_id'];
     $user_responser_id  = $_REQUEST['prof_user_id'];
     $user_app           = $_REQUEST['user_app'];
