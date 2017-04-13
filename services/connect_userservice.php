@@ -535,13 +535,11 @@ public function coach_log_assign($item)
 public function coach_log_list($coachid)
 {
    $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `coach_id`='$coachid'");
-
     $num = mysql_num_rows($query);
   if ($num)
   {
      while($row=mysql_fetch_assoc($query))
                    {
-                    
                      $data[]   = $row ;
                    }
                    return $data;
@@ -550,16 +548,13 @@ public function coach_log_list($coachid)
   {
      return 0;
   }
-
 }
 
 /*****************************Function for student list based on classid Listing ********************/
 
-public function studentlist($classid)
+public function studentlist($userid)
 {
-
- // print_r($classid);
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid'");
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` IN (SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid')");
 
     $num = mysql_num_rows($query);
   if ($num)
@@ -580,9 +575,10 @@ public function studentlist($classid)
 
 /********************Function for student list based on classid and gender Listing******************/
 
-public function studentlistgender($classid,$gender)
+public function studentlistgender($userid,$gender)
 {
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
+ // $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `gender` = '$gender' AND `classid` IN(SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid') ");
   $num = mysql_num_rows($query);
   if ($num)
   {
@@ -683,6 +679,47 @@ public function  view_coach_log($coach_assignment_id)
 }
 
 
+public function view_log_assign($log_id)
+{
+      $query = mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id')");
+
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                    
+                     $data[]  = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+}
+
+public function getClass_id($userid)
+{
+ $query= mysql_query("SELECT `id` FROM `gs_coach_class` where `userid`=$userid");
+ $num=mysql_num_rows($query);
+  if ($num!=0) 
+ {
+     
+        while ($row=mysql_fetch_assoc($query))
+        {
+          $data[]=$row;
+        }
+        
+    
+return $data;  
+}
+else
+{
+ return 0;
+}
+}
 
 
 

@@ -406,8 +406,8 @@ if($response)
     $item->remark                  =   $data->remark;
     $item->repetition              =   $data->repetition;
     $item->performance             =   $data->performance;
-    $req                           =  new connect_userservice();
-    $res                           =  $req->coach_log_assign($item);
+    $req                           =   new connect_userservice();
+    $res                           =   $req->coach_log_assign($item);
 
     if($res)
     {
@@ -431,23 +431,18 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
       $req = new  connect_userservice();
       if($data->indicator == 'studentlist')
       {
-        $res = $req->getClass($data->userid);
-        if($res)
-        {
-        $arr=[];
-        foreach ($res as $key ) 
-        {
-          $studentlist = $req->studentlist($key['id']);
-          array_push($arr,$studentlist);
-        }
-        $result = array('status' =>1 , 'data' =>$arr);
-        echo json_encode($result);
-        }
-         else
-         {
-           $result = array('status' =>0 , 'data' =>[]);
-           echo json_encode($result);
+       
+          $studentlist = $req->studentlist($data->userid);
+          if($studentlist)
+          {
+            $result = array('status' =>1 , 'data' =>$studentlist);
+            echo json_encode($result);
          }
+          else
+             {
+              $result =  array('status' =>0  ,'data' => []);
+              echo json_encode($result);
+             }
       }
       else if($data->indicator == 'class')
       {
@@ -457,16 +452,9 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
       }
       else if($data->indicator == 'gender')
       {
-       $res = $req->getClass($data->userid);
-        if($res)
-        {
-        $arr=[];
-        foreach ($res as $key )
-         {
-          $studentlist = $req->studentlistgender($key['id'],$data->parameter);
-          array_push($arr,$studentlist);
-        }
-        $result = array('status' =>1 , 'data' =>$arr);
+        $studentlist = $req->studentlistgender($data->userid,$data->parameter);
+        if($studentlist){
+        $result = array('status' =>1 , 'data' =>$studentlist);
         echo json_encode($result);
          }
          else
@@ -590,6 +578,27 @@ else if($_REQUEST['act'] == "view_coach_log")
   $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Any Log ');
           echo json_encode($Result);      
   }
+}
+
+else if($_REQUEST['act'] == 'view_log_assign')
+{
+   $data = json_decode($_POST['data']);
+   $req = new connect_userservice();
+   $res = $req->view_log_assign($data->log_id);
+   
+   //print_r($res);die;
+
+   if($res)
+   {
+    $result = array('status' =>1 , 'data' =>$res);
+    echo json_encode($result);
+   }
+   else
+   {
+    $result =  array('status' => 0, 'data' => []);
+    echo json_encode($res);
+
+   }
 }
 
 
