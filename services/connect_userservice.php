@@ -424,7 +424,8 @@ public function createdDailyLog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $date             =  $userdata->date;
-        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date')");
+  $reps             =  $userdata->reps;
+        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`,`dailylogstatus`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date','$reps','1')");
     if ($query)
      {
       return 1;
@@ -720,6 +721,30 @@ else
  return 0;
 }
 }
+
+
+public function updatelog($userdata)
+{
+  $id               =  $userdata->id;
+  $phase            =  $userdata->phase;
+  $activity         =  $userdata->activity;
+  $duration         =  $userdata->duration;
+  $distance         =  $userdata->distance;
+  $performance      =  $userdata->performance;
+  $remarks          =  $userdata->remarks;
+  $reps             =  $userdata->reps;
+              $query= mysql_query("UPDATE  `gs_athlit_dailylog` SET `phase`='$phase',`activity`='$activity',`duration`='duration' ,`distance`='$distance',`performance`='$performance',`remarks`='$remarks',`repetition`='$reps',`dailylogstatus`='1' WHERE `id`='$id' ");
+  $num=mysql_affected_rows(); 
+  if ($num>=1)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+} /// End Function
+
 
 
 
