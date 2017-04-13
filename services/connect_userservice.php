@@ -696,7 +696,7 @@ public function updatelog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $reps             =  $userdata->reps;
-              $query= mysql_query("UPDATE  `gs_athlit_dailylog` SET `phase`='$phase',`activity`='$activity',`duration`='duration' ,`distance`='$distance',`performance`='$performance',`remarks`='remarks',`repetition`='$reps',`dailylogstatus`='1' WHERE `id`='$id' ");
+              $query= mysql_query("UPDATE  `gs_athlit_dailylog` SET `phase`='$phase',`activity`='$activity',`duration`='duration' ,`distance`='$distance',`performance`='$performance',`remarks`='$remarks',`repetition`='$reps',`dailylogstatus`='1' WHERE `id`='$id' ");
   $num=mysql_affected_rows(); 
   if ($num>=1)
   {
