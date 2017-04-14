@@ -555,15 +555,26 @@ public function coach_log_list($coachid)
 
 public function studentlist($userid)
 {
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` IN (SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid')");
+
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid'");
+
+
+  // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
 
     $num = mysql_num_rows($query);
   if ($num)
   {
      while($row=mysql_fetch_assoc($query))
                    {
-                    
-                     $data[]   = $row ;
+                       $date_1 = new DateTime($row['student_dob']);
+                       $date_2 = new DateTime( date( 'd-m-Y' ));
+                       $difference = $date_2->diff( $date_1 );
+                       $year=(string)$difference->y;
+
+                       $row['age'] = $year;
+
+                       $data[]   = $row ;
+
                    }
                    return $data;
   }
@@ -745,7 +756,15 @@ public function updatelog($userdata)
   }
 } /// End Function
 
+public function getage($age)
+{
+                 $date_1 = new DateTime($age);
+                 $date_2 = new DateTime( date( 'd-m-Y' ));
+                 $difference = $date_2->diff( $date_1 );
+                 $year=(string)$difference->y;
+                  return $year;
 
+}
 
 
 
