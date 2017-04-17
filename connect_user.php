@@ -583,7 +583,7 @@ else if($_REQUEST['act'] == 'view_log_assign')
 {
    $data = json_decode($_POST['data']);
    $req = new connect_userservice();
-   $res = $req->view_log_assign($data->logid);
+   $res = $req->view_log_assign($data->userid,$data->logid);
    
    if($res)
    {
