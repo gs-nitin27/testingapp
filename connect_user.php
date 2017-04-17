@@ -556,6 +556,7 @@ else if($_REQUEST['act'] == 'activity_search')
       $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignemet','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
            
       $jsondata       = json_encode($message);
+      $req->alerts($student_list[$i],L,$jsondata);
       $coach->sendLitePushNotificationToGCM($studentdata['device_id'],$jsondata);
 
        }
