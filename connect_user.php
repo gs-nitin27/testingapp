@@ -451,7 +451,7 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
       }
       else if($data->indicator == 'gender')
       {
-        $studentlist = $req->studentlistgender($data->userid,$data->parameter);
+        $studentlist = $req->studentlistgender($data->userid,$data->parameter,$data->logid);
         if($studentlist){
         $result = array('status' =>1 , 'data' =>$studentlist);
         echo json_encode($result);

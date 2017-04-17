@@ -587,10 +587,18 @@ public function studentlist($userid , $assignment_id)
 
 /********************Function for student list based on classid and gender Listing******************/
 
-public function studentlistgender($userid,$gender)
+public function studentlistgender($userid,$gender,$assignment_id)
 {
+
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gender` = '$gender' AND `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id` NOT IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$assignment_id')");
+
+
+
+
  // $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `gender` = '$gender' AND `classid` IN(SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid') ");
+  // $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `gender` = '$gender' AND `classid` IN(SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid') ");
+
+
   $num = mysql_num_rows($query);
   if ($num)
   {
