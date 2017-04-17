@@ -1294,7 +1294,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
    $this->sendNotification($registration_ids, $message,$google_api);
   //  return $Notification;
   }
-
+ 
     
 } //End function
 

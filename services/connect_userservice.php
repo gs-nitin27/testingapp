@@ -650,7 +650,9 @@ public function log_assign($studentid,$data)
     $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE())");
     if($insert)
     {
-      return 1;
+      $last_id = mysql_insert_id();
+
+      return $last_id;
     }
     else
     {
@@ -702,7 +704,6 @@ public function  view_coach_log($coach_assignment_id)
 
 public function view_log_assign($userid,$log_id)
 {
-
  $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id`  IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id') ");
   
 

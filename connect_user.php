@@ -538,13 +538,27 @@ else if($_REQUEST['act'] == 'activity_search')
  {
      $data = json_decode($_POST['data']);
      $req = new connect_userservice();
-
      $log = $req->logdata($data->logid);
-     
+     $date = date("Y-m-d ");
+
+      $coach = new userdataservice();
+      $coachdata = $coach->userdata($log[0]['coach_id']);
+
+
      $student_list = explode(",", $data->student_id_list);
      for ($i=0; $i <sizeof($student_list) ; $i++) 
       {
-           $res = $req->log_assign($student_list[$i] ,$log);
+          $res = $req->log_assign($student_list[$i] ,$log);
+             
+     if($res)
+     {
+      $studentdata = $coach->userdata($student_list[$i]);
+      $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignemet','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
+           
+      $jsondata       = json_encode($message);
+      $coach->sendLitePushNotificationToGCM($studentdata['device_id'],$jsondata);
+
+       }
       }
     if($res)
     {
