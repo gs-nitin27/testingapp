@@ -715,7 +715,12 @@ public function view_log_assign($userid,$log_id)
   {
      while($row=mysql_fetch_assoc($query))
                    {
-                    
+                       $date_1 = new DateTime($row['student_dob']);
+                       $date_2 = new DateTime( date( 'd-m-Y' ));
+                       $difference = $date_2->diff( $date_1 );
+                       $year=(string)$difference->y;
+
+                       $row['age'] = $year;
                      $data[]  = $row ;
                    }
                    return $data;
