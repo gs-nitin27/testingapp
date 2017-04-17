@@ -471,7 +471,7 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
         $arr=[];
         $temp = [];
         foreach ($res as $key ) {
-          $studentlist = $req->studentlist($key['id']);
+          $studentlist = $req->studentlist($key['id'],$data->logid);
             $arr[] = $studentlist;
         }
            for ($i=0; $i <sizeof($arr[0]) ; $i++) { 
@@ -583,7 +583,7 @@ else if($_REQUEST['act'] == 'view_log_assign')
 {
    $data = json_decode($_POST['data']);
    $req = new connect_userservice();
-   $res = $req->view_log_assign($data->log_id);
+   $res = $req->view_log_assign($data->logid);
    
    //print_r($res);die;
 
