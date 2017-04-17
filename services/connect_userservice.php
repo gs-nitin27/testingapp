@@ -636,7 +636,7 @@ public function log_assign($studentid,$data)
       $phase     = $data[0]['phase'];
       $activity  = $data[0]['activity'];
       $id        = $data[0]['id'];
-      $date      = $data[0]['date'];
+    //  $date      = $data[0]['date'];
       $remarks   = $data[0]['remarks'];
 
     $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE())");
