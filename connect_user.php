@@ -431,7 +431,7 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
       if($data->indicator == 'studentlist')
       {
        
-          $studentlist = $req->studentlist($data->userid);
+          $studentlist = $req->studentlist($data->userid,$data->logid);
           if($studentlist)
           {
             $result = array('status' =>1 , 'data' =>$studentlist);

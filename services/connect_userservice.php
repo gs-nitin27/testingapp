@@ -553,10 +553,10 @@ public function coach_log_list($coachid)
 
 /*****************************Function for student list based on classid Listing ********************/
 
-public function studentlist($userid)
+public function studentlist($userid , $assignment_id)
 {
-
- $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid'");
+   
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid' AND `gs_class_data`.`student_id` NOT IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$assignment_id')");
 
 
   // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
