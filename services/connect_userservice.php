@@ -639,7 +639,7 @@ public function log_assign($studentid,$data)
       $date      = $data[0]['date'];
       $remarks   = $data[0]['remarks'];
 
-    $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id','$date')");
+    $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE())");
     if($insert)
     {
       return 1;
