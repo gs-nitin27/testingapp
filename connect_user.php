@@ -585,8 +585,6 @@ else if($_REQUEST['act'] == 'view_log_assign')
    $req = new connect_userservice();
    $res = $req->view_log_assign($data->logid);
    
-   //print_r($res);die;
-
    if($res)
    {
     $result = array('status' =>1 , 'data' =>$res);
@@ -594,8 +592,8 @@ else if($_REQUEST['act'] == 'view_log_assign')
    }
    else
    {
-    $result =  array('status' => 0, 'data' => []);
-    echo json_encode($res);
+    $result =  array('status' => 0, 'data' =>[]);
+    echo json_encode($result);
 
    }
 }
