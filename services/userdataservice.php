@@ -1569,6 +1569,31 @@ public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 
 
 
+/*********************************Short List the Job***********************/
+
+public function shortlist($userid,$id,$status,$module)
+{
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = '$userid' AND `userjob` = '$id'");
+$num=mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+
+    return 0;
+
+  }
+
+}
+
+
+
+
+
+
+
 // Status =2 is Check because If Ofer send then Status  =2
 
 public function getOfferList($userid)
@@ -1863,14 +1888,14 @@ return 0;
 public  function create_manage_user_exits($item)
 {
 
-    $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`forget_code`,`prof_name` FROM `user`  WHERE `email`='$item->email'");
+    $query  = mysql_query("SELECT `userid`,`password`,`userType` ,`email`,`forget_code`,`prof_name` FROM `user`  WHERE `email`='$item->email'");
         if(mysql_num_rows($query)>0)
         {
           while($row = mysql_fetch_assoc($query))
         {
           $data = $row;
         }
-        $userid=$data['userid'];
+        $email=$data['email'];
            //print_r($data['password']); die;
         if($data['userType']=='104'  && ($data['password']=='' || $data['password']== NULL ))
         {
@@ -1907,12 +1932,12 @@ else if($data['userType']=='103'  && ($data['password']=='' || $data['password']
 {
   // new user email not verify or password not set;
 
-  $this->sendEmail_for_password_reset($userid);
+  $this->sendEmail_for_password_reset($email);
     return 3;  
 }
 else{
    //forgot password 
-  $this->sendEmail_for_password_reset($userid);
+  $this->sendEmail_for_password_reset($email);
   return 4;
 }
 }
@@ -2100,7 +2125,7 @@ case '3':
 
        
  
-public function sendEmail_for_password_reset($id)
+public function sendEmail_for_password_reset($email)
 {
 
 $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
@@ -2126,7 +2151,7 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">  Please click on the link to reset the password <br>
 
- <a href="http://getsporty.in/user_var/index.php?id='.$id. '">continue reading.</a>
+ <a href="http://getsporty.in/user_var/index.php?id='.$email. '">continue reading.</a>
 
 <br><br><br><br><br>Thanks GetSportyLite Team </p> 
 </td>
@@ -2150,12 +2175,12 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 </tbody></table>
 </div>'; 
 
- $query  = mysql_query("SELECT `email`,`name` FROM `user` WHERE `userid` = '$id'");
- while ($row=mysql_fetch_assoc($query))
-  {
-   $email=$row['email'];
-   $user_name= $row['name'];
-   }
+ //$query  = mysql_query("SELECT `email`,`name` FROM `user` WHERE `userid` = '$id'");
+ //while ($row=mysql_fetch_assoc($query))
+  //{
+   //$email=$row['email'];
+   //$user_name= $row['name'];
+   //}
               require('class.phpmailer.php');
               $mail = new PHPMailer();
               $to=$email;
@@ -2174,7 +2199,6 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
               $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
-
               $mail->Body = $body;
               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
               $mail->AltBody = $txt; 

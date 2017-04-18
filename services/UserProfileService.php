@@ -510,6 +510,33 @@ public function get_imageName($userid)
 
 
 
+/********************************************************************************/
+
+// public function find_jobtitle($id)
+// {
+//   $query=mysql_query("SELECT `user_image` FROM `user` where `userid`='$userid'");
+//   if(mysql_num_rows($query)>0)
+//        {
+//           while($row = mysql_fetch_assoc($query))
+//           {
+//             $data = $row;
+//           }
+//           return $data;
+//           }
+//           else 
+//           {
+//           return 0;
+//           }
+
+// }// End Function
+
+
+
+
+// find_jobtitle($id)
+
+
+
 
 } // End of Class
 
