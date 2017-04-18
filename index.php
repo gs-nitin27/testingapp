@@ -10,6 +10,3 @@
 	<title>404</title>
 </head>
 </html>
-<?php
-header('Location:../getsporty.in');
- ?>
