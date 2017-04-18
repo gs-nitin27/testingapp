@@ -198,6 +198,40 @@ else if($_REQUEST['act'] == "logout")
 }
 
 
+ 
+/*************************************Forget Password*********************************/
+
+ else if($_REQUEST['act']=='forget_pass')
+  {
+     $email      =  urldecode($_REQUEST['email']);
+     $where      =  "WHERE userType = '103' AND `email` = '".$email."'";
+     $req        =  new liteservice();
+     $res        =   $req->userExits($where);
+     if($res)
+     {
+                $req1     = new userdataservice();
+                $res1     = $req1->sendEmail_for_password_reset($email);
+           if($res1)
+           {
+              $res1  = array('msg'=>'send to your Email id', 'status'=>'1');
+              echo json_encode($res1);
+             exit();
+           }
+           else
+            {
+              $res2  = array('msg'=>' Email are not send', 'status'=>'0');
+              echo json_encode($res2);
+              exit();
+            }
+              $res3  = array('msg'=>'Email id is Registered', 'status'=>'1');
+              echo json_encode($res3);
+      }
+      else
+      {
+          $res4  = array('msg'=>'Email id is Not Registered', 'status'=>'0');
+          echo json_encode($res4);
+      }
+}
 
 
 
@@ -1893,7 +1927,6 @@ echo json_encode($data);
 
 else if($_REQUEST['act'] == "apply")
 {
- 
 $userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
 $id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
 $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
@@ -1907,7 +1940,6 @@ $user_app    = 'M';
     if ($response)
     {
     $response                  =  $request->FindDeviceId($id,$module);
-    //print_r($response);die();
         if ($response == 0)
         {
          $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>'0');
@@ -1916,19 +1948,16 @@ $user_app    = 'M';
 
         $userid_Emp                =  $response['userid'];
         $device_id_Emp             =  $response['device_id'];
-       //print_r (explode("|",$device_id_Emp));die();
-        //print_r($device_id_Emp);die();
         $email_id_Emp              =  $response['email'];
         if ($device_id_Emp)
         {
           $response     = $request->userdata($userid);
           $username     = $response['name'];
           $email        = $response['email'];
-
            if ($module=='1')
            {
-              $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$id,'indicator' => 3);
-            }  
+            $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$id,'indicator' => 3,);
+           }  
           if ($module=='2')
            {
               $message      = array('message'=>$username." "." has applied for a Event" ,'title'=>'Event Application','date_applied'=>$date,'userid'=>$userid,'id'=>$id,'indicator' => 4);
@@ -1960,8 +1989,30 @@ $user_app    = 'M';
 } // End Function
 
 
+/**********************    New Apply Code  act=apply  *************************/
 
+else if($_REQUEST['act'] == "shortlist")
+{
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $userid            =  $userdata->userid ;
+  $id                =  $userdata->id;
+  $status            =  $userdata->status;
+  $module            =  $userdata->module;
+  $request           =  new userdataservice();
+  $response          =  $request->shortlist($userid,$id,$status,$module);
+  if ($response) 
+  {
+    $Result = array('status' => '1','data'=>'1' ,'msg'=>'user is shortlisted');
+       echo json_encode($Result);
+  }
+  else
+  {
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
+       echo json_encode($Result);
+  }
 
+} // End Function
 
 
 

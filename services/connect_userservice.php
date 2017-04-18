@@ -539,11 +539,13 @@ public function coach_log_assign($item)
 public function coach_log_list($coachid)
 {
    $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `coach_id`='$coachid'");
+
     $num = mysql_num_rows($query);
   if ($num)
   {
      while($row=mysql_fetch_assoc($query))
                    {
+                    
                      $data[]   = $row ;
                    }
                    return $data;
@@ -552,9 +554,11 @@ public function coach_log_list($coachid)
   {
      return 0;
   }
+
 }
 
 /*****************************Function for student list based on classid Listing ********************/
+
 
 public function studentlist($userid , $assignment_id)
 {
@@ -563,6 +567,7 @@ public function studentlist($userid , $assignment_id)
 
 
   // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
+
 
     $num = mysql_num_rows($query);
   if ($num)
@@ -589,6 +594,7 @@ public function studentlist($userid , $assignment_id)
 }
 
 /********************Function for student list based on classid and gender Listing******************/
+
 
 public function studentlistgender($userid,$gender,$assignment_id)
 {
@@ -649,8 +655,7 @@ public function log_assign($studentid,$data)
       $id        = $data[0]['id'];
     //  $date      = $data[0]['date'];
       $remarks   = $data[0]['remarks'];
-
-    $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE())");
+    $insert = mysql_query("INSERT INTO `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`,`duration`,`distance`,`performance`,`repetition`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE(),0,0,0,0)");
     if($insert)
     {
       $last_id = mysql_insert_id();
@@ -758,6 +763,7 @@ else
 }
 
 
+
 public function updatelog($userdata)
 {
   $id               =  $userdata->id;
@@ -768,7 +774,7 @@ public function updatelog($userdata)
   $performance      =  $userdata->performance;
   $remarks          =  $userdata->remarks;
   $reps             =  $userdata->reps;
-              $query= mysql_query("UPDATE  `gs_athlit_dailylog` SET `phase`='$phase',`activity`='$activity',`duration`='duration' ,`distance`='$distance',`performance`='$performance',`remarks`='$remarks',`repetition`='$reps',`dailylogstatus`='1' WHERE `id`='$id' ");
+  $query= mysql_query("UPDATE  `gs_athlit_dailylog` SET `phase`='$phase',`activity`='$activity',`duration`='$duration' ,`distance`='$distance',`performance`='$performance',`remarks`='$remarks',`repetition`='$reps',`dailylogstatus`='1' WHERE `id`='$id' ");
   $num=mysql_affected_rows(); 
   if ($num>=1)
   {

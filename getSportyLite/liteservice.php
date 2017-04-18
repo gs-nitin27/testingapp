@@ -12,7 +12,7 @@
 
     public function  userExits($where)
     {
-     
+     //echo "SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` $where"; die();
        $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
@@ -627,8 +627,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                   $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
               $mail->SMTPAuth = true;  // authentication enabled
               $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-              $mail->Host = 'dezire.websitewelcome.com';
-              //$mail->Host = 'smtp.gmail.com';
+             // $mail->Host = 'dezire.websitewelcome.com';
+              $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
               $mail->Username ="info@getsporty.in";  
               $mail->Password = "%leq?xgq;D?v";           
