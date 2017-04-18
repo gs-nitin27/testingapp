@@ -381,14 +381,17 @@ public function joinStudentData($userdata)
   $gender            =  $userdata->gender;
   $mode_of_payment   =  $userdata->mode_of_payment;
   $fees              =  $userdata->fees;
+  $transaction_id    =  $userdata->transaction_id;
+  $payment_id        =  $userdata->payment_id;
+  $remark            =  $userdata->remark; 
 
-   if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees))
+   if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees) || empty($transaction_id) || empty($payment_id) || empty($remark))
   {
     return 0;
   }
   else
   {
-    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees')");
+    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`,`transaction_id`,`payment_id`,`remark`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees','$transaction_id','$payment_id','$remark')");
   return 1;
   }
 
@@ -425,7 +428,7 @@ public function createdDailyLog($userdata)
   $remarks          =  $userdata->remarks;
   $date             =  $userdata->date;
   $reps             =  $userdata->reps;
-        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`,`dailylogstatus`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date','$reps','1')");
+        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`,`dailylogstatus`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks',CURDATE(),'$reps','1')");
     if ($query)
      {
       return 1;
