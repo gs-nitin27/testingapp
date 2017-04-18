@@ -2151,7 +2151,9 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">  Please click on the link to reset the password <br>
 
- <a href="'.CHANGE_PASSWORD.'?id='.$email. '">continue reading.</a>
+
+ <a href="'.CHANGE_PASSWORD.'?email='.$email. '">continue reading.</a>
+
 
 <br><br><br><br><br>Thanks GetSportyLite Team </p> 
 </td>
