@@ -556,19 +556,30 @@ public function coach_log_list($coachid)
 
 /*****************************Function for student list based on classid Listing ********************/
 
-public function studentlist($classid)
-{
 
- // print_r($classid);
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid'");
+public function studentlist($userid , $assignment_id)
+{
+   
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid' AND `gs_class_data`.`student_id` NOT IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$assignment_id')");
+
+
+  // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
+
 
     $num = mysql_num_rows($query);
   if ($num)
   {
      while($row=mysql_fetch_assoc($query))
                    {
-                    
-                     $data[]   = $row ;
+                       $date_1 = new DateTime($row['student_dob']);
+                       $date_2 = new DateTime( date( 'd-m-Y' ));
+                       $difference = $date_2->diff( $date_1 );
+                       $year=(string)$difference->y;
+
+                       $row['age'] = $year;
+
+                       $data[]   = $row ;
+
                    }
                    return $data;
   }
@@ -581,9 +592,19 @@ public function studentlist($classid)
 
 /********************Function for student list based on classid and gender Listing******************/
 
-public function studentlistgender($classid,$gender)
+
+public function studentlistgender($userid,$gender,$assignment_id)
 {
-  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
+
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id` NOT IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$assignment_id') AND `user`.`gender` = '$gender' ");
+
+
+
+
+ // $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`='$classid' AND `gender`='$gender'");
+  // $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `gender` = '$gender' AND `classid` IN(SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$userid') ");
+
+
   $num = mysql_num_rows($query);
   if ($num)
   {
@@ -629,15 +650,17 @@ public function log_assign($studentid,$data)
       $phase     = $data[0]['phase'];
       $activity  = $data[0]['activity'];
       $id        = $data[0]['id'];
-      $date      = $data[0]['date'];
+    //  $date      = $data[0]['date'];
       $remarks   = $data[0]['remarks'];
-
-    $insert = mysql_query("INSERT `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`) VALUES('$studentid','$phase','$activity','$remarks','$id','$date')");
+    $insert = mysql_query("INSERT INTO `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`,`duration`,`distance`,`performance`,`repetition`) VALUES('$studentid','$phase','$activity','$remarks','$id',CURDATE(),0,0,0,0)");
     if($insert)
     {
-      return 1;
+      $last_id = mysql_insert_id();
+
+      return $last_id;
     }
-    else{
+    else
+    {
       return 0;
     }    
 
@@ -684,6 +707,58 @@ public function  view_coach_log($coach_assignment_id)
 }
 
 
+public function view_log_assign($userid,$log_id)
+{
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id`  IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id') ");
+  
+
+      // $query = mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id')");
+
+
+
+  $num = mysql_num_rows($query);
+  if ($num)
+  {
+     while($row=mysql_fetch_assoc($query))
+                   {
+                       $date_1 = new DateTime($row['student_dob']);
+                       $date_2 = new DateTime( date( 'd-m-Y' ));
+                       $difference = $date_2->diff( $date_1 );
+                       $year=(string)$difference->y;
+
+                       $row['age'] = $year;
+                     $data[]  = $row ;
+                   }
+                   return $data;
+  }
+  else
+  {
+     return 0;
+  }
+
+}
+
+public function getClass_id($userid)
+{
+ $query= mysql_query("SELECT `id` FROM `gs_coach_class` where `userid`=$userid");
+ $num=mysql_num_rows($query);
+  if ($num!=0) 
+ {
+     
+        while ($row=mysql_fetch_assoc($query))
+        {
+          $data[]=$row;
+        }
+        
+    
+return $data;  
+}
+else
+{
+ return 0;
+}
+}
+
 
 
 public function updatelog($userdata)
@@ -708,7 +783,15 @@ public function updatelog($userdata)
   }
 } /// End Function
 
+public function getage($age)
+{
+                 $date_1 = new DateTime($age);
+                 $date_2 = new DateTime( date( 'd-m-Y' ));
+                 $difference = $date_2->diff( $date_1 );
+                 $year=(string)$difference->y;
+                  return $year;
 
+}
 
 
 

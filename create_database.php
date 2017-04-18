@@ -855,11 +855,11 @@ $res[0]['terms_and_cond1'] = $terms;
 else
 {
   $status = 0;
+  $res = [];
 } 
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
-
 
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
