@@ -33,15 +33,21 @@ else if($_REQUEST['act'] == "view_rate")
    $req = new ratingservice();
    $res1 = $req->total_rate($entity_id,$entity_type);
    $res = $req->view_rate($userid,$entity_id,$entity_type);
+  
+   // print_r($res1);die;
+
    $avg=0;
    if($res1){
    for ($i=0; $i <sizeof($res1); $i++) 
    { 
-        $avg = $avg +$res1[$i][0];
+        $avg = $avg +$res1[$i]['total_rating'];
    }
   $total_avg =  $avg/sizeof($res1);
   $res[0]['total_avg'] = $total_avg;
   $res[0]['total_users'] = sizeof($res1);
+  $res[0]['name'] = $res1[0]['name'];
+  $res[0]['image'] = $res1[0]['user_image'];
+
   }
    if($res)
    {
