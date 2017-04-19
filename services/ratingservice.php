@@ -15,9 +15,9 @@ else
 }
 }
 
-public function view_rate($data)
+public function view_rate($userid,$entity_id)
 {
-   $query = mysql_query("SELECT * FROM `gs_rating` WHERE `userid`='$data->userid' AND `entity_id` ='$data->entity_id'");
+   $query = mysql_query("SELECT * FROM `gs_rating` WHERE `userid`='$userid' AND `entity_id` ='$entity_id'");
   $row = mysql_num_rows($query);
    if($row)
    {
@@ -31,9 +31,9 @@ public function view_rate($data)
 
 }
 
-public function total_rate($data)
+public function total_rate($entity_id)
 {
-   $query = mysql_query("SELECT `total_rating` FROM `gs_rating` WHERE  `entity_id` ='$data->entity_id'");
+  $query = mysql_query("SELECT `total_rating` FROM `gs_rating` WHERE  `entity_id` ='$entity_id'");
   $row = mysql_num_rows($query);
    if($row)
    {

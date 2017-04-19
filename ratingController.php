@@ -25,10 +25,12 @@ if($_REQUEST['act'] == "rate_coach")
 
 else if($_REQUEST['act'] == "view_rate")
 {
-   $ratedata = json_decode(file_get_contents("php://input"));
+    $userid =   $_REQUEST['userid'];
+    $entity_id =  $_REQUEST['entity_id'];
+   
    $req = new ratingservice();
-   $res1 = $req->total_rate($ratedata);
-   $res = $req->view_rate($ratedata);
+   $res1 = $req->total_rate($entity_id);
+   $res = $req->view_rate($userid,$entity_id);
    $avg=0;
    for ($i=0; $i <sizeof($res1); $i++) 
    { 
