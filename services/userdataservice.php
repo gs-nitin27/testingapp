@@ -1317,9 +1317,9 @@ public function sendNotification($registration_ids, $message,$google_api)
 
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
-        define("GOOGLE_API", $google_api);    
+        //define("GOOGLE_API", $google_api);    
         $headers = array(
-            'Authorization: key=' . GOOGLE_API,
+            'Authorization: key=' .$google_api,
             'Content-Type: application/json'
         );
 
