@@ -385,7 +385,7 @@ public function joinStudentData($userdata)
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
 
-   if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees) || empty($transaction_id) || empty($payment_id) || empty($remark))
+   if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees) )
   {
     return 0;
   }
