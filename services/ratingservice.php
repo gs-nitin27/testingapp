@@ -33,18 +33,32 @@ public function view_rate($userid,$entity_id,$entity_type)
 
 public function total_rate($entity_id,$entity_type)
 {
-  $query = mysql_query("SELECT `gs_rating`.`total_rating`, `user`.`name`,`user`.`user_image` FROM `gs_rating` INNER JOIN user ON `gs_rating`.`entity_id`=`user`.`userid` WHERE `user`.`userid`='$entity_id' AND `entity_type`='$entity_type'");
+  $query = mysql_query("SELECT `total_rating` FROM `gs_rating` WHERE  `entity_id` ='$entity_id' AND `entity_type`='$entity_type'");
   $row = mysql_num_rows($query);
    if($row)
    {
-     while($data = mysql_fetch_assoc($query))
+     while($data = mysql_fetch_row($query))
       {
       $result[] = $data;
       }
        
         return $result;
    }
+}
 
+public function userdata($userid)
+{ 
+	 $query = mysql_query("SELECT `name`,`user_image` FROM `user` WHERE `userid`= '$userid'");
+    $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_row($query))
+      {
+      $result[] = $data;
+      }
+       
+        return $result;
+   }
 }
 
 
