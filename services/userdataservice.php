@@ -1233,8 +1233,12 @@ $query      = mysql_query("SELECT  * FROM `gs_resources` WHERE $whereclause ");
          {
                while($row = mysql_fetch_assoc($query))
                {
-                $row['fav']='0';
-                $data[]=$row;
+                 $des1=strip_tags($row['description']); 
+                 $row['description'] = $des1;
+                 $sum1=strip_tags($row['summary']);
+                 $row['summary'] = $sum1; 
+                 $row['fav'] = '0';
+                 $data[] = $row;
                }
                return $data;
           } 
@@ -2237,10 +2241,27 @@ $rows[] = $row;
 }
 
 
+/******************************Rating function******************************************/
+
+  public function rating($userid)
+  {
+     $query = mysql_query("SELECT avg(total_rating) AS rating FROM gs_rating where entity_id=$userid ");
+     $row   =mysql_fetch_assoc($query);
+     if ($row['rating']!=null)
+     {
+       return $row['rating'];
+     }
+     else
+     {
+      return 0;
+     }
+     
+  } // End Function
 
 
 
 /**********************************************************************/
+
 public function user_Info($whereclause)
 {
  $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
@@ -2248,6 +2269,8 @@ if(mysql_num_rows($query) > 0)
 {
 while($row = mysql_fetch_assoc($query))
 {
+$userid =$row['userid'];
+$row['rating']=$this->rating($userid);
 $rows[] = $row;
 }
     return $rows;
