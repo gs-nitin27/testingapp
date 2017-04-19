@@ -19,10 +19,12 @@ if($_REQUEST['act'] == 'fee_payment')
 
   $response          =  $request->createinventry($invoice,$userdata,$s_no);
 
+  //print_r($response);die;
+
 
 if($response)
    {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'Create Daily Log ');
+             $Result = array('status' => '1','data'=>$invoice ,'msg'=>'Create Daily Log ');
              echo json_encode($Result);
    }
    else

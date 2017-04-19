@@ -13,8 +13,7 @@ class inventryservice
   $query = mysql_query("INSERT INTO `gs_inventry`(`invoiceid`,`transactionid`,`userid`,`classid`,`remarks`,`paymentid`,`date_of_transaction`,`sno`,`mode_of_payment`) VALUES('$invoice','$userdata->transactionid','$userdata->userid','$userdata->classid','$userdata->remarks','$userdata->paymentid',CURDATE(),$sno,'$userdata->mode_of_payment')");
   if($query)
   {
-    $id = mysql_insert_id();
-    return $id;
+    return 1;
   }
   else
   {
@@ -22,7 +21,6 @@ class inventryservice
   }
 
  }
-
 
  public function inventrylastid()
  {
