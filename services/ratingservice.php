@@ -13,9 +13,37 @@ else
 {
 	return 0;
 }
+}
 
+public function view_rate($data)
+{
+   $query = mysql_query("SELECT * FROM `gs_rating` WHERE `userid`='$data->userid' AND `entity_id` ='$data->entity_id'");
+  $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_assoc($query))
+      {
+      $result[] = $data;
+      }
+       
+        return $result;
+   }
 
+}
 
+public function total_rate($data)
+{
+   $query = mysql_query("SELECT `total_rating` FROM `gs_rating` WHERE  `entity_id` ='$data->entity_id'");
+  $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_row($query))
+      {
+      $result[] = $data;
+      }
+       
+        return $result;
+   }
 
 }
 
