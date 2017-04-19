@@ -553,7 +553,7 @@ else if($_REQUEST['act'] == 'activity_search')
      if($res)
      {
       $studentdata = $coach->userdata($student_list[$i]);
-      $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignemet','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
+      $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignment','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
            
       $jsondata       = json_encode($message);
       $req->alerts($student_list[$i],L,$jsondata);
