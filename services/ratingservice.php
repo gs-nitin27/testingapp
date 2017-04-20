@@ -4,7 +4,7 @@ class ratingservice
 	
 public 	function  createrating($data)
 {
-		 $query = mysql_query("INSERT INTO `gs_rating`(`userid`,`entity_type`,`entity_id`,`q1`,`q2`,`q3`,`q4`,`q5`,`total_rating`,`entry_date`) VALUES('$data->userid','$data->entity_type','$data->entity_id','$data->q1','$data->q2','$data->q3','$data->q4','$data->q5','$data->total_rating',CURDATE())");
+		 $query = mysql_query("INSERT INTO `gs_rating`(`id`,`userid`,`entity_type`,`entity_id`,`q1`,`q2`,`q3`,`q4`,`q5`,`total_rating`,`entry_date`) VALUES('$data->id','$data->userid','$data->entity_type','$data->entity_id','$data->q1','$data->q2','$data->q3','$data->q4','$data->q5','$data->total_rating',CURDATE()) ON DUPLICATE KEY UPDATE `q1`='$data->q1',`q2`='$data->q2',`q3`='$data->q3',`q4`='$data->q4',`q5`='$data->q5',`total_rating`='$data->total_rating',`date_updated`=CURDATE()");
 if($query)
 {
 	return 1;
