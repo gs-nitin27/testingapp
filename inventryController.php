@@ -34,19 +34,28 @@ if($response)
 
 elseif($_REQUEST['act'] == 'invoice_history')
 {
- $userid         =  urldecode($_REQUEST['userid']);
- $request         =  new inventryservice();
-$response        =  $request->invoicehistory($userid);
-if($response)
-   {
-             $Result = array('status' => '1','data'=>$response,'msg'=>'invoice history ');
-             echo json_encode($Result);
-   }
-   else
-   {                     
-          $Result = array('status' => '0','data'=>[] ,'msg'=>'No invoice history');
-          echo json_encode($Result);
-   } 
+    $userid         =  urldecode($_REQUEST['userid']);
+    $request         =  new inventryservice();
+    if (empty($userid))
+    {
+      $Result = array('status' => '0','data'=>[] ,'msg'=>'userid is not find');
+              echo json_encode($Result);
+    }
+    else
+    {
+     $response        =  $request->invoicehistory($userid);
+     if($response)
+       {
+                 $Result = array('status' => '1','data'=>$response,'msg'=>'invoice history ');
+                 echo json_encode($Result);
+       }
+       else
+       {                     
+              $Result = array('status' => '0','data'=>[] ,'msg'=>'No invoice history');
+              echo json_encode($Result);
+       } 
+     }
+
 }
 
 
