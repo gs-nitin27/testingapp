@@ -10,7 +10,7 @@ class inventryservice
  
  public function createinventry($invoice,$userdata,$sno)
  {
-  $query = mysql_query("INSERT INTO `gs_inventry`(`invoiceid`,`transactionid`,`userid`,`classid`,`remarks`,`paymentid`,`date_of_transaction`,`sno`,`mode_of_payment`) VALUES('$invoice','$userdata->transactionid','$userdata->userid','$userdata->classid','$userdata->remarks','$userdata->paymentid',CURDATE(),$sno,'$userdata->mode_of_payment')");
+  $query = mysql_query("INSERT INTO `gs_inventry`(`invoiceid`,`transactionid`,`userid`,`classid`,`remarks`,`paymentid`,`date_of_transaction`,`sno`,`mode_of_payment`,`amount_paid`) VALUES('$invoice','$userdata->transactionid','$userdata->userid','$userdata->classid','$userdata->remarks','$userdata->paymentid',CURDATE(),$sno,'$userdata->mode_of_payment','$userdata->amount_paid')");
   if($query)
   {
     return 1;
