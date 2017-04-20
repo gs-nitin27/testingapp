@@ -2245,11 +2245,11 @@ $rows[] = $row;
 
   public function rating($userid)
   {
-     $query = mysql_query("SELECT avg(total_rating) AS rating FROM gs_rating where entity_id=$userid ");
+     $query = mysql_query("SELECT avg(total_rating) AS rating ,COUNT(*) AS total_user FROM gs_rating where entity_id=$userid ");
      $row   =mysql_fetch_assoc($query);
      if ($row['rating']!=null)
      {
-       return $row['rating'];
+       return $row;
      }
      else
      {
@@ -2262,23 +2262,41 @@ $rows[] = $row;
 
 /**********************************************************************/
 
+
 public function user_Info($whereclause)
 {
- $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
-if(mysql_num_rows($query) > 0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-$userid =$row['userid'];
-$row['rating']=$this->rating($userid);
-$rows[] = $row;
-}
-    return $rows;
- } 
-  else
- {
-  return 0;
-   }
+       $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
+      if(mysql_num_rows($query) > 0)
+      {
+      while($row = mysql_fetch_assoc($query))
+      {
+      $userid =$row['userid'];
+      $row1   = $this->rating($userid);
+      if ($row1['rating'] !=null)
+      {
+        $row['rating']       = (float)$row1['rating'];
+      }
+      else
+      {
+        $row['rating']   = 0;
+      }
+      if ($row1['total_user']!=null)
+      {
+        $row['total_user']   = $row1['total_user'];
+      }
+      else
+      {
+        $row['total_user']   = 0;
+      }
+
+      $rows[] = $row;
+      }
+          return $rows;
+       } 
+        else
+       {
+        return 0;
+         }
 }
 
 
