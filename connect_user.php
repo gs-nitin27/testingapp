@@ -297,7 +297,7 @@ $response       =  $request->getClass($userid);
              echo json_encode($Result);
    }
    else
-   {                     
+   {      $response = [];                
           $Result = array('status' => '0','data'=>$response ,'msg'=>'Not any Class');
           echo json_encode($Result);
    } 

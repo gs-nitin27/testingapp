@@ -1578,7 +1578,7 @@ public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 public function shortlist($userid,$id,$status,$module)
 {
 $query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` = '$userid' AND `userjob` = '$id'");
-$num=mysql_affected_rows();
+$num   =  mysql_affected_rows();
   if($num)
   {
     return 1;
