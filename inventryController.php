@@ -15,24 +15,41 @@ if($_REQUEST['act'] == 'fee_payment')
   $month = date("m");
   $year = date("y");
   $invoice = "DHS/".$month.$year."/".$s_no;
-
-
   $response          =  $request->createinventry($invoice,$userdata,$s_no);
-
-  //print_r($response);die;
-
-
 if($response)
    {
-             $Result = array('status' => '1','data'=>$invoice ,'msg'=>'Create Daily Log ');
+             $Result = array('status' => '1','data'=>$invoice ,'msg'=>'fee payment is done ');
              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>[] ,'msg'=>'Not Create Daily Log');
+          $Result = array('status' => '0','data'=>[] ,'msg'=>'Not payment');
           echo json_encode($Result);
    } 
 }
+
+
+
+/*************************************************************************************/
+
+elseif($_REQUEST['act'] == 'invoice_history')
+{
+ $userid         =  urldecode($_REQUEST['userid']);
+ $request         =  new inventryservice();
+$response        =  $request->invoicehistory($userid);
+if($response)
+   {
+             $Result = array('status' => '1','data'=>$response,'msg'=>'invoice history ');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>[] ,'msg'=>'No invoice history');
+          echo json_encode($Result);
+   } 
+}
+
+
 
 
 

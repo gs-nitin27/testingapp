@@ -40,6 +40,26 @@ class inventryservice
 
 
 
+public function invoicehistory($userid)
+{
+   $query = mysql_query("SELECT gs_inventry.* , `gs_coach_class`.`class_title` FROM gs_inventry INNER JOIN gs_coach_class ON `gs_inventry`.`classid`=`gs_coach_class`.id WHERE `gs_inventry`.`userid`=$userid ");
+    $row = mysql_num_rows($query);
+   if($row)
+   {
+     while($data = mysql_fetch_assoc($query))
+      {
+      $data['amount_paid']  =  (float)$data['amount_paid'];
+      $result[]    = $data;
+      }
+      
+        return $result;
+   }
+   else
+   {
+    return 0;
+   }
+}
+
 
 } // End Class
 
