@@ -22,7 +22,7 @@ if($_REQUEST['act'] == 'get_modules')
         }
         else
         {
-            $data = array('status' => 1, 'data'=>$res, 'msg'=>'Failure');
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Failure');
                     echo json_encode($data);
         }  
 

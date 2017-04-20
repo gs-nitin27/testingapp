@@ -61,7 +61,7 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 			$query 	= mysql_query("SELECT age_group FROM gs_age_group WHERE `gender` = '$gender' ");
 			$num = mysql_num_rows($query);
 			if ($num>0)
-			{
+			{   $sum = '';
 				while ($row=mysql_fetch_assoc($query))
 				{
 					$data[]=implode("-",$row);
