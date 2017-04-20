@@ -2262,6 +2262,7 @@ $rows[] = $row;
 
 /**********************************************************************/
 
+
 public function user_Info($whereclause)
 {
        $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
@@ -2271,10 +2272,9 @@ public function user_Info($whereclause)
       {
       $userid =$row['userid'];
       $row1   = $this->rating($userid);
-
       if ($row1['rating'] !=null)
       {
-        $row['rating']       = $row1['rating'];
+        $row['rating']       = (float)$row1['rating'];
       }
       else
       {
