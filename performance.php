@@ -17,7 +17,9 @@ if($_REQUEST['act'] == 'get_modules')
    {
      $id          =  $req->save($coachid,$athleteid);
    }
-   $age           =  $req->ageGropup($dob,$gender);
+   $req_age       =  new UserPerformanceService();
+   $age           =  $req_age->ageGropup($dob,$gender);
+   $req           =  new UserPerformanceService();
    $res           =  $req->userPerformance($id,$age,$sport,$gender);
         if($res)
         {
