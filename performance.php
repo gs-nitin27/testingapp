@@ -12,7 +12,7 @@ if($_REQUEST['act'] == 'get_modules')
    $coachid       =  $userdata->coachid;
    $athleteid     =  $userdata->athleteid;
    $req           =  new UserPerformanceService();
-   $cheak         =  $req->cheackPerformance($age,$sport,$gender)
+   $cheak         =  $req->cheackPerformance($age,$sport,$gender);
    if($cheak)
    {
      $id          =  $req->save($coachid,$athleteid);
