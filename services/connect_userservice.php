@@ -105,7 +105,24 @@ public function updateseennotification($id)
  }
 
 
+/*****************************Find out the rating*******************************/
 
+  public function rating($userid)
+  {
+     $query = mysql_query("SELECT avg(total_rating) AS rating ,COUNT(*) AS total_user FROM gs_rating where entity_id=$userid ");
+     $row   =mysql_fetch_assoc($query);
+     if ($row['rating']!=null)
+     {
+       return $row;
+     }
+     else
+     {
+      return 0;
+     }
+     
+  } // End Function
+
+/*******************************************************************************/
 
 /****************This Function Show Connected  Usrs **************/
 
@@ -119,8 +136,26 @@ public function getConnectedUser($userid,$usertype)
      {
           for ($i=0; $i <$num ; $i++) 
           {
-            $row=mysql_fetch_assoc($query);
-            $data[]=$row;
+             $row=mysql_fetch_assoc($query);
+             $userid =$row['userid'];
+             $row1   = $this->rating($userid);
+            if ($row1['rating'] !=null)
+            {
+              $row['rating']       = (float)$row1['rating'];
+            }
+            else
+            {
+              $row['rating']   = 0;
+            }
+            if ($row1['total_user']!=null)
+            {
+              $row['total_user']   = $row1['total_user'];
+            }
+            else
+            {
+              $row['total_user']   = 0;
+            }
+           $data[]=$row;
           }
 
     return $data;  
@@ -384,7 +419,6 @@ public function joinStudentData($userdata)
   $transaction_id    =  $userdata->transaction_id;
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
-
    if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees) )
   {
     return 0;

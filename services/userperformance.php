@@ -12,7 +12,6 @@ public function userPerformance($id,$age,$sport,$gender)
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-
 		$row['question']=json_decode($row['question']);
 		$row['performance_id'] = $id['id'];
 		$data = $row;
@@ -26,9 +25,26 @@ public function userPerformance($id,$age,$sport,$gender)
 }	
 
 
+/*********************************** Cheak The Performance**********************************/
+
+public function cheackPerformance($age,$sport,$gender)
+{ 
+	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
+	$num = mysql_num_rows($query);
+	if ($num>0)
+	{
+	   return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}	
+
 
 
 /******************************Save ***************************************/
+
 
 public function  save($coachid,$athleteid)
 {
@@ -61,7 +77,7 @@ $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlit
 			$query 	= mysql_query("SELECT age_group FROM gs_age_group WHERE `gender` = '$gender' ");
 			$num = mysql_num_rows($query);
 			if ($num>0)
-			{
+			{   $sum = '';
 				while ($row=mysql_fetch_assoc($query))
 				{
 					$data[]=implode("-",$row);
