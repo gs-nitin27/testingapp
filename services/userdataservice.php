@@ -1960,17 +1960,14 @@ if($query)
 {
   
  $last_id = mysql_insert_id();
- $this->sendEmail_for_password_reset($last_id);
+ $this->sendEmail_for_password_reset($item->email);
   return 5;
 }
 else
 {
     return 1;
 }
-
 }
-
-
 }
 
 
