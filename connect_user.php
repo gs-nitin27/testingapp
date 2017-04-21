@@ -3,6 +3,7 @@ include('config1.php');
 include('services/userdataservice.php');
 include('services/connect_userservice.php');
 include('services/manageSchedulingService.php');
+include('services/inventryservice.php');
 
  
 if($_REQUEST['act'] == 'connect')
@@ -214,7 +215,7 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 
 /****************************Join the Student**********************************/
-
+ 
 
   else if($_REQUEST['act'] == 'join_student')
   { 
@@ -223,16 +224,30 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $coach_id          =  $userdata->coach_id ;
   $classid           =  $userdata->classid;
    //                 =   userdata($coach_id); This code are used to send Notification
-  $student_id        =  $userdata->userid;  
-  $request           =  new connect_userservice();
-  $response          =  $request->alreadyStudent($student_id,$classid);
-  if($response)
-   {
-            $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
-             echo json_encode($Result);
-   }
-else
+  $student_id        =  $userdata->student_id;  
+
+
+  $req         =  new inventryservice();
+  $sno         = $req->inventrylastid();
+
+  $s_no = $sno['sno'] +1;
+
+  $month = date("m");
+  $year = date("y");
+  $invoice = "DHS/".$month.$year."/".$s_no;
+  $res          =  $req->createinventry($invoice,$userdata,$s_no);
+
+if($res)
 {
+  $request           =  new connect_userservice();
+  // $response          =  $request->alreadyStudent($student_id,$classid);
+  // if($response)
+  //  {
+  //           $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
+  //            echo json_encode($Result);
+  //  }
+// else
+// {
    $response          =  $request->joinStudentData($userdata);
    if($response)
    {
@@ -244,6 +259,13 @@ else
           $Result = array('status' => '0','data'=>'0' ,'msg'=>'Record is not Inserted');
           echo json_encode($Result);
    } 
+// }
+}
+else
+{
+          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Inventry Record is not Inserted');
+          echo json_encode($Result);
+
 }
 
 }

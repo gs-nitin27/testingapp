@@ -364,7 +364,7 @@ $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_i
   }
 }
 
-
+ 
 
 /********************************************************************/
 public function  alreadyStudent($student_id,$classid)
@@ -409,13 +409,13 @@ $num =mysql_num_rows($query);
 public function joinStudentData($userdata)
 {
   $classid           =  $userdata->classid;
-  $student_id        =  $userdata->userid;
+  $student_id        =  $userdata->student_id;
   $student_name      =  $userdata->student_name;
   $student_dob       =  $userdata->student_dob;
   $location          =  $userdata->location;
   $gender            =  $userdata->gender;
   $mode_of_payment   =  $userdata->mode_of_payment;
-  $fees              =  $userdata->fees;
+  $fees              =  $userdata->amount_paid;
   $transaction_id    =  $userdata->transaction_id;
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
