@@ -2265,7 +2265,7 @@ $rows[] = $row;
 
 public function user_Info($whereclause)
 {
-       $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
+      $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
       if(mysql_num_rows($query) > 0)
       {
       while($row = mysql_fetch_assoc($query))
