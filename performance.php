@@ -11,13 +11,16 @@ if($_REQUEST['act'] == 'get_modules')
    $dob		        =  $userdata->dob;
    $coachid       =  $userdata->coachid;
    $athleteid     =  $userdata->athleteid;
+   $id            =  0;
+   $req_age       =  new UserPerformanceService();
+   $age           =  $req_age->ageGropup($dob,$gender);
    $req           =  new UserPerformanceService();
    $cheak         =  $req->cheackPerformance($age,$sport,$gender);
    if($cheak)
    {
      $id          =  $req->save($coachid,$athleteid);
    }
-   $age           =  $req->ageGropup($dob,$gender);
+   $req           =  new UserPerformanceService();
    $res           =  $req->userPerformance($id,$age,$sport,$gender);
         if($res)
         {
