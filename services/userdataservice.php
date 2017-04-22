@@ -2255,6 +2255,51 @@ $rows[] = $row;
      
   } // End Function
 
+/*****************************Find Total Experience*************************/
+
+
+public function Experience($userid)
+{
+     $query = mysql_query("SELECT `user_detail` FROM `gs_userdata` where `userid` =$userid ");
+     $row   =mysql_fetch_assoc($query);
+     if ($row['user_detail']!=null)
+     {
+         $data  =  $row;
+         foreach($data as $key => $value) 
+         {
+            $data1     =  json_decode($value);
+            $data2     =  (array)$data1;
+         }
+           $data3  = (array)$data2['Experience'];
+           $data4 =  (array)$data3['workExperience'];
+           $num =count($data4);
+           for ($i=0; $i <$num ; $i++) 
+           { 
+                $data5[$i]=(array)$data4[$i];
+           }
+            $total_exp = 0;
+            $num1 =count($data5);
+           for ($i=0; $i <$num1 ; $i++) 
+           { 
+            $from        = $data5[$i]['dateFrom'];
+            $to          = $data5[$i]['dateTo'];
+            $date1       = date_create($to);
+            $date2       = date_create($from );
+            $diff12      = date_diff($date2, $date1);  
+            $month       = $diff12->m;
+            $year        = $diff12->y;
+            $total_month =  $month +  $year*12;
+            $total_exp   =  $total_exp + $total_month ;
+           }
+           return  $total_exp;
+    }
+    return 0;
+     
+}  // End Function
+
+
+
+
 
 
 /**********************************************************************/
@@ -2268,6 +2313,15 @@ public function user_Info($whereclause)
       while($row = mysql_fetch_assoc($query))
       {
       $userid =$row['userid'];
+      $row1['experience']   = $this->Experience($userid);
+      if ($row1['experience'] != null) 
+      {
+           $row['experience']    = $row1['experience'];
+      }  
+      else
+      {
+           $row['experience']   = 0;
+      }
       $row1   = $this->rating($userid);
       if ($row1['rating'] !=null)
       {
