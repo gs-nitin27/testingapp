@@ -122,7 +122,6 @@ public function updateseennotification($id)
      
   } // End Function
 
-/*******************************************************************************/
 
 /****************This Function Show Connected  Usrs **************/
 
@@ -138,7 +137,17 @@ public function getConnectedUser($userid,$usertype)
           {
              $row=mysql_fetch_assoc($query);
              $userid =$row['userid'];
-             $row1   = $this->rating($userid);
+              $row1['experience']   = $this->Experience($userid);
+              if ($row1['experience'] != null) 
+              {
+                   $row['experience']    = $row1['experience'];
+              }  
+              else
+              {
+                   $row['experience']   = 0;
+              }
+               $row1   = $this->rating($userid);
+
             if ($row1['rating'] !=null)
             {
               $row['rating']       = (float)$row1['rating'];
