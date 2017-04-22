@@ -17,8 +17,10 @@ $phone = $data->phone_no;
 $userid = $data->userid;
 $otp_code = mt_rand(1000,10000);
 $res1 = save_otp_code($userid,$otp_code);
-$msg = $otp_code." This is OTP code for login";
+$msg = "This + is + OTP + code + for + login +".$otp_code;
 $res = sendWay2SMS(9528454915,8824784642, $phone, $msg);
+
+//print_r($res);die;
   if (is_array($res))
      { 
      	if($res[0]['result'] == 1 || $res[0]['result'] == true)

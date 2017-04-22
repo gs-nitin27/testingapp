@@ -11,7 +11,7 @@ if($_REQUEST['act'] == 'fee_payment')
   $sno               = $request->inventrylastid();
 
   $s_no = $sno['sno'] +1;
-
+ 
   $month = date("m");
   $year = date("y");
   $invoice = "DHS/".$month.$year."/".$s_no;
