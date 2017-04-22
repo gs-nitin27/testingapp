@@ -223,32 +223,26 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $userdata          =  json_decode(file_get_contents("php://input"));
   $coach_id          =  $userdata->coach_id ;
   $classid           =  $userdata->classid;
-   //                 =   userdata($coach_id); This code are used to send Notification
-  $student_id        =  $userdata->student_id;  
-
-
-  $req         =  new inventryservice();
-  $sno         = $req->inventrylastid();
-
-  $s_no = $sno['sno'] +1;
-
-  $month = date("m");
-  $year = date("y");
-  $invoice = "DHS/".$month.$year."/".$s_no;
-  $res          =  $req->createinventry($invoice,$userdata,$s_no);
-
-if($res)
-{
-  $request           =  new connect_userservice();
-  // $response          =  $request->alreadyStudent($student_id,$classid);
-  // if($response)
-  //  {
-  //           $Result = array('status' => '0','data'=>'0' ,'msg'=>'User already exists');
-  //            echo json_encode($Result);
-  //  }
-// else
-// {
-   $response          =  $request->joinStudentData($userdata);
+  $student_id        =  $userdata->student_id; 
+  $student_name      =  $userdata->student_name;  
+  $req               =  new inventryservice();
+  $sno               = $req->inventrylastid();
+  $s_no              = $sno['sno'] +1;
+  $month             = date("m");
+  $year              = date("y");
+  $invoice           = "DHS/".$month.$year."/".$s_no;
+  $res               =  $req->createinventry($invoice,$userdata,$s_no);
+  if($res)
+  {
+   $pushobj              =   new userdataservice();
+   $coachdata            =   $pushobj->getdeviceid($coach_id);
+   $coach_id_device_id   =   $coachdata['device_id'];
+   $message      = array('message'=>$student_name ." "."has been enrolled for ".$class." class " ,'title'=>'New Student Enrolled','date_applied'=>$date,'userid'=>$student_id,'id'=>$classid,'indicator' => 7);
+   $jsondata        =   json_encode($message);
+   $pushnote        =   $pushobj ->sendPushNotificationToGCM($coach_id_device_id, $message);
+   $req->alerts($coach_id,L,$jsondata);
+   $request              =   new connect_userservice();
+   $response        =   $request->joinStudentData($userdata);
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'Successfuly Insert Record');
@@ -259,7 +253,6 @@ if($res)
           $Result = array('status' => '0','data'=>'0' ,'msg'=>'Record is not Inserted');
           echo json_encode($Result);
    } 
-// }
 }
 else
 {

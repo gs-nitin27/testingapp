@@ -425,7 +425,6 @@ public function joinStudentData($userdata)
   $gender            =  $userdata->gender;
   $mode_of_payment   =  $userdata->mode_of_payment;
   $fees              =  $userdata->amount_paid;
-  // $transaction_id    =  $userdata->transaction_id;
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
 
