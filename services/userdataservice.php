@@ -2296,8 +2296,8 @@ public function Experience($userid)
            $exp    = "$year years and $month months"  ;
            return  $exp;
     }
-           $exp    = "no experience"  ;
-           return $exp ;
+          // $exp    = "no experience"  ;
+           return 0;
       
 }  // End Function
 
@@ -2318,14 +2318,14 @@ public function user_Info($whereclause)
       {
       $userid =$row['userid'];
       $row1['experience']   = $this->Experience($userid);
-      if ($row1['experience'] != null) 
+      if ($row1['experience'] != 0) 
       {
            $row['experience']    = $row1['experience'];
       }  
-      //else
-    //  {
-       //    $row['experience']   = 0;
-    //  }
+      else
+    {
+         $row['experience']   = "no experience" ;
+    }
       $row1   = $this->rating($userid);
       if ($row1['rating'] !=null)
       {
