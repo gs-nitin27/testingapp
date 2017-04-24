@@ -67,9 +67,6 @@ $logintype                    =  $data1->logintype;
 $where                        =  "WHERE `email`= '$email' ";
 $req                          =  new userdataservice();
 $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
-//die();
-//die();
-
 $user_image                   =  $data1->user_image;
 switch ($logintype)
 {

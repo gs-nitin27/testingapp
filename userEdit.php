@@ -153,7 +153,7 @@ else
 
 $Total_profile = ($comp1+$comp2)/200*100;     // Total user and profile Status calculate
 $prof_status=$Total_profile;
-$data->profile = $Total_profile;
+$data->profile = (int)$Total_profile;
 $res  = json_encode($data);//json_encode($data); 
 $user = array('status' => 1, 'data'=> json_decode($res), 'msg'=>'Success');
 echo json_encode($user);
