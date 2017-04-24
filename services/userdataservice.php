@@ -2255,8 +2255,8 @@ $rows[] = $row;
      
   } // End Function
 
-/*****************************Find Total Experience*************************/
 
+/*****************************Find Total Experience*************************/
 
 public function Experience($userid)
 {
@@ -2291,10 +2291,14 @@ public function Experience($userid)
             $total_month =  $month +  $year*12;
             $total_exp   =  $total_exp + $total_month ;
            }
-           return  $total_exp;
+           $year  = (int)($total_exp / 12);
+           $month  = (int)($total_exp % 12);                     
+           $exp    = "$year years and $month months"  ;
+           return  $exp;
     }
-    return 0;
-     
+          // $exp    = "no experience"  ;
+           return 0;
+      
 }  // End Function
 
 
@@ -2314,14 +2318,14 @@ public function user_Info($whereclause)
       {
       $userid =$row['userid'];
       $row1['experience']   = $this->Experience($userid);
-      if ($row1['experience'] != null) 
+      if ($row1['experience'] != 0) 
       {
            $row['experience']    = $row1['experience'];
       }  
       else
-      {
-           $row['experience']   = 0;
-      }
+    {
+         $row['experience']   = "no experience" ;
+    }
       $row1   = $this->rating($userid);
       if ($row1['rating'] !=null)
       {
