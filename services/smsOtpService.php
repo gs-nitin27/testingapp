@@ -199,7 +199,17 @@ $varPhNo=$phone;
 $varMSG= $msg;//"message to send";
 $url="http://nimbusit.co.in/api/swsendSingle.asp";
 $data="username=".$varUserName."&password=".$varPWD."&sender=".$varSenderID."&sendto=".$varPhNo."&message=".$varMSG;
-postData($url,$data); 
+$result =  postData($url,$data); 
+
+//print_r($result);die;
+if($result)
+{
+return 1;
+}
+else
+{
+  return 0;
+}
 }
 
 function postdata($url,$data)
@@ -217,11 +227,13 @@ curl_setopt($objURL, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($objURL,CURLOPT_POST,1);
 curl_setopt($objURL, CURLOPT_POSTFIELDS,$data);
 
-print_r($data);
+
 
 $retval = curl_exec($objURL); 
 curl_close($objURL);
- 
+
+ //print_r($retval);
+
 return $retval;
 
 }

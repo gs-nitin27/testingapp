@@ -21,10 +21,10 @@ $msg = $otp_code." + This + is + OTP + code + for + login ";
 $res = sendWay2SMS(9528454915,8824784642, $phone, $msg);
 
 //print_r($res);die;
-  if (is_array($res))
+  if ($res)
      { 
-     	if($res[0]['result'] == 1 || $res[0]['result'] == true)
-     	{
+     	// if($res[0]['result'] == 1 || $res[0]['result'] == true)
+     	// {
        	 $user = array('status' => 1);
          echo json_encode($user);
         }
@@ -32,7 +32,7 @@ $res = sendWay2SMS(9528454915,8824784642, $phone, $msg);
        {
            $user = array('status' => 0);
            echo json_encode($user);   
-      } 
+      // } 
 }
 }
 
