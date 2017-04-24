@@ -2322,10 +2322,10 @@ public function user_Info($whereclause)
       {
            $row['experience']    = $row1['experience'];
       }  
-      else
-      {
-           $row['experience']   = 0;
-      }
+      //else
+    //  {
+       //    $row['experience']   = 0;
+    //  }
       $row1   = $this->rating($userid);
       if ($row1['rating'] !=null)
       {
