@@ -2255,8 +2255,8 @@ $rows[] = $row;
      
   } // End Function
 
-/*****************************Find Total Experience*************************/
 
+/*****************************Find Total Experience*************************/
 
 public function Experience($userid)
 {
@@ -2277,7 +2277,6 @@ public function Experience($userid)
            { 
                 $data5[$i]=(array)$data4[$i];
            }
-           //print_r($data5);die();
             $total_exp = 0;
             $num1 =count($data5);
            for ($i=0; $i <$num1 ; $i++) 
@@ -2289,15 +2288,13 @@ public function Experience($userid)
             $diff12      = date_diff($date2, $date1);  
             $month       = $diff12->m;
             $year        = $diff12->y;
-
             $total_month =  $month +  $year*12;
             $total_exp   =  $total_exp + $total_month ;
            }
            $year  = (int)($total_exp / 12);
            $month  = (int)($total_exp % 12);                     
            $exp    = "$year years and $month months"  ;
-          // echo $month;die();
-          return  $exp;
+           return  $exp;
     }
            $exp    = "no experience"  ;
            return $exp ;
