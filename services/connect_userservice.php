@@ -943,6 +943,30 @@ public function joinStudentData($userdata)
 
 }
 
+/***********************************************************************************************************/
+
+
+public function userdata($userid)
+    {
+    
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$userid'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+    }
+
+
+
+
 
 
 /********************This Function are used to find the Class informatino********************/
@@ -959,6 +983,16 @@ public function ClassInfo($student_id)
             {
               $row=mysql_fetch_assoc($query);
               $userid       =   $row['userid'];
+               $row1        =   $this->userdata($userid); 
+               if ($row1 !=0) 
+               {
+                  $row['user_image']       = $row1['user_image'];
+               }
+               else
+               {
+                $row['user_image']       = "No Image";
+               }
+               
               $row1           =  $this->rating($userid);
               if ($row1['rating'] !=null)
               {
