@@ -955,10 +955,12 @@ public function ClassInfo($student_id)
                if ($row1 !=0) 
                {
                   $row['user_image']       = $row1['user_image'];
+                  $row['name']             = $row1['name'];
                }
                else
                {
                 $row['user_image']       = "No Image";
+                
                }
                
               $row1           =  $this->rating($userid);
