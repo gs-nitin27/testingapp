@@ -950,31 +950,29 @@ public function joinStudentData($userdata)
 
 
 public function ClassInfo($student_id)
-
 {
-
  $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
-
   $num=mysql_num_rows($query);
-
   if ($num!=0) 
-
   {
-
             for ($i=0; $i <$num ; $i++) 
-
             {
-
               $row=mysql_fetch_assoc($query);
+              $userid       =   $row['userid'];
+              $row1           =  $this->rating($userid);
+              if ($row1['rating'] !=null)
+              {
+                $row['rating']       = (float)$row1['rating'];
+              }
+              else
+              {
+                $row['rating']   = 0;
+              }
 
               $data[]   = $row ;
-
-            }
-
+           }
         return $data;
-
   }
-
 }
 
 
