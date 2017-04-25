@@ -756,39 +756,19 @@ public function getClassInfo($class_id)
 
 
 public function getConnect($student_id,$coach_id)
-
 {
-
 $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
-
   $num =mysql_num_rows($query);
-
   if ($num>0)
-
   {
-
-    while($row = mysql_fetch_assoc($query))
-
-     {
-
-       $data[] = $row;
-
-      }
-
-        return $data;
-
-      //print_r($data);die();
-
+    $row = mysql_fetch_assoc($query);
+    $data = $row['req_status'];
+    return $data;
   }
-
   else
-
   {
-
     return 0;
-
   }
-
 }
 
 
@@ -800,29 +780,17 @@ $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_i
 /********************************************************************/
 
 public function  alreadyStudent($student_id,$classid)
-
 {
-
 $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`='$student_id' AND `classid`='$classid'");
-
 $num =mysql_num_rows($query);
-
     if ($num>0)
-
     {
-
     return 1;
-
     }
-
     else
-
     {
-
       return 0;
-
     }
-
 }
 
 

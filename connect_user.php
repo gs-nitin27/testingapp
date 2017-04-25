@@ -263,43 +263,23 @@ if($_REQUEST['act'] == 'connect')
 
 
 else if($_REQUEST['act'] == 'get_organized_classes')
-
  { 
-
  $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
-
  $student_id     =  $_REQUEST['student_userid'];  // Student User Id
-
  $request        =  new connect_userservice();
-
  $response       =  $request->getClass($userid);
-
  if ($response)
-
  {
-
-
-
  	if (!empty($student_id))
-
  	{
-
  		$response       =  $request->getClassJoinStudent($response, $student_id);
-
  	}
-
 	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
-
         echo json_encode($Result);
-
  }
-
    else
-
    {                     
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
-
           echo json_encode($Result);
 
    } 
@@ -328,27 +308,19 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $response         =  $request->getClassInfo($class_id);
 if ($response)
  {
-    if (!empty($student_id))
+  if (!empty($student_id))
   {
     $response              =  $request->getClassJoinStudent($response, $student_id);
   }
-  $con_res                 =   $request->getConnect($student_id,$coach_id);
-  if ($con_res!=0)
-  {
-      $response[0]['connection_status']=$con_res[0]['req_status'] ;
-  }
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
-             echo json_encode($Result);
-
+   $con_res                 =   $request->getConnect($student_id,$coach_id);
+   $response[0]['connection_status']= "$con_res";
+   $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
+   echo json_encode($Result);
 }
    else
-
    {                     
-
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
-
+         $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
           echo json_encode($Result);
-
    } 
 
 }
@@ -449,35 +421,19 @@ Student Id and Result is display all Class Information
 
 
  else if($_REQUEST['act'] == 'class_info' ) 
-
  { 
-
  $student_id           =  $_REQUEST['userid'];
-
- 
-
  $request              =  new connect_userservice();
-
  $response             =  $request->ClassInfo($student_id);
-
    if($response)
-
    {
-
              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
-
              echo json_encode($Result);
-
    }
-
    else
-
    {                     
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
-
           echo json_encode($Result);
-
    } 
 
 }
