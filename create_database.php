@@ -591,6 +591,8 @@ $item->name                  = $data1->name;
 $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
+$item->salary                = $data1->salary; 
+
 $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
