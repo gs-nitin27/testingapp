@@ -1867,7 +1867,7 @@ if($response)
 }
 else
 {                     
-        $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
+        $Result = array('status' => '0','data'=>[] ,'msg'=>'More Result is Not Found');
         echo json_encode($Result);
 } 
                      
@@ -2013,6 +2013,8 @@ else if($_REQUEST['act'] == "shortlist")
 
 } // End Function
 
+
+
 /***********************************Interview*****************************/
 
 else if($_REQUEST['act'] == "interview_schedule")
@@ -2023,18 +2025,30 @@ else if($_REQUEST['act'] == "interview_schedule")
   $applicant_id      =  $userdata->applicant_id;
   $job_id            =  $userdata->job_id;
   $status            =  $userdata->status;    // Status = 3 for Interview 
-  $module            =  $userdata->module;
+  $module            =  $userdata->module;     // module = 1 for Job
+  $date              =  $userdata->date; 
+  $msg               =  $userdata->msg;
+  $venue             =  $userdata->venue;
+  $applicant_id      =  implode(",",$applicant_id);
   $request           =  new userdataservice();
-  $emailnote         =  $request ->sendEmail($applicant_id);
-  $response          =  $request->shortlist($applicant_id,$job_id,$status,$module);  // This code for Interview Schedule
-  if ($response) 
+  $response          =  $request->interview_schedule($applicant_id,$job_id,$status);  // This code for Interview 
+  $email_res         =  new emailService();
+  $request           =  new userdataservice();
+  $userdata          =  $request->userdata($employer_id);
+  $employer_name     =  $userdata['name']; 
+  $fwhere            =  "`id`= $job_id"; 
+  $job_user          =  $request->jobsearch_user($fwhere);
+  $title             =  $job_user[0]['title']; 
+  $organisation_name =  $job_user[0]['organisation_name'];  
+  $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue);
+  if ($emailnote) 
   {
-    $Result = array('status' => '1','data'=>'1' ,'msg'=>'user is shortlisted');
+       $Result = array('status' => '1','data'=>'1' ,'msg'=>'Interview is schedule');
        echo json_encode($Result);
   }
   else
   {
-      $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'Interview is Not schedule');
        echo json_encode($Result);
   }
 

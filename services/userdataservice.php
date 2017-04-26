@@ -1593,7 +1593,46 @@ $num   =  mysql_affected_rows();
 }
 
 
+/********************************************************************************************/
 
+
+public function interview_schedule($applicant_id,$job_id,$status)
+{
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
+$num   =  mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+
+    return 0;
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************
 
 
 
