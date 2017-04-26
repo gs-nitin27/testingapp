@@ -482,7 +482,14 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
            if($id!=NULL && $image!=NULL)
              {
               $image = $this->imageupload($image,$id,$table);
+             // return $image;
+             }
+             if($image)
+             {
               return $image;
+             }else
+             {
+              return 1;
              }
            } 
         else
