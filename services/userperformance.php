@@ -2,18 +2,24 @@
 class UserPerformanceService
 {
 
+
 /***************This Function are used to find Performance****************************/
 
 public function userPerformance($id,$age,$sport,$gender)
 { 
-	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
+	//echo "SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ";die();
+
+	$query 	= mysql_query("SELECT * FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
+	//mysql_set_charset("UTF8");
+    //  header('Content-type: text/html; charset=utf-8');
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-		$row['question']=json_decode($row['question']);
-		$row['performance_id'] = $id['id'];
+		$question1 = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $row['question']), true );
+		$row['question'] =  $question1;
+		$row['performance_id'] = $id;
 		$data = $row;
 	}
 	return $data;
