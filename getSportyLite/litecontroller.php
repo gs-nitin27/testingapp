@@ -53,7 +53,7 @@ else if($_REQUEST['act']=="gs_login")
       $pass          = md5(urldecode($_REQUEST['password']));
       $username      = mysql_real_escape_string($email);
       $password1     = mysql_real_escape_string($pass);
-      $device_id        = urldecode($_REQUEST['device_id']);
+      $device_id     = urldecode($_REQUEST['device_id']);
       $req           = new liteservice();
       $res           = $req->gsSignIn($email,$password1,$token);
       if($res)

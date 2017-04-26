@@ -12,10 +12,11 @@ public function userPerformance($id,$age,$sport,$gender)
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-		$row['question']=json_decode($row['question']);
+		$row['question']= json_decode($row['question']);
 		$row['performance_id'] = $id['id'];
 		$data = $row;
 	}
+	
 	return $data;
 	}
 	else
