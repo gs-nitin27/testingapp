@@ -482,7 +482,14 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
            if($id!=NULL && $image!=NULL)
              {
               $image = $this->imageupload($image,$id,$table);
+             // return $image;
+             }
+             if($image)
+             {
               return $image;
+             }else
+             {
+              return 1;
              }
            } 
         else
@@ -1602,7 +1609,46 @@ $num   =  mysql_affected_rows();
 }
 
 
+/********************************************************************************************/
 
+
+public function interview_schedule($applicant_id,$job_id,$status)
+{
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
+$num   =  mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+
+    return 0;
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************
 
 
 
