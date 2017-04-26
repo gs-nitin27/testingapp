@@ -591,6 +591,8 @@ $item->name                  = $data1->name;
 $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
+$item->salary                = $data1->salary; 
+
 $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
@@ -1994,7 +1996,7 @@ else if($_REQUEST['act'] == "shortlist")
   $userdata          =  json_decode(file_get_contents("php://input"));
   $userid            =  $userdata->userid ;
   $id                =  $userdata->id;
-  $status            =  $userdata->status;
+  $status            =  $userdata->status;    // Status = 2 for shortlist
   $module            =  $userdata->module;
   $request           =  new userdataservice();
   $response          =  $request->shortlist($userid,$id,$status,$module);
@@ -2010,6 +2012,37 @@ else if($_REQUEST['act'] == "shortlist")
   }
 
 } // End Function
+
+/***********************************Interview*****************************/
+
+else if($_REQUEST['act'] == "interview_schedule")
+{
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $employer_id       =  $userdata->employer_id;
+  $applicant_id      =  $userdata->applicant_id;
+  $job_id            =  $userdata->job_id;
+  $status            =  $userdata->status;    // Status = 3 for Interview 
+  $module            =  $userdata->module;
+  $request           =  new userdataservice();
+  $emailnote         =  $request ->sendEmail($applicant_id);
+  $response          =  $request->shortlist($applicant_id,$job_id,$status,$module);  // This code for Interview Schedule
+  if ($response) 
+  {
+    $Result = array('status' => '1','data'=>'1' ,'msg'=>'user is shortlisted');
+       echo json_encode($Result);
+  }
+  else
+  {
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
+       echo json_encode($Result);
+  }
+
+} // End Function
+
+
+
+
 
 
 

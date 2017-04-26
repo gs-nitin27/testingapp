@@ -249,79 +249,62 @@ public function updateseennotification($id)
 /*********************************************************************************************/
 
 public function Experience($userid)
-
 {
-
      $query = mysql_query("SELECT `user_detail` FROM `gs_userdata` where `userid` =$userid ");
-     $row   =mysql_fetch_assoc($query);
+     $num = mysql_num_rows($query);
+     if ($num>0) 
+     {
+          $row   =mysql_fetch_assoc($query);
      if ($row['user_detail']!=null)
      {
          $data  =  $row;
          foreach($data as $key => $value) 
-
          {
-
             $data1     =  json_decode($value);
-
             $data2     =  (array)$data1;
-
          }
-
            $data3  = (array)$data2['Experience'];
-
            $data4 =  (array)$data3['workExperience'];
-
            $num =count($data4);
-
            for ($i=0; $i <$num ; $i++) 
-
            { 
-
                 $data5[$i]=(array)$data4[$i];
-
            }
-
             $total_exp = 0;
-
             $num1 =count($data5);
-
            for ($i=0; $i <$num1 ; $i++) 
-
            { 
-
             $from        = $data5[$i]['dateFrom'];
-
             $to          = $data5[$i]['dateTo'];
-
+            $from        = '12 july -2016';       // default Date value
+            $to          = '18 july 2017' ;       // default Date value
             $date1       = date_create($to);
-
             $date2       = date_create($from );
-
             $diff12      = date_diff($date2, $date1);  
-
             $month       = $diff12->m;
-
             $year        = $diff12->y;
-
             $total_month =  $month +  $year*12;
-
             $total_exp   =  $total_exp + $total_month ;
-
            }
-
            $year  = (int)($total_exp / 12);
-
            $month  = (int)($total_exp % 12);                     
-
            $exp    = "$year years and $month months"  ;
-
            return  $exp;
 
     }
-
+  }
+  else
+  {
           $exp    = "No Experience"  ;
 
            return $exp;
+  }
+       //  }
+      // }
+      // else
+      // {
+            return 0;
+      // }
 
       
 
@@ -358,16 +341,17 @@ public function getConnectedUser($userid,$usertype)
           {
              $row=mysql_fetch_assoc($query);
              $userid =$row['userid'];
-              $row1['experience']   = $this->Experience($userid);
-              if ($row1['experience'] != null) 
+              $row1 = $this->Experience($userid);
+               if ($row1 != 0) 
               {
-                   $row['experience']    = $row1['experience'];
+                   $row['experience']    = $row1;
 
               }  
               else
               {
                    $row['experience']   = "No Experience" ;
               }
+               
                $row1   = $this->rating($userid);
             if ($row1['rating'] !=null)
             {
@@ -397,9 +381,6 @@ public function getConnectedUser($userid,$usertype)
            $data[]=$row;
 
           }
-
-
-
     return $data;  
 
     }
@@ -775,39 +756,19 @@ public function getClassInfo($class_id)
 
 
 public function getConnect($student_id,$coach_id)
-
 {
-
 $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
-
   $num =mysql_num_rows($query);
-
   if ($num>0)
-
   {
-
-    while($row = mysql_fetch_assoc($query))
-
-     {
-
-       $data[] = $row;
-
-      }
-
-        return $data;
-
-      //print_r($data);die();
-
+    $row = mysql_fetch_assoc($query);
+    $data = $row['req_status'];
+    return $data;
   }
-
   else
-
   {
-
     return 0;
-
   }
-
 }
 
 
@@ -819,29 +780,17 @@ $query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_i
 /********************************************************************/
 
 public function  alreadyStudent($student_id,$classid)
-
 {
-
 $query= mysql_query("SELECT `classid` FROM `gs_class_data` WHERE `student_id`='$student_id' AND `classid`='$classid'");
-
 $num =mysql_num_rows($query);
-
     if ($num>0)
-
     {
-
     return 1;
-
     }
-
     else
-
     {
-
       return 0;
-
     }
-
 }
 
 
@@ -962,6 +911,30 @@ public function joinStudentData($userdata)
 
 }
 
+/***********************************************************************************************************/
+
+
+public function userdata($userid)
+    {
+    
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$userid'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+    }
+
+
+
+
 
 
 /********************This Function are used to find the Class informatino********************/
@@ -969,31 +942,41 @@ public function joinStudentData($userdata)
 
 
 public function ClassInfo($student_id)
-
 {
-
  $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
-
   $num=mysql_num_rows($query);
-
   if ($num!=0) 
-
   {
-
             for ($i=0; $i <$num ; $i++) 
-
             {
-
               $row=mysql_fetch_assoc($query);
+              $userid       =   $row['userid'];
+               $row1        =   $this->userdata($userid); 
+               if ($row1 !=0) 
+               {
+                  $row['user_image']       = $row1['user_image'];
+                  $row['name']             = $row1['name'];
+               }
+               else
+               {
+                $row['user_image']       = "No Image";
+                
+               }
+               
+              $row1           =  $this->rating($userid);
+              if ($row1['rating'] !=null)
+              {
+                $row['rating']       = (float)$row1['rating'];
+              }
+              else
+              {
+                $row['rating']   = 0;
+              }
 
               $data[]   = $row ;
-
-            }
-
+           }
         return $data;
-
   }
-
 }
 
 

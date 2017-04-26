@@ -1,16 +1,9 @@
 <?php
-
 include('config1.php');
-
 include('services/userdataservice.php');
-
 include('services/connect_userservice.php');
-
 include('services/manageSchedulingService.php');
-
 include('services/inventryservice.php');
-
-
 
  
 
@@ -23,40 +16,23 @@ if($_REQUEST['act'] == 'connect')
     $response           = $req->getConnect($user_request_id,$user_responser_id);
     if ($response)
     {
-
       $userresponse = array('status' =>0 , 'msg' => 'already connected');
-
        echo json_encode($userresponse);
-
     }
-
     else
-
     {
-
     $req = new connect_userservice();
-
     $connection_id = $req->connect_user_request($user_request_id , $user_responser_id);
-
     $userdata = new userdataservice();
-
     $request_user = $userdata->getuserdata($user_request_id);
-
     $name      = $request_user['name'];
-
     $prof_id   = $request_user['prof_id'];
-
     $sport     = $request_user['sport'];
-
     $user_data = $userdata->getuserdata($user_responser_id);
-
     $device_id = $user_data['device_id'];
-
     $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id,'sport'=> $sport , 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'message'=> $name.' wants to connect with you' , 'device_id' => $device_id , 'indicator' => 1);
-
     $json_data = json_encode($array_data);
-
-    if($connection_id)
+     if($connection_id)
 
     {
 
@@ -287,43 +263,23 @@ if($_REQUEST['act'] == 'connect')
 
 
 else if($_REQUEST['act'] == 'get_organized_classes')
-
  { 
-
  $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
-
  $student_id     =  $_REQUEST['student_userid'];  // Student User Id
-
  $request        =  new connect_userservice();
-
  $response       =  $request->getClass($userid);
-
  if ($response)
-
  {
-
-
-
  	if (!empty($student_id))
-
  	{
-
  		$response       =  $request->getClassJoinStudent($response, $student_id);
-
  	}
-
 	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
-
         echo json_encode($Result);
-
  }
-
    else
-
    {                     
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
-
           echo json_encode($Result);
 
    } 
@@ -343,71 +299,28 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 
   else if($_REQUEST['act'] == 'get_classes_info')
-
  {
-
  $class_id         =  @$_REQUEST['class_id'];
-
  $student_id       =  $_REQUEST['student_userid'];
-
  $coach_id         =  $_REQUEST['coach_id'] ;
-
  $request          =  new connect_userservice();
-
  $con_res          =  $request->getConnect($student_id,$coach_id);
-
  $response         =  $request->getClassInfo($class_id);
-
- if ($response)
-
+if ($response)
  {
-
-  	if (!empty($student_id))
-
- 	{
-
- 		$response       =  $request->getClassJoinStudent($response, $student_id);
-
- 	}
-
-  $con_res          =  $request->getConnect($student_id,$coach_id);
-
-  if ($con_res) 
-
+  if (!empty($student_id))
   {
-
-    $response[0]['connection_status']='1';
-
+    $response              =  $request->getClassJoinStudent($response, $student_id);
   }
-
-  else
-
-  {
-
-    $response[0]['connection_status']='0';
-
-  }
-
-           
-
-
-
-  
-
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
-
-             echo json_encode($Result);
-
+   $con_res                 =   $request->getConnect($student_id,$coach_id);
+   $response[0]['connection_status']= "$con_res";
+   $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
+   echo json_encode($Result);
 }
-
    else
-
    {                     
-
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
-
+         $Result = array('status' => '0','data'=>$response ,'msg'=>'class Information Not find');
           echo json_encode($Result);
-
    } 
 
 }
@@ -508,35 +421,19 @@ Student Id and Result is display all Class Information
 
 
  else if($_REQUEST['act'] == 'class_info' ) 
-
  { 
-
  $student_id           =  $_REQUEST['userid'];
-
- 
-
  $request              =  new connect_userservice();
-
  $response             =  $request->ClassInfo($student_id);
-
    if($response)
-
    {
-
              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
-
              echo json_encode($Result);
-
    }
-
    else
-
    {                     
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
-
           echo json_encode($Result);
-
    } 
 
 }
