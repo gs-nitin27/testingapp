@@ -6,20 +6,28 @@ if($_REQUEST['act'] == 'get_modules')
 {
    $data 			    =  file_get_contents("php://input");
    $userdata 	    =  json_decode(file_get_contents("php://input"));
+  // print_r($userdata);die();
    $sport         =  $userdata->sport;
    $gender        =  $userdata->gender;
    $dob		        =  $userdata->dob;
    $coachid       =  $userdata->coachid;
    $athleteid     =  $userdata->athleteid;
-   $id            =  0;
+   //$id            =  0;
    $req_age       =  new UserPerformanceService();
    $age           =  $req_age->ageGropup($dob,$gender);
+   //echo "$age";die();
    $req           =  new UserPerformanceService();
    $cheak         =  $req->cheackPerformance($age,$sport,$gender);
+   //echo "$cheak";die();
    if($cheak)
    {
      $id          =  $req->save($coachid,$athleteid);
    }
+           $id = $id['id'];
+
+   //echo "$id";die();
+   //echo "$id";die();
+
    $req           =  new UserPerformanceService();
    $res           =  $req->userPerformance($id,$age,$sport,$gender);
         if($res)
