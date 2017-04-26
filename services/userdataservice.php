@@ -1537,12 +1537,21 @@ public function getAppliedJobListing($userid,$jobid)
 {
 $n=1;
 
-$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport,uj.`status` As status FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
+$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport,uj.`status` As status FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
 if(mysql_num_rows($query)>0)
 {
+
 while($row = mysql_fetch_assoc($query))
 {
-$rows[] = $row;
+
+                      $date_1 = new DateTime($row['dob']);
+                      $date_2 = new DateTime( date( 'd-m-Y' ));
+                      $difference = $date_2->diff( $date_1 );
+                      $year=(string)$difference->y;
+                      $row['age'] = $year;
+                      $rows[] = $row;
+
+
 }
 return $rows;
 }
