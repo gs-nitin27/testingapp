@@ -1603,21 +1603,17 @@ public function getAppliedJobListing($userid,$jobid)
 {
 $n=1;
 
-$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport,uj.`status` As status FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
+$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport, uj.`status` As status , uj.`interview_date` As interview_date FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
                       $date_1 = new DateTime($row['dob']);
                       $date_2 = new DateTime( date( 'd-m-Y' ));
                       $difference = $date_2->diff( $date_1 );
                       $year=(string)$difference->y;
                       $row['age'] = $year;
                       $rows[] = $row;
-
-
 }
 return $rows;
 }
@@ -1669,9 +1665,9 @@ $num   =  mysql_affected_rows();
 /********************************************************************************************/
 
 
-public function interview_schedule($applicant_id,$job_id,$status)
+public function interview_schedule($applicant_id,$job_id,$status,$date )
 {
-$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status',`interview_date` = $date  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
 $num   =  mysql_affected_rows();
   if($num)
   {
