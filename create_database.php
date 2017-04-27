@@ -2075,7 +2075,7 @@ if($response)
   }
   else
   {
-      $Result = array('status' => '0','data'=>'0' ,'msg'=>'Interview is Not Confirm');
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'All Ready Confirm');
        echo json_encode($Result);
   }
 }
