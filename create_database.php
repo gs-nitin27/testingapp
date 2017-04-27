@@ -2067,7 +2067,7 @@ else if($_POST['act'] == "confirm_interview")
   $applicant_id      = urldecode($_REQUEST ['applicant_id']); 
   $job_id            = urldecode($_REQUEST ['job_id']); 
   $request           =  new userdataservice();
-  $response          =  $request->confirm_interview($applicant_id,$job_id)
+  $response          =  $request->confirm_interview($applicant_id,$job_id);
 if($response) 
   {
        $Result = array('status' => '1','data'=>'1' ,'msg'=>'Interview is Confirm');
