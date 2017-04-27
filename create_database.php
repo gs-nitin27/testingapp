@@ -2062,12 +2062,10 @@ else if($_REQUEST['act'] == "interview_schedule")
 
 /***************************************Interview Confirm************************/
 
-else if($_REQUEST['act'] == "confirm_interview")
+else if($_POST['act'] == "confirm_interview")
 {
-  $data              =  file_get_contents("php://input");
-  $userdata          =  json_decode(file_get_contents("php://input"));
-  $applicant_id      =  $userdata->applicant_id;
-  $job_id            =  $userdata->job_id;
+  $applicant_id      = urldecode($_REQUEST ['applicant_id']); 
+  $job_id            = urldecode($_REQUEST ['job_id']); 
   $request           =  new userdataservice();
   $response          =  $request->confirm_interview($applicant_id,$job_id)
 if($response) 
