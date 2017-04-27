@@ -1018,7 +1018,6 @@ else
 
 /*************************Function for Get The Job***************************/
 
-
 public function getuserjobs($res,$userid)
 {
 $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` >= '1' ");
@@ -1028,6 +1027,7 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
           {
                     $data = $row;
                     $value =$data['userjob']; 
+
                     $size = sizeof($res);
                     for($j = 0 ; $j< $size ; $j++)
                     {  
@@ -1067,6 +1067,8 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 }// End Function
+
+
 
 /*************************Function for Get The Event***************************/
 
@@ -1226,6 +1228,63 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 }// End Function
+
+
+
+public function getuserInterview($res,$userid)
+{
+   $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` = '3' ");
+    if(mysql_num_rows($query)>0)
+    {
+          while($row = mysql_fetch_assoc($query))
+          {
+                    $data = $row;
+                    $value =$data['userjob']; 
+                    $size = sizeof($res);
+                    for($j = 0 ; $j< $size ; $j++)
+                    {  
+                          $keyval = $res[$j]['id'];
+                          if($keyval != $value)
+                          {
+                                 array_push($res[$j]['interview'], 0);
+                                  $val1 = "0";
+                                  if($res[$j]['interview'] != "1")
+                                  {
+                                   $res[$j]['interview'] = $val1;
+                                  }
+                                  else
+                                  {
+                                     $res[$j]['interview'] = "1";
+                                  }
+                          }
+                          else if($keyval == $value)
+                          {      
+                              array_push($res[$j]['interview'], "1");
+                              $res[$j]['interview'] = "1";   
+                          }
+                     }
+          }
+           return $res;
+    }
+    else
+    {
+          $size = sizeof($res);
+          for($i = 0 ; $i<$size ; $i++)
+          {
+           array_push($res[$i]['interview'], 0);
+                    $res[$i]['interview'] = "0";
+          }
+          return $res;
+    }
+
+
+}// End Function
+
+//}
+
+
+
+
 
 
 
