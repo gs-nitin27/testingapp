@@ -1248,19 +1248,19 @@ public function getuserInterview($res,$userid)
                           {
                                  array_push($res[$j]['job_status'], 0);
                                   $val1 = "0";
-                                  if($res[$j]['job_status'] != "1")
+                                  if($res[$j]['job_status'] != "3")
                                   {
                                    $res[$j]['job_status'] = $val1;
                                   }
                                   else
                                   {
-                                     $res[$j]['job_status'] = "1";
+                                     $res[$j]['job_status'] = "3";
                                   }
                           }
                           else if($keyval == $value)
                           {      
-                              array_push($res[$j]['job_status'], "1");
-                              $res[$j]['job_status'] = "1";   
+                              array_push($res[$j]['job_status'], "3");
+                              $res[$j]['job_status'] = "3";   
                           }
                      }
           }

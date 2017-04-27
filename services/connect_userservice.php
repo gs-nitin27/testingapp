@@ -117,34 +117,18 @@ class connect_userservice
 
 
  public function alerts($userid,$user_app,$jsondata)
-
  {
-
- 
-
   $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES('$userid','$user_app','$jsondata',CURDATE())");
 
   if($query)
-
-  {
-
-  	$data = mysql_insert_id();
-
-  	return $data;
-
-  }
-
-  else
-
-  {
-
+    {
+  	return 1;
+    }
+ else
+   {
   	return 0;
-
-  }
-
-
-
- }
+   }
+}
 
 
 
@@ -757,13 +741,12 @@ public function getClassInfo($class_id)
 
 public function getConnect($student_id,$coach_id)
 {
-$query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
+
+$query= mysql_query("SELECT `id` FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
   $num =mysql_num_rows($query);
   if ($num>0)
   {
-    $row = mysql_fetch_assoc($query);
-    $data = $row['req_status'];
-    return $data;
+    return 1;
   }
   else
   {

@@ -8,7 +8,7 @@ include('services/inventryservice.php');
  
 
 if($_REQUEST['act'] == 'connect')
-{
+{   
     $user_request_id    = $_REQUEST['lite_user_id'];
     $user_responser_id  = $_REQUEST['prof_user_id'];
     $user_app           = $_REQUEST['user_app'];
@@ -33,39 +33,20 @@ if($_REQUEST['act'] == 'connect')
     $array_data = array('connection_id' => $connection_id,'lite_user_id' => $user_request_id,'sport'=> $sport , 'prof_id' => $prof_id, 'title'=> 'New Connection Request', 'message'=> $name.' wants to connect with you' , 'device_id' => $device_id , 'indicator' => 1);
     $json_data = json_encode($array_data);
      if($connection_id)
-
     {
-
-     $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
-
-     $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data); 
-
-     $userresponse = array('status' =>1 ,  'connection_status' => 0 , 'message' => 'Request is sent');
-
-
-
+     $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data);
+     $userresponse = array('status' =>1 ,  'connection_status' => 0 ,'alerts'=>$alerts ,'message' => 'Request is sent');
      echo json_encode($userresponse);
-
+     $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
     }
-
-    else
-
+   else
     {
-
-       $userresponse = array('status' =>0 , 'connection_status' => 0 , 'message' => 'Request is  not sent');
-
+       $userresponse = array('status' =>0 , 'connection_status' => 0 , 'alerts'=>0 ,'message' => 'Request is  not sent');
        echo json_encode($userresponse);
-
     }
 
   }
-
-
-
 }
-
-
-
 
 
 
