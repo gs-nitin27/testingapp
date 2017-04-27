@@ -2060,9 +2060,27 @@ else if($_REQUEST['act'] == "interview_schedule")
 
 
 
+/***************************************Interview Confirm************************/
 
-
-
+else if($_REQUEST['act'] == "confirm_interview")
+{
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $applicant_id      =  $userdata->applicant_id;
+  $job_id            =  $userdata->job_id;
+  $request           =  new userdataservice();
+  $response          =  $request->confirm_interview($applicant_id,$job_id)
+if($response) 
+  {
+       $Result = array('status' => '1','data'=>'1' ,'msg'=>'Interview is Confirm');
+       echo json_encode($Result);
+  }
+  else
+  {
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'Interview is Not Confirm');
+       echo json_encode($Result);
+  }
+}
 
 
 

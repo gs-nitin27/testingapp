@@ -2125,6 +2125,44 @@ case '3':
 
 
 
+/****************************************************************************/
+
+public function confirm_interview($applicant_id,$job_id)
+{
+$query =  mysql_query("UPDATE `user_jobs` SET `status` ='4' WHERE `userid`=$applicant_id AND `userjob` = $job_id");
+$num   =  mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+
+    return 0;
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************/
+
+
+
+
+
+
+
+
 
 
 /***************************************New Apply function Job Event Tournament*****************/
