@@ -1643,8 +1643,9 @@ else if($_REQUEST['act'] == "gs_searching")
 
                          if ($module=='1')
                          {
-                            $response      = $request ->getuserjobs($response,$userid);
-                            $response      = $request ->getuserOffer($response,$userid);
+                            $response      = $request->getuserjobs($response,$userid);
+                            $response      = $request->getuserOffer($response,$userid);
+                            $response      = $request->getuserInterview($response,$userid);
                          }
                          if ($module=='2')
                           {
