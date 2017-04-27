@@ -1246,21 +1246,21 @@ public function getuserInterview($res,$userid)
                           $keyval = $res[$j]['id'];
                           if($keyval != $value)
                           {
-                                 array_push($res[$j]['interview'], 0);
+                                 array_push($res[$j]['job_status'], 0);
                                   $val1 = "0";
-                                  if($res[$j]['interview'] != "1")
+                                  if($res[$j]['job_status'] != "1")
                                   {
-                                   $res[$j]['interview'] = $val1;
+                                   $res[$j]['job_status'] = $val1;
                                   }
                                   else
                                   {
-                                     $res[$j]['interview'] = "1";
+                                     $res[$j]['job_status'] = "1";
                                   }
                           }
                           else if($keyval == $value)
                           {      
-                              array_push($res[$j]['interview'], "1");
-                              $res[$j]['interview'] = "1";   
+                              array_push($res[$j]['job_status'], "1");
+                              $res[$j]['job_status'] = "1";   
                           }
                      }
           }
@@ -1271,8 +1271,8 @@ public function getuserInterview($res,$userid)
           $size = sizeof($res);
           for($i = 0 ; $i<$size ; $i++)
           {
-           array_push($res[$i]['interview'], 0);
-                    $res[$i]['interview'] = "0";
+           array_push($res[$i]['job_status'], 0);
+                    $res[$i]['job_status'] = "0";
           }
           return $res;
     }
