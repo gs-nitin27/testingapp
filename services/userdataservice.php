@@ -1570,7 +1570,6 @@ return 0;
 
 /***********************************/
 
-
 public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 {
     $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
@@ -1586,7 +1585,6 @@ public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
 
   }
 }
-
 
 
 /*********************************Short List the Job***********************/
