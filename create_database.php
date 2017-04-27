@@ -1104,6 +1104,8 @@ else if($_POST['act'] == "getsearchview")
                              $request       =   new userdataservice();
                              $response      = $request->getuserjobs($res,$user_id);
                              $response      = $request->getuserOffer($response ,$user_id);
+                             $response      = $request->getuserInterview($response,$userid);
+
                          }
                          if($type=='2')
                           {
@@ -2055,6 +2057,10 @@ else if($_REQUEST['act'] == "interview_schedule")
   }
 
 } // End Function
+
+
+
+
 
 
 
