@@ -171,21 +171,13 @@ if($_REQUEST['act'] == 'connect')
 
 
  else if($_REQUEST['act'] == 'get_connected_users')
-
  { 
-
  $userid         =  @$_REQUEST['userid'];   // Lite user id
-
  $usertype       =  @$_REQUEST['usertype'];
-
  $request        =  new connect_userservice();
-
  $response       =  $request->getConnectedUser($userid,$usertype);
-
- //print_r($response);die();
-
- $response       =  $request->getConnectedStatus($response,$userid,$usertype);
-
+  $response       =  $request->getConnectedStatus($response,$userid,$usertype);
+//print_r($response);die();
   if($response)
 
   {

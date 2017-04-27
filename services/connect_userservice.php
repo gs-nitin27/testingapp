@@ -546,47 +546,32 @@ else
 
 
 public function getConnectedStatus($response,$userid,$usertype)
-
 {
-
-//print_r($response);
 
 if ($usertype=='L')
-
 {
-
  $query= mysql_query("SELECT `id`, `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
-
     $filed =`lite_user_id`; 
-
 }
-
 else if ($usertype=='M')
-
 {
-
    $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
-
 }
-
     $num=mysql_num_rows($query);
 
-  //   $data = [];
+//echo $num;die();
 
   if ($num!=0) 
-
   {
-
             for ($i=0; $i <$num ; $i++) 
-
             {
-
               $row=mysql_fetch_assoc($query);
-
               $data[]=$row;
-
             }
+print_r($response);
 
+
+print_r($data);die();
              // $num1=count($data);
 
             //  echo "$num1";die();
