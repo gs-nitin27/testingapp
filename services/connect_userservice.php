@@ -552,10 +552,10 @@ else if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-print_r($response);
+//print_r($response);
 
 
-print_r($data);die();
+//print_r($data);die();
              // $num1=count($data);
 
             //  echo "$num1";die();
