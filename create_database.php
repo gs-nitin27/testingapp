@@ -592,7 +592,6 @@ $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
 $item->salary                = $data1->salary; 
-
 $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
@@ -1104,7 +1103,7 @@ else if($_POST['act'] == "getsearchview")
                              $request       =   new userdataservice();
                              $response      = $request->getuserjobs($res,$user_id);
                              $response      = $request->getuserOffer($response ,$user_id);
-                             $response      = $request->getuserInterview($response,$userid);
+                             $response      = $request->getuserInterview($response,$$user_id);
 
                          }
                          if($type=='2')
