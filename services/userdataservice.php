@@ -1074,8 +1074,7 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 public function job_status($id,$userid)
-{
-  
+{ 
   $query  = mysql_query("SELECT *FROM `user_jobs` WHERE `userid` = '$userid' AND `userjob` = $id ");
     if(mysql_num_rows($query)>0)
     {

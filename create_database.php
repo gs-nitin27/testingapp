@@ -1008,9 +1008,9 @@ else
 else if($_POST['act'] == "getsearchview")
 {
  
-    $type  = urldecode($_POST['type']);
-    $id    = urldecode($_POST['id']);
-    $user_id =urldecode($_POST['user_id']);
+    $type  = urldecode($_REQUEST['type']);
+    $id    = urldecode($_REQUEST['id']);
+    $user_id =urldecode($_REQUEST['user_id']);
     $where =  "`id` = '".$id."'"; 
     $req   = new userdataservice();
     $res   = $req->getCreation($where , $type);
@@ -1098,11 +1098,12 @@ else if($_POST['act'] == "getsearchview")
               }
 
                          if ($type=='1')
-                         {
+                         {  
                             for ($i=0; $i <count($res) ; $i++)
-                            { 
-                               $job_status      = $request->job_status($res[$i]['id'],$userid);
-                               $res[$i]['job_status'] =$job_status;
+                            {  $request       =   new userdataservice();
+                               $job_status      = $request->job_status($res[$i]['id'],$user_id);
+                               $res[$i]['job_status'] = $job_status;
+                               $response = $res; 
                             }
                          }
                         if($type=='2')
@@ -1117,14 +1118,16 @@ else if($_POST['act'] == "getsearchview")
                           }
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
-}
+
+
+          }
        else
        {
        $data = array('data'=>$response, 'status'=>'0');
        echo json_encode($data);
        }
        
-      }
+  }
 
 
 
