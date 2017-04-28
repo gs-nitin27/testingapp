@@ -544,7 +544,7 @@ if(in_array(0, $userdata)){
 
   $userdata['status'] = 1;
 }
-print_r($userdata);
+//print_r($userdata);
 
 if($res)
 {
@@ -1007,7 +1007,7 @@ else
 
 else if($_POST['act'] == "getsearchview")
 {
-
+ 
     $type  = urldecode($_POST['type']);
     $id    = urldecode($_POST['id']);
     $user_id =urldecode($_POST['user_id']);
@@ -1594,6 +1594,7 @@ else if($_POST['act'] == "create_resource")
 
 else if($_REQUEST['act'] == "gs_searching")
 {
+
  $userid        =   urldecode($_REQUEST['userid']);  //Apply User Id 
  $module        =   urldecode($_REQUEST['module']);  //Type Job=1 Event=2 Tournament=3 
  $keyword       =   urldecode($_REQUEST ['key']);   // Search the Value by Applicant User
@@ -1640,8 +1641,7 @@ else if($_REQUEST['act'] == "gs_searching")
 
                 }
               }
-
-                         if ($module=='1')
+                        if ($module=='1')
                          {
                             for ($i=0; $i <count($response) ; $i++)
                             { 
@@ -1649,7 +1649,6 @@ else if($_REQUEST['act'] == "gs_searching")
                                $response[$i]['job_status'] =$job_status;
                             }
                          }
-
                          if ($module=='2')
                           {
                             $response      = $request ->getuserEvent($response, $userid);
