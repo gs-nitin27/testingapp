@@ -1,4 +1,4 @@
-<?php 
+u<?php 
 
  
  class userdataservice 
@@ -1069,6 +1069,40 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 
+/***************This function are used to find out the Job Status*************/
+// Status 1= Apply   2= shortlist  3= interview  4= confirm
+
+
+public function job_status($id,$userid)
+{
+  $query  = mysql_query("SELECT *FROM `user_jobs` WHERE `userid` = '$userid' AND `userjob` = $id ");
+    if(mysql_num_rows($query)>0)
+    {
+          $row = mysql_fetch_assoc($query);
+          return $row['status'];
+    }
+    else
+    {
+      return '0';
+    }     
+
+}// End Function
+
+
+/*********************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*************************Function for Get The Event***************************/
 
 
@@ -1227,63 +1261,6 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 }// End Function
-
-
-
-public function getuserInterview($res,$userid)
-{
-  
-   $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` = '3' ");
-    if(mysql_num_rows($query)>0)
-    {
-          while($row = mysql_fetch_assoc($query))
-          {
-                    $data = $row;
-                    $value =$data['userjob']; 
-                    $size = sizeof($res);
-                    for($j = 0 ; $j< $size ; $j++)
-                    {  
-                          $keyval = $res[$j]['id'];
-                          if($keyval != $value)
-                          {
-                                 array_push($res[$j]['job_status'], 0);
-                                  $val1 = "0";
-                                  if($res[$j]['job_status'] != "3")
-                                  {
-                                   $res[$j]['job_status'] = $val1;
-                                  }
-                                  else
-                                  {
-                                     $res[$j]['job_status'] = "3";
-                                  }
-                          }
-                          else if($keyval == $value)
-                          {      
-                              array_push($res[$j]['job_status'], "3");
-                              $res[$j]['job_status'] = "3";   
-                          }
-                     }
-          }
-           return $res;
-    }
-    else
-    {
-          $size = sizeof($res);
-          for($i = 0 ; $i<$size ; $i++)
-          {
-           array_push($res[$i]['job_status'], 0);
-                    $res[$i]['job_status'] = "0";
-          }
-          return $res;
-    }
-
-
-}// End Function
-
-//}
-
-
-
 
 
 

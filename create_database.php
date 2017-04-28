@@ -1097,15 +1097,15 @@ else if($_POST['act'] == "getsearchview")
                 }
               }
 
-                        if($type=='1')
+                         if ($type=='1')
                          {
-
-                             $request       =   new userdataservice();
-                             $response      = $request->getuserjobs($res,$user_id);
-                             $response      = $request->getuserOffer($response ,$user_id);
-                             $response      = $request->getuserInterview($response,$user_id);
+                            for ($i=0; $i <count($res) ; $i++)
+                            { 
+                               $job_status      = $request->job_status($res[$i]['id'],$userid);
+                               $res[$i]['job_status'] =$job_status;
+                            }
                          }
-                         if($type=='2')
+                        if($type=='2')
                           {
                             $request       =   new userdataservice();
                             $response      =   $request ->getuserEvent($res,$user_id);
@@ -1643,10 +1643,13 @@ else if($_REQUEST['act'] == "gs_searching")
 
                          if ($module=='1')
                          {
-                            $response      = $request->getuserjobs($response,$userid);
-                            $response      = $request->getuserOffer($response,$userid);
-                            $response      = $request->getuserInterview($response,$userid);
+                            for ($i=0; $i <count($response) ; $i++)
+                            { 
+                               $job_status      = $request->job_status($response[$i]['id'],$userid);
+                               $response[$i]['job_status'] =$job_status;
+                            }
                          }
+
                          if ($module=='2')
                           {
                             $response      = $request ->getuserEvent($response, $userid);
