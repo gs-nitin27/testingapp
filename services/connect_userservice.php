@@ -543,8 +543,6 @@ else if ($usertype=='M')
 }
     $num=mysql_num_rows($query);
 
-//echo $num;die();
-
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -552,20 +550,6 @@ else if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-//print_r($response);
-
-
-//print_r($data);die();
-             // $num1=count($data);
-
-            //  echo "$num1";die();
-
-         // print_r($data);
-
-           //print_r($response)       ;die();
-
-             
-
             for ($i=0; $i <$num; $i++) 
 
             {   
