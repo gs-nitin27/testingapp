@@ -1232,6 +1232,7 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 public function getuserInterview($res,$userid)
 {
+  
    $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` = '3' ");
     if(mysql_num_rows($query)>0)
     {

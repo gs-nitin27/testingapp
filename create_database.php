@@ -1103,8 +1103,7 @@ else if($_POST['act'] == "getsearchview")
                              $request       =   new userdataservice();
                              $response      = $request->getuserjobs($res,$user_id);
                              $response      = $request->getuserOffer($response ,$user_id);
-                             $response      = $request->getuserInterview($response,$$user_id);
-
+                             $response      = $request->getuserInterview($response,$user_id);
                          }
                          if($type=='2')
                           {
@@ -2034,7 +2033,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   $venue             =  $userdata->venue;
   $applicant_id      =  implode(",",$applicant_id);
   $request           =  new userdataservice();
-  $response          =  $request->interview_schedule($applicant_id,$job_id,$status);  // This code for Interview 
+  $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date);  // This code for Interview 
   $email_res         =  new emailService();
   $request           =  new userdataservice();
   $userdata          =  $request->userdata($employer_id);
