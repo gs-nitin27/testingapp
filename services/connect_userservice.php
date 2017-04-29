@@ -1148,30 +1148,36 @@ public function studentPaidListing($class_id,$flag)
 /*****************************Function Create log ********************/
 
 public function coach_log_assign($item)
-
 {
-
  $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`target_duration`,`target_distance`,`target_performance`,`target_repetition`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->performance','$item->repetition','$item->time_of_day','$item->remark',CURDATE())");
-
-
-
  if($insert)
-
  {
-
   return 1;
-
  }
-
  else
-
  {
-
   return 0;
-
  }
-
 }
+
+
+
+/**************************************************************************/
+
+public function edit_log_assign($item)
+{
+    $query = mysql_query("UPDATE `gs_coach_assignment` SET `coach_id`='$item->coach_id',`phase`='$item->phase',`activity`='$item->activity',`target_duration`='$item->duration',`target_distance`='$item->distance',`target_performance`='$item->performance',`target_repetition`='$item->repetition',`time_of_day`='$item->time_of_day',`remarks`='$item->remark' WHERE `id` = '$item->assign_id' ");
+    $update = mysql_affected_rows();
+    if($update)
+    {
+      return 1;
+    }
+    else 
+    {
+    return 0;
+    }
+
+} // End Function
 
 
 

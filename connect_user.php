@@ -636,60 +636,73 @@ if($response)
 
 
  else if ($_REQUEST['act'] == 'create_log_assign') 
-
 {
-
-    $data   = json_decode($_POST['data']);
-
-    $item    =  new stdClass();
-
-
-
+    $data                          =   json_decode($_POST['data']);
+    $item                          =   new stdClass();
     $item->coach_id                =   $data->coach_id; 
-
     $item->phase                   =   $data->phase;
-
     $item->activity                =   $data->activity;
-
     $item->duration                =   $data->duration;
-
     $item->distance                =   $data->distance;
-
     $item->time_of_day             =   $data->time_of_day;
-
     $item->remark                  =   $data->remark;
-
     $item->repetition              =   $data->repetition;
-
     $item->performance             =   $data->performance;
-
     $req                           =   new connect_userservice();
-
     $res                           =   $req->coach_log_assign($item);
-
-
-
     if($res)
-
     {
-
        $result = array('status' => 1);
-
        echo json_encode($result);
-
     }
-
     else
-
     {
-
        $result  = array('status' => 0);
-
        echo json_encode($result);
-
     }    
-
 } 
+
+
+/**********************************Edit create_log_assign ***************/
+
+ else if ($_REQUEST['act'] == 'edit_log_assign') 
+{
+    $data                          =   json_decode($_POST['data']);
+    $item                          =   new stdClass();
+    $item->assign_id               =   $data->id; 
+    $item->coach_id                =   $data->coach_id; 
+    $item->phase                   =   $data->phase;
+    $item->activity                =   $data->activity;
+    $item->duration                =   $data->duration;
+    $item->distance                =   $data->distance;
+    $item->time_of_day             =   $data->time_of_day;
+    $item->remark                  =   $data->remark;
+    $item->repetition              =   $data->repetition;
+    $item->performance             =   $data->performance;
+    $req                           =   new connect_userservice();
+    $res                           =   $req->edit_log_assign($item);
+    if($res)
+    {
+       $result = array('status' => 1);
+       echo json_encode($result);
+    }
+    else
+    {
+       $result  = array('status' => 0);
+       echo json_encode($result);
+    }    
+} 
+
+
+
+
+
+
+
+
+
+
+/**************************************************************************************/
 
 
 
