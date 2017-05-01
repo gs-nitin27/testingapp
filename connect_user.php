@@ -648,6 +648,7 @@ if($response)
     $item->remark                  =   $data->remark;
     $item->repetition              =   $data->repetition;
     $item->performance             =   $data->performance;
+
     $req                           =   new connect_userservice();
     $res                           =   $req->coach_log_assign($item);
     if($res)
@@ -861,35 +862,20 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
  /****************************create log list   **********************************/
 
 
-
 else if ($_REQUEST['act'] == 'coach_log_list')
-
 {
-
        $data = json_decode($_POST['data']);
-
        $req = new  connect_userservice();
-
        $res = $req->coach_log_list($data->coach_id);
-
        if($res)
-
        {
-
          $result = array('status' => 1, 'data' => $res);
-
-         echo json_encode($result);
-
-       }
-
-       else
-
-       {
-
-        $result = array('status' => 0, 'data' => []);
-
         echo json_encode($result);
-
+       }
+       else
+       {
+        $result = array('status' => 0, 'data' => []);
+       echo json_encode($result);
        }
 
 }
