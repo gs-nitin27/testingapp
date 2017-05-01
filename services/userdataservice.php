@@ -1603,18 +1603,19 @@ return 0;
 
 /***********************************/
 
-public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
+public function jobStatus($applicant_id,$job_id,$status,$salary,$joining_date)
 {
     $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
 
-  if($query)
+$num   =  mysql_affected_rows();
+  if($num)
   {
-    return true;
+    return 1;
   }
   else
   {
 
-    return false;
+    return 0;
 
   }
 }

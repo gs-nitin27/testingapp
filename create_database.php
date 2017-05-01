@@ -1449,7 +1449,7 @@ echo json_encode($data);
 
 /*****************************Sending Offer **************************************/
 
-else if($_POST['act']=="send_offer")
+else if($_REQUEST['act']=="send_offer")
 {
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
@@ -1467,19 +1467,19 @@ else if($_POST['act']=="send_offer")
   $device_id_apply   =  $getid['device_id'];
   $name              =  $getid['name'];
   $req1              =  new connect_userservice();
-  $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>'' 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
+  $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
    $jsondata        =  json_encode($message);
    $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
    $pushobj         =  new userdataservice();
    $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
-  if ($response) 
+  if ($res) 
   {
-   $Result = array('status' => '1','data'=>1 ,'msg'=>'Send Offer to Applicant');
+   $Result = array('status' => '1','data'=>'1' ,'msg'=>'Send Offer to Applicant');
              echo json_encode($Result);
   }
   else
   {
-  $Result = array('status' => '0','data'=>0 ,'msg'=>'Not send Offer ');
+  $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not send Offer ');
              echo json_encode($Result);
   }
   
@@ -2014,8 +2014,8 @@ else if($_REQUEST['act'] == "interview_schedule")
   $date              =  $userdata->date; 
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
-  $module            =  '1'    // for Job
-  $date              =  date("F j, Y, g:i a");
+  $module            =  '1';    // for Job
+  //$date1             =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $con               =  new connect_userservice();
   //$message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
