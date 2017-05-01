@@ -474,8 +474,7 @@ public function create_job($item)
 
 $image =$item->image;
 $table ="gs_jobInfo";
-$query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`,`salary`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email','$item->salary',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' ,`salary` = '$item->salary', `pin` = '$item->pin'");
- 
+$query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`,`salary`, `date_created`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email','$item->salary',CURDATE()) ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' ,`salary` = '$item->salary', `pin` = '$item->pin'"); 
  if($query)
         { 
              $id = mysql_insert_id();
@@ -1070,6 +1069,41 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 
+/***************This function are used to find out the Job Status*************/
+// Status 1= Apply   2= shortlist  3= interview  4= confirm
+
+
+public function job_status($id,$userid)
+{ 
+  $query  = mysql_query("SELECT *FROM `user_jobs` WHERE `userid` = '$userid' AND `userjob` = $id ");
+    if(mysql_num_rows($query)>0)
+    {
+          $row = mysql_fetch_assoc($query);
+          return $row['status'];
+    }
+
+    else
+    {
+      return '0';
+    }     
+
+}// End Function
+
+
+/*********************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*************************Function for Get The Event***************************/
 
 
@@ -1228,62 +1262,6 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 }// End Function
-
-
-
-public function getuserInterview($res,$userid)
-{
-   $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$userid' AND `status` = '3' ");
-    if(mysql_num_rows($query)>0)
-    {
-          while($row = mysql_fetch_assoc($query))
-          {
-                    $data = $row;
-                    $value =$data['userjob']; 
-                    $size = sizeof($res);
-                    for($j = 0 ; $j< $size ; $j++)
-                    {  
-                          $keyval = $res[$j]['id'];
-                          if($keyval != $value)
-                          {
-                                 array_push($res[$j]['interview'], 0);
-                                  $val1 = "0";
-                                  if($res[$j]['interview'] != "1")
-                                  {
-                                   $res[$j]['interview'] = $val1;
-                                  }
-                                  else
-                                  {
-                                     $res[$j]['interview'] = "1";
-                                  }
-                          }
-                          else if($keyval == $value)
-                          {      
-                              array_push($res[$j]['interview'], "1");
-                              $res[$j]['interview'] = "1";   
-                          }
-                     }
-          }
-           return $res;
-    }
-    else
-    {
-          $size = sizeof($res);
-          for($i = 0 ; $i<$size ; $i++)
-          {
-           array_push($res[$i]['interview'], 0);
-                    $res[$i]['interview'] = "0";
-          }
-          return $res;
-    }
-
-
-}// End Function
-
-//}
-
-
-
 
 
 
@@ -1603,21 +1581,17 @@ public function getAppliedJobListing($userid,$jobid)
 {
 $n=1;
 
-$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport,uj.`status` As status FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
+$query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport, uj.`status` As status , uj.`interview_date` As interview_date FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
-
                       $date_1 = new DateTime($row['dob']);
                       $date_2 = new DateTime( date( 'd-m-Y' ));
                       $difference = $date_2->diff( $date_1 );
                       $year=(string)$difference->y;
                       $row['age'] = $year;
                       $rows[] = $row;
-
-
 }
 return $rows;
 }
@@ -1629,18 +1603,19 @@ return 0;
 
 /***********************************/
 
-public function jobStatus($job_id,$applicant_id,$status,$salary,$joining_date)
+public function jobStatus($applicant_id,$job_id,$status,$salary,$joining_date)
 {
     $query = mysql_query("UPDATE `user_jobs` SET `status` = '$status',  `salary`='$salary' ,`joining_date`='$joining_date' WHERE `userid` = '$applicant_id' AND `userjob` = '$job_id'");
 
-  if($query)
+$num   =  mysql_affected_rows();
+  if($num)
   {
-    return true;
+    return 1;
   }
   else
   {
 
-    return false;
+    return 0;
 
   }
 }
@@ -1669,9 +1644,9 @@ $num   =  mysql_affected_rows();
 /********************************************************************************************/
 
 
-public function interview_schedule($applicant_id,$job_id,$status)
+public function interview_schedule($applicant_id,$job_id,$status,$date )
 {
-$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status' WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status',`interview_date` = '$date'  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
 $num   =  mysql_affected_rows();
   if($num)
   {
@@ -2122,6 +2097,44 @@ case '3':
      } //End Switch
 
 }//End Function
+
+
+
+/****************************************************************************/
+
+public function confirm_interview($applicant_id,$job_id)
+{
+$query =  mysql_query("UPDATE `user_jobs` SET `status` ='4' WHERE `userid`=$applicant_id AND `userjob` = $job_id");
+$num   =  mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+
+    return 0;
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/************************************************************************************/
+
+
+
+
+
 
 
 

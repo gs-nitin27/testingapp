@@ -543,7 +543,7 @@ if(in_array(0, $userdata)){
 
   $userdata['status'] = 1;
 }
-print_r($userdata);
+//print_r($userdata);
 
 if($res)
 {
@@ -591,7 +591,6 @@ $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
 $item->salary                = $data1->salary; 
-
 $req = new userdataservice();
 $res = $req->create_job($item);
 if($res != 0)
@@ -1007,10 +1006,10 @@ else
 
 else if($_POST['act'] == "getsearchview")
 {
-
-    $type  = urldecode($_POST['type']);
-    $id    = urldecode($_POST['id']);
-    $user_id =urldecode($_POST['user_id']);
+ 
+    $type  = urldecode($_REQUEST['type']);
+    $id    = urldecode($_REQUEST['id']);
+    $user_id =urldecode($_REQUEST['user_id']);
     $where =  "`id` = '".$id."'"; 
     $req   = new userdataservice();
     $res   = $req->getCreation($where , $type);
@@ -1097,14 +1096,16 @@ else if($_POST['act'] == "getsearchview")
                 }
               }
 
-                        if($type=='1')
-                         {
-
-                             $request       =   new userdataservice();
-                             $response      = $request->getuserjobs($res,$user_id);
-                             $response      = $request->getuserOffer($response ,$user_id);
+                         if ($type=='1')
+                         {  
+                            for ($i=0; $i <count($res) ; $i++)
+                            {  $request       =   new userdataservice();
+                               $job_status      = $request->job_status($res[$i]['id'],$user_id);
+                               $res[$i]['job_status'] = $job_status;
+                               $response = $res; 
+                            }
                          }
-                         if($type=='2')
+                        if($type=='2')
                           {
                             $request       =   new userdataservice();
                             $response      =   $request ->getuserEvent($res,$user_id);
@@ -1116,14 +1117,16 @@ else if($_POST['act'] == "getsearchview")
                           }
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
-}
+
+
+          }
        else
        {
        $data = array('data'=>$response, 'status'=>'0');
        echo json_encode($data);
        }
        
-      }
+  }
 
 
 
@@ -1445,69 +1448,43 @@ echo json_encode($data);
 
 /*****************************Sending Offer **************************************/
 
-else if($_POST['act']=="select_applicant")
+else if($_REQUEST['act']=="send_offer")
 {
-  $applicant_id   = urldecode($_POST['applicant_id']);
-  $emp_id         = urldecode($_POST['employer_id']);
-  $job_title      = urldecode($_POST['job_title']);
-  $job_id         = urldecode($_POST['job_id']);
-  $name           = urldecode($_POST['employer_name']);
-  $salary         = urldecode($_POST['salary']);
-  $joining_date   = urldecode($_POST['joining_date']);
-  $other_deatil   = urldecode($_POST['other_deatil']);
-  $status         = urldecode($_POST['status']);  // status=1 Apply , status=2 Offer, Status =3 Accept
-  $date           = date("F j, Y, g:i a");
-  $user_app       = 'L';
-  switch ($status)
+  $data              =  file_get_contents("php://input");
+  $userdata          =  json_decode(file_get_contents("php://input"));
+  $applicant_id      =  $userdata->applicant_id;
+  $job_id            =  $userdata->job_id;
+  $salary            =  $userdata->salary;
+  $joining_date      =  $userdata->joining_date;
+  $status            =  '5';                      // Status 5 for Offer
+  $user_app          =  'L' ;
+  $date              =  date("F j, Y, g:i a");
+  $req               =  new userdataservice();
+  $res               =  $req->jobStatus($applicant_id,$job_id,$status,$salary,$joining_date);
+  $pushobj           =  new userdataservice();
+  $getid             =  $pushobj->getdeviceid($applicant_id);
+  $device_id_apply   =  $getid['device_id'];
+  $name              =  $getid['name'];
+  $req1              =  new connect_userservice();
+  $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
+   $jsondata        =  json_encode($message);
+   $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
+   $pushobj         =  new userdataservice();
+   $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
+  if ($res) 
   {
-  case '2':
-   $req = new userdataservice();
-   $res = $req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
-   $req1      = new connect_userservice();
-    //$date    = date("F j, Y, g:i a");
-  // $message = array('name'=>$name,'salary'=>$salary,'joining_date'=>$joining_date,'message'=>"has sent you a job offer" , 'Module'=>'8');
-
-
-$message      = array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$emp_id,'id'=>$job_id,'indicator' => 3);
-
-   $jsondata       = json_encode($message);
-   $response       = $req1->alerts( $applicant_id,$user_app,$jsondata);
-
-   //     $jsondata       = json_encode($message);
-     //     $response       = $req->alerts($userid_Emp,$user_app, $jsondata); 
-
-
-   $pushobj        = new userdataservice();
-   $getid          = $pushobj->getdeviceid($applicant_id);
-   $device_id_apply=$getid['device_id'];
-   $pushobj     = new userdataservice();
-   $pushnote    = $pushobj ->sendLitePushNotificationToGCM($device_id_apply, $jsondata);
-
-   $resp['status'] = "Success";
-   echo json_encode($resp);
-   $emailnote  = $pushobj ->sendEmail($applicant_id);
-    break;
-  case '3':
-   $req      = new userdataservice();
-   $res      =$req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
-   $date     = date("F j, Y, g:i a");
-   $message  = array('message'=>"candidate has accepted your offer" , 'Module'=>'8');
-   $pushobj  = new userdataservice();
-   $getid    = $pushobj->getdeviceid($emp_id);
-   $device_id_offer=$getid['device_id'];
-   $pushnote = $pushobj ->sendPushNotificationToGCM($device_id_offer, $message);
-   $resp['status'] = "Success";
-   echo json_encode($resp);
-   break;
-   default:
-   $req = new userdataservice();
-   $salary='0';
-   $joining_date='0';
-   $res      = $req->jobStatus($job_id,$applicant_id,$status,$salary,$joining_date);
-   $resp['status'] = "Failure";
-   echo json_encode($resp);
+   $Result = array('status' => '1','data'=>'1' ,'msg'=>'Send Offer to Applicant');
+             echo json_encode($Result);
   }
-}
+  else
+  {
+  $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not send Offer ');
+             echo json_encode($Result);
+  }
+  
+} // End Function
+
+
 
 
 
@@ -1532,6 +1509,8 @@ else if($_POST['act'] == 'jobOffersList')
   }
 
 }
+
+
 
 
 /* ***********************************************************************************/
@@ -1593,6 +1572,7 @@ else if($_POST['act'] == "create_resource")
 
 else if($_REQUEST['act'] == "gs_searching")
 {
+
  $userid        =   urldecode($_REQUEST['userid']);  //Apply User Id 
  $module        =   urldecode($_REQUEST['module']);  //Type Job=1 Event=2 Tournament=3 
  $keyword       =   urldecode($_REQUEST ['key']);   // Search the Value by Applicant User
@@ -1639,12 +1619,13 @@ else if($_REQUEST['act'] == "gs_searching")
 
                 }
               }
-
-                         if ($module=='1')
+                        if ($module=='1')
                          {
-                            $response      = $request->getuserjobs($response,$userid);
-                            $response      = $request->getuserOffer($response,$userid);
-                            $response      = $request->getuserInterview($response,$userid);
+                            for ($i=0; $i <count($response) ; $i++)
+                            { 
+                               $job_status      = $request->job_status($response[$i]['id'],$userid);
+                               $response[$i]['job_status'] =$job_status;
+                            }
                          }
                          if ($module=='2')
                           {
@@ -2016,6 +1997,7 @@ else if($_REQUEST['act'] == "shortlist")
 
 
 
+
 /***********************************Interview*****************************/
 
 else if($_REQUEST['act'] == "interview_schedule")
@@ -2023,6 +2005,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
   $employer_id       =  $userdata->employer_id;
+  $username          =  $userdata->name;
   $applicant_id      =  $userdata->applicant_id;
   $job_id            =  $userdata->job_id;
   $status            =  $userdata->status;    // Status = 3 for Interview 
@@ -2030,9 +2013,19 @@ else if($_REQUEST['act'] == "interview_schedule")
   $date              =  $userdata->date; 
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
+  $module            =  '1';    // for Job
+  //$date1             =  date("F j, Y, g:i a");
+  $req               =  new userdataservice();
+  $con               =  new connect_userservice();
+  //$message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
+  //$json_data         = json_encode($message);
+  //$alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
+  //$response          =  $req->FindDeviceId($id,$module);
+  //$pushnote          = $pushobj ->sendLitePushNotificationToGCM($response['device_id'], $message);
+  //$response          =  $request->FindDeviceId($id,$module);
   $applicant_id      =  implode(",",$applicant_id);
   $request           =  new userdataservice();
-  $response          =  $request->interview_schedule($applicant_id,$job_id,$status);  // This code for Interview 
+  $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date);  // This code for Interview 
   $email_res         =  new emailService();
   $request           =  new userdataservice();
   $userdata          =  $request->userdata($employer_id);
@@ -2056,6 +2049,35 @@ else if($_REQUEST['act'] == "interview_schedule")
 } // End Function
 
 
+
+/***************************************Interview Confirm************************/
+
+else if($_POST['act'] == "confirm_interview")
+{
+  $applicant_id      = urldecode($_REQUEST ['applicant_id']); 
+  $job_id            = urldecode($_REQUEST ['job_id']); 
+  $job_id            = urldecode($_REQUEST ['name']); 
+  //$user_app          =  'L'; 
+  $request           =  new userdataservice();
+  //$save_alert               =  new connect_userservice();
+  //$module            =  '1';
+  //$response          =  $request->FindDeviceId($id,$module);
+  //$message           = array('message'=>$username." "." has confirmed for interview" ,'title'=>'Interview Confirmation','date_applied'=>$date,'userid'=>$userid ,'id'=>$job_id,'indicator' => 8);
+  //$json_data         = json_encode($message);
+  //$alerts            = $save_alert->alerts($user_responser_id ,$user_app ,$json_data);
+  //$pushnote          = $request->sendPushNotificationToGCM($response['device_id'], $message);
+  $response          =  $request->confirm_interview($applicant_id,$job_id);
+if($response) 
+  {
+       $Result = array('status' => '1','data'=>'1' ,'msg'=>'Interview is Confirm');
+       echo json_encode($Result);
+  }
+  else
+  {
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'All Ready Confirm');
+       echo json_encode($Result);
+  }
+}
 
 
 

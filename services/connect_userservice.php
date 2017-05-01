@@ -117,34 +117,18 @@ class connect_userservice
 
 
  public function alerts($userid,$user_app,$jsondata)
-
  {
-
- 
-
   $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES('$userid','$user_app','$jsondata',CURDATE())");
 
   if($query)
-
-  {
-
-  	$data = mysql_insert_id();
-
-  	return $data;
-
-  }
-
-  else
-
-  {
-
+    {
+  	return 1;
+    }
+ else
+   {
   	return 0;
-
-  }
-
-
-
- }
+   }
+}
 
 
 
@@ -546,9 +530,8 @@ else
 
 
 public function getConnectedStatus($response,$userid,$usertype)
-
 {
-//print_r($response);
+
 if ($usertype=='L')
 {
  $query= mysql_query("SELECT `id`, `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
@@ -556,10 +539,9 @@ if ($usertype=='L')
 }
 else if ($usertype=='M')
 {
-  $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
+   $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
-  $num=mysql_num_rows($query);
-  //   $data = [];
+    $num=mysql_num_rows($query);
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -567,10 +549,6 @@ else if ($usertype=='M')
               $row=mysql_fetch_assoc($query);
               $data[]=$row;
             }
-             // $num1=count($data);
-            //  echo "$num1";die();
-         // print_r($data);
-           //print_r($response)       ;die();
             for ($i=0; $i <$num; $i++) 
             {   
                 if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
@@ -704,13 +682,12 @@ public function getClassInfo($class_id)
 
 public function getConnect($student_id,$coach_id)
 {
-$query= mysql_query("SELECT *FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
+
+$query= mysql_query("SELECT `id` FROM `gs_connect` WHERE  `lite_user_id`='$student_id' AND `prof_user_id`='$coach_id'");
   $num =mysql_num_rows($query);
   if ($num>0)
   {
-    $row = mysql_fetch_assoc($query);
-    $data = $row['req_status'];
-    return $data;
+    return 1;
   }
   else
   {
@@ -1143,30 +1120,36 @@ public function studentPaidListing($class_id,$flag)
 /*****************************Function Create log ********************/
 
 public function coach_log_assign($item)
-
 {
-
  $insert  = mysql_query("INSERT `gs_coach_assignment`(`coach_id`,`phase`,`activity`,`target_duration`,`target_distance`,`target_performance`,`target_repetition`,`time_of_day`,`remarks`,`date`)  VALUES('$item->coach_id','$item->phase','$item->activity','$item->duration','$item->distance','$item->performance','$item->repetition','$item->time_of_day','$item->remark',CURDATE())");
-
-
-
  if($insert)
-
  {
-
   return 1;
-
  }
-
  else
-
  {
-
   return 0;
-
  }
-
 }
+
+
+
+/**************************************************************************/
+
+public function edit_log_assign($item)
+{
+    $query = mysql_query("UPDATE `gs_coach_assignment` SET `coach_id`='$item->coach_id',`phase`='$item->phase',`activity`='$item->activity',`target_duration`='$item->duration',`target_distance`='$item->distance',`target_performance`='$item->performance',`target_repetition`='$item->repetition',`time_of_day`='$item->time_of_day',`remarks`='$item->remark' WHERE `id` = '$item->assign_id' ");
+    $update = mysql_affected_rows();
+    if($update)
+    {
+      return 1;
+    }
+    else 
+    {
+    return 0;
+    }
+
+} // End Function
 
 
 
