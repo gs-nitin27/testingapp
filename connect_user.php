@@ -637,14 +637,9 @@ if($response)
 
  else if ($_REQUEST['act'] == 'create_log_assign') 
 {
-<<<<<<< HEAD
-    $data   = json_decode($_POST['data']);
-    $item    =  new stdClass();
 
-=======
     $data                          =   json_decode($_POST['data']);
     $item                          =   new stdClass();
->>>>>>> a7432a2da6ed428547b487cfb4adf491cc7b6ee4
     $item->coach_id                =   $data->coach_id; 
     $item->phase                   =   $data->phase;
     $item->activity                =   $data->activity;
@@ -656,8 +651,6 @@ if($response)
     $item->performance             =   $data->performance;
     $req                           =   new connect_userservice();
     $res                           =   $req->coach_log_assign($item);
-<<<<<<< HEAD
-=======
     if($res)
     {
        $result = array('status' => 1);
@@ -689,7 +682,6 @@ if($response)
     $item->performance             =   $data->performance;
     $req                           =   new connect_userservice();
     $res                           =   $req->edit_log_assign($item);
->>>>>>> a7432a2da6ed428547b487cfb4adf491cc7b6ee4
     if($res)
     {
        $result = array('status' => 1);
