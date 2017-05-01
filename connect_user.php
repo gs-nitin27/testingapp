@@ -37,14 +37,14 @@ if($_REQUEST['act'] == 'connect')
      $alerts = $req->alerts($user_responser_id ,$user_app ,$json_data);
      $userresponse = array('status' =>1 ,  'connection_status' => 0 ,'alerts'=>$alerts ,'message' => 'Request is sent');
      echo json_encode($userresponse);
-     $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
+    // $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
     }
    else
     {
        $userresponse = array('status' =>0 , 'connection_status' => 0 , 'alerts'=>0 ,'message' => 'Request is  not sent');
        echo json_encode($userresponse);
     }
-
+    $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
   }
 }
 
