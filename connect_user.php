@@ -663,57 +663,30 @@ if($response)
 
 
  else if ($_REQUEST['act'] == 'create_log_assign') 
-
 {
-
     $data   = json_decode($_POST['data']);
-
     $item    =  new stdClass();
 
-
-
     $item->coach_id                =   $data->coach_id; 
-
     $item->phase                   =   $data->phase;
-
     $item->activity                =   $data->activity;
-
     $item->duration                =   $data->duration;
-
     $item->distance                =   $data->distance;
-
     $item->time_of_day             =   $data->time_of_day;
-
     $item->remark                  =   $data->remark;
-
     $item->repetition              =   $data->repetition;
-
     $item->performance             =   $data->performance;
-
     $req                           =   new connect_userservice();
-
     $res                           =   $req->coach_log_assign($item);
-
-
-
     if($res)
-
     {
-
        $result = array('status' => 1);
-
        echo json_encode($result);
-
     }
-
     else
-
     {
-
        $result  = array('status' => 0);
-
        echo json_encode($result);
-
     }    
 
 } 
@@ -949,79 +922,73 @@ else if($_REQUEST['act'] == 'activity_search')
 
 
  else if($_REQUEST['act'] == 'log_assign')
-
  {
-
-     $data = json_decode($_POST['data']);
-
-     $req = new connect_userservice();
-
-     $log = $req->logdata($data->logid);
-
-     $date = date("Y-m-d ");
-
-
-
-      $coach = new userdataservice();
-
-      $coachdata = $coach->userdata($log[0]['coach_id']);
-
-
-
-
-
-     $student_list = explode(",", $data->student_id_list);
-
-     for ($i=0; $i <sizeof($student_list) ; $i++) 
-
+    $data = json_decode($_POST['data']);
+    $req = new connect_userservice();
+    $log = $req->logdata($data->logid);
+    $date = date("Y-m-d ");
+    $coach = new userdataservice();
+    $coachdata = $coach->userdata($log[0]['coach_id']);
+    $student_list = explode(",", $data->student_id_list);
+    $value  ="";
+    $userid = $student_list;
+    $st ="(";
+    $phase                =  $log[0]['phase'];
+    $activity             =  $log[0]['activity'];
+    $remarks              =  $log[0]['remarks'];
+    $coach_assignment_id  =  $log[0]['id'];
+    $date                 =  date("Y-m-d ");
+    $duration             =  0 ;
+    $distance             =  0 ;
+    $performance          =  0 ;
+    $repetition           =  0 ;
+    $k  = ")";
+for($i=0;$i<sizeof($userid);$i++)
+{    
+      if($i == 0)
       {
-
-          $res = $req->log_assign($student_list[$i] ,$log);
-
-             
-
-     if($res)
-
-     {
-
-      $studentdata = $coach->userdata($student_list[$i]);
-
-      $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignment','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
-
-           
-
-      $jsondata       = json_encode($message);
-
-      $req->alerts($student_list[$i],L,$jsondata);
-
-      $coach->sendLitePushNotificationToGCM($studentdata['device_id'],$jsondata);
-
-
-
-       }
-
+      $value  .=$st.$userid[$i].",'".$phase."','".$activity."','".$remarks."','".$coach_assignment_id."','".$date."',".$duration.",'".$distance."',".$performance.",".$repetition.$k;
       }
-
+      else
+      {
+        $value  .=",".$st.$userid[$i].",'".$phase."','".$activity."','".$remarks."','".$coach_assignment_id."','".$date."',".$duration.",'".$distance."',".$performance.",".$repetition.$k;
+      }  
+}
+     $res= $req->new_log_assign($value);
+//     print_r($res);die;
+   // for ($i=0; $i <sizeof($student_list) ; $i++) 
+   // {
+         // $res = $req->log_assign($student_list[$i] ,$log);
+    // if($res)
+    // {
+    //   for($i=0;$i<sizeof($userid);$i++)
+    //    {
+    //   $studentdata = $coach->userdata($userid[$i]);
+    //  // print_r($studentdata);//die;
+    //   $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignment','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
+    //   $jsondata       = json_encode($message);
+    //   $req->alerts(102,'L',$jsondata);
+    //   $coach->sendLitePushNotificationToGCM($studentdata['device_id'],$jsondata);
+    //    }
+    //   }
     if($res)
-
     {
-
        $result =  array('status' =>1);
-
        echo json_encode($result);
-
+       for($i=0;$i<sizeof($userid);$i++)
+       {
+       $studentdata = $coach->userdata($userid[$i]);
+       $message      = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignment','date_assign'=>$date,'id'=>$log[0]['id'],'indicator' => 6);
+      $jsondata       = json_encode($message);
+      $req->alerts(102,'L',$jsondata);
+      $coach->sendLitePushNotificationToGCM($studentdata['device_id'],$jsondata);
+       }
     }
-
     else
-
     {
-
        $result =  array('status' =>0);
-
        echo json_encode($result);
-
     }
-
  }
 
 
@@ -1149,6 +1116,43 @@ if($response)
           echo json_encode($Result);
 
    } 
+
+}
+
+
+else if($_REQUEST['act'] = 'test')
+{
+$value  ="";
+$userid = [25,26,24,15,19,13,16];
+
+$st ="(";
+$a  = 'mydogSpot1' ;
+$b  = '1' ;
+$c  = 'Bag' ;
+$d  = 'James';
+$e  ='M' ;
+$f  = 1 ;
+$g  ='1942-10-11' ;
+$h  = 1 ;
+$i  = 1 ;
+$j  = 1 ;
+$k  = ")";
+$m   = "'";
+for($i=0;$i<sizeof($userid);$i++)
+{    
+      if($i == 0)
+      {
+      $value  .=$st.$userid[$i].",'".$a."',".$b.",'".$c."','".$d."','".$e."',".$f.",'".$g."',".$h.",".$i.",".$j.$k;
+      }
+      else
+      {
+        $value  .=",".$st.$userid[$i].",'".$a."',".$b.",'".$c."','".$d."','".$e."',".$f.",'".$g."',".$h.",".$i.",".$j.$k;
+      }  
+}
+     $coach = new connect_userservice();
+     $rr= $coach->test($value);
+     print_r($rr);
+
 
 }
 

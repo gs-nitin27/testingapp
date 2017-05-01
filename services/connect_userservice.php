@@ -548,107 +548,54 @@ else
 public function getConnectedStatus($response,$userid,$usertype)
 
 {
-
 //print_r($response);
-
 if ($usertype=='L')
-
 {
-
  $query= mysql_query("SELECT `id`, `prof_user_id`, `req_status` FROM `gs_connect` WHERE lite_user_id =$userid");
-
     $filed =`lite_user_id`; 
-
 }
-
 else if ($usertype=='M')
-
 {
-
-   $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
-
+  $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
-
-    $num=mysql_num_rows($query);
-
+  $num=mysql_num_rows($query);
   //   $data = [];
-
   if ($num!=0) 
-
   {
-
             for ($i=0; $i <$num ; $i++) 
-
             {
-
               $row=mysql_fetch_assoc($query);
-
               $data[]=$row;
-
             }
-
              // $num1=count($data);
-
             //  echo "$num1";die();
-
          // print_r($data);
-
            //print_r($response)       ;die();
-
-             
-
             for ($i=0; $i <$num; $i++) 
-
             {   
-
                 if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
-
                 {   
-
                      $response[$i]['req_status']=$data[$i]['req_status'];
-
                      $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
                else if (isset($data[$i]['lite_user_id']) && $response[$i]['userid']==$data[$i]['lite_user_id']) 
-
                 {
-
                   $response[$i]['req_status']=$data[$i]['req_status'];
-
                   $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
                 else
-
                 {
-
                  $response[$i]['req_status']=$data[$i]['req_status'];
-
                  $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
             }
-
               return $response;  
-
   }
-
    else
-
   {
-
    return $data;
-
   }
-
 }
-
-
-
 /************ This Function are used to find Class  Informantion Created by Coach*******/
 
 
@@ -917,7 +864,7 @@ public function joinStudentData($userdata)
 public function userdata($userid)
     {
     
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$userid'");
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -1488,6 +1435,22 @@ public function log_assign($studentid,$data)
 
 
 }
+
+public function new_log_assign($data)
+{
+    $insert = mysql_query("INSERT INTO `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`,`duration`,`distance`,`performance`,`repetition`) VALUES $data");
+
+    if($insert)
+    {
+      $last_id = mysql_insert_id() ;
+      return $last_id;
+    }
+    else
+    {
+      return 0;
+    }    
+}
+
 
 /*******************Get log data  ********************/
 
