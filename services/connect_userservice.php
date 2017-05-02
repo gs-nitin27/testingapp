@@ -1689,8 +1689,12 @@ $query= mysql_query("SELECT * FROM `gs_athlit_dailylog` WHERE `userid`= $athlete
 $num = mysql_num_rows($query);
     if ($num>=1)
       {
-        return 1;
-      }
+         while ($row=mysql_fetch_assoc($query))
+        {
+          $data[]=$row;
+        }
+        return $data;  
+     }
       else
       {
         return 0;

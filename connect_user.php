@@ -1080,8 +1080,8 @@ if($response)
 
 
 
-/***************************************************************************************/
 
+/*********************************View Athlete Log by the Athelete*****************************/
 
 else if($_REQUEST['act'] == 'veiw_athlete_log')
 {
@@ -1091,13 +1091,13 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
   $response          =  $request->veiw_athlete_log($coach_id,$athlete_id);
 if($response)
    {
-             $Result = array('status' => '1','data'=>'1' ,'msg'=>'view Athlete Log');
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'view Athlete Log');
              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not seen Athlete Log');
-          echo json_encode($Result);
+             $Result = array('status' => '0','data'=>[] ,'msg'=>'Not seen Athlete Log');
+             echo json_encode($Result);
    } 
 }
 
