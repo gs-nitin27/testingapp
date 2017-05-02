@@ -882,6 +882,7 @@ else if($_REQUEST['act'] == 'activity_search')
 }  
 
  /****************************Log Assign by coach  **********************************/
+
  else if($_REQUEST['act'] == 'log_assign')
  {
      $data = json_decode($_POST['data']);
@@ -1032,6 +1033,9 @@ else if($_REQUEST['act'] == "view_coach_log")
 
 
 
+/***********************************************************************************************/
+
+
 else if($_REQUEST['act'] == 'view_log_assign')
 {
    $data = json_decode($_POST['data']);
@@ -1052,6 +1056,7 @@ else if($_REQUEST['act'] == 'view_log_assign')
 
 
 /******************************** UPDATE THE COACH LOG FILE**************************/
+
 else if($_REQUEST['act'] == 'update_log')
 {
   $data               =  file_get_contents("php://input");
@@ -1074,6 +1079,48 @@ if($response)
 
 
 
+
+/***************************************************************************************/
+
+
+else if($_REQUEST['act'] == 'veiw_athlete_log')
+{
+  $coach_id          =  @$_REQUEST['coach_id'];
+  $athlete_id        =  @$_REQUEST['athlete_id'];
+  $request           =  new connect_userservice();
+  $response          =  $request->veiw_athlete_log($coach_id,$athlete_id);
+if($response)
+   {
+             $Result = array('status' => '1','data'=>'1' ,'msg'=>'view Athlete Log');
+             echo json_encode($Result);
+   }
+   else
+   {                     
+          $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not seen Athlete Log');
+          echo json_encode($Result);
+   } 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*********************************************************************************************/
 
 
 

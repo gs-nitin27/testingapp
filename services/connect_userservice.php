@@ -1674,9 +1674,54 @@ public function getage($age)
 
                   return $year;
 
-
-
 }
+
+
+
+
+
+/******************************Function for Athlete Log*************************************/
+
+
+public function veiw_athlete_log($coach_id,$athlete_id)
+{
+$query= mysql_query("SELECT * FROM `gs_athlit_dailylog` WHERE `userid`= $athlete_id OR `coach_assignment_id`=(SELECT `id` FROM `gs_coach_assignment` WHERE `coach_id`=$coach_id) ");
+$num = mysql_num_rows($query);
+    if ($num>=1)
+      {
+        return 1;
+      }
+      else
+      {
+        return 0;
+      }
+
+}  // End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************************************************/
+
+
+
+
 
 
 
