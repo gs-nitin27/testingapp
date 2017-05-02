@@ -16,26 +16,26 @@ if($_REQUEST['act'] == "create_class")
                             date_add($date, date_interval_create_from_date_string($data->duration.'months'));
                             $ndate = date_format($date, 'Y-m-d');
 
-							$item->class_name   = $data->class_name;
-							$item->description  = $data->description;
-							$item->days         = $data->days;
-							$item->duration     = $data->duration;
-							$item->start_date   = strtotime($data->start_date);
-							$item->end_date     = strtotime($ndate);
-							$item->start_time   = $data->start_time;
-							$item->end_time     = $data->end_time;
-							$item->address      = $data->address;
-							$item->user_id      = $data->user_id;
-							$item->location     = $data->location;
-							$item->fee          = $data->fee;
-							$item->age_group    = $data->age_group;
-							$item->class_strength = $data->class_strength;
-							$item->class_host     = $data->class_host;
-							$item->phone_no     = $data->contact_no;
+							$item->class_name      = $data->class_name;
+							$item->description     = $data->description;
+							$item->days            = $data->days;
+							$item->duration        = $data->duration;
+							$item->start_date      = strtotime($data->start_date);
+							$item->end_date        = strtotime($ndate);
+							$item->start_time      = $data->start_time;
+							$item->end_time        = $data->end_time;
+							$item->address         = $data->address;
+							$item->user_id         = $data->user_id;
+							$item->location        = $data->location;
+							$item->fee             = $data->fee;
+							$item->age_group       = $data->age_group;
+							$item->class_strength  = $data->class_strength;
+							$item->class_host      = $data->class_host;
+							$item->phone_no        = $data->contact_no;
 
                               //print_r($data->contact_no);die;
 
-                            $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
+                        $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
                             
                             $req2 = new manageSchedulingService();
                             $res2 = $req2->CheckforExistingClass($item);
