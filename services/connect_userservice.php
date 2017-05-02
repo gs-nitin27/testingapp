@@ -943,41 +943,22 @@ public function createdDailyLog($userdata)
 
 
 public function viewDailyLog($userid)
-
 {
-
      $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
-
       $num = mysql_num_rows($query);
-
     if ($num!=0) 
-
     {    
-
            for ($i=0; $i <$num ; $i++) 
-
           {
-
             $row=mysql_fetch_assoc($query);
-
             $data[] = $row;
-
-            
-
-          }
-
+         }
           return $data;
-
     }
-
     else
-
     {
-
       return 0;
-
     }          
-
 }
 
 
