@@ -8,7 +8,6 @@ include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 error_reporting(E_ERROR | E_PARSE);
 
-
 // SignUp The New User  using the GetsportyLite 
 /*
  | When the user is SignUp if user   LoginType=1 Then User is Normal User
@@ -18,7 +17,7 @@ error_reporting(E_ERROR | E_PARSE);
  |                                   UserType =104
  | When the user is Signup then the Device Id are store in User Table
 */
- 
+      
 if($_REQUEST['act'] == 'gs_signup')
 {
   $data1                     =   json_decode($_POST['data']);

@@ -542,7 +542,6 @@ else if ($usertype=='M')
    $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
     $num=mysql_num_rows($query);
-
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
@@ -551,57 +550,30 @@ else if ($usertype=='M')
               $data[]=$row;
             }
             for ($i=0; $i <$num; $i++) 
-
             {   
-
                 if (isset($data[$i]['prof_user_id']) && ($response[$i]['userid']==$data[$i]['prof_user_id']))
-
                 {   
-
                      $response[$i]['req_status']=$data[$i]['req_status'];
-
                      $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
                else if (isset($data[$i]['lite_user_id']) && $response[$i]['userid']==$data[$i]['lite_user_id']) 
-
                 {
-
                   $response[$i]['req_status']=$data[$i]['req_status'];
-
                   $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
                 else
-
                 {
-
                  $response[$i]['req_status']=$data[$i]['req_status'];
-
                  $response[$i]['connection_id']=$data[$i]['id'];
-
                 }
-
             }
-
               return $response;  
-
   }
-
    else
-
   {
-
    return $data;
-
   }
-
 }
-
-
-
 /************ This Function are used to find Class  Informantion Created by Coach*******/
 
 
@@ -869,7 +841,7 @@ public function joinStudentData($userdata)
 public function userdata($userid)
     {
     
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$userid'");
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -940,48 +912,25 @@ public function ClassInfo($student_id)
 
 
 public function createdDailyLog($userdata)
-
 {
-
   $userid           =  $userdata->userid;
-
   $phase            =  $userdata->phase;
-
   $activity         =  $userdata->activity;
-
   $duration         =  $userdata->duration;
-
   $distance         =  $userdata->distance;
-
   $performance      =  $userdata->performance;
-
   $remarks          =  $userdata->remarks;
-
   $date             =  $userdata->date;
-
   $reps             =  $userdata->reps;
-
-        $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`,`dailylogstatus`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks',CURDATE(),'$reps','1')");
-
+  $query= mysql_query("INSERT INTO `gs_athlit_dailylog`(`id`,`userid`,`phase`,`activity`,`duration`, `distance`,`performance`,`remarks`,`date`,`repetition`,`dailylogstatus`) VALUES ('0',' $userid',' $phase','$activity ','$duration ','$distance','$performance','$remarks','$date','$reps','1')");
     if ($query)
-
-     {
-
-      return 1;
-
-    }
-
-    else
-
     {
-
-      return 0;
-
+      return 1;
     }
-
-
-
-
+    else
+    {
+      return 0;
+    }
 
 } // End Function
 
@@ -1446,6 +1395,22 @@ public function log_assign($studentid,$data)
 
 
 }
+
+public function new_log_assign($data)
+{
+    $insert = mysql_query("INSERT INTO `gs_athlit_dailylog`(`userid`,`phase`,`activity`,`remarks`,`coach_assignment_id`,`date`,`duration`,`distance`,`performance`,`repetition`) VALUES $data");
+
+    if($insert)
+    {
+      $last_id = mysql_insert_id() ;
+      return $last_id;
+    }
+    else
+    {
+      return 0;
+    }    
+}
+
 
 /*******************Get log data  ********************/
 
