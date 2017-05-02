@@ -974,41 +974,22 @@ public function createdDailyLog($userdata)
 
 
 public function viewDailyLog($userid)
-
 {
-
      $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
-
       $num = mysql_num_rows($query);
-
     if ($num!=0) 
-
     {    
-
            for ($i=0; $i <$num ; $i++) 
-
           {
-
             $row=mysql_fetch_assoc($query);
-
             $data[] = $row;
-
-            
-
-          }
-
+         }
           return $data;
-
     }
-
     else
-
     {
-
       return 0;
-
     }          
-
 }
 
 
@@ -1693,9 +1674,58 @@ public function getage($age)
 
                   return $year;
 
-
-
 }
+
+
+
+
+
+/******************************Function for Athlete Log*************************************/
+
+
+public function veiw_athlete_log($coach_id,$athlete_id)
+{
+$query= mysql_query("SELECT *FROM `gs_athlit_dailylog` WHERE `userid`= $athlete_id OR `coach_assignment_id`=(SELECT `id` FROM `gs_coach_assignment` WHERE `coach_id`=$coach_id) ");
+$num = mysql_num_rows($query);
+    if ($num>=1)
+      {
+         while ($row=mysql_fetch_assoc($query))
+        {
+          $data[]=$row;
+        }
+        return $data;  
+     }
+      else
+      {
+        return 0;
+      }
+
+}  // End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************************************************/
+
+
+
+
 
 
 

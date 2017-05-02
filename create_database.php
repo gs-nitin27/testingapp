@@ -2058,7 +2058,7 @@ else if($_POST['act'] == "confirm_interview")
 {
   $applicant_id      = urldecode($_REQUEST ['applicant_id']); 
   $job_id            = urldecode($_REQUEST ['job_id']); 
-  $job_id            = urldecode($_REQUEST ['name']); 
+  $name              = urldecode($_REQUEST ['name']); 
   //$user_app          =  'L'; 
   $request           =  new userdataservice();
   //$save_alert               =  new connect_userservice();

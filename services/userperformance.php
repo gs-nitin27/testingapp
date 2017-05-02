@@ -6,7 +6,7 @@ class UserPerformanceService
 /***************This Function are used to find Performance****************************/
 
 public function userPerformance($id,$age,$sport,$gender)
-{ $query 	= mysql_query("SELECT * FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
+{ $query 	= mysql_query("SELECT * FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' AND `publish` = '1' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
