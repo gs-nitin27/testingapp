@@ -130,6 +130,18 @@ class connect_userservice
    }
 }
 
+public function bulk_alerts_save($data)
+ {
+  $query = mysql_query("INSERT INTO `gs_alerts`(`userid`,`user_app`,`alert_data`,`date_alerted`) VALUES $data");
+  if($query)
+  {
+    return 1;
+  }
+ else
+  {
+    return 0;
+  }
+}
 
 
  public function getuserid($id)
@@ -858,6 +870,25 @@ public function userdata($userid)
 
 
 
+public function alluserdata($userid)
+{  
+    //echo "SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)";die;
+
+     $query = mysql_query("SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)");
+     if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data[] = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
+
+}
 
 
 
