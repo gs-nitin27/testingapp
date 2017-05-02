@@ -1089,16 +1089,16 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
   $athlete_id        =  @$_REQUEST['athlete_id'];
   $request           =  new connect_userservice();
   $response          =  $request->veiw_athlete_log($coach_id,$athlete_id);
-if($response)
-   {
+  if($response)
+  {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'view Athlete Log');
              echo json_encode($Result);
-   }
-   else
-   {                     
+  }
+  else
+  {                     
              $Result = array('status' => '0','data'=>[] ,'msg'=>'Not seen Athlete Log');
              echo json_encode($Result);
-   } 
+  } 
 }
 
 
