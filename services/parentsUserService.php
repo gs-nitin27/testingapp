@@ -2,6 +2,29 @@
 class parentsUserService
 {
 
+
+public function  get_parent_child($parent_id)
+{
+	$query  = mysql_query("SELECT `child_id` FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
+     $num = mysql_num_rows($query);
+	if($num>0)
+	{
+		while ($row  = mysql_fetch_assoc($query)) 
+		{
+	  		$child_id  = $row['child_id'];
+       		$data[]    = $this->get_child_data($child_id);
+	   }
+	
+	return $data;
+}
+	else
+	{
+		return 0;
+	}
+}
+
+
+
 public function varify_child($decode_data)
 {
 
