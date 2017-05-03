@@ -3,7 +3,7 @@ include('config1.php');
 include('services/userperformance.php');
 
 if($_REQUEST['act'] == 'get_modules')	
-{
+{ 
    $data 			    =  file_get_contents("php://input");
    $userdata 	    =  json_decode(file_get_contents("php://input"));
    $sport         =  $userdata->sport;
@@ -13,17 +13,15 @@ if($_REQUEST['act'] == 'get_modules')
    $athleteid     =  $userdata->athleteid;
    $req_age       =  new UserPerformanceService();
    $age           =  $req_age->ageGropup($dob,$gender);
-   $req           =  new UserPerformanceService();
-   $cheak         =  $req->cheackPerformance($age,$sport,$gender);
-   if($cheak)
-   {
-     $id          =  $req->save($coachid,$athleteid);
+   $cheak         =  $req_age->cheackPerformance($age,$sport,$gender);
+   $res = 0;
+   if($cheak != 0)
+   { 
+     $id          =  $req_age->save($coachid,$athleteid);
+     $req           =  new UserPerformanceService();
+     $res           =  $req->userPerformance($id,$age,$sport,$gender);
    }
-           $id = $id['id'];
-
-   $req           =  new UserPerformanceService();
-   $res           =  $req->userPerformance($id,$age,$sport,$gender);
-        if($res)
+   if($res != 0)
         {
           $data = array('status' => 1, 'data'=> $res  , 'msg'=>'Success');
                   echo json_encode($data);
