@@ -6,13 +6,13 @@ class UserPerformanceService
 /***************This Function are used to find Performance****************************/
 
 public function userPerformance($id,$age,$sport,$gender)
-{ $query 	= mysql_query("SELECT * FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' AND `publish` = '1' ");
+{  
+	$query 	= mysql_query("SELECT * FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' AND `publish` = '1' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
 	while ($row=mysql_fetch_assoc($query))
-	{
-		//$row['question']= json_decode($row['question']);
+	{	
 		$row['performance_id'] = $id;
 		$question1 = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $row['question']), true );
 		$row['question'] =  $question1;
@@ -29,7 +29,7 @@ public function userPerformance($id,$age,$sport,$gender)
 }	
 
 
-/*********************************** Cheak The Performance**********************************/
+/*********************************** Check The Performance**********************************/
 
 public function cheackPerformance($age,$sport,$gender)
 {  
@@ -130,13 +130,13 @@ public function  savePerformance($userdata)
 
 public function findData($last_id)
 {
-	$query 	= mysql_query("SELECT `id`,`status` FROM `gs_athlit_performance` WHERE `id`='$last_id' ");
+	$query 	= mysql_query("SELECT `id`FROM `gs_athlit_performance` WHERE `id`='$last_id' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
 	while ($row=mysql_fetch_assoc($query))
 	{
-		$data=$row;
+		$data=$row['id'];
 	}
 	return $data;
 	}
