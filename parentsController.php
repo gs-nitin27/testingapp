@@ -2,7 +2,7 @@
 include('config1.php');
 include('services/parentsUserService.php');
 error_reporting(E_ERROR | E_PARSE);
-
+$nodata = [];
 
 switch ($_REQUEST['act']) 
 {
@@ -18,7 +18,7 @@ switch ($_REQUEST['act'])
 	 }
 	 else
 	 {                     
-	            $Result = array('status' => '0','data'=>'0' ,'msg'=>'No  Child');
+	            $Result = array('status' => '0','data'=>$nodata ,'msg'=>'No  Child');
 	            echo json_encode($Result);
 	 }
 	break;
@@ -27,7 +27,8 @@ switch ($_REQUEST['act'])
 	 $decode_data        	   =  json_decode(file_get_contents("php://input"));
      $request           	   =  new parentsUserService();
      $already_child            =  $request->varify_child($decode_data);
-     if ($already_child) 
+    
+     if ($already_child != 0) 
      {
      	 $Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists ');
 	            echo json_encode($Result);
@@ -42,7 +43,7 @@ switch ($_REQUEST['act'])
 	 }
 	 else
 	 {                     
-	            $Result = array('status' => '0','data'=>'0' ,'msg'=>'Not Add Child');
+	            $Result = array('status' => '0','data'=>$nodata ,'msg'=>'Not Add Child');
 	            echo json_encode($Result);
 	 }
 	}
