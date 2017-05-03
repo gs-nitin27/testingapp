@@ -32,7 +32,7 @@ public function userPerformance($id,$age,$sport,$gender)
 /*********************************** Cheak The Performance**********************************/
 
 public function cheackPerformance($age,$sport,$gender)
-{ 
+{  
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
@@ -52,7 +52,6 @@ public function cheackPerformance($age,$sport,$gender)
 
 public function  save($coachid,$athleteid)
 {
-
 $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURDATE())");
 	if ($query)
 	{
@@ -222,17 +221,7 @@ public function viewPerformanceguide($item,$agegropup)
 		return 0;
 	}
 
-
-
-
-
-
-
-
-}				
-
-
-
+  }				
 } // End Class 
 
 
