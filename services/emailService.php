@@ -177,10 +177,7 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
 public function ActivateChildAccount($child_email,$code)
 {
        require('class.phpmailer.php');
-       while ($row=mysql_fetch_assoc($query))
-        {
          $to             = $child_email;
-         $pushobj        = new userdataservice();
          $from           = "info@darkhorsesports.in";
          $from_name      = 'Getsporty';
          $subject        = "Welcome to Getsporty";
@@ -233,10 +230,6 @@ Hi user Your Login code is<br>'.$code.'
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
-   } 
-   
-
-
 }   
           
       
