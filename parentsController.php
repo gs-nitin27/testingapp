@@ -1,6 +1,7 @@
 <?php
 include('config1.php');
 include('services/parentsUserService.php');
+include('services/emailService.php');
 error_reporting(E_ERROR | E_PARSE);
 $nodata = [];
 
@@ -48,6 +49,24 @@ switch ($_REQUEST['act'])
 	 }
 	}
 	break;
+	case 'activate_child_account':  // Api for activating child account by a parent
+		  $parent_id = $_REQUEST['parent_id'];
+		  $child_id  = $_REQUEST['child_id'];
+		  $child_email = $_REQUEST['child_email'];
+		  $req       = new parentsUserService();
+		  $activated = $req->activateAccount($parent_id,$child_id,$child_email);
+		  if($activated != 0)
+		  { $email_req  = new emailService();
+		  	$send_email = $email_req->ActivateChildAccount($child_email,$activated); 
+		  	$msg = 'Success';
+		  	$getcode = 1;
+		  }else
+		  { $getcode = 0;
+		  	$msg = 'failure';
+		  }
+		  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
+		  echo json_encode($response); 
+		break;
 	default:
 
 		$Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');

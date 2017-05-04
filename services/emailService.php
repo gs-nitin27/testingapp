@@ -173,7 +173,71 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
 
 
 }  // End of Function
+
+public function ActivateChildAccount($child_email,$code)
+{
+       require('class.phpmailer.php');
+       while ($row=mysql_fetch_assoc($query))
+        {
+         $to             = $child_email;
+         $pushobj        = new userdataservice();
+         $from           = "info@darkhorsesports.in";
+         $from_name      = 'Getsporty';
+         $subject        = "Welcome to Getsporty";
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->SetFrom($from, $from_name);
+         $mail->Subject = $subject;
+         $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+
+ <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
+<tbody><tr>
+<td align="center" valign="top">
+<table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%">
+<tbody><tr>
+<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:10px" valign="top">
+<h3 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left"></h1>
+</td>
+</tr>
+<tr>
+<td style="padding-bottom:20px" valign="top">
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Dear Mr. /Ms., <strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' . $user . '</strong></p>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
+Hi user Your Login code is<br>'.$code.'
+<br><br><br><br><br>Please Login with you current google account with the code and access all your info </p> 
+
+</td>
+</tr>
+<tr>
+<td align="center" style="padding-bottom:60px" valign="top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+</tr>
+</table>
+</div>'; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+   } 
    
+
+
+}   
           
       
        

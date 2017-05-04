@@ -5,7 +5,7 @@ class parentsUserService
 
 public function  get_parent_child($parent_id)
 {  
-	$query  = mysql_query("SELECT `child_id` FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
+	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
 	{
@@ -62,25 +62,7 @@ public function add_child($decode_data)
             return 0;
         }  
         
-} // End Funtction 
-
-
-// public function get_child_id$child_id)
-// {
-// 	$query = mysql_query("SELECT `userid`, IFNull(`userid`,'') AS userid
-// 	 FROM `user` WHERE `userid`= $child_id ");
-// 	$num = mysql_num_rows($query);
-// 	 if ($num>0)
-// 	 {
-// 		$row = mysql_fetch_assoc($query);
-// 		return $row['userid'];
-// 	 }
-// 	 else
-// 	 {
-// 		return 0;
-// 	 }
-
-// } // End Function
+} 
 
 public function get_child_data($child_id)
 {   
@@ -101,8 +83,8 @@ public function get_child_data($child_id)
 
 public function insert_association($parent_id,$child_id)
 {
-	$unicode = rand();
-	$query = mysql_query("INSERT INTO `gs_association`(`parent_id`,`child_id`,`unicode`) VALUES('$parent_id','$child_id','$unicode')");
+	$unique_code = rand();
+	$query = mysql_query("INSERT INTO `gs_association`(`parent_id`,`child_id`,`unique_code`) VALUES('$parent_id','$child_id','$unique_code')");
 	 if ($query)
 	 {
 				return 1;
@@ -114,6 +96,36 @@ public function insert_association($parent_id,$child_id)
 
 } // End Function
 
+public function  activateAccount($parent_id,$child_id)
+{
+	$code = $this->get_association_data($parent_id,$child_id);
+	if($code != 0)
+	{  $code = $code['unique_code'];
+	   $update = mysql_query("UPDATE `user` SET `email` = '$email' , `unique_code` = '$code' WHERE `userid` = '$child_id'");
+	   if($update)
+	   {
+	   	return $code;
+	   }else{
+	   	return 0;
+	   }
+
+	}
+  
+
+}
+// End Function
+public function get_association_data($parent_id,$child_id)
+{
+$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' AND `child_id`= '$child_id'");
+if(mysql_num_rows($query)> 0)
+{
+	$row = mysql_fetch_assoc($query);
+	return $row;
+}else
+    return 0;
+
+
+}
 
 }  // End Class
 
