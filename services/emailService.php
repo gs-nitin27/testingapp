@@ -25,11 +25,11 @@ public function emailVarification($email)
               $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
               $mail->SMTPAuth = true;  // authentication enabled
               $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-              $mail->Host = 'dezire.websitewelcome.com';
-              //$mail->Host = 'smtp.gmail.com';
+              //$mail->Host = 'dezire.websitewelcome.com';
+              $mail->Host = 'smtp.gmail.com';
               $mail->Port = 465; 
-              $mail->Username ="info@getsporty.in";  
-              $mail->Password = "%leq?xgq;D?v";           
+              $mail->Username ="info@darkhorsesports.in";  
+              $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
               $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
