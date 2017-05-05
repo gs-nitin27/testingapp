@@ -426,42 +426,22 @@ Student Id and Result is display all Class Information
 
 
 else if($_REQUEST['act'] == 'view_class')
-
 { 
-
 $userid           =  $_REQUEST['userid'];
-
 $request        =  new connect_userservice();
-
 $response       =  $request->getClass($userid);
-
   if($response)
-
    {
-
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Class ');
-
              echo json_encode($Result);
-
    }
-
    else
-
    {      $response = [];                
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'Not any Class');
-
           echo json_encode($Result);
-
    } 
 
 }
-
-
-
-
-
-
 
 /*********************************Daily Log************************/
 
@@ -693,23 +673,7 @@ if($response)
        echo json_encode($result);
     }    
 } 
-
-
-
-
-
-
-
-
-
-
 /**************************************************************************************/
-
-
-
-
-
-
 
 /****************************For  Log list filters   **********************************/
 
@@ -1014,35 +978,20 @@ for($i=0;$i<sizeof($userid);$i++)
 
 
 else if($_REQUEST['act'] == "view_coach_log")
-
 {
-
   $coach_assignment_id    =  @$_REQUEST['coach_assignment_id'];
-
    $request               =  new connect_userservice();
-
   $response               =  $request->view_coach_log($coach_assignment_id); 
-
   if ($response)
-
   {
-
     $Result = array('status' => '1','data'=>$response,'msg'=>'view coach log ');
-
           echo json_encode($Result);      
-
   }
-
   else
-
   {
-
   $Result = array('status' => '0','data'=>$response ,'msg'=>'Not Any Log ');
-
           echo json_encode($Result);      
-
   }
-
 }
 
 
@@ -1081,6 +1030,34 @@ if($response)
           echo json_encode($Result);
    } 
 }
+
+
+
+
+
+
+/*********************************View Athlete Log by the Athelete*****************************/
+
+else if($_REQUEST['act'] == 'veiw_athlete_log')
+{
+  $coach_id          =  @$_REQUEST['coach_id'];
+  $athlete_id        =  @$_REQUEST['athlete_id'];
+  $request           =  new connect_userservice();
+  $response          =  $request->veiw_athlete_log($coach_id,$athlete_id);
+  if($response)
+  {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'view Athlete Log');
+             echo json_encode($Result);
+  }
+  else 
+  {                     
+             $Result = array('status' => '0','data'=>[] ,'msg'=>'Not seen Athlete Log');
+             echo json_encode($Result);
+  } 
+}
+
+
+
 
 
 
