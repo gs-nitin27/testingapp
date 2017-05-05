@@ -32,6 +32,7 @@ if($_REQUEST['act'] == "create_class")
 							$item->class_strength  = $data->class_strength;
 							$item->class_host      = $data->class_host;
 							$item->phone_no        = $data->contact_no;
+							$item->classtype       = $data->classtype;
 
                               //print_r($data->contact_no);die;
 
