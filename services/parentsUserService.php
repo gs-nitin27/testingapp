@@ -130,7 +130,7 @@ public function get_association_data($parent_id,$child_id)
 public function child_account_verify($code,$email)
 {
 
-	$query = mysql_query("UPDATE `user` SET `unique_code` = '$code' WHERE `email` = '$email' AND `unique_code` = '$code'");
+	$query = mysql_query("UPDATE `user` SET `unique_code` = '0' WHERE `email` = '$email' AND `unique_code` = '$code'");
 	if($query)
 	{
 		return "1";
