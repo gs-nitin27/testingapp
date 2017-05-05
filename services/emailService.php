@@ -230,7 +230,31 @@ Hi user Your Login code is<br>'.$code.'
                $mail->Send();
 }   
           
-      
+public function contact_us_App($user_info)
+{
+         require('class.phpmailer.php');
+         $to             =  "info@darkhorsesports.in";
+         $from           =  "info@darkhorsesports.in";
+         $from_name      =  $user_info->name;
+         $subject        =  $user_info->name." has sent a message";
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->SetFrom($from, $from_name);
+         $mail->Subject = $subject;
+         $mail->Body = $user_info->message; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+               return $mail->Send();
+}    
        
 
 
