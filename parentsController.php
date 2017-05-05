@@ -75,7 +75,7 @@ switch ($_REQUEST['act'])
 			  $res = $req->child_account_verify($code,$email);
 			  if($res != 0)
 			  {
-			  	$msg = 'Success'
+			  	$msg = 'Success';
 			  }else
 			  {
 			  	$msg =  'Failure';
