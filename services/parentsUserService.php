@@ -25,9 +25,9 @@ public function  get_parent_child($parent_id)
 
 
 
-public function varify_child($decode_data)
+public function varify_child($where)
 { 
-  $query  = mysql_query("SELECT * FROM `user` WHERE `name`= '$decode_data->name' AND `dob`= '$decode_data->dob'");
+  $query  = mysql_query("SELECT * FROM `user` WHERE ".$where."");
 	$num = mysql_num_rows($query);
 	if ($num>0)
 	{
@@ -116,14 +116,28 @@ public function  activateAccount($parent_id,$child_id)
 // End Function
 public function get_association_data($parent_id,$child_id)
 {
-$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' AND `child_id`= '$child_id'");
-if(mysql_num_rows($query)> 0)
-{
-	$row = mysql_fetch_assoc($query);
-	return $row;
-}else
-    return 0;
+	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' AND `child_id`= '$child_id'");
+	if(mysql_num_rows($query)> 0)
+	{
+		$row = mysql_fetch_assoc($query);
+		return $row;
+	}else
+	    return "0";
 
+
+}
+
+public function child_account_verify($code,$email)
+{
+
+	$query = mysql_query("UPDATE `user` SET `unique_code` = '$code' WHERE `email` = '$email' AND `unique_code` = '$code'");
+	if($query)
+	{
+		return "1";
+	}else
+	{
+		return "0";
+	}
 
 }
 

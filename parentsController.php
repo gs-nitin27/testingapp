@@ -27,12 +27,13 @@ switch ($_REQUEST['act'])
 	 $data                     =  file_get_contents("php://input");
 	 $decode_data        	   =  json_decode(file_get_contents("php://input"));
      $request           	   =  new parentsUserService();
-     $already_child            =  $request->varify_child($decode_data);
+     $where = '`name`= '.$decode_data->name.' AND `dob`= '.$decode_data->dob.'';
+     $already_child            =  $request->varify_child($where);
     
      if ($already_child != 0) 
      {
-     	 $Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists ');
-	            echo json_encode($Result);
+     	 $Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists');
+	             echo json_encode($Result);
      }
      else
      {
@@ -65,8 +66,23 @@ switch ($_REQUEST['act'])
 		  	$msg = 'failure';
 		  }
 		  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
-		  echo json_encode($response); 
+		        echo json_encode($response); 
 		break;
+		case 'child_athlete_login':
+			  $code  = $_REQUEST['code'];
+			  $email = $_REQUEST['email'];
+			  $req = new parentsUserService();
+			  $res = $req->child_account_verify($code,$email);
+			  if($res != 0)
+			  {
+			  	$msg = 'Success'
+			  }else
+			  {
+			  	$msg =  'Failure';
+			  }
+			  $Result = array('status' =>$res,'data'=>$res ,'msg'=>$msg);
+	            echo json_encode($Result);  
+			break;
 	default:
 
 		$Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');

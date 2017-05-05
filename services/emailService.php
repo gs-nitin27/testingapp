@@ -18,8 +18,6 @@ public function emailVarification($email)
               $from_name="Getsporty Lite";
               $subject="Email varification ";
               $emailconform="getsporty.in/testingactivation.php?email=";
-              //$emailconform  ="testingapp.getsporty.in/getSportyLite/activation.php?email=";
-              //global $error;
               $mail = new PHPMailer();  // create a new object
               $mail->IsSMTP(); // enable SMTP
               $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
