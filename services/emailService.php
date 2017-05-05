@@ -253,8 +253,36 @@ public function contact_us_App($user_info)
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
+               $this->visitor_Acknowlege($user_info);
                return $mail->Send();
-}    
+
+}
+public function visitor_Acknowlege($user_info)
+{
+       //  require('class.phpmailer.php');
+         $to             =  $user_info->email;
+         $from           =  "info@darkhorsesports.in";
+         $from_name      =  "Getsporty";
+         $subject        =  "Thanks for contacting us";
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->SetFrom($from, $from_name);
+         $mail->Subject = $subject;
+         $mail->Body = "We have recieve your message our team will contact you soon"; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+               echo"dffdf";
+               //return $mail->Send();
+}        
        
 
 
