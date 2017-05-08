@@ -1430,7 +1430,7 @@ else if($_REQUEST['act'] == "getappliedjobs")
 {
 $userid = urldecode($_REQUEST['user_id']);
 $jobid  = urldecode($_REQUEST['id']);   // JOb id
-$type   =  '1';
+$type   = '1';
 $req    = new userdataservice();
 $res    = $req->getAppliedJobListing($userid,$jobid);
 if($res)
