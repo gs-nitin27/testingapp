@@ -506,7 +506,21 @@ $userid           =  $userdata->userid;
 $id               =  $userdata->id;
 $module           =  $userdata->module; // 1= Job 2=Event 3=Tournament
 $publish          =  $userdata->publish;
+
+if($module == 1)
+{
 $query            =  mysql_query("UPDATE  `gs_jobInfo` set `publish`=$publish  where `userid`= $userid  AND `id` =$id");
+}
+else if($module == 2)
+{
+$query            =  mysql_query("UPDATE  `gs_eventinfo` set `publish`=$publish  where  `id` ='$id'");
+
+} 
+else if($module == 3)
+{
+  $query            =  mysql_query("UPDATE  `gs_tournament_info` set `publish`=$publish  where  `id` ='$id'");
+}
+
 $num=mysql_affected_rows(); 
   if ($num> 0)
   {
@@ -517,11 +531,6 @@ $num=mysql_affected_rows();
     return 0;
   }
 }
-
-
-
-
-
 
 
 /***********************************Create Tournament Function****************/
@@ -1575,12 +1584,9 @@ return 0;
 }
 }
 
-
-
 public function getAppliedJobListing($userid,$jobid)
 {
 $n=1;
-
 $query =mysql_query("SELECT ji.`userid` AS employerid, ji.`id` AS job_id, uj.`userid` AS applicant_id ,us.`name` AS applicant_name ,us.`user_image` AS applicant_image , us.`dob` AS dob , us.`location` AS location ,us.`prof_name` AS prof_name ,  us.`prof_id` AS prof_id, us.`sport` AS sport, uj.`status` As status , uj.`interview_date` As interview_date FROM `gs_jobInfo` AS ji LEFT JOIN `user_jobs` AS uj ON ji.`id` = uj.`userjob` LEFT JOIN `user` AS us ON us.`userid` = uj.`userid` WHERE ji.`userid`='$userid' AND ji.`id`='$jobid' AND uj.`status`>='$n'");
 if(mysql_num_rows($query)>0)
 {
@@ -2119,26 +2125,23 @@ $num   =  mysql_affected_rows();
 
 }
 
+/********************* Generate Random Code ******************************************/
 
-
-
-
-
-
-
-
-
-
-/************************************************************************************/
-
-
-
-
-
-
-
-
-
+function generate_random_code($length) {
+    $alphabets = range('A','Z');
+    $numbers = range('0','9');
+    $additional_characters = array('@','#','$','&','*');
+    $final_array = array_merge($alphabets,$numbers,$additional_characters);
+         
+    $code = '';
+  
+    while($length--) {
+      $key = array_rand($final_array);
+      $code .= $final_array[$key];
+    }
+  
+    return $code;
+  }
 
 /***************************************New Apply function Job Event Tournament*****************/
 
@@ -2148,17 +2151,23 @@ $num   =  mysql_affected_rows();
 public function apply($userid , $id ,$status,$module)
 {
 
+ 
+//print_r($module);die;
+
 switch ($module)
  {
-   case '1':
+   case 1:
      $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
-   case '2':
-       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
+   case 2:
+       $entry_passcode = $this->generate_random_code(6);
+       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES ('0','$userid','$id',CURDATE(),'$status','$entry_passcode')");
      break;
-     case '3':
+     case 3:
        $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
        break;
+       default :
+          //echo "default";break;
   
  }  //End Switch
     if($query)
