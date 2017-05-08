@@ -2130,8 +2130,7 @@ $num   =  mysql_affected_rows();
 function generate_random_code($length) {
     $alphabets = range('A','Z');
     $numbers = range('0','9');
-    $additional_characters = array('@','#','$','&','*');
-    $final_array = array_merge($alphabets,$numbers,$additional_characters);
+    $final_array = array_merge($alphabets,$numbers);
          
     $code = '';
   
