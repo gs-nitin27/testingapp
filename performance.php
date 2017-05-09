@@ -117,26 +117,44 @@ else if($_REQUEST['act'] == 'view_performance')
 
 } // End of Statment
 
-/**************************************** View Guidelines ************************/
+/************************* View Guidelines ************************/
 
 else if ($_REQUEST['act'] == 'view_guidelines') 
 {         
           $data      =  json_decode(file_get_contents("php://input"));
-          $req = new UserPerformanceService();
-          $age           =  $req->ageGropup($data->dob,$data->gender);
-          $res = $req->viewPerformanceguide($data,$age);
-
+          $req       =  new UserPerformanceService();
+          $age       =  $req->ageGropup($data->dob,$data->gender);
+          $res       =  $req->viewPerformanceguide($data,$age);
           if($res)
           {
               $array = array('status' => 1, 'data'=>$res, 'msg'=>'Success');
               echo json_encode($array);
           }
-          else {
+          else 
+          {
               $array = array('status' => 0, 'data'=>$res, 'msg'=>'failure');
-                    echo json_encode($array);
-              }
+              echo json_encode($array);
+          }
 }
 
 
 
+/************************* Suggestion  gs_suggestion ************************/
+
+else if ($_REQUEST['act'] == 'save_suggestion') 
+{         
+          $data      =  json_decode(file_get_contents("php://input"));
+          $req       =  new UserPerformanceService();
+          $res       =  $req->suggestion($data);
+          if($res)
+          {
+             $result = array('status' => 1, 'data'=>$res, 'msg'=>'save suggestion') ;
+              echo json_encode($result);
+          }
+          else 
+          {
+              $result = array('status' => 0, 'data'=>$res, 'msg'=>'not save suggestion');
+              echo json_encode($result);
+          }
+}
 ?>

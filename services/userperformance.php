@@ -221,7 +221,36 @@ public function viewPerformanceguide($item,$agegropup)
 		return 0;
 	}
 
-  }				
+  }		
+
+
+
+/*******************Save Suggestion********************/
+
+ public function suggestion($data)
+ {
+	$coachid 		=	 $data->coachid;
+	$title 			=	 $data->title;
+	$description 	=	 $data->description;
+	$module 		=	 $data->module;
+	$gender 		=	 $data->gender;
+	$dob 			=	 $data->dob;
+	$sport 			=	 $data->sport;
+   $query =mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
+	if ($query)
+	{
+	   return 1;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+
+
+
 } // End Class 
 
 
