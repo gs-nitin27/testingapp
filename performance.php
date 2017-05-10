@@ -139,21 +139,22 @@ else if ($_REQUEST['act'] == 'view_guidelines')
 
 
 
+
 /************************* Suggestion  gs_suggestion ************************/
 
 else if ($_REQUEST['act'] == 'save_suggestion') 
-{         
-          $data      =  json_decode(file_get_contents("php://input"));
-          $req       =  new UserPerformanceService();
-          $res       =  $req->suggestion($data);
+{         $data          =  file_get_contents("php://input");
+          $userdata      =  json_decode(file_get_contents("php://input")); 
+          $req           =  new UserPerformanceService();
+          $res           =  $req->suggestion($userdata);
           if($res)
           {
-             $result = array('status' => 1, 'data'=>$res, 'msg'=>'save suggestion') ;
+             $result = array('status' => 1, 'data'=>$res, 'msg'=>'Your suggestion is successfully sent') ;
               echo json_encode($result);
           }
           else 
           {
-              $result = array('status' => 0, 'data'=>$res, 'msg'=>'not save suggestion');
+              $result = array('status' => 0, 'data'=>$res, 'msg'=>'Suggestion not send');
               echo json_encode($result);
           }
 }
