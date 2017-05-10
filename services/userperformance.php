@@ -236,8 +236,8 @@ public function viewPerformanceguide($item,$agegropup)
 	$gender 		=	 $userdata->gender;
 	$dob 			=	 $userdata->dob;
 	$sport 			=	 $userdata->sport;
-   $query =mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
-	if ($query)
+   $query = mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
+	if($query)
 	{
 	   return 1;
 	}

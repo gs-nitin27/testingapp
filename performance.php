@@ -140,9 +140,9 @@ else if ($_REQUEST['act'] == 'view_guidelines')
 
 
 
-/************************* Suggestion  gs_suggestion ************************/
+/******************* Suggestion  gs_suggestion ******************/
 
-else if ($_REQUEST['act'] == 'save_suggestion') 
+else if($_REQUEST['act'] == 'save_suggestion') 
 {         $data          =  file_get_contents("php://input");
           $userdata      =  json_decode(file_get_contents("php://input")); 
           $req           =  new UserPerformanceService();

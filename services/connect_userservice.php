@@ -782,48 +782,25 @@ $num =mysql_num_rows($query);
 
 
 public function joinStudentData($userdata)
-
 {
-
   $classid           =  $userdata->classid;
-
   $student_id        =  $userdata->student_id;
-
   $student_name      =  $userdata->student_name;
-
   $student_dob       =  $userdata->student_dob;
-
   $location          =  $userdata->location;
-
   $gender            =  $userdata->gender;
-
   $mode_of_payment   =  $userdata->mode_of_payment;
-
   $fees              =  $userdata->amount_paid;
-
   $payment_id        =  $userdata->payment_id;
-
   $remark            =  $userdata->remark; 
-
-
-
    if($userdata->mode_of_payment == 1)
-
    {
-
         $transaction_id = 0;
-
    }
-
    else
-
    {
-
          $transaction_id = $userdata->transaction_id;
-
    }
-
-
 
    if (empty($classid) || empty($student_id) || empty($student_name) || empty($student_dob) || empty($location) || empty($gender) || empty($mode_of_payment) || empty($fees) )
 
