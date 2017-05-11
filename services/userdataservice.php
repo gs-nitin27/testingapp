@@ -1079,7 +1079,7 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 /***************This function are used to find out the Job Status*************/
-// Status 1= Apply   2= shortlist  3= interview  4= confirm
+// Status 1= Apply Job   2= shortlist  3= interview  4= confirm
 
 
 public function job_status($id,$userid)
@@ -1099,9 +1099,43 @@ public function job_status($id,$userid)
 }// End Function
 
 
-/*********************************************************************************************************
+/******************This function are used to find out the Event*******************/
+// status =1 Apply for Event
+
+public function event_status($id,$userid)
+{ 
+  $query  = mysql_query("SELECT *FROM `user_events` WHERE `userid` = '$userid' AND `userevent` = $id ");
+    if(mysql_num_rows($query)>0)
+    {
+          $row = mysql_fetch_assoc($query);
+          return $row['status'];
+    }
+    else
+    {
+      return '0';
+    }     
+
+}// End Function
 
 
+
+/******************This function are used to find out the Tournament*******************/
+// status =1 Apply for Tournament
+
+public function tournament_status($id,$userid)
+{ 
+  $query  = mysql_query("SELECT *FROM `user_tournaments` WHERE `userid` = '$userid' AND `usertournament` = $id ");
+    if(mysql_num_rows($query)>0)
+    {
+          $row = mysql_fetch_assoc($query);
+          return $row['status'];
+    }
+    else
+    {
+      return '0';
+    }     
+
+}// End Function
 
 
 
@@ -1592,12 +1626,12 @@ if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
 {
-                      $date_1 = new DateTime($row['dob']);
-                      $date_2 = new DateTime( date( 'd-m-Y' ));
+                      $date_1     = new DateTime($row['dob']);
+                      $date_2     = new DateTime( date( 'd-m-Y' ));
                       $difference = $date_2->diff( $date_1 );
-                      $year=(string)$difference->y;
+                      $year       =(string)$difference->y;
                       $row['age'] = $year;
-                      $rows[] = $row;
+                      $rows[]     = $row;
 }
 return $rows;
 }
