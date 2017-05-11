@@ -1490,39 +1490,15 @@ public function view_log_assign($userid,$log_id)
 {
 
  $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id`  IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id') ");
-
-  
-
-
-
-      // $query = mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `gs_athlit_dailylog` WHERE `coach_assignment_id` = '$log_id')");
-
-
-
-
-
-
-
-  $num = mysql_num_rows($query);
-
+ $num = mysql_num_rows($query);
   if ($num)
-
   {
-
      while($row=mysql_fetch_assoc($query))
-
-                   {
-
+                  {
                        $date_1 = new DateTime($row['student_dob']);
-
                        $date_2 = new DateTime( date( 'd-m-Y' ));
-
                        $difference = $date_2->diff( $date_1 );
-
                        $year=(string)$difference->y;
-
-
-
                        $row['age'] = $year;
 
                      $data[]  = $row ;

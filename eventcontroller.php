@@ -22,7 +22,7 @@ if($_REQUEST['act'] == "event_participants_list")
    }
    else
    {
-   	$data = array('data'=>$res,'status'=>'0');
+   	$data = array('data'=>[],'status'=>'0');
     	echo json_encode($data);
    }
 }
