@@ -66,7 +66,7 @@ public function add_child($decode_data)
 
 public function get_child_data($child_id)
 {   
-	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender
+	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport
 	 FROM `user` WHERE `userid`= $child_id ");
 	$num = mysql_num_rows($query);
 	 if ($num>0)
