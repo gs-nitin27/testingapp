@@ -51,11 +51,12 @@ switch ($_REQUEST['act'])
 	}
 	break;
 	case 'activate_child_account':  // Api for activating child account by a parent
-		  $parent_id = $_REQUEST['parent_id'];
-		  $child_id  = $_REQUEST['child_id'];
-		  $child_email = $_REQUEST['child_email'];
-		  $req       = new parentsUserService();
-		  $activated = $req->activateAccount($parent_id,$child_id,$child_email);
+		  $parent_id 		= $_REQUEST['parent_id'];
+		  $child_id 		= $_REQUEST['child_id'];
+		  $child_email		= $_REQUEST['child_email'];
+		  $parent_mobile 	= $_REQUEST['mobile_no'];
+		  $req       		= new parentsUserService();
+		  $activated = $req->activateAccount($parent_id,$child_id,$child_email,$parent_mobile);
 		  if($activated != 0)
 		  { $email_req  = new emailService();
 		  	$send_email = $email_req->ActivateChildAccount($child_email,$activated); 
