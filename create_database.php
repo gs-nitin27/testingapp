@@ -948,7 +948,7 @@ else if ($_REQUEST['act'] == "search_event" )
  $title       = urldecode($_REQUEST['title']);
  $sport       = urldecode($_REQUEST['sport']);
  $location    = urldecode($_REQUEST['location']);
- $module      = '2';                         // for Event 
+ $module      = '2';                                // for Event 
  $request    = new userdataservice();
  $where[]         =   '1 =1 ';
  $arr = array();
@@ -985,10 +985,12 @@ else if ($_REQUEST['act'] == "search_event" )
 if($response)
 {
                         $response      = $request->getfavForUser($response,$module, $userid);
+
                               //  if (!empty($userid))
                                // {
                                     
                                // }
+
            $Result = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
            echo json_encode($Result);
 }
@@ -1107,14 +1109,24 @@ else if($_POST['act'] == "getsearchview")
                          }
                         if($type=='2')
                           {
-                            $request       =   new userdataservice();
-                            $response      =   $request ->getuserEvent($res,$user_id);
+                            for ($i=0; $i <count($res) ; $i++)
+                            {  $request         =   new userdataservice();
+                               $event_status     = $request->event_status($res[$i]['id'],$user_id);
+                               $res[$i]['event'] = $event_status;
+                               $response = $res; 
+                            }
                           } 
+                        
                           if($type=='3') 
                           {
-                            $request       =   new userdataservice();
-                            $response      = $request ->getuserTournament($res, $user_id);
+                            for ($i=0; $i <count($res) ; $i++)
+                            {  $request         =   new userdataservice();
+                               $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
+                               $res[$i]['tour'] = $tour_status;
+                               $response        = $res; 
+                            }
                           }
+
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
 
@@ -1917,9 +1929,6 @@ $userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
 $id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
 $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
 $module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
-
-//print_r($userid);die();
-
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();

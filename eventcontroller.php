@@ -22,10 +22,37 @@ if($_REQUEST['act'] == "event_participants_list")
    }
    else
    {
-   	$data = array('data'=>$res,'status'=>'0');
+   	$data = array('data'=>[],'status'=>'0');
     	echo json_encode($data);
    }
 }
+
+
+/*******************Check The Pass Code ********************/
+
+
+if($_REQUEST['act'] == 'check_passcode')  
+{ 
+   $data         =  file_get_contents("php://input");
+   $userdata     =  json_decode(file_get_contents("php://input"));
+   $req          =  new event_service();
+   $res          =  $req->check_entry_passcode($userdata);
+   if($res)
+        {
+          $data = array('status' => 1, 'data'=> $res  , 'msg'=>'valid pass code');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Not valid pass code');
+                    echo json_encode($data);
+        }  
+}
+
+
+
+
+
 
 
 ?>

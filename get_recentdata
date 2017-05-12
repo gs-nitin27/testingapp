@@ -22,14 +22,13 @@ if($_POST['act'] == "create_class")
 		    
 		    $req2 = new manageSchedulingService();
 			$res2 = $req2->CheckforExistingClass($item);
-            if($res2 == '1'){
-
+            if($res2 == '1')
+            {
 			$req = new manageSchedulingService();
 			$res = $req->createClass($item);
 
       if($res == 1)
-{
-
+	  {
 		$req1 = new manageSchedulingService();
 		$res1 =  $req1->getclassdata($item);
         if($res1 != 0)
@@ -37,12 +36,11 @@ if($_POST['act'] == "create_class")
 				$data= array('data'=>$res1);
 				echo json_encode($data);
        }
-    else
-		 {
-
+    	else
+       {
 		 	echo $res1;
-		 }
-}
+       }
+	}
 
 			else echo $res;
 
@@ -70,7 +68,7 @@ else if($_POST['act'] == "update_class")
 		$item->end_time     = $data->end_time;
 		$item->address      = $data->address;
 		$item->class_id     = $data->class_id;
-//echo $item->end_date ."is end date";
+		//echo $item->end_date ."is end date";
 $req = new manageSchedulingService();
 $res = $req->updateClass($item);
 echo $res;

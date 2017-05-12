@@ -158,7 +158,6 @@ if($_REQUEST['act'] == 'connect')
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
   $response       =  $request->getConnectedStatus($response,$userid,$usertype);
-//print_r($response);die();
   if($response)
 
   {
@@ -170,7 +169,6 @@ if($_REQUEST['act'] == 'connect')
    }
 
    else 
-
    {                       
 
           $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connected');
@@ -178,7 +176,6 @@ if($_REQUEST['act'] == 'connect')
           echo json_encode($Result);
 
    } 
-
 }
 
 
