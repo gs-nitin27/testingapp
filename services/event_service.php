@@ -21,6 +21,27 @@ class event_service
 			return 0;
  }
 
+
+public function  check_entry_passcode($userdata)
+{
+	$userid             =  $userdata->userid;
+    $event_id           =  $userdata->event_id;
+    $entry_passcode     =  $userdata->entry_passcode;
+	$query  =mysql_query("SELECT *FROM `user_events` WHERE `userid`='$userid' AND `userevent` = '$event_id' AND `entry_passcode`='$entry_passcode'");
+	$num = mysql_num_rows($query);
+	if ($num>0) 
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}  // End Function
+
+
+
+
 }  // End Class
 ?>
 
