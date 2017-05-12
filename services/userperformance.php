@@ -52,7 +52,7 @@ public function cheackPerformance($age,$sport,$gender)
 
 public function  save($coachid,$athleteid)
 {
-    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURDATE())");
+    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURRENT_DATE )");
 	if ($query)
 	{
 	 $last_id = mysql_insert_id();
