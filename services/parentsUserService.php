@@ -96,16 +96,18 @@ public function insert_association($parent_id,$child_id)
 
 } // End Function
 
-public function  activateAccount($parent_id,$child_id,$child_email,$parent_mobile)
+public function  activateAccount($parent_id,$child_id,$child_email,$parent_mobile,$location)
 {
 	$code = $this->get_association_data($parent_id,$child_id);
 	if($code != 0)
 	{  $code = $code['unique_code'];
-	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code',`contact_no`='$parent_mobile',`prof_id`='1',`prof_name`='Athletes' WHERE `userid` = '$child_id'");
+	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code', `contact_no` ='$parent_mobile',`prof_id`='1',`prof_name`='Athletes',`location`='$location' WHERE `userid` = '$child_id'");
 	   if($update)
 	   {
 	   	return $code;
-	   }else{
+	   }
+	   else
+	   {
 	   	return 0;
 	   }
 
