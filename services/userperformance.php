@@ -52,7 +52,7 @@ public function cheackPerformance($age,$sport,$gender)
 
 public function  save($coachid,$athleteid)
 {
-    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURDATE())");
+    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURRENT_DATE )");
 	if ($query)
 	{
 	 $last_id = mysql_insert_id();
@@ -227,17 +227,17 @@ public function viewPerformanceguide($item,$agegropup)
 
 /*******************Save Suggestion********************/
 
- public function suggestion($data)
+ public function suggestion($userdata)
  {
-	$coachid 		=	 $data->coachid;
-	$title 			=	 $data->title;
-	$description 	=	 $data->description;
-	$module 		=	 $data->module;
-	$gender 		=	 $data->gender;
-	$dob 			=	 $data->dob;
-	$sport 			=	 $data->sport;
-   $query =mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
-	if ($query)
+ 	$coachid 		=	 $userdata->coachid;
+	$title 			=	 $userdata->title;
+	$description 	=	 $userdata->description;
+	$module 		=	 $userdata->module;
+	$gender 		=	 $userdata->gender;
+	$dob 			=	 $userdata->dob;
+	$sport 			=	 $userdata->sport;
+   $query = mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
+	if($query)
 	{
 	   return 1;
 	}
