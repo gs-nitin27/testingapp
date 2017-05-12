@@ -513,8 +513,7 @@ $query            =  mysql_query("UPDATE  `gs_jobInfo` set `publish`=$publish  w
 }
 else if($module == 2)
 {
-$query            =  mysql_query("UPDATE  `gs_eventinfo` set `publish`=$publish  where  `id` ='$id'");
-
+$query            =   mysql_query("UPDATE  `gs_eventinfo` set `publish`=$publish  where  `id` ='$id'");
 } 
 else if($module == 3)
 {
