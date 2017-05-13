@@ -1655,37 +1655,24 @@ $num = mysql_num_rows($query);
 
 }  // End Function
 
+public view_user_schedule($user_id)
+{
+$query = mysql_query("SELECT * FROM `gs_athlete_schedule` WHERE `userid` = '$user_id'")
+    if(mysql_num_rows($query)!= 0)
+    {
 
+    while ($row = mysql_fetch_assoc($query)) {
+      
+    $rows[] = $row;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    return $row;
+    }else
+    {
+      return "0";
+    }
+}
 /******************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
 } // End Class
 
 
