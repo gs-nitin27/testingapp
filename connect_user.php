@@ -1053,6 +1053,14 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
   } 
 }
 
+else if ($_REQUEST['create_schedule']) {
+ 
+  $data = json_decode(file_get_contents("php://input"));
+  print_r($data);
+
+
+
+}
 
 
 
