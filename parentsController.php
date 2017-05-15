@@ -55,8 +55,10 @@ switch ($_REQUEST['act'])
 		  $child_id 		= $_REQUEST['child_id'];
 		  $child_email		= $_REQUEST['child_email'];
 		  $parent_mobile 	= $_REQUEST['mobile_no'];
+		  $location 	 	= $_REQUEST['location'];
+
 		  $req       		= new parentsUserService();
-		  $activated = $req->activateAccount($parent_id,$child_id,$child_email,$parent_mobile);
+		  $activated = $req->activateAccount($parent_id,$child_id,$child_email,$parent_mobile,$location);
 		  if($activated != 0)
 		  { $email_req  = new emailService();
 		  	$send_email = $email_req->ActivateChildAccount($child_email,$activated); 
@@ -84,6 +86,8 @@ switch ($_REQUEST['act'])
 			  $Result = array('status' =>$res,'data'=>$res ,'msg'=>$msg);
 	            echo json_encode($Result);  
 			break;
+		
+
 	default:
 
 		$Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');

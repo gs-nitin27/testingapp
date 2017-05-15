@@ -1614,24 +1614,13 @@ public function updatelog($userdata)
 
 
 public function getage($age)
-
 {
-
-                 $date_1 = new DateTime($age);
-
-                 $date_2 = new DateTime( date( 'd-m-Y' ));
-
-                 $difference = $date_2->diff( $date_1 );
-
-                 $year=(string)$difference->y;
-
-                  return $year;
-
+ $date_1 = new DateTime($age);
+ $date_2 = new DateTime( date( 'd-m-Y' ));
+ $difference = $date_2->diff( $date_1 );
+ $year=(string)$difference->y;
+ return $year;
 }
-
-
-
-
 
 /******************************Function for Athlete Log*************************************/
 
@@ -1655,37 +1644,24 @@ $num = mysql_num_rows($query);
 
 }  // End Function
 
+public function view_user_schedule($user_id)
+{
+$query = mysql_query("SELECT * FROM `gs_athlete_schedule` WHERE `userid` = '$user_id'");
+    if(mysql_num_rows($query)!= 0)
+    {
 
+    while ($row = mysql_fetch_assoc($query)) {
+      
+    $rows[] = $row;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    return $rows;
+    }else
+    {
+      return "0";
+    }
+}
 /******************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
 } // End Class
 
 
