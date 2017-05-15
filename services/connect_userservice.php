@@ -1661,6 +1661,20 @@ $query = mysql_query("SELECT * FROM `gs_athlete_schedule` WHERE `userid` = '$use
       return "0";
     }
 }
+
+
+public function create_user_schedule($data)
+{
+  
+  $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`, `schedule_duration_date`, `schedule_duration_day`, `schedule_type`, `date_created`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_date','$data->schedule_duration_day','$data->type','$data->date_created')");
+  if($query)
+  {
+    return "1";
+
+  }else
+
+    return "0";
+}
 /******************************************************************************************/
 } // End Class
 

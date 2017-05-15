@@ -1028,12 +1028,22 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
              echo json_encode($Result);
   } 
 }
-else if ($_REQUEST['create_schedule']) {
+else if ($_REQUEST['act'] == 'create_schedule') {
  
   $data = json_decode(file_get_contents("php://input"));
-  print_r($data);
+  $obj  = new connect_userservice();
+  $res  = $obj->create_user_schedule($data);
+  if($res != 0)
+  {
+    $msg    = 'Success';
+     
+  }else
+  {
+    $msg = 'Failure';
 
-
+  }
+    $response = array('status'=>$res,'message'=$msg);
+    echo json_encode($response);
 
 }
 
