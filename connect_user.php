@@ -1042,7 +1042,7 @@ else if ($_REQUEST['act'] == 'create_schedule') {
     $msg = 'Failure';
 
   }
-    $response = array('status'=>$res,'message'=$msg);
+    $response = array('status'=>$res,'message'=>$msg);
     echo json_encode($response);
 
 }
