@@ -2180,26 +2180,43 @@ function generate_random_code($length) {
 // This code is Only for Local System Please Ignore it if Functionaly is Complite then code is replace the Code Server
 
 
-public function apply($userid , $id ,$status,$module)
+public function apply($userid , $id ,$status,$module,$user_name,$email)
 {
-
- 
-//print_r($module);die;
-
 switch ($module)
  {
    case 1:
      $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
    case 2:
-       $entry_passcode = $this->generate_random_code(6);
-       $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES ('0','$userid','$id',CURDATE(),'$status','$entry_passcode')");
+
+   $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+   $entry_passcode='';
+   for ($i = 0; $i < 20; $i++)
+                 {
+                    $n    = rand(0, strlen($alphabet)-1);
+                    $entry_passcode .= $alphabet[$n];
+                 }
+
+            // $where = "`id`  = $id";
+            // $row             =    $this->searchEvent($where);
+            // $name            =    $row['name'];
+            // $organizer_name  =    $row['organizer_name'];
+            // $sport_name      =    $row['sport_name'];
+            // $start_date      =    $row['start_date'];
+
+                      //  print_r($row);die();
+
+              $object  = new generate_code();
+              $qur = $object->qr_code($entry_passcode,$user_name,$email);
+        $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES ('0','$userid','$id',CURDATE(),'$status','$entry_passcode')");
      break;
+
+
      case 3:
        $query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
        break;
        default :
-          //echo "default";break;
+          
   
  }  //End Switch
     if($query)

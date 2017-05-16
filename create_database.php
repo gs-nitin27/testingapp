@@ -6,6 +6,11 @@ include('services/UserProfileService.php');
 include('services/emailService.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
+include('services/generate_code.php');
+
+//include('test/bar.php');
+// include "BarcodeQR.php"; 
+
 error_reporting(E_ERROR | E_PARSE);
 
 // SignUp The New User  using the GetsportyLite 
@@ -1924,15 +1929,17 @@ echo json_encode($data);
 
 else if($_REQUEST['act'] == "apply")
 {
-  
 $userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
 $id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
 $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
 $module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
+$user_name   = urldecode($_REQUEST ['user_name']);  // User is Apply the Job=1 Event=2 Tournament=3
+$email       = urldecode($_REQUEST ['email']);  // User is Apply the Job=1 Event=2 Tournament=3
+
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();
-$response    =  $request->apply($userid,$id,$type,$module);
+$response    =  $request->apply($userid,$id,$type,$module,$user_name,$email);
 $date        = date("F j, Y, g:i a");
 $user_app    = 'M';
     if ($response)
