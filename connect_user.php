@@ -1060,6 +1060,7 @@ else if($_REQUEST['act'] == 'view_schedule')
   $message = "Success";
   }else
   {
+  $status = "0";  
   $message = "Failure";  
   }
   $response = array('status' => $status,'data'=>$res,'msg'=>$message );
