@@ -97,10 +97,6 @@ if($_REQUEST['act'] == 'connect')
 
          echo json_encode($user);
 
-
-
-
-
    }
 
    else if($res == 2)
@@ -132,20 +128,6 @@ if($_REQUEST['act'] == 'connect')
    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*****************************Get All Connected Users*******************************/
 
@@ -447,16 +429,10 @@ $response       =  $request->getClass($userid);
 else if($_REQUEST['act'] == 'daily_log')
 
 {
-
- 
-
  $data               =  file_get_contents("php://input");
-
  $userdata           =  json_decode(file_get_contents("php://input"));
-
-  $request           =  new connect_userservice();
-
-  $response          =  $request->createdDailyLog($userdata);
+ $request            =  new connect_userservice();
+ $response           =  $request->createdDailyLog($userdata);
 
 if($response)
 
@@ -1033,7 +1009,7 @@ if($response)
 
 
 
-/*********************************View Athlete Log by the Athelete*****************************/
+/*************************** View Athlete Log by the Athelete *****************************/
 
 else if($_REQUEST['act'] == 'veiw_athlete_log')
 {
@@ -1051,6 +1027,44 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
              $Result = array('status' => '0','data'=>[] ,'msg'=>'Not seen Athlete Log');
              echo json_encode($Result);
   } 
+}
+else if ($_REQUEST['act'] == 'create_schedule') {
+ 
+  $data = json_decode(file_get_contents("php://input"));
+  $obj  = new connect_userservice();
+  $res  = $obj->create_user_schedule($data);
+  if($res != 0)
+  {
+    $msg = 'Success';
+    $status = 1;
+     
+  }else
+  {
+    $msg = 'Failure';
+    $status = 0;
+
+  }
+    $response = array('status'=>$status,'data'=>$res,'msg'=>$msg);
+    echo json_encode($response);
+
+}
+
+else if($_REQUEST['act'] == 'view_schedule')
+{
+  $user_id = $_REQUEST['user_id'];
+  $req = new connect_userservice();
+  $res = $req->view_user_schedule($user_id);
+  if($res != "0")
+  {
+  $status = "1";
+  $message = "Success";
+  }else
+  {
+  $status = "0";  
+  $message = "Failure";  
+  }
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
+  echo json_encode($response);
 }
 
 
