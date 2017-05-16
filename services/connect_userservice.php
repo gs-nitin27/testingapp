@@ -1665,11 +1665,10 @@ $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$us
 
 public function create_user_schedule($data)
 {
-  
-  $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`, `date_created`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->date_created')");
+   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created')");
   if($query)
   {
-    return "1";
+    return mysql_insert_id();
 
   }else
 

@@ -1035,14 +1035,16 @@ else if ($_REQUEST['act'] == 'create_schedule') {
   $res  = $obj->create_user_schedule($data);
   if($res != 0)
   {
-    $msg    = 'Success';
+    $msg = 'Success';
+    $status = 1;
      
   }else
   {
     $msg = 'Failure';
+    $status = 0;
 
   }
-    $response = array('status'=>$res,'msg'=>$msg);
+    $response = array('status'=>$status,'data'=>$res,'msg'=>$msg);
     echo json_encode($response);
 
 }
