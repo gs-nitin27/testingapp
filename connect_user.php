@@ -1049,7 +1049,7 @@ else if ($_REQUEST['act'] == 'create_schedule') {
 
 else if($_REQUEST['act'] == 'view_schedule')
 {
-  $user_id = $_REQUEST['userid'];
+  $user_id = $_REQUEST['user_id'];
   $req = new connect_userservice();
   $res = $req->view_user_schedule($user_id);
   if($res != "0")
