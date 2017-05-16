@@ -1028,8 +1028,13 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
              echo json_encode($Result);
   } 
 }
-else if ($_REQUEST['act'] == 'create_schedule') {
- 
+
+
+
+/************************************************Create Schedule********************************************/
+
+else if ($_REQUEST['act'] == 'create_schedule') 
+{
   $data = json_decode(file_get_contents("php://input"));
   $obj  = new connect_userservice();
   $res  = $obj->create_user_schedule($data);
@@ -1058,13 +1063,41 @@ else if($_REQUEST['act'] == 'view_schedule')
   {
   $status = "1";
   $message = "Success";
-  }else
+  }
+  else
   {
   $status = "0";  
   $message = "Failure";  
   }
   $response = array('status' => $status,'data'=>$res,'msg'=>$message );
   echo json_encode($response);
+}
+
+
+
+/****************************************************************************************/
+
+else if($_REQUEST['act'] == 'update_schedule')
+{
+  $id             = $_REQUEST['id'];
+  $time_of_day    = $_REQUEST['time_of_day'];
+  $active_status  = $_REQUEST['active_status'];
+  $req            = new connect_userservice();
+  $res            = $req->update_user_schedule($id,$time_of_day,$active_status);
+  if($res=='1')
+  {
+  $status = "1";
+  $message = "Success";
+  }
+  else
+  {
+  $status = "0";  
+  $message = "Failure";  
+  }
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
+  echo json_encode($response);
+}
+
 }
 
 

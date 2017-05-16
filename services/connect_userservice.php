@@ -1674,6 +1674,38 @@ public function create_user_schedule($data)
 
     return "0";
 }
+
+
+public function update_user_schedule($id,$time_of_day,$active_status)
+{
+  if(!empty($time_of_day)) 
+  {
+    $time_of_day  = $time_of_day;
+  }  
+   if (!empty($active_status)) 
+  {
+    $active_status  = $active_status;
+  } 
+   $query   = mysql_query("UPDATE `gs_athletes_schedule` SET `time_of_day`= '$time_of_day' , `active_status` = '$active_status' WHERE `id` =$id  ")  ;
+$num=mysql_affected_rows(); 
+mysql_num_rows($num)
+
+if ($query) 
+{
+    return 1;
+}
+else
+{
+  return 0;
+}
+
+}  // End of Function
+
+
+
+
+
+
 /******************************************************************************************/
 } // End Class
 
