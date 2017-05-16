@@ -1042,7 +1042,7 @@ else if ($_REQUEST['act'] == 'create_schedule') {
     $msg = 'Failure';
 
   }
-    $response = array('status'=>$res,'message'=>$msg);
+    $response = array('status'=>$res,'msg'=>$msg);
     echo json_encode($response);
 
 }
@@ -1060,7 +1060,7 @@ else if($_REQUEST['act'] == 'view_schedule')
   {
   $message = "Failure";  
   }
-  $response = array('Status' => $status,'Data'=>$res,'message'=>$message );
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
   echo json_encode($response);
 }
 
