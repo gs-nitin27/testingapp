@@ -1075,7 +1075,7 @@ else if($_REQUEST['act'] == 'view_schedule')
 
 
 
-/****************************************************************************************/
+/*********************************Update Schedule**************************/
 
 else if($_REQUEST['act'] == 'update_schedule')
 {
@@ -1098,7 +1098,7 @@ else if($_REQUEST['act'] == 'update_schedule')
   echo json_encode($response);
 }
 
-}
+
 
 
 
