@@ -15,9 +15,9 @@ error_reporting(E_ERROR | E_PARSE);
 if($_REQUEST['act'] == "tournament_participants_list")
 {
    $userid  = urldecode($_REQUEST['user_id']);
-   $tour_id = urldecode($_REQUEST['id']);
+   $tournament_id = urldecode($_REQUEST['tournament_id']);
    $req     = new tournament_service();
-   $res     = $req->tournament_participants_list($tour_id);
+   $res     = $req->tournament_participants_list($tournament_id);
    if($res)
    {
    	$data = array('data'=>$res,'status'=>'1');

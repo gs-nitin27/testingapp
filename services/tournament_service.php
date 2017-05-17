@@ -2,9 +2,10 @@
 class tournament_service
 {
 
- public function tournament_participants_list($tour_id)
+ public function tournament_participants_list($tournament_id)
  {
-    $query =mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `user_tournaments` WHERE `usertournament` = $tour_id)");
+
+    $query =mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `user_tournaments` WHERE `usertournament` = $tournament_id)");
 			if(mysql_num_rows($query)>0)
 			{
 				while ($row = mysql_fetch_assoc($query)) 
