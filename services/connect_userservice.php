@@ -1676,28 +1676,33 @@ public function create_user_schedule($data)
 }
 
 
+/***************************************Update Schedule Function**************************************/
+
+
 public function update_user_schedule($id,$time_of_day,$active_status)
 {
-  if(!empty($time_of_day)) 
+        $arr = array();
+        if($time_of_day != '')
+        {
+          $column[] = " `time_of_day` = '$time_of_day' ";
+          $arr['time_of_day'] = $time_of_day;
+        }
+        if($active_status != '')
+        {
+          $column[] = " `active_status` = '$active_status' ";
+          $arr['active_status'] = $active_status;
+        }
+         $update_column = implode(',', $column);
+  $query   = mysql_query("UPDATE `gs_athletes_schedule` SET $update_column  WHERE `id` =$id  ")  ;
+ $num=mysql_affected_rows(); 
+  if ($num) 
   {
-    $time_of_day  = $time_of_day;
-  }  
-   if (!empty($active_status)) 
+      return 1;
+  }
+  else
   {
-    $active_status  = $active_status;
-  } 
-   $query   = mysql_query("UPDATE `gs_athletes_schedule` SET `time_of_day`= '$time_of_day' , `active_status` = '$active_status' WHERE `id` =$id  ")  ;
-$num=mysql_affected_rows(); 
-mysql_num_rows($num);
-
-if ($query) 
-{
-    return 1;
-}
-else
-{
-  return 0;
-}
+    return 0;
+  }
 
 }  // End of Function
 
@@ -1705,8 +1710,6 @@ else
 
 
 
-
-/******************************************************************************************/
 } // End Class
 
 

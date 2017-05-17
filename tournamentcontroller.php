@@ -7,6 +7,9 @@ include('services/emailService.php');
 include('services/event_service.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
+include('services/tournament_service.php');
+
+
 error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == "tournament_participants_list")
