@@ -1688,7 +1688,7 @@ public function update_user_schedule($id,$time_of_day,$active_status)
   } 
    $query   = mysql_query("UPDATE `gs_athletes_schedule` SET `time_of_day`= '$time_of_day' , `active_status` = '$active_status' WHERE `id` =$id  ")  ;
 $num=mysql_affected_rows(); 
-mysql_num_rows($num)
+mysql_num_rows($num);
 
 if ($query) 
 {
