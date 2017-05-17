@@ -1694,7 +1694,7 @@ public function update_user_schedule($id,$time_of_day,$active_status)
         }
          $update_column = implode(',', $column);
   $query   = mysql_query("UPDATE `gs_athletes_schedule` SET $update_column  WHERE `id` =$id  ")  ;
- $num=mysql_affected_rows(); 
+  $num=mysql_affected_rows(); 
   if ($num) 
   {
       return 1;
@@ -1705,6 +1705,27 @@ public function update_user_schedule($id,$time_of_day,$active_status)
   }
 
 }  // End of Function
+
+/****************************************************************************************************/
+
+
+public function log_unassign($data)
+{
+$query   = mysql_query("DELETE FROM `gs_athlit_dailylog` WHERE `coach_assignment_id`='$data->logid' AND `userid` IN ($data->student_id_list)")  ;
+$num=mysql_affected_rows(); 
+if ($num) 
+{
+   return 1;
+}
+else
+{
+   return 0;
+}
+}  // End Function 
+
+
+
+
 
 
 
