@@ -573,7 +573,7 @@ $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`
 
 
 }
-  ticket_detail
+  
 
 else if ($type == 2) 
 {
@@ -675,12 +675,6 @@ if($query)
 }
 
   }
-
-feetype
-
-ticket_detail
-
-no_of_ticket
 
 public function eventsearch($keyword)
 {
