@@ -80,8 +80,6 @@ public function emailVarification($email)
                $mail->Send();
           return 1;
    
-
-
           } // End Function
    
           

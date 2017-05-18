@@ -1057,24 +1057,28 @@ else if ($_REQUEST['act'] == 'create_schedule')
 
 }
 
-else if($_REQUEST['act'] == 'view_schedule')
-{
-  $user_id = $_REQUEST['user_id'];
-  $req = new connect_userservice();
-  $res = $req->view_user_schedule($user_id);
-  if($res != "0")
+
+
+
+/******************************View Schedule*******************/
+
+  else if($_REQUEST['act'] == 'view_schedule')
   {
-  $status = "1";
-  $message = "Success";
-  }
-  else
-  {
-  $status = "0";  
-  $message = "Failure";  
-  }
-  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
-  echo json_encode($response);
-}
+      $user_id = $_REQUEST['user_id'];
+      $req = new connect_userservice();
+      $res = $req->view_user_schedule($user_id);
+      if($res != "0")
+      {
+        $response = array('status' => '1','data'=>$res,'msg'=>'Success' );
+        echo json_encode($response);
+      }
+      else
+      {
+        $response = array('status' => '0','data'=>[],'msg'=>'Failure' );
+        echo json_encode($response);
+      }
+  }  
+
 
 
 
@@ -1107,7 +1111,7 @@ else if($_REQUEST['act'] == 'update_schedule')
 
 else if($_REQUEST['act'] == 'log_unassign')
 {
-  $data = json_decode(file_get_contents("php://input"));
+  $data               =  json_decode(file_get_contents("php://input"));
   $req                =  new connect_userservice();
   $res                =  $req->log_unassign($data);
   if($res=='1')

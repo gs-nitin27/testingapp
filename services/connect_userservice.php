@@ -1706,13 +1706,13 @@ public function update_user_schedule($id,$time_of_day,$active_status)
 
 }  // End of Function
 
-/****************************************************************************************************/
 
+
+/*****************************Log Unassign*****************************/
 
 public function log_unassign($data)
 {
 $query   = mysql_query("DELETE FROM `gs_athlit_dailylog` WHERE `coach_assignment_id`='$data->logid' AND `userid` IN ($data->student_id_list)")  ;
-//$num=mysql_affected_rows(); 
 if($query) 
 {
    return 1;
