@@ -269,11 +269,8 @@ $mail = new PHPMailer();
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
- //              echo "meassage is sent ";
+
          // return 1;
-   
-echo "save ";
-die();
 return 1;
 
 }

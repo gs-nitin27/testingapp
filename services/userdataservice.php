@@ -2188,17 +2188,21 @@ switch ($module)
      $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
    case 2:
-
-   $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
    $entry_passcode='';
    for ($i = 0; $i < 20; $i++)
                  {
                     $n    = rand(0, strlen($alphabet)-1);
                     $entry_passcode .= $alphabet[$n];
                  }
+             //  $req      = new email_template();
+             // $ob = $req->template_content($name,$user_name);
 
-            // $where = "`id`  = $id";
-            // $row             =    $this->searchEvent($where);
+             // ->template_content()
+
+             // print_r($row);die();
+
+
             // $name            =    $row['name'];
             // $organizer_name  =    $row['organizer_name'];
             // $sport_name      =    $row['sport_name'];
@@ -2206,8 +2210,8 @@ switch ($module)
 
                       //  print_r($row);die();
 
-              $object  = new generate_code();
-              $qur = $object->qr_code($entry_passcode,$user_name,$email);
+             $object  = new generate_code();
+             $qur     = $object->qr_code($entry_passcode,$user_name,$email);
         $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES ('0','$userid','$id',CURDATE(),'$status','$entry_passcode')");
      break;
 

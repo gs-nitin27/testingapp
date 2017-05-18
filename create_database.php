@@ -8,9 +8,6 @@ include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/generate_code.php');
 
-//include('test/bar.php');
-// include "BarcodeQR.php"; 
-
 error_reporting(E_ERROR | E_PARSE);
 
 // SignUp The New User  using the GetsportyLite 
@@ -1935,7 +1932,7 @@ $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status
 $module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
 $user_name   = urldecode($_REQUEST ['user_name']);  // User is Apply the Job=1 Event=2 Tournament=3
 $email       = urldecode($_REQUEST ['email']);  // User is Apply the Job=1 Event=2 Tournament=3
-
+//echo "$userid";die();
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();
