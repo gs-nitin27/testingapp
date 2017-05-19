@@ -50,12 +50,35 @@ public function add_child($decode_data)
        {
              $child_id = mysql_insert_id();
              if($child_id!=NULL)
-              {
-              	 $data1 = $this->insert_association($parent_id,$child_id);
+              {  $unique_code = rand();
+              	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
                  $data  = $this->get_child_data($child_id);
              
               }
               return $data['userid'];
+        } 
+        else
+        {    
+            return 0;
+        }  
+        
+} 
+
+
+/******************************This Function for adding a parent***********************/
+public function add_Parent($parent_email,$child_id)
+{  $unique_code = rand();
+   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`date_created`,`unique_code`) VALUES('$parent_email','104','6','Parent','CURDATE()','$unique_code')");
+       if($query)
+       {
+             $parent_id = mysql_insert_id();
+             if($parent_id!=NULL)
+              {
+              	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
+                // $data  = $this->get_child_data($child_id);
+             
+              }
+              return 1;//$data['userid'];
         } 
         else
         {    
@@ -81,13 +104,13 @@ public function get_child_data($child_id)
 
 } // End Function
 
-public function insert_association($parent_id,$child_id)
+public function insert_association($parent_id,$child_id,$unique_code)
 {
-	$unique_code = rand();
+	
 	$query = mysql_query("INSERT INTO `gs_association`(`parent_id`,`child_id`,`unique_code`) VALUES('$parent_id','$child_id','$unique_code')");
 	 if ($query)
 	 {
-				return 1;
+		return 1;
 	 }
 	 else
 	 {
@@ -142,6 +165,9 @@ public function child_account_verify($code,$email)
 	}
 
 }
+
+
+
 
 }  // End Class
 
