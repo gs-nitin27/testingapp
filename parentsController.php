@@ -85,25 +85,25 @@ switch ($_REQUEST['act'])
 			  }
 			  $Result = array('status' =>$res,'data'=>$res ,'msg'=>$msg);
 	            echo json_encode($Result);  
-			break;
-			case 'add_parent':  // Api for activating child account by a parent
-		  $child_id 		    = $_REQUEST['child_id'];
-		  $parent_email 		= $_REQUEST['parent_email'];
-		  
-		  $req       		= new userdataservice();
-		  $where            = "WHERE `email` =".$parent_email." ";
-		  $Verified        = $req->userVarify($where);
-		  if($activated == 0)
-		  { $Obj  = new parentsUserService();
-		  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
-		  	$status = $create_account;
-		  	$msg = 'success';
-		  }else
-		  { $status = "0";
-		  	$msg = 'failure';
-		  }
-		  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
-		        echo json_encode($response); 
+		break;
+	    case 'add_parent':  // Api for Adding Parent account by child
+			  $child_id 		    = $_REQUEST['child_id'];
+			  $parent_email 		= $_REQUEST['parent_email'];
+			  
+			  $req       		= new userdataservice();
+			  $where            = "WHERE `email` =".$parent_email." ";
+			  $Verified        = $req->userVarify($where);
+			  if($activated == 0)
+			  { $Obj  = new parentsUserService();
+			  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
+			  	$status = $create_account;
+			  	$msg = 'success';
+			  }else
+			  { $status = "0";
+			  	$msg = 'failure';
+			  }
+			  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
+			        echo json_encode($response); 
 		break;
 		
 
