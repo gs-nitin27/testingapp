@@ -246,10 +246,6 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 /******************* Display Class Information Created By Coach*************/
 
-
-
-
-
   else if($_REQUEST['act'] == 'get_classes_info')
  {
  $class_id         =  @$_REQUEST['class_id'];
@@ -258,13 +254,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $request          =  new connect_userservice();
  $con_res          =  $request->getConnect($student_id,$coach_id);
  $response         =  $request->getClassInfo($class_id);
-if ($response)
+ if ($response)
  {
   if (!empty($student_id))
   {
     $response              =  $request->getClassJoinStudent($response, $student_id);
   }
-   $con_res                 =   $request->getConnect($student_id,$coach_id);
+   $con_res                =   $request->getConnect($student_id,$coach_id);
    $response[0]['connection_status']= "$con_res";
    $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
    echo json_encode($Result);
@@ -1045,8 +1041,8 @@ else if ($_REQUEST['act'] == 'create_schedule')
   {
     $msg = 'Success';
     $status = 1;
-     
-  }else
+  }
+  else
   {
     $msg = 'Failure';
     $status = 0;
