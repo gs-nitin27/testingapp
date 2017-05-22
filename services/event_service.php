@@ -26,11 +26,12 @@ public function  check_entry_passcode($userdata)
 {
 	$event_id           =  $userdata->event_id;
     $entry_passcode     =  $userdata->entry_passcode;
-	$query  =mysql_query("SELECT *FROM `user_events` WHERE  `userevent` = '$event_id' AND `entry_passcode`='$entry_passcode'");
+	$query  = mysql_query("SELECT *FROM `user_events` WHERE  `userevent` = '$event_id' AND `entry_passcode`='$entry_passcode'");
 	$num = mysql_num_rows($query);
 	if ($num>0) 
 	{
-		return 1;
+	 mysql_query("UPDATE  `user_events` SET  `status` = '2' WHERE `entry_passcode` = '$entry_passcode' ");
+     return 1;
 	}
 	else
 	{
