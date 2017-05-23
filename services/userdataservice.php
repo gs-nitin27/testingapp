@@ -169,7 +169,6 @@ return 0;
 */
 public function UserSignup($data)
 {
- // print_r($data);die();
 $name               =  $data->name;
 $email              =  $data->email;
 $password           =  $data->password;
@@ -2196,6 +2195,7 @@ switch ($module)
                     $n    = rand(0, strlen($alphabet)-1);
                     $entry_passcode .= $alphabet[$n];
                  }
+                 
              //  $req      = new email_template();
              // $ob = $req->template_content($name,$user_name);
 

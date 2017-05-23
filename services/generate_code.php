@@ -9,7 +9,7 @@ $qr->text($entry_passcode);
 $qr->draw(150, "QrCodeImage/qr-code.png");
 require('class.phpmailer.php');
 $mail = new PHPMailer();
-              $email = "nitin@darkhorsesports.in";
+            //  $email = "nitin@darkhorsesports.in";
               $to=$email;
               $from="info@getsporty.in";
               $from_name="Getsporty Lite";
