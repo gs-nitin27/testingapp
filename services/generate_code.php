@@ -1,20 +1,22 @@
 <?php 
 class generate_code 
 {
-public function qr_code($entry_passcode,$user_name,$email)
+public function qr_code($entry_passcode,$user_name,$email,$row)
 {
+$evnet_name      =    $row[0]['name'];
+$organizer_name  =    $row[0]['organizer_name'];
+$sport_name      =    $row[0]['sport_name'];
+$start_date      =    $row[0]['start_date'];
 require('BarcodeQR.php');
 $qr = new BarcodeQR(); 
 $qr->text($entry_passcode); 
 $qr->draw(150, "QrCodeImage/qr-code.png");
 require('class.phpmailer.php');
 $mail = new PHPMailer();
-            //  $email = "nitin@darkhorsesports.in";
               $to=$email;
               $from="info@getsporty.in";
               $from_name="Getsporty Lite";
               $subject="Pass code for New User ";
-              $emailconform="getsporty.in/testingactivation.php?email=";
               $mail = new PHPMailer();  // create a new object
               $mail->IsSMTP(); // enable SMTP
               $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
@@ -159,12 +161,12 @@ $mail = new PHPMailer();
             <tr><td> <img width = "100%" height = "200px"  src ="http://getsporty.in/staging/uploads/event/res_1494850039.jpg" > </td> </tr>
             <tr>
                 <td bgcolor="#ffffff" style="padding: 40px 40px 20px;">
-                    <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Hi user</h1>
+                    <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Hi '.$user_name.'</h1>
                 </td>
             </tr>
             <tr>
                 <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-                    <p style="margin: 0;">Greetings from GetSporty,<br>Thanks for showing interest in participating in the (event name) which is scheduled for 4 pm kick-off on <b> Tuesday May 15 at Ambedkar Stadium.</b>
+                    <p style="margin: 0;">Greetings from GetSporty,<br>Thanks for showing interest in participating in the <b>'.$evnet_name.'</b> which is scheduled for 4 pm kick-off on <b>'.$start_date.' .</b>
                      Please find the attached PDF file to download the event <b>QR Code </b> as you will need it to enter the event<vr>
                     </p>
                 </td>

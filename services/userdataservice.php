@@ -2195,24 +2195,10 @@ switch ($module)
                     $n    = rand(0, strlen($alphabet)-1);
                     $entry_passcode .= $alphabet[$n];
                  }
-                 
-             //  $req      = new email_template();
-             // $ob = $req->template_content($name,$user_name);
-
-             // ->template_content()
-
-             // print_r($row);die();
-
-
-            // $name            =    $row['name'];
-            // $organizer_name  =    $row['organizer_name'];
-            // $sport_name      =    $row['sport_name'];
-            // $start_date      =    $row['start_date'];
-
-                      //  print_r($row);die();
-
+                  $where  = "`id` = $id";
+                 $row =$this->searchEvent($where);
              $object  = new generate_code();
-             $qur     = $object->qr_code($entry_passcode,$user_name,$email);
+             $qur     = $object->qr_code($entry_passcode,$user_name,$email,$row);
         $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES ('0','$userid','$id',CURDATE(),'$status','$entry_passcode')");
      break;
 
