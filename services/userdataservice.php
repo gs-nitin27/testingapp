@@ -1326,6 +1326,7 @@ $query      = mysql_query("SELECT  * FROM `gs_resources` WHERE $whereclause ");
                  $row['fav'] = '0';
                  $data[] = $row;
                }
+
                return $data;
           } 
          else
