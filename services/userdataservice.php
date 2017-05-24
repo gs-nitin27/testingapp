@@ -1307,27 +1307,28 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 
-
+//mysqli_set_charset($dbc, 'utf8');
 
 /***********************Search the Article From Resources Table*****************/
 
 public function findArticle($whereclause)
 {
-$query      = mysql_query("SELECT  * FROM `gs_resources` WHERE $whereclause ");
- $num       =  mysql_num_rows($query);
+$query      = mysql_query("SELECT   *FROM `gs_resources` WHERE $whereclause ");
+$num        =  mysql_num_rows($query);
          if($num>=0) 
          {
                while($row = mysql_fetch_assoc($query))
                {
-                 $des1=strip_tags($row['description']); 
-                 $row['description'] = $des1;
-                 $sum1=strip_tags($row['summary']);
-                 $row['summary'] = $sum1; 
-                 $row['fav'] = '0';
-                 $data[] = $row;
+                 $title               = strip_tags($row['title']);
+                 $row['title']        = utf8_encode($title);                 
+                 $des1                = strip_tags($row['description']);
+                 $row['description']  = utf8_encode($des1);
+                 $sum1                = strip_tags($row['summary']);
+                 $row['summary']      = utf8_encode($sum1);
+                 $row['fav']          = '0';
+                 $data[]              = $row;
                }
-
-               return $data;
+                return $data;
           } 
          else
          {
