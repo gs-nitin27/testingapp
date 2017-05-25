@@ -162,8 +162,7 @@ switch ($logintype)
 
                           $data = array('status' => 0,'data'=>$res2,'msg'=>'User registered');
                            echo json_encode($data);
-                           
-                    }
+                       }
                   }
     break;
   

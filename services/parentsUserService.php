@@ -159,12 +159,75 @@ public function child_account_verify($code,$email)
 	if($query)
 	{
 		return "1";
-	}else
+	}
+	else
 	{
 		return "0";
 	}
 
 }
+
+
+
+
+public function get_all_child($parent_id,$id,$module)
+{
+$query = mysql_query("SELECT `userType`,`userid`,`name`,`sport`,`dob` FROM user WHERE `userid` IN (SELECT `child_id`FROM `gs_association` WHERE `parent_id`='$parent_id')");
+$num = mysql_num_rows($query);
+if ($num>0)
+{
+	while($row = mysql_fetch_assoc($query))
+	{
+		$userid 			 = $row['userid'];
+		$dob	 			 = $row['dob'];
+		$query1 			 = mysql_query("SELECT get_age('$dob', NOW()) AS age ");
+		$age    			 = mysql_fetch_assoc($query1);
+		$row['age ']  		 = $age['age'] ;
+		$apply_status 		 = $this->cheack_apply_status($userid,$id,$module);
+		$row['apply_status'] = $apply_status;
+		$data[]  			 = $row;
+	}
+       	return $data;
+}
+else
+{
+	return 0;
+}
+
+}  // End of Function
+
+
+public function cheack_apply_status($userid,$id,$module)
+{
+         if($module=='1')
+          {
+         	$table	=	"`user_jobs` WHERE `userid` = $userid AND `userjob` = $id ";
+          }
+		  if($module=='2')
+          {
+          	$table 	=	"`user_events` WHERE `userid` = $userid AND `userevent` = $id ";
+          }
+  
+          if($module=='3')
+          {
+         	$table 	= 	"`user_tournaments` WHERE `userid` = $userid AND `usertournament` = $id ";
+          }
+          
+	$query = mysql_query("SELECT `status` FROM $table ");
+	$num = mysql_num_rows($query);
+	if ($num>0)
+	{
+		$row = mysql_fetch_assoc($query);
+		return $row['status'];
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+
 
 
 

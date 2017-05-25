@@ -87,12 +87,11 @@ switch ($_REQUEST['act'])
 	            echo json_encode($Result);  
 		break;
 	    case 'add_parent':  // Api for Adding Parent account by child
-			  $child_id 		    = $_REQUEST['child_id'];
-			  $parent_email 		= $_REQUEST['parent_email'];
-			  
+			  $child_id 	    = $_REQUEST['child_id'];
+			  $parent_email 	= $_REQUEST['parent_email'];
 			  $req       		= new userdataservice();
 			  $where            = "WHERE `email` =".$parent_email." ";
-			  $Verified        = $req->userVarify($where);
+			  $Verified         = $req->userVarify($where);
 			  if($activated == 0)
 			  { $Obj  = new parentsUserService();
 			  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
@@ -105,7 +104,37 @@ switch ($_REQUEST['act'])
 			  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
 			        echo json_encode($response); 
 		break;
+/*
+	This act for cheack the child is apply on Job,Event, Tournament and display the All child of 
+	particular 
+	id = for job Id , event Id, or Tournament Id
+	module => 1 for job, 2 for event , 3 for tournament
+*/
+			case 'get_child_status':
+					$parent_id       =  $_REQUEST['parent_id'];
+					$id        		 =  $_REQUEST['id'];
+					$module      	 =  $_REQUEST['module'];
+					$request         =  new parentsUserService();
+					$response 		 =  $request->get_all_child($parent_id,$id,$module);
+				if($response)
+				 {
+				             $Result = array('status' => '1','data'=>$response ,'msg'=>'Child List');
+				             echo json_encode($Result);
+				 }
+				 else
+				 {                     
+				            $Result = array('status' => '0','data'=>$response ,'msg'=>'No  Child List');
+				            echo json_encode($Result);
+				 }
+
+		break;
 		
+
+
+
+
+
+
 
 	default:
 
