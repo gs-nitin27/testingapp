@@ -227,12 +227,10 @@ public function cheack_apply_status($userid,$id,$module)
 }
 
 
+// 2 = Event 3 = Tournament
 
 public function child_apply($child_ids,$res_id,$module,$parent_name,$parent_email)
 {
-
-
-
 if(!empty($child_ids) && !empty($module) )
 {
 $total_child_id = (explode(",",$child_ids));
@@ -252,25 +250,24 @@ foreach ($total_child_id as $key => $userid)
               // $req      =  new generate_code();
               //  $qur      =  $req->qr_code($entry_passcode,$user_name,$email,$row);
 }
-
 $values  = (implode(",",$record));
+if ($module==2) 
+{
 $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
-return 1;
+}
+if($module==3) 
+{
+	$query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`,`entry_passcode`)  VALUES $values");
 }
 
-
+return 1;
+}
 else
 {
 	return 0;
 }
 
-}
-
-
-
-
-
-//}  // End of Function
+}  // End of Function
 
 
 
