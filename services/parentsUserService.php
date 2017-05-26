@@ -2,7 +2,6 @@
 class parentsUserService
 {
 
-
 public function  get_parent_child($parent_id)
 {  
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
@@ -182,7 +181,7 @@ if ($num>0)
 		$dob	 			 = $row['dob'];
 		$query1 			 = mysql_query("SELECT get_age('$dob', NOW()) AS age ");
 		$age    			 = mysql_fetch_assoc($query1);
-		$row['age ']  		 = $age['age'] ;
+		$row['age']  		 = $age['age'] ;
 		$apply_status 		 = $this->cheack_apply_status($userid,$id,$module);
 		$row['apply_status'] = $apply_status;
 		$data[]  			 = $row;
@@ -226,6 +225,42 @@ public function cheack_apply_status($userid,$id,$module)
 	}
 
 }
+
+
+
+public function child_apply($child_ids,$res_id,$module,$user_name,$email)
+{
+$total_child_id = (explode(",",$child_ids));
+foreach ($total_child_id as $key => $userid)
+{
+  $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+   $entry_passcode='';
+   for ($i = 0; $i < 20; $i++)
+   {
+       $n    = rand(0, strlen($alphabet)-1);
+       $entry_passcode .= $alphabet[$n];
+      }
+                 $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
+			  //	$where    =  "`id` = $res_id";
+              //  $object   = new  userdataservice();
+              // $row      =  $object->searchEvent($where);
+              // $req      =  new generate_code();
+              //  $qur      =  $req->qr_code($entry_passcode,$user_name,$email,$row);
+}
+
+$values  = (implode(",",$record));
+$query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
+return 1;
+}
+
+
+
+
+
+
+
+//}  // End of Function
+
 
 
 

@@ -2,6 +2,10 @@
 include('config1.php');
 include('services/parentsUserService.php');
 include('services/emailService.php');
+include('services/userdataservice.php');
+include('services/generate_code.php');
+
+
 error_reporting(E_ERROR | E_PARSE);
 $nodata = [];
 
@@ -128,7 +132,27 @@ switch ($_REQUEST['act'])
 				 }
 
 		break;
-		
+
+			case 'child_apply':
+					$child_ids       =  $_REQUEST['child_ids'];  // User id
+					$res_id       	 =  $_REQUEST['res_id'];  // jobID OR eventID Or TournamentID
+					$module      	 =  $_REQUEST['module'];  // Module 1=Job, 2= Event 3= Tournament
+					$user_name     	 =  $_REQUEST['user_name'];
+					$email      	 =  $_REQUEST['email'];
+					$request         =  new parentsUserService();
+					$response 		 =  $request->child_apply($child_ids,$res_id,$module,$user_name,$email);
+				if($response)
+				 {
+				             $Result = array('status' => '1','data'=>$response ,'msg'=>'apply success');
+				             echo json_encode($Result);
+				 }
+				 else
+				 {                     
+				            $Result = array('status' => '0','data'=>$response ,'msg'=>'Not apply');
+				            echo json_encode($Result);
+				 }
+
+		break;
 
 
 
