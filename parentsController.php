@@ -137,13 +137,13 @@ switch ($_REQUEST['act'])
 					$child_ids       =  $_REQUEST['child_ids'];  // User id
 					$res_id       	 =  $_REQUEST['res_id'];  // jobID OR eventID Or TournamentID
 					$module      	 =  $_REQUEST['module'];  // Module 1=Job, 2= Event 3= Tournament
-					$user_name     	 =  $_REQUEST['user_name'];
-					$email      	 =  $_REQUEST['email'];
+					$parent_name   	 =  $_REQUEST['parent_name'];
+					$parent_email  	 =  $_REQUEST['parent_email'];
 					$request         =  new parentsUserService();
-					$response 		 =  $request->child_apply($child_ids,$res_id,$module,$user_name,$email);
+					$response 		 =  $request->child_apply($child_ids,$res_id,$module,$parent_name,$parent_email);
 				if($response)
 				 {
-				             $Result = array('status' => '1','data'=>$response ,'msg'=>'apply success');
+				            $Result = array('status' => '1','data'=>$response ,'msg'=>'apply success');
 				             echo json_encode($Result);
 				 }
 				 else

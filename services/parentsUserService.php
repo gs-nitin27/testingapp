@@ -228,7 +228,12 @@ public function cheack_apply_status($userid,$id,$module)
 
 
 
-public function child_apply($child_ids,$res_id,$module,$user_name,$email)
+public function child_apply($child_ids,$res_id,$module,$parent_name,$parent_email)
+{
+
+
+
+if(!empty($child_ids) && !empty($module) )
 {
 $total_child_id = (explode(",",$child_ids));
 foreach ($total_child_id as $key => $userid)
@@ -254,6 +259,12 @@ return 1;
 }
 
 
+else
+{
+	return 0;
+}
+
+}
 
 
 
