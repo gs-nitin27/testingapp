@@ -220,6 +220,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                  $row['summary'] = $sum1; 
                  $row['fav'] = '0';
                  $data[] = $row;
+                 
             }
           return $data;
         }

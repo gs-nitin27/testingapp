@@ -2,7 +2,6 @@
 class parentsUserService
 {
 
-
 public function  get_parent_child($parent_id)
 {  
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
@@ -50,8 +49,8 @@ public function add_child($decode_data)
        {
              $child_id = mysql_insert_id();
              if($child_id!=NULL)
-              {
-              	 $data1 = $this->insert_association($parent_id,$child_id);
+              {  $unique_code = rand();
+              	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
                  $data  = $this->get_child_data($child_id);
              
               }
@@ -64,9 +63,32 @@ public function add_child($decode_data)
         
 } 
 
+
+/******************************This Function for adding a parent***********************/
+public function add_Parent($parent_email,$child_id)
+{  $unique_code = rand();
+   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`date_created`,`unique_code`) VALUES('$parent_email','104','6','Parent','CURDATE()','$unique_code')");
+       if($query)
+       {
+             $parent_id = mysql_insert_id();
+             if($parent_id!=NULL)
+              {
+              	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
+                // $data  = $this->get_child_data($child_id);
+             
+              }
+              return 1;//$data['userid'];
+        } 
+        else
+        {    
+            return 0;
+        }  
+        
+} 
+
 public function get_child_data($child_id)
 {   
-	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender
+	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code
 	 FROM `user` WHERE `userid`= $child_id ");
 	$num = mysql_num_rows($query);
 	 if ($num>0)
@@ -81,13 +103,13 @@ public function get_child_data($child_id)
 
 } // End Function
 
-public function insert_association($parent_id,$child_id)
+public function insert_association($parent_id,$child_id,$unique_code)
 {
-	$unique_code = rand();
+	
 	$query = mysql_query("INSERT INTO `gs_association`(`parent_id`,`child_id`,`unique_code`) VALUES('$parent_id','$child_id','$unique_code')");
 	 if ($query)
 	 {
-				return 1;
+		return 1;
 	 }
 	 else
 	 {
@@ -96,16 +118,18 @@ public function insert_association($parent_id,$child_id)
 
 } // End Function
 
-public function  activateAccount($parent_id,$child_id,$child_email)
+public function  activateAccount($parent_id,$child_id,$child_email,$parent_mobile,$location)
 {
 	$code = $this->get_association_data($parent_id,$child_id);
 	if($code != 0)
 	{  $code = $code['unique_code'];
-	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code' WHERE `userid` = '$child_id'");
+	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code', `contact_no` ='$parent_mobile',`prof_id`='1',`prof_name`='Athletes',`location`='$location' WHERE `userid` = '$child_id'");
 	   if($update)
 	   {
 	   	return $code;
-	   }else{
+	   }
+	   else
+	   {
 	   	return 0;
 	   }
 
@@ -134,12 +158,125 @@ public function child_account_verify($code,$email)
 	if($query)
 	{
 		return "1";
-	}else
+	}
+	else
 	{
 		return "0";
 	}
 
 }
+
+
+
+
+public function get_all_child($parent_id,$id,$module)
+{
+$query = mysql_query("SELECT `userType`,`userid`,`name`,`sport`,`dob` FROM user WHERE `userid` IN (SELECT `child_id`FROM `gs_association` WHERE `parent_id`='$parent_id')");
+$num = mysql_num_rows($query);
+if ($num>0)
+{
+	while($row = mysql_fetch_assoc($query))
+	{
+		$userid 			 = $row['userid'];
+		$dob	 			 = $row['dob'];
+		$query1 			 = mysql_query("SELECT get_age('$dob', NOW()) AS age ");
+		$age    			 = mysql_fetch_assoc($query1);
+		$row['age']  		 = $age['age'] ;
+		$apply_status 		 = $this->cheack_apply_status($userid,$id,$module);
+		$row['apply_status'] = $apply_status;
+		$data[]  			 = $row;
+	}
+       	return $data;
+}
+else
+{
+	return 0;
+}
+
+}  // End of Function
+
+
+public function cheack_apply_status($userid,$id,$module)
+{
+         if($module=='1')
+          {
+         	$table	=	"`user_jobs` WHERE `userid` = $userid AND `userjob` = $id ";
+          }
+		  if($module=='2')
+          {
+          	$table 	=	"`user_events` WHERE `userid` = $userid AND `userevent` = $id ";
+          }
+  
+          if($module=='3')
+          {
+         	$table 	= 	"`user_tournaments` WHERE `userid` = $userid AND `usertournament` = $id ";
+          }
+          
+	$query = mysql_query("SELECT `status` FROM $table ");
+	$num = mysql_num_rows($query);
+	if ($num>0)
+	{
+		$row = mysql_fetch_assoc($query);
+		return $row['status'];
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+
+
+public function child_apply($child_ids,$res_id,$module,$parent_name,$parent_email)
+{
+
+
+
+if(!empty($child_ids) && !empty($module) )
+{
+$total_child_id = (explode(",",$child_ids));
+foreach ($total_child_id as $key => $userid)
+{
+  $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+   $entry_passcode='';
+   for ($i = 0; $i < 20; $i++)
+   {
+       $n    = rand(0, strlen($alphabet)-1);
+       $entry_passcode .= $alphabet[$n];
+      }
+                 $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
+			  //	$where    =  "`id` = $res_id";
+              //  $object   = new  userdataservice();
+              // $row      =  $object->searchEvent($where);
+              // $req      =  new generate_code();
+              //  $qur      =  $req->qr_code($entry_passcode,$user_name,$email,$row);
+}
+
+$values  = (implode(",",$record));
+$query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
+return 1;
+}
+
+
+else
+{
+	return 0;
+}
+
+}
+
+
+
+
+
+//}  // End of Function
+
+
+
+
+
+
 
 }  // End Class
 

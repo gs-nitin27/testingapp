@@ -97,10 +97,6 @@ if($_REQUEST['act'] == 'connect')
 
          echo json_encode($user);
 
-
-
-
-
    }
 
    else if($res == 2)
@@ -132,20 +128,6 @@ if($_REQUEST['act'] == 'connect')
    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*****************************Get All Connected Users*******************************/
 
@@ -264,10 +246,6 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 /******************* Display Class Information Created By Coach*************/
 
-
-
-
-
   else if($_REQUEST['act'] == 'get_classes_info')
  {
  $class_id         =  @$_REQUEST['class_id'];
@@ -276,13 +254,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $request          =  new connect_userservice();
  $con_res          =  $request->getConnect($student_id,$coach_id);
  $response         =  $request->getClassInfo($class_id);
-if ($response)
+ if ($response)
  {
   if (!empty($student_id))
   {
     $response              =  $request->getClassJoinStudent($response, $student_id);
   }
-   $con_res                 =   $request->getConnect($student_id,$coach_id);
+   $con_res                =   $request->getConnect($student_id,$coach_id);
    $response[0]['connection_status']= "$con_res";
    $Result = array('status' => '1','data'=>$response ,'msg'=>'class Information ');
    echo json_encode($Result);
@@ -447,16 +425,10 @@ $response       =  $request->getClass($userid);
 else if($_REQUEST['act'] == 'daily_log')
 
 {
-
- 
-
  $data               =  file_get_contents("php://input");
-
  $userdata           =  json_decode(file_get_contents("php://input"));
-
-  $request           =  new connect_userservice();
-
-  $response          =  $request->createdDailyLog($userdata);
+ $request            =  new connect_userservice();
+ $response           =  $request->createdDailyLog($userdata);
 
 if($response)
 
@@ -861,6 +833,7 @@ else if($_REQUEST['act'] == 'activity_search')
 }  
 
  /****************************Log Assign by coach  **********************************/
+
  else if($_REQUEST['act'] == 'log_assign')
  {
     $data = json_decode($_POST['data']);
@@ -895,7 +868,9 @@ for($i=0;$i<sizeof($userid);$i++)
       }  
 }
      $res= $req->new_log_assign($value);
-//     print_r($res);die;
+
+
+  //   print_r($res);die;
    // for ($i=0; $i <sizeof($student_list) ; $i++) 
    // {
          // $res = $req->log_assign($student_list[$i] ,$log);
@@ -1033,7 +1008,7 @@ if($response)
 
 
 
-/*********************************View Athlete Log by the Athelete*****************************/
+/*************************** View Athlete Log by the Athelete *****************************/
 
 else if($_REQUEST['act'] == 'veiw_athlete_log')
 {
@@ -1052,6 +1027,104 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
              echo json_encode($Result);
   } 
 }
+
+
+
+/************************************************Create Schedule********************************************/
+
+else if ($_REQUEST['act'] == 'create_schedule') 
+{
+  $data = json_decode(file_get_contents("php://input"));
+  $obj  = new connect_userservice();
+  $res  = $obj->create_user_schedule($data);
+  if($res != 0)
+  {
+    $msg = 'Success';
+    $status = 1;
+  }
+  else
+  {
+    $msg = 'Failure';
+    $status = 0;
+
+  }
+    $response = array('status'=>$status,'data'=>$res,'msg'=>$msg);
+    echo json_encode($response);
+
+}
+
+
+
+
+/******************************View Schedule*******************/
+
+  else if($_REQUEST['act'] == 'view_schedule')
+  {
+      $user_id = $_REQUEST['user_id'];
+      $req = new connect_userservice();
+      $res = $req->view_user_schedule($user_id);
+      if($res != "0")
+      {
+        $response = array('status' => '1','data'=>$res,'msg'=>'Success' );
+        echo json_encode($response);
+      }
+      else
+      {
+        $response = array('status' => '0','data'=>[],'msg'=>'Failure' );
+        echo json_encode($response);
+      }
+  }  
+
+
+
+
+/*********************************Update Schedule**************************/
+
+else if($_REQUEST['act'] == 'update_schedule')
+{
+  $id             = $_REQUEST['id'];
+  $time_of_day    = $_REQUEST['time_of_day'];
+  $active_status  = $_REQUEST['active_status'];
+  $req            = new connect_userservice();
+  $res            = $req->update_user_schedule($id,$time_of_day,$active_status);
+  if($res=='1')
+  {
+  $status = "1";
+  $message = "Success";
+  }
+  else
+  {
+  $status = "0";  
+  $message = "Failure";  
+  }
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
+  echo json_encode($response);
+}
+
+
+
+/***************************Un Assign log  By The Coach************************************/
+
+else if($_REQUEST['act'] == 'log_unassign')
+{
+  $data               =  json_decode(file_get_contents("php://input"));
+  $req                =  new connect_userservice();
+  $res                =  $req->log_unassign($data);
+  if($res=='1')
+  {
+  $status = "1";
+  $message = "Success";
+  }
+  else
+  {
+  $status = "0";  
+  $message = "Failure";  
+  }
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
+  echo json_encode($response);
+}
+
+
 
 
 
