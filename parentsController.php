@@ -101,8 +101,10 @@ switch ($_REQUEST['act'])
 			  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
 			  	$status = $create_account;
 			  	$msg = 'success';
-			  }else
-			  { $status = "0";
+			  }
+			  else
+			  {
+			    $status = "0";
 			  	$msg = 'failure';
 			  }
 			  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
@@ -153,10 +155,6 @@ switch ($_REQUEST['act'])
 				 }
 
 		break;
-
-
-
-
 
 
 

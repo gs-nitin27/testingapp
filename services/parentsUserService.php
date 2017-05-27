@@ -234,27 +234,28 @@ public function child_apply($child_ids,$res_id,$module,$parent_name,$parent_emai
 if(!empty($child_ids) && !empty($module) )
 {
 $total_child_id = (explode(",",$child_ids));
-foreach ($total_child_id as $key => $userid)
-{
-  $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-   $entry_passcode='';
+ $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+ $entry_passcode='';
    for ($i = 0; $i < 20; $i++)
    {
-       $n    = rand(0, strlen($alphabet)-1);
-       $entry_passcode .= $alphabet[$n];
-      }
-                 $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
-			  //	$where    =  "`id` = $res_id";
-              //  $object   = new  userdataservice();
-              // $row      =  $object->searchEvent($where);
-              // $req      =  new generate_code();
-              //  $qur      =  $req->qr_code($entry_passcode,$user_name,$email,$row);
+      $n    = rand(0, strlen($alphabet)-1);
+      $entry_passcode .= $alphabet[$n];
+   }  
+foreach ($total_child_id as $key => $userid)
+{
+              $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
 }
 $values  = (implode(",",$record));
+			  $where    =  "`id` = $res_id";
+              $object   = new  userdataservice();
+              $row      =  $object->searchEvent($where);
+              $req      =  new generate_code();
+              $qur      =  $req->qr_code($entry_passcode,$parent_name,$parent_email,$row);
 if ($module==2) 
 {
 $query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
 }
+
 if($module==3) 
 {
 	$query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`,`entry_passcode`)  VALUES $values");
