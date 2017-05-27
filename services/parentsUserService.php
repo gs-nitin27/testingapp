@@ -74,8 +74,7 @@ public function add_Parent($parent_email,$child_id)
              if($parent_id!=NULL)
               {
               	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
-                // $data  = $this->get_child_data($child_id);
-             
+                           
               }
               return 1;//$data['userid'];
         } 
@@ -88,8 +87,7 @@ public function add_Parent($parent_email,$child_id)
 
 public function get_child_data($child_id)
 {   
-	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code
-	 FROM `user` WHERE `userid`= $child_id ");
+	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code,IFNull(`user_image`,'') AS user_image	 FROM `user` WHERE `userid`= $child_id ");
 	$num = mysql_num_rows($query);
 	 if ($num>0)
 	 {
