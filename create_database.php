@@ -794,59 +794,14 @@ if($res != 0)
   if(sizeof($res == '1'))
 {
 if($type == '2' || $type == '3')
-{
+{ 
 $eligibility = $res[0]['eligibility1'];
 $eligibility = explode("|",$eligibility);
-$eligibility = array_filter(array_values($eligibility));
-$size        = sizeof($eligibility);
-$el = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Eligibility ".($i +'1');
-if($eligibility[$i] == '')
-{
-$el[$index] = "";
-}
-else
-{ 
-$el[$index] = $eligibility[$i];
-}
-}
-$res[0]['eligibility1'] = $el; 
-if($type == '2')
-{
-$terms = $res[0]['terms_cond1'];
-}
-else if($type == '3')
-{
-$terms = $res[0]['terms_and_cond1'];
-}
-$terms = explode("|",$terms);
-$terms = array_filter(array_values($terms));
-$size  = sizeof($terms);
-$tc = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Terms & condition ".($i +'1');
-if($terms[$i] == '')
-{
-$tc[$index] = "";
-}
-else
-{ 
-$tc[$index] = $terms[$i];
-}
-}
-$terms = $tc;
-if($type == '2')
-{
-$res[0]['terms_cond1'] = $terms;
-}
-else if($type == '3')
-{
-$res[0]['terms_and_cond1'] = $terms;
-}
-}
+$res[0]['eligibility'] = $eligibility;
+$terms_cond = $res[0]['terms_cond1'];
+$terms_cond = explode("|",$terms_cond);
+$res[0]['terms_cond'] = $terms_cond;
+ }
 }
   $status = 1;
 }
@@ -858,6 +813,7 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
+
 
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
