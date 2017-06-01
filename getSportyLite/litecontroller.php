@@ -73,8 +73,9 @@ else if($_REQUEST['act']=="gs_login")
 
 else if($_REQUEST['act']=="gs_list")
 { 
-    $req           =  new liteservice();
-    $res           =  $req->getList();
+
+    $req            =  new liteservice();
+    $res            =  $req->getList();
     $module        = '6';
     if($res != 0)
     {

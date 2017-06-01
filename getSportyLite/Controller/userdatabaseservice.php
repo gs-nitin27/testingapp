@@ -72,43 +72,17 @@ $query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$
       
 }
 /****************************Listing Resources GetSporty [Function]*************************/
+
 public function getList()
 {
-
-//  $query    = mysql_query("SELECT * FROM `gs_resources` WHERE `id`=11 ");
-  //SELECT * FROM `gs_resources` ORDER by `date_created`
 $query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
-
- //$data =array();
   $row  = mysql_num_rows($query);
   if($row)
   {
    while ($row = mysql_fetch_assoc($query))
    {
-  
-    $data[] = $row;
-   // print_r($row);die();
-  //foreach ($data as  $value) {
-   // print_r($value);die();
-}
-//foreach ($data as  $value) 
-//{
-//print_r($value['description']);
-//$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $value['description']);
-
-
-
-
-//die();
-   //$temp[] = preg_replace("/[^a-zA-Z 0-9]+/", "", $data[]['description']);
-
-   
-  // $json = $temp;
-    //$json = $temp;
-    //print_r($json);die();
- //$data['description'];die();
-  // return $json;
- //  print_r($data);die();
+      $data[] = $row;
+  }
     return $data;
    }
   else
