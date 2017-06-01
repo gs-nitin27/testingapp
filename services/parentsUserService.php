@@ -18,7 +18,7 @@ public function  get_parent_child($parent_id)
 	   }
 	
 	return $data;
-}
+    }
 	else
 	{
 		return 0;
@@ -157,7 +157,7 @@ public function child_account_verify($code,$email)
 
 	$query = mysql_query("UPDATE `user` SET `unique_code` = '0' WHERE `email` = '$email' AND `unique_code` = '$code'");
 	if($query)
-	{
+	{   mysql_query("UPDATE `gs_association` SET `child_activate` = '2'  WHERE `unique_code` = '$code'");
 		return "1";
 	}
 	else
