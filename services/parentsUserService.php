@@ -123,7 +123,7 @@ public function  activateAccount($parent_id,$child_id,$child_email,$parent_mobil
 	{  $code = $code['unique_code'];
 	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code', `contact_no` ='$parent_mobile',`prof_id`='1',`prof_name`='Athletes',`location`='$location' WHERE `userid` = '$child_id'");
 	   if($update)
-	   {
+	   { mysql_query("UPDATE `gs_association` SET `child_activate` = '1'  WHERE `child_id` = '$child_id'");
 	   	return $code;
 	   }
 	   else
