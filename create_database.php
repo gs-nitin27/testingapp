@@ -1638,28 +1638,28 @@ else
 
    if($key  != '')
    {
-      $where[] = " `description` LIKE '%$key%' ";
+      $where[] = " `description` LIKE '%$key%' ORDER by `id` desc ";
       $arr['description'] =  $key  ; 
    }
   if($location  != '')
    {
-      $where[] = "`location` LIKE '%$location%' ";
+      $where[] = "`location` LIKE '%$location%' ORDER by `id` desc ";
       $arr['location'] =  $location; 
    }
 
    if($title != '')
    {
-      $where[] = " `title` LIKE '%$title%' ";
+      $where[] = " `title` LIKE '%$title%' ORDER by `id` desc ";
       $arr['title'] =  $title ; 
    }
   if($type != '')
   {
-    $where[] = " `topic_of_artical` LIKE '%$type%' ";
+    $where[] = " `topic_of_artical` LIKE '%$type%' ORDER by `id` desc ";
     $arr['topic_of_artical'] =  $type ; 
   }
   if($sport != '')
   {
-    $where[] = " `sport` LIKE '%$sport%' ";
+    $where[] = " `sport` LIKE '%$sport%' ORDER by `id` desc ";
     $arr['sport'] =  $sport ; 
   }
     $whereclause   = implode('AND', $where);

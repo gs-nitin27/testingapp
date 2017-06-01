@@ -2192,6 +2192,7 @@ switch ($module)
    case 2:
     $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
    $entry_passcode='';
+   mysql_query("UPDATE `gs_eventinfo` SET `no_of_ticket`=`no_of_ticket`-1 WHERE `id` = $id");
    for ($i = 0; $i < 20; $i++)
                  {
                     $n    = rand(0, strlen($alphabet)-1);
