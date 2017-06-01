@@ -1313,6 +1313,9 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 public function findArticle($whereclause)
 {
+
+
+
 $query      = mysql_query("SELECT   *FROM `gs_resources` WHERE $whereclause ");
 $num        =  mysql_num_rows($query);
          if($num>=0) 

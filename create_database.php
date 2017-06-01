@@ -1633,7 +1633,7 @@ else
   $key           =   urldecode($_REQUEST ['key']); 
   $module ='6';                                       //  For Resources Then Module
   $request       =   new userdataservice();
-  $where[]       =   '1 =1 ';
+  $where[]       =   '1 =1 ORDER by `id` desc ';
   $arr = array();
 
    if($key  != '')
