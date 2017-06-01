@@ -7,11 +7,14 @@ public function  get_parent_child($parent_id)
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
-	{
+	{    $i = 0;
 		while ($row  = mysql_fetch_assoc($query)) 
-		{
+		{    
 	  		$child_id  = $row['child_id'];
+	  		//echo $row['child_activate'];die;
        		$data[]    = $this->get_child_data($child_id);
+       		$data[$i]['child_activate'] = $row['child_activate'];
+            $i++;
 	   }
 	
 	return $data;
