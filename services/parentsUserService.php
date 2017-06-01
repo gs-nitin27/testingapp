@@ -7,15 +7,18 @@ public function  get_parent_child($parent_id)
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
-	{
+	{    $i = 0;
 		while ($row  = mysql_fetch_assoc($query)) 
-		{
+		{    
 	  		$child_id  = $row['child_id'];
+	  		//echo $row['child_activate'];die;
        		$data[]    = $this->get_child_data($child_id);
+       		$data[$i]['child_activate'] = $row['child_activate'];
+            $i++;
 	   }
 	
 	return $data;
-}
+    }
 	else
 	{
 		return 0;
@@ -154,7 +157,7 @@ public function child_account_verify($code,$email)
 
 	$query = mysql_query("UPDATE `user` SET `unique_code` = '0' WHERE `email` = '$email' AND `unique_code` = '$code'");
 	if($query)
-	{
+	{   mysql_query("UPDATE `gs_association` SET `child_activate` = '2'  WHERE `unique_code` = '$code'");
 		return "1";
 	}
 	else
