@@ -1996,12 +1996,13 @@ return 0;
 
 public function manage_Login($item)
 {
+echo "SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ";die;
 $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ");
 {
 if(mysql_num_rows($query)>0)
 {
 while ($row = mysql_fetch_assoc($query)) 
-{
+{ $row['creations'] = $this->get_creations($row['userid']);
   $data[] = $row;
 }
 
@@ -2553,7 +2554,22 @@ public function searchEvent($where)
   }
 }
 
-
+public function get_creations($id)
+{
+  $query = mysql_query("SELECT * FROM `gs_activity_log` WHERE `userid` = '$id' AND `activity` = 'create'"); 
+  if($query)
+  {
+    while($row  = mysql_fetch_assoc($query))
+    {
+     $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+   return 0;
+  }
+}
 
 
 
