@@ -1,7 +1,6 @@
 <?php
 class parentsUserService
 {
-
 public function  get_parent_child($parent_id)
 {  
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
@@ -272,13 +271,5 @@ else
 }  // End of Function
 
 
-
-
-
-
-
 }  // End Class
-
-
-
 ?>

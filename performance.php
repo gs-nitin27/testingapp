@@ -158,4 +158,32 @@ else if($_REQUEST['act'] == 'save_suggestion')
               echo json_encode($result);
           }
 }
+
+/***********************Request Assessment  by Athlete******************************/
+
+else if($_REQUEST['act'] == 'request_assessment') 
+{
+   $data          =  file_get_contents("php://input");
+   $userdata      =  json_decode(file_get_contents("php://input"));
+   $req           =  new UserPerformanceService();
+   $res           =  $req->save_request_assessment($userdata);
+        if($res)
+        {
+          $data = array('status' => 1, 'data'=> $res, 'msg'=>'Request Assessment send');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Not send');
+                    echo json_encode($data);
+        }  
+
+} // End of Statment
+
+
+
+
+
+
+
 ?>
