@@ -1,6 +1,7 @@
 <?php
 include('config1.php');
 include('services/userperformance.php');
+include('services/emailService.php');
 
 if($_REQUEST['act'] == 'get_modules')	
 { 
@@ -159,14 +160,20 @@ else if($_REQUEST['act'] == 'save_suggestion')
           }
 }
 
+
+
 /***********************Request Assessment  by Athlete******************************/
 
 else if($_REQUEST['act'] == 'request_assessment') 
 {
-   $data          =  file_get_contents("php://input");
-   $userdata      =  json_decode(file_get_contents("php://input"));
-   $req           =  new UserPerformanceService();
-   $res           =  $req->save_request_assessment($userdata);
+   $data            =  file_get_contents("php://input");
+   $userdata        =  json_decode(file_get_contents("php://input"));
+   $email           =  $userdata->email;
+   $name            =  $userdata->name;
+   $req1            =  new emailService();
+   $res1            =  $req1->send_email_athlete($email,$name);
+   $req             =  new UserPerformanceService();
+   $res             =  $req->save_request_assessment($userdata);
         if($res)
         {
           $data = array('status' => 1, 'data'=> $res, 'msg'=>'Request Assessment send');
@@ -174,7 +181,7 @@ else if($_REQUEST['act'] == 'request_assessment')
         }
         else
         {
-            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Not send');
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Request Assessment not send');
                     echo json_encode($data);
         }  
 
