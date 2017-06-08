@@ -2001,11 +2001,11 @@ $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `pa
 if(mysql_num_rows($query)>0)
 {
 while ($row = mysql_fetch_assoc($query)) 
-{ echo "hello".$this->get_creations($row['userid']).'nitin';
-  $row['creations'] = $this->get_creations($row['userid']);
+{ 
+  $row['creations'] = "".$this->get_creations($row['userid'])."";
   $data[] = $row;
 }
-print_r($data);
+//print_r($data);
 //if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
 //{
   // $userid= $data[0]['userid'];
@@ -2557,7 +2557,7 @@ public function searchEvent($where)
 public function get_creations($id)
 {
   $query = mysql_query("SELECT * FROM `gs_activity_log` WHERE `userid` = '$id' AND `activity` = 'create'"); 
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while($row  = mysql_fetch_assoc($query))
     {
