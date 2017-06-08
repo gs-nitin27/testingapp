@@ -2001,7 +2001,8 @@ $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `pa
 if(mysql_num_rows($query)>0)
 {
 while ($row = mysql_fetch_assoc($query)) 
-{ $row['creations'] = $this->get_creations($row['userid']);
+{ echo "hello".$this->get_creations($row['userid']).'nitin';
+  $row['creations'] = $this->get_creations($row['userid']);
   $data[] = $row;
 }
 print_r($data);
