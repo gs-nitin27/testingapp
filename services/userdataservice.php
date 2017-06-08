@@ -1996,6 +1996,7 @@ return 0;
 
 public function manage_Login($item)
 {
+"SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ";die;
 $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ");
 {
 if(mysql_num_rows($query)>0)
