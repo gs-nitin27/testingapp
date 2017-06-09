@@ -166,14 +166,15 @@ else if($_REQUEST['act'] == 'save_suggestion')
 
 else if($_REQUEST['act'] == 'request_assessment') 
 {
-   $data            =  file_get_contents("php://input");
-   $userdata        =  json_decode(file_get_contents("php://input"));
-   $email           =  $userdata->email;
-   $name            =  $userdata->name;
-   $req1            =  new emailService();
-   $res1            =  $req1->send_email_athlete($email,$name);
-   $req             =  new UserPerformanceService();
-   $res             =  $req->save_request_assessment($userdata);
+   $data              =  file_get_contents("php://input");
+   $userdata          =  json_decode(file_get_contents("php://input"));
+   $email             =  $userdata->email;
+   $name              =  $userdata->name;
+   $request_type      =  $userdata->request_type;
+   $req1              =  new emailService();
+   $res1              =  $req1->send_email_athlete($email,$name,$request_type);
+   $req               =  new UserPerformanceService();
+   $res               =  $req->save_request_assessment($userdata);
         if($res)
         {
           $data = array('status' => 1, 'data'=> $res, 'msg'=>'Request Assessment send');
