@@ -193,7 +193,7 @@ else if($_REQUEST['act'] == 'request_assessment')
 
 /***********************Request Assessment  by Athlete******************************/
 
-else if($_REQUEST['act'] == 'view_requeste_assessment') 
+else if($_REQUEST['act'] == 'view_request_assessment') 
 {
    $data              =  file_get_contents("php://input");
    $userdata          =  json_decode(file_get_contents("php://input"));
