@@ -354,7 +354,7 @@ public function send_email_athlete($email,$name,$request_type)
                $mail->AddAddress($to);
                $mail->Send();
                 $res = $this->send_email_info($info_mail,$name,$request_name);
-              return 1;
+             // return 1;
           
    
           } // End Function
@@ -411,7 +411,7 @@ public function send_email_info($info_mail,$name,$request_name)
                $mail->AltBody = $txt; 
                $mail->AddAddress($info_mail);
                $mail->Send();
-               return 1;
+              // return 1;
          
           } // End Function
    
