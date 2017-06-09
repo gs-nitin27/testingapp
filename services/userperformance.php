@@ -277,6 +277,28 @@ public function viewPerformanceguide($item,$agegropup)
 
 
 
+public function  view_request_assessment($athlete_id)
+{
+  $query = mysql_query("SELECT *FROM `gs_request_assessment` WHERE `athlete_id` = '$athlete_id' ");
+  $num   = mysql_num_rows($query);
+  if($num)
+  {
+     while($row = mysql_fetch_assoc($query))
+     {
+     	$data[]  = $row;
+     }
+     return $data;
+  }
+  else
+  {
+		return 0;
+  }
+	
+
+}
+
+
+
 
 } // End Class 
 

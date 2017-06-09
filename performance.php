@@ -191,6 +191,27 @@ else if($_REQUEST['act'] == 'request_assessment')
 
 
 
+/***********************Request Assessment  by Athlete******************************/
+
+else if($_REQUEST['act'] == 'view_requeste_assessment') 
+{
+   $data              =  file_get_contents("php://input");
+   $userdata          =  json_decode(file_get_contents("php://input"));
+   $athlete_id        =  $userdata->athlete_id ;
+   $req               =  new UserPerformanceService();
+   $res               =  $req->view_request_assessment($athlete_id);
+     if($res)
+     {
+       $data = array('status' => 1, 'data'=> $res, 'msg'=>'view request Assessment');
+            echo json_encode($data);
+     }
+     else
+     {
+       $data = array('status' => 0, 'data'=>$res, 'msg'=>'Now view request Assessment');
+           echo json_encode($data);
+     } 
+}
+   
 
 
 
