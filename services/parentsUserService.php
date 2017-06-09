@@ -1,21 +1,23 @@
 <?php
 class parentsUserService
 {
-
 public function  get_parent_child($parent_id)
 {  
 	$query  = mysql_query("SELECT * FROM `gs_association` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
-	{
+	{    $i = 0;
 		while ($row  = mysql_fetch_assoc($query)) 
-		{
+		{    
 	  		$child_id  = $row['child_id'];
+	  		//echo $row['child_activate'];die;
        		$data[]    = $this->get_child_data($child_id);
+       		$data[$i]['child_activate'] = $row['child_activate'];
+            $i++;
 	   }
 	
 	return $data;
-}
+    }
 	else
 	{
 		return 0;
@@ -74,8 +76,7 @@ public function add_Parent($parent_email,$child_id)
              if($parent_id!=NULL)
               {
               	 $data1 = $this->insert_association($parent_id,$child_id,$unique_code);
-                // $data  = $this->get_child_data($child_id);
-             
+                           
               }
               return 1;//$data['userid'];
         } 
@@ -88,8 +89,7 @@ public function add_Parent($parent_email,$child_id)
 
 public function get_child_data($child_id)
 {   
-	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code
-	 FROM `user` WHERE `userid`= $child_id ");
+	$query = mysql_query("SELECT  IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code,IFNull(`user_image`,'') AS user_image	 FROM `user` WHERE `userid`= $child_id ");
 	$num = mysql_num_rows($query);
 	 if ($num>0)
 	 {
@@ -125,7 +125,7 @@ public function  activateAccount($parent_id,$child_id,$child_email,$parent_mobil
 	{  $code = $code['unique_code'];
 	   $update = mysql_query("UPDATE `user` SET `email` = '$child_email' , `unique_code` = '$code', `contact_no` ='$parent_mobile',`prof_id`='1',`prof_name`='Athletes',`location`='$location' WHERE `userid` = '$child_id'");
 	   if($update)
-	   {
+	   { mysql_query("UPDATE `gs_association` SET `child_activate` = '1'  WHERE `child_id` = '$child_id'");
 	   	return $code;
 	   }
 	   else
@@ -156,7 +156,7 @@ public function child_account_verify($code,$email)
 
 	$query = mysql_query("UPDATE `user` SET `unique_code` = '0' WHERE `email` = '$email' AND `unique_code` = '$code'");
 	if($query)
-	{
+	{   mysql_query("UPDATE `gs_association` SET `child_activate` = '2'  WHERE `unique_code` = '$code'");
 		return "1";
 	}
 	else
@@ -227,59 +227,49 @@ public function cheack_apply_status($userid,$id,$module)
 }
 
 
+// 2 = Event 3 = Tournament
 
 public function child_apply($child_ids,$res_id,$module,$parent_name,$parent_email)
 {
-
-
-
 if(!empty($child_ids) && !empty($module) )
 {
 $total_child_id = (explode(",",$child_ids));
-foreach ($total_child_id as $key => $userid)
-{
-  $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-   $entry_passcode='';
+ $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+ $entry_passcode='';
    for ($i = 0; $i < 20; $i++)
    {
-       $n    = rand(0, strlen($alphabet)-1);
-       $entry_passcode .= $alphabet[$n];
-      }
-                 $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
-			  //	$where    =  "`id` = $res_id";
-              //  $object   = new  userdataservice();
-              // $row      =  $object->searchEvent($where);
-              // $req      =  new generate_code();
-              //  $qur      =  $req->qr_code($entry_passcode,$user_name,$email,$row);
+      $n    = rand(0, strlen($alphabet)-1);
+      $entry_passcode .= $alphabet[$n];
+   }  
+foreach ($total_child_id as $key => $userid)
+{
+              $record[] = "('0','$userid','$res_id',CURDATE(),'1','$entry_passcode')";
+}
+$values  = (implode(",",$record));
+			  $where    =  "`id` = $res_id";
+              $object   = new  userdataservice();
+              $row      =  $object->searchEvent($where);
+              $req      =  new generate_code();
+              $qur      =  $req->qr_code($entry_passcode,$parent_name,$parent_email,$row);
+if ($module==2) 
+{
+$query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
 }
 
-$values  = (implode(",",$record));
-$query = mysql_query("INSERT INTO `user_events`(`id`, `userid`,`userevent`,`date`,`status`,`entry_passcode`) VALUES $values");
+if($module==3) 
+{
+	$query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`,`entry_passcode`)  VALUES $values");
+}
+
 return 1;
 }
-
-
 else
 {
 	return 0;
 }
 
-}
-
-
-
-
-
-//}  // End of Function
-
-
-
-
-
+}  // End of Function
 
 
 }  // End Class
-
-
-
 ?>

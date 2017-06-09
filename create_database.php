@@ -794,59 +794,14 @@ if($res != 0)
   if(sizeof($res == '1'))
 {
 if($type == '2' || $type == '3')
-{
+{ 
 $eligibility = $res[0]['eligibility1'];
 $eligibility = explode("|",$eligibility);
-$eligibility = array_filter(array_values($eligibility));
-$size        = sizeof($eligibility);
-$el = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Eligibility ".($i +'1');
-if($eligibility[$i] == '')
-{
-$el[$index] = "";
-}
-else
-{ 
-$el[$index] = $eligibility[$i];
-}
-}
-$res[0]['eligibility1'] = $el; 
-if($type == '2')
-{
-$terms = $res[0]['terms_cond1'];
-}
-else if($type == '3')
-{
-$terms = $res[0]['terms_and_cond1'];
-}
-$terms = explode("|",$terms);
-$terms = array_filter(array_values($terms));
-$size  = sizeof($terms);
-$tc = array();
-for ($i=0; $i <$size ; $i++) 
-{ 
-$index = "Terms & condition ".($i +'1');
-if($terms[$i] == '')
-{
-$tc[$index] = "";
-}
-else
-{ 
-$tc[$index] = $terms[$i];
-}
-}
-$terms = $tc;
-if($type == '2')
-{
-$res[0]['terms_cond1'] = $terms;
-}
-else if($type == '3')
-{
-$res[0]['terms_and_cond1'] = $terms;
-}
-}
+$res[0]['eligibility'] = $eligibility;
+$terms_cond = $res[0]['terms_cond1'];
+$terms_cond = explode("|",$terms_cond);
+$res[0]['terms_cond'] = $terms_cond;
+ }
 }
   $status = 1;
 }
@@ -858,6 +813,7 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
+
 
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
@@ -1677,33 +1633,33 @@ else
   $key           =   urldecode($_REQUEST ['key']); 
   $module ='6';                                       //  For Resources Then Module
   $request       =   new userdataservice();
-  $where[]       =   '1 =1 ';
+  $where[]       =   '1 =1 ORDER by `id` desc ';
   $arr = array();
 
    if($key  != '')
    {
-      $where[] = " `description` LIKE '%$key%' ";
+      $where[] = " `description` LIKE '%$key%' ORDER by `id` desc ";
       $arr['description'] =  $key  ; 
    }
   if($location  != '')
    {
-      $where[] = "`location` LIKE '%$location%' ";
+      $where[] = "`location` LIKE '%$location%' ORDER by `id` desc ";
       $arr['location'] =  $location; 
    }
 
    if($title != '')
    {
-      $where[] = " `title` LIKE '%$title%' ";
+      $where[] = " `title` LIKE '%$title%' ORDER by `id` desc ";
       $arr['title'] =  $title ; 
    }
   if($type != '')
   {
-    $where[] = " `topic_of_artical` LIKE '%$type%' ";
+    $where[] = " `topic_of_artical` LIKE '%$type%' ORDER by `id` desc ";
     $arr['topic_of_artical'] =  $type ; 
   }
   if($sport != '')
   {
-    $where[] = " `sport` LIKE '%$sport%' ";
+    $where[] = " `sport` LIKE '%$sport%' ORDER by `id` desc ";
     $arr['sport'] =  $sport ; 
   }
     $whereclause   = implode('AND', $where);

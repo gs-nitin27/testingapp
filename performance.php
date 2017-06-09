@@ -1,6 +1,7 @@
 <?php
 include('config1.php');
 include('services/userperformance.php');
+include('services/emailService.php');
 
 if($_REQUEST['act'] == 'get_modules')	
 { 
@@ -158,4 +159,60 @@ else if($_REQUEST['act'] == 'save_suggestion')
               echo json_encode($result);
           }
 }
+
+
+
+/***********************Request Assessment  by Athlete******************************/
+
+else if($_REQUEST['act'] == 'request_assessment') 
+{
+   $data              =  file_get_contents("php://input");
+   $userdata          =  json_decode(file_get_contents("php://input"));
+   $email             =  $userdata->email;
+   $name              =  $userdata->name;
+   $request_type      =  $userdata->request_type;
+   $req1              =  new emailService();
+   $res1              =  $req1->send_email_athlete($email,$name,$request_type);
+   $req               =  new UserPerformanceService();
+   $res               =  $req->save_request_assessment($userdata);
+        if($res)
+        {
+          $data = array('status' => 1, 'data'=> $res, 'msg'=>'Request Assessment send');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Request Assessment not send');
+                    echo json_encode($data);
+        }  
+
+} // End of Statment
+
+
+
+
+/***********************Request Assessment  by Athlete******************************/
+
+else if($_REQUEST['act'] == 'view_request_assessment') 
+{
+   $data              =  file_get_contents("php://input");
+   $userdata          =  json_decode(file_get_contents("php://input"));
+   $athlete_id        =  $userdata->athlete_id ;
+   $req               =  new UserPerformanceService();
+   $res               =  $req->view_request_assessment($athlete_id);
+     if($res)
+     {
+       $data = array('status' => 1, 'data'=> $res, 'msg'=>'view request Assessment');
+            echo json_encode($data);
+     }
+     else
+     {
+       $data = array('status' => 0, 'data'=>$res, 'msg'=>'Now view request Assessment');
+           echo json_encode($data);
+     } 
+}
+   
+
+
+
 ?>

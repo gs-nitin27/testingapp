@@ -249,6 +249,55 @@ public function viewPerformanceguide($item,$agegropup)
 }
 
 
+/**************************Function for save_request_assessment ********************/
+
+ public function save_request_assessment($userdata)
+ {
+ 	$request_type		=	 $userdata->request_type;
+	$assessment_type 	=	 $userdata->assessment_type;
+	$athlete_id 		=	 $userdata->athlete_id;
+	$video_link 		=	 $userdata->video_link;
+	$date 				=	 $userdata->date;
+	$time 				=	 $userdata->time;
+	$venue 				=	 $userdata->venue;
+   $query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link','$date','$time','$venue')");
+	if($query)
+	{
+	   return 1;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+
+
+
+
+
+public function  view_request_assessment($athlete_id)
+{
+  $query = mysql_query("SELECT *FROM `gs_request_assessment` WHERE `athlete_id` = '$athlete_id' ");
+  $num   = mysql_num_rows($query);
+  if($num)
+  {
+     while($row = mysql_fetch_assoc($query))
+     {
+     	$data[]  = $row;
+     }
+     return $data;
+  }
+  else
+  {
+		return 0;
+  }
+	
+
+}
+
+
 
 
 } // End Class 

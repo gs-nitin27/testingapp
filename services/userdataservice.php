@@ -577,7 +577,7 @@ $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`
 else if ($type == 2) 
 {
   
-$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid,IFNull(`image`,'') AS image, IFNull(`type`,'') AS type, IFNull(`feetype`,'') AS feetype, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`ticket_detail`,'') AS ticket_detail,IFNull(`no_of_ticket`,'') AS no_of_ticket, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE ".$where." ORDER BY `id` DESC ");
+$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS serid,IFNull(`image`,'') AS image, IFNull(`type`,'') AS type, IFNull(`feetype`,'') AS feetype, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`ticket_detail`,'') AS ticket_detail,IFNull(`no_of_ticket`,'') AS no_of_ticket, IFNull(`eligibility1`,'') AS eligibility, IFNull(`terms_cond1`,'') AS terms_cond, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE ".$where." ORDER BY `id` DESC ");
 }
 else if($type == 3)
 {
@@ -592,7 +592,7 @@ $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,
 , IFNull(`pin`,'') AS pin, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull
 
 
-(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2
+(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility
 
 
 , IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
@@ -1313,6 +1313,9 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 public function findArticle($whereclause)
 {
+
+
+
 $query      = mysql_query("SELECT   *FROM `gs_resources` WHERE $whereclause ");
 $num        =  mysql_num_rows($query);
          if($num>=0) 
@@ -1998,10 +2001,11 @@ $query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `pa
 if(mysql_num_rows($query)>0)
 {
 while ($row = mysql_fetch_assoc($query)) 
-{
+{ 
+  $row['creations'] = "".$this->get_creations($row['userid'])."";
   $data[] = $row;
 }
-
+//print_r($data);
 //if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
 //{
   // $userid= $data[0]['userid'];
@@ -2192,6 +2196,7 @@ switch ($module)
    case 2:
     $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
    $entry_passcode='';
+   mysql_query("UPDATE `gs_eventinfo` SET `no_of_ticket`=`no_of_ticket`-1 WHERE `id` = $id");
    for ($i = 0; $i < 20; $i++)
                  {
                     $n    = rand(0, strlen($alphabet)-1);
@@ -2549,7 +2554,22 @@ public function searchEvent($where)
   }
 }
 
-
+public function get_creations($id)
+{
+  $query = mysql_query("SELECT * FROM `gs_activity_log` WHERE `userid` = '$id' AND `activity` = 'create'"); 
+  if(mysql_num_rows($query)>0)
+  {
+    while($row  = mysql_fetch_assoc($query))
+    {
+     $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+   return 0;
+  }
+}
 
 
 
