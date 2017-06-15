@@ -9,6 +9,9 @@ include('services/getListingService.php');
 
 if($_REQUEST['act'] == 'contentangular')
 {
+    
+   
+
 	$req    =   new angularapi();
 	$res= $req->getContentInfo();
     echo json_encode($res); 
@@ -20,24 +23,37 @@ else if($_REQUEST['act'] == 'angulartest')
 		 $password       =  md5($_REQUEST['password']);   
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
+         if($res)
+         {
          $data = array("data" =>$res);		 
           echo json_encode($res);
+          }
+          else
+          {
+          $data = array("data" =>0);        
+          echo json_encode($res);
+          }
+
 }
+
 
 if($_REQUEST['act'] == 'contentangularlex')
 {
+
+     $userid      =  $_REQUEST['userid'];
 	$req    =   new angularapi();
-	$res= $req->getContent();
+	$res= $req->getContent($userid);
     echo json_encode($res); 
 }
+
 else if($_REQUEST['act'] == 'createcontent')
 {        
 
+
         $data =  json_decode(file_get_contents("php://input"));
-        
         $item                     =  new stdClass();
         $item->id           =  '0';
-        $item->userid       =  '58';
+        $item->userid       =  '11';
         $item->title        =  $data->title;
         $item->content      =  $data->content;
         $item->url          =  $data->url;

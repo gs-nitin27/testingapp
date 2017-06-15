@@ -18,7 +18,7 @@ public function getContentInfo()
 public function angulartest($username,$password)
 {
 	
-          $query = mysql_query("SELECT  *FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
+          $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
           if($query)
           {
             while($row = mysql_fetch_assoc($query))
@@ -46,9 +46,9 @@ public function angulartest($username,$password)
 	
 }
 
-public function getContent()
+public function getContent($userid)
 {
-   $query = mysql_query("SELECT * FROM `cms_content`");
+   $query = mysql_query("SELECT * FROM `cms_content` WHERE `userid` = '$userid'");
    $row = mysql_num_rows($query);
    if($row)
    {
