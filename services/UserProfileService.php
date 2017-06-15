@@ -455,7 +455,7 @@ public function edit_user($userid,$prof_id,$data)
 /***************Function for Upload Image in User Table***********************/
 
  public function imageupload_user($userid,$image)
- {
+ { 
       $url=IMAGE_URL;
       $now = new DateTime();
       $time=$now->getTimestamp(); 
