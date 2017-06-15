@@ -158,7 +158,7 @@ else if($_REQUEST['act'] == "get_studentlist")
 						}
 						else
 						{  $res = [];
-					       $data= array('status' =>0,'data'=>0);
+					       $data= array('status' =>0,'data'=>$res);
 						   echo json_encode($data);
 						}
 }
