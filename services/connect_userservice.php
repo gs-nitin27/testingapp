@@ -1678,7 +1678,7 @@ public function create_user_schedule($data)
 
 public function edit_schedule($data)
 {
-  $query = mysql_query("UPDATE `gs_athletes_schedule` SET `phase`='$data->phase',`activity`='$data->activity',`time_of_day`='$data->time_of_day',`remarks`='$data->remarks',`schedule_duration_day`='$data->schedule_duration_day',`schedule_type`='$data->type',`active_status`='active_status' WHERE `id`='$data->id'");
+  $query = mysql_query("UPDATE `gs_athletes_schedule` SET `phase`='$data->phase',`activity`='$data->activity',`time_of_day`='$data->time_of_day',`remarks`='$data->remarks',`schedule_duration_day`='$data->schedule_duration_day',`schedule_type`='$data->schedule_type',`active_status`='$data->active_status' WHERE `id`='$data->id'");
   $num=mysql_affected_rows(); 
   if ($num==1) 
   {
