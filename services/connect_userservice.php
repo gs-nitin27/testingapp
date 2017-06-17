@@ -329,7 +329,7 @@ public function getConnectedUser($userid,$usertype)
 {
   if($usertype=='L')
   {
-      $query = mysql_query("SELECT userid,name,email,sport,gender,dob,user_image,location,prof_id,prof_name FROM user WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid)");
+      $query = mysql_query("SELECT a.`userid`,a.`name`,a.`email`,a.`sport`,a.`gender`,a.`dob`,a.`user_image`,a.`location`,a.`prof_id`,a.`prof_name`,IFNull(b.`student_id`,'') AS class_student_id  FROM user AS a LEFT JOIN `gs_class_data` AS b ON a.`userid` = b.`coach_id` WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`='$userid')");
     $num=mysql_num_rows($query);
     if ($num!=0) 
      {
@@ -793,6 +793,7 @@ public function joinStudentData($userdata)
   $fees              =  $userdata->amount_paid;
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
+  $coach_id          =  $userdata->coach_id; 
    if($userdata->mode_of_payment == 1)
    {
         $transaction_id = 0;
@@ -814,14 +815,15 @@ public function joinStudentData($userdata)
 
   {
 
-    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`,`transaction_id`,`payment_id`,`remark`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees','$transaction_id','$payment_id','$remark')");
-
-  return 1;
-
+    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`,`transaction_id`,`payment_id`,`remark`,`coach_id`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees','$transaction_id','$payment_id','$remark','$coach_id')");
+if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
   }
-
-
-
+  }
 }
 
 /***********************************************************************************************************/
