@@ -1996,7 +1996,7 @@ return 0;
 
 public function manage_Login($item)
 {
-$query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103' OR `userType` = '102' OR `userType` = '101') ");
+$query = mysql_query("SELECT * FROM `user` WHERE `email`= '$item->email' AND `password` = '$item->password' AND (`userType`= '103') ");
 {
 if(mysql_num_rows($query)>0)
 {
@@ -2556,14 +2556,12 @@ public function searchEvent($where)
 
 public function get_creations($id)
 {
-  $query = mysql_query("SELECT * FROM `gs_activity_log` WHERE `userid` = '$id' AND `activity` = 'create'"); 
+  $query = mysql_query("SELECT COUNT(`activity`) as creation FROM `gs_activity_log` WHERE `userid` = '$id' AND `activity` = 'create'"); 
   if(mysql_num_rows($query)>0)
   {
-    while($row  = mysql_fetch_assoc($query))
-    {
-     $rows[] = $row;
-    }
-    return $rows;
+    $row  = mysql_fetch_assoc($query);
+    if($row['creation'] > 0 )
+    return 1;
   }
   else
   {

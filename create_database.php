@@ -285,7 +285,7 @@ echo json_encode($user);
 
 else if($_REQUEST['act']=="manage_Login")
 {
-$data1                =  json_decode($_POST[ 'data' ]);
+$data1                =  json_decode(file_get_contents("php://input"));
 $item                 =  new stdClass();
 $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
