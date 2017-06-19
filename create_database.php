@@ -1633,33 +1633,32 @@ else
   $key           =   urldecode($_REQUEST ['key']); 
   $module ='6';                                       //  For Resources Then Module
   $request       =   new userdataservice();
-  $where[]       =   '1 =1 ORDER by `id` desc ';
+  //$where[]       =   '1 =1 ORDER by `id` desc ';
   $arr = array();
-
    if($key  != '')
    {
-      $where[] = " `description` LIKE '%$key%' ORDER by `id` desc ";
+      $where[] = " `description` LIKE '%$key%'  ";
       $arr['description'] =  $key  ; 
    }
   if($location  != '')
    {
-      $where[] = "`location` LIKE '%$location%' ORDER by `id` desc ";
+      $where[] = "`location` LIKE '%$location%'  ";
       $arr['location'] =  $location; 
    }
 
    if($title != '')
    {
-      $where[] = " `title` LIKE '%$title%' ORDER by `id` desc ";
+      $where[] = " `title` LIKE '%$title%' ";
       $arr['title'] =  $title ; 
    }
   if($type != '')
   {
-    $where[] = " `topic_of_artical` LIKE '%$type%' ORDER by `id` desc ";
+    $where[] = " `topic_of_artical` LIKE '%$type%'  ";
     $arr['topic_of_artical'] =  $type ; 
   }
   if($sport != '')
   {
-    $where[] = " `sport` LIKE '%$sport%' ORDER by `id` desc ";
+    $where[] = " `sport` LIKE '%$sport%' ";
     $arr['sport'] =  $sport ; 
   }
     $whereclause   = implode('AND', $where);

@@ -1307,16 +1307,13 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 
 
-//mysqli_set_charset($dbc, 'utf8');
+
 
 /***********************Search the Article From Resources Table*****************/
 
 public function findArticle($whereclause)
 {
-
-
-
-$query      = mysql_query("SELECT   *FROM `gs_resources` WHERE $whereclause ");
+$query      = mysql_query("SELECT   *FROM `gs_resources` WHERE $whereclause ORDER by `id` desc ");
 $num        =  mysql_num_rows($query);
          if($num>=0) 
          {
