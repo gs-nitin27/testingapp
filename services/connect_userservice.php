@@ -217,16 +217,11 @@ public function updateseennotification($id)
   {
 
      $query = mysql_query("SELECT avg(total_rating) AS rating ,COUNT(*) AS total_user FROM gs_rating where entity_id=$userid ");
-
      $row   =mysql_fetch_assoc($query);
-
-     if ($row['rating']!=null)
-
-     {
-
-       return $row;
-
-     }
+    if ($row['rating']!=null)
+    {
+     return $row;
+   }
 
      else
 
@@ -1124,43 +1119,23 @@ public function edit_log_assign($item)
 /*****************************Function for log Listing ********************/
 
 public function coach_log_list($coachid)
-
 {
 
    $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `coach_id`='$coachid'");
-
-
-
-    $num = mysql_num_rows($query);
-
+   $num = mysql_num_rows($query);
   if ($num)
-
   {
-
-     while($row=mysql_fetch_assoc($query))
-
+   while($row=mysql_fetch_assoc($query))
                    {
-
-                    
-
                      $data[]   = $row ;
 
                    }
-
-                   return $data;
-
+              return $data;
   }
-
   else
-
   {
-
      return 0;
-
   }
-
-
-
 }
 
 
@@ -1657,7 +1632,7 @@ $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$us
 
 public function create_user_schedule($data)
 {
-   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created')");
+   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
   if($query)
   {
     return mysql_insert_id();
