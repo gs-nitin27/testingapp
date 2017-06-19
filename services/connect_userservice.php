@@ -329,7 +329,7 @@ public function getConnectedUser($userid,$usertype)
 {
   if($usertype=='L')
   {
-      $query = mysql_query("SELECT a.`userid`,a.`name`,a.`email`,a.`sport`,a.`gender`,a.`dob`,a.`user_image`,a.`location`,a.`prof_id`,a.`prof_name`,IFNull(b.`student_id`,'') AS class_student_id  FROM user AS a LEFT JOIN `gs_class_data` AS b ON a.`userid` = b.`coach_id` WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`='$userid') GROUP BY a.`userid`");
+      $query = mysql_query("SELECT a.`userid`,a.`name`,a.`email`,a.`sport`,a.`gender`,a.`dob`,a.`user_image`,a.`location`,a.`prof_id`,a.`prof_name`,(b.`student_id` IS NOT NULL) AS class_student_status FROM user AS a LEFT JOIN `gs_class_data` AS b ON a.`userid` = b.`coach_id` WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`='$userid') GROUP BY a.`userid` ");
     $num=mysql_num_rows($query);
     if ($num!=0) 
      {
@@ -1181,19 +1181,9 @@ public function studentlist($userid , $assignment_id)
 
 
 
-
-
-  // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
-
-
-
-
-
-    $num = mysql_num_rows($query);
-
+  $num = mysql_num_rows($query);
   if ($num)
-
-  {
+ {
 
      while($row=mysql_fetch_assoc($query))
 
