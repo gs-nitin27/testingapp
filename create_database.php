@@ -1631,7 +1631,7 @@ else
   $sport         =   urldecode($_REQUEST ['sport']); 
   $location      =   urldecode($_REQUEST ['location']); 
   $key           =   urldecode($_REQUEST ['key']); 
-  $module ='6';                                       //  For Resources Then Module
+  $module ='6';                                       //  For 
   $request       =   new userdataservice();
   //$where[]       =   '1 =1 ORDER by `id` desc ';
   $arr = array();
@@ -1653,8 +1653,8 @@ else
    }
   if($type != '')
   {
-    $where[] = " `topic_of_artical` LIKE '%$type%'  ";
-    $arr['topic_of_artical'] =  $type ; 
+    $where[] = " `topic_of_artical` LIKE '%$topic%'  ";
+    $arr['topic_of_artical'] =  $topic ; 
   }
   if($sport != '')
   {

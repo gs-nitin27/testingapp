@@ -1672,9 +1672,12 @@ public function create_user_schedule($data)
   {
     return mysql_insert_id();
 
-  }else
+  }
+  else
+  {
 
     return "0";
+  }
 }
 
 
