@@ -1651,7 +1651,7 @@ else
       $where[] = " `title` LIKE '%$title%' ";
       $arr['title'] =  $title ; 
    }
-  if($type != '')
+  if($topic != '')
   {
     $where[] = " `topic_of_artical` LIKE '%$topic%'  ";
     $arr['topic_of_artical'] =  $topic ; 
