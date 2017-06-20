@@ -13,7 +13,7 @@ if(mysql_num_rows($query)> 0)
 while($row = mysql_fetch_assoc($query))
 {
 
-$data[] = "('".$row['userid']."','".$row['phase']."','0','0','0','0','".$row['activity']."','".$row['id']."','".$row['remarks']."',CURDATE(),0)"; 
+$data[] = "('".$row['userid']."','".$row['phase']."','0','0','0','0','".$row['activity']."','1000001','".$row['remarks']."',CURDATE(),0)"; 
 
 }
 
