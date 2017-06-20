@@ -239,11 +239,6 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 }
 
 
-
-
-
-
-
 /******************* Display Class Information Created By Coach*************/
 
   else if($_REQUEST['act'] == 'get_classes_info')
