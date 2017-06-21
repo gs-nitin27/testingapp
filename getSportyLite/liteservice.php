@@ -838,6 +838,27 @@ switch ($module)
     return '0';
   }//End of Switch
 }//End of Function
+
+ public function getBlogData($where)
+  {  
+    $query = mysql_query("SELECT * FROM `gs_resources`".$where."");
+    if(mysql_num_rows($query)>0)
+    {
+    while ($row = mysql_fetch_assoc($query))
+    { 
+      //$row['description'] = nl2br(htmlentities($row['description'], ENT_QUOTES, 'UTF-8'));
+      $row['description'] = nl2br($row['description']);
+      $rows[] = $row;
+    } 
+      return $rows;
+    }
+     else
+     {
+      return $row;
+     }
+
+  } 
+
 } // End of Class
  
 
