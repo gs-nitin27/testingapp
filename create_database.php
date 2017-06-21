@@ -879,9 +879,17 @@ if($response)
 
                 }
               }
+
+                            for ($i=0; $i <count($response) ; $i++)
+                            { 
+                               $job_status      = $request->job_status($response[$i]['id'],$userid);
+                               $response[$i]['job_status'] =$job_status;
+                            }
                                        
-      $response      = $request ->getuserjobs($response,$userid);
-      $response      = $request ->getuserOffer($response,$userid);
+      //$response      = $request ->getuserjobs($response,$userid);
+
+    //  $response      = $request ->getuserOffer($response,$userid);
+
       $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
       echo json_encode($Result);
 }
