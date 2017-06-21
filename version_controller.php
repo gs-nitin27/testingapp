@@ -12,14 +12,14 @@ include('services/version_service.php');
   $response          =   $request->cheack_version($version_key,$app_type);
   if($response==1)
    {
-        $sucess   = array('forceUpgrade'=>'false','recommondUpgrade'=>'false','stayonApp'=>"false"); 
-          $Result = array('status' => '0','data'=>[$sucess] ,'msg'=>'No Updated');
+        $sucess   = array('forceUpgrade'=>'true','recommondUpgrade'=>'true','stayonApp'=>"true"); 
+          $Result = array('status' => '1','data'=>[$sucess] ,'msg'=>'Updated');
           echo json_encode($Result); 
    }
    else
    {     
-          $fail   = array('forceUpgrade'=>'true','recommondUpgrade'=>'true','stayonApp'=>"true");
-          $Result = array('status' => '1','data'=>[$fail],'msg'=>'Updated');
+          $fail   = array('forceUpgrade'=>'false','recommondUpgrade'=>'false','stayonApp'=>"false");
+          $Result = array('status' => '0','data'=>[$fail],'msg'=>'No Updated');
           echo json_encode($Result); 
    } 
 }
