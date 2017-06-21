@@ -785,7 +785,30 @@ else if($_REQUEST['act'] == "gs_searching")
     }
 }
   
+else if($_REQUEST['act'] == "blog_api")
+{
 
+$id     = $_REQUEST['id'];
+$token  = $_REQUEST['token'];
+if(!isset($id))
+{
+  $where = 'WHERE `token` IN ('.$token.') AND `status` = 1 ORDER BY `date_created` DESC';
+}else
+{ 
+  $where = "WHERE `id` = '$id' ";
+}
+$req = new liteservice();
+$res = $req->getBlogData($where);
+if($res != 0)
+{
+ $data = array('data'=>$res,'status'=>'1');
+ 
+}else
+{
+  $data = array('data'=>$res,'status'=>'');
+}
+echo json_encode($data);
+}
 
 
 
