@@ -219,6 +219,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                  $sum1=strip_tags($row['summary']);
                  $row['summary'] = $sum1; 
                  $row['fav'] = '0';
+                 if($row['url'] == '' || $row['url'] == null)
+                 {
+                  $row['url'] = 'http://darkhorsesports.in/blogdetail.html?n='.$row['id'];
+                 }
                  $data[] = $row;
                  
             }
@@ -301,7 +305,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         if(mysql_num_rows($query)>0)
         {
            while ($row = mysql_fetch_assoc($query))
+           {  
+          if($row['url'] == '' || $row['url'] == null)
            {
+            $row['url'] = 'http://darkhorsesports.in/blogdetail.html?n='.$row['id'];
+           }
              $data[] = $row;
            }
             return $data;
