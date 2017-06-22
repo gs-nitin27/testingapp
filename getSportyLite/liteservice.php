@@ -208,7 +208,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function getList()
     { 
-      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `id` desc ");
+      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `date_created` desc ");
       $row  = mysql_num_rows($query);
        if($row > 0)
         {
