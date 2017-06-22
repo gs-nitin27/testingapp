@@ -1,6 +1,6 @@
 <?php 
 include('../config1.php');
-include('configservice.php');
+include('config_service.php');
 
 
 
