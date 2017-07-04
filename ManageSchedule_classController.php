@@ -205,9 +205,8 @@ else if($_POST['act'] == "get_classstudent")
 }
 }
 
-else if($_POST['act'] == "get_classlisting")
-{
-						$time = urldecode($_POST['time']);
+else if($_REQUEST['act'] == "get_classlisting")
+{                       $time = urldecode($_POST['time']);
 						$time_in_24_hour_format  = date("H:i", strtotime("7 p.m"));
 
 						$userid = urldecode($_POST['userid']);
@@ -251,7 +250,7 @@ else if($_POST['act'] == "get_classlisting")
 			 }
 
 					}        for($k = 0 ; $k<sizeof($res) ;$k++)
-					         {
+		         	         {
 
 					             if($res[$k]['status'] == "")
 					             {
@@ -263,15 +262,17 @@ else if($_POST['act'] == "get_classlisting")
 
 					         }
 							
-							$data = array('data'=>$res);
+							$data = array('status'=>'1','data'=>$res);
 							echo json_encode($data);
 					         
 
-					    }
-					         else echo $res;
-
-
-}
+					    }         
+					    else
+					    {
+				         	$data = array('status'=>0,'data'=>[]);
+				         	echo json_encode($data);
+				        } 
+                  }
 
 
 

@@ -208,7 +208,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
     public function getList()
     { 
-      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `id` desc ");
+      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `date_created` desc ");
       $row  = mysql_num_rows($query);
        if($row > 0)
         {
@@ -219,6 +219,10 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
                  $sum1=strip_tags($row['summary']);
                  $row['summary'] = $sum1; 
                  $row['fav'] = '0';
+                 if($row['url'] == '' || $row['url'] == null)
+                 {
+                  $row['url'] = 'http://darkhorsesports.in/blogdetail.html?n='.$row['id'];
+                 }
                  $data[] = $row;
                  
             }
@@ -301,7 +305,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
         if(mysql_num_rows($query)>0)
         {
            while ($row = mysql_fetch_assoc($query))
+           {  
+          if($row['url'] == '' || $row['url'] == null)
            {
+            $row['url'] = 'http://darkhorsesports.in/blogdetail.html?n='.$row['id'];
+           }
              $data[] = $row;
            }
             return $data;
@@ -830,6 +838,27 @@ switch ($module)
     return '0';
   }//End of Switch
 }//End of Function
+
+ public function getBlogData($where)
+  {  
+    $query = mysql_query("SELECT * FROM `gs_resources`".$where."");
+    if(mysql_num_rows($query)>0)
+    {
+    while ($row = mysql_fetch_assoc($query))
+    { 
+      //$row['description'] = nl2br(htmlentities($row['description'], ENT_QUOTES, 'UTF-8'));
+      $row['description'] = nl2br($row['description']);
+      $rows[] = $row;
+    } 
+      return $rows;
+    }
+     else
+     {
+      return $row;
+     }
+
+  } 
+
 } // End of Class
  
 

@@ -217,16 +217,11 @@ public function updateseennotification($id)
   {
 
      $query = mysql_query("SELECT avg(total_rating) AS rating ,COUNT(*) AS total_user FROM gs_rating where entity_id=$userid ");
-
      $row   =mysql_fetch_assoc($query);
-
-     if ($row['rating']!=null)
-
-     {
-
-       return $row;
-
-     }
+    if ($row['rating']!=null)
+    {
+     return $row;
+   }
 
      else
 
@@ -329,7 +324,7 @@ public function getConnectedUser($userid,$usertype)
 {
   if($usertype=='L')
   {
-      $query = mysql_query("SELECT userid,name,email,sport,gender,dob,user_image,location,prof_id,prof_name FROM user WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`=$userid)");
+      $query = mysql_query("SELECT a.`userid`,a.`name`,a.`email`,a.`sport`,a.`gender`,a.`dob`,a.`user_image`,a.`location`,a.`prof_id`,a.`prof_name`,(b.`student_id` IS NOT NULL) AS class_student_status FROM user AS a LEFT JOIN `gs_class_data` AS b ON a.`userid` = b.`coach_id` WHERE userid IN (SELECT `prof_user_id` FROM `gs_connect` WHERE `lite_user_id`='$userid') GROUP BY a.`userid` ");
     $num=mysql_num_rows($query);
     if ($num!=0) 
      {
@@ -793,6 +788,7 @@ public function joinStudentData($userdata)
   $fees              =  $userdata->amount_paid;
   $payment_id        =  $userdata->payment_id;
   $remark            =  $userdata->remark; 
+  $coach_id          =  $userdata->coach_id; 
    if($userdata->mode_of_payment == 1)
    {
         $transaction_id = 0;
@@ -814,14 +810,15 @@ public function joinStudentData($userdata)
 
   {
 
-    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`,`transaction_id`,`payment_id`,`remark`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees','$transaction_id','$payment_id','$remark')");
-
-  return 1;
-
+    $query= mysql_query("INSERT INTO gs_class_data(`id`,`classid`,`student_id`, `student_name`,`student_dob`,`location`,`gender`,`date_added`,`mode_of_payment`,`fees`,`transaction_id`,`payment_id`,`remark`,`coach_id`) VALUES('0','$classid','$student_id','$student_name ','$student_dob','$location','$gender',CURDATE(),'$mode_of_payment','$fees','$transaction_id','$payment_id','$remark','$coach_id')");
+if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
   }
-
-
-
+  }
 }
 
 /***********************************************************************************************************/
@@ -952,7 +949,7 @@ public function createdDailyLog($userdata)
 
 public function viewDailyLog($userid)
 {
-     $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` DESC");
+     $query =mysql_query("SELECT *FROM `gs_athlit_dailylog`  WHERE userid = '$userid ' ORDER BY `date` ASC");
       $num = mysql_num_rows($query);
     if ($num!=0) 
     {    
@@ -1122,43 +1119,23 @@ public function edit_log_assign($item)
 /*****************************Function for log Listing ********************/
 
 public function coach_log_list($coachid)
-
 {
 
    $query = mysql_query("SELECT * FROM `gs_coach_assignment` WHERE `coach_id`='$coachid'");
-
-
-
-    $num = mysql_num_rows($query);
-
+   $num = mysql_num_rows($query);
   if ($num)
-
   {
-
-     while($row=mysql_fetch_assoc($query))
-
+   while($row=mysql_fetch_assoc($query))
                    {
-
-                    
-
                      $data[]   = $row ;
 
                    }
-
-                   return $data;
-
+              return $data;
   }
-
   else
-
   {
-
      return 0;
-
   }
-
-
-
 }
 
 
@@ -1179,19 +1156,9 @@ public function studentlist($userid , $assignment_id)
 
 
 
-
-
-  // $query = mysql_query("SELECT * , `gs_coach_class`.`class_title` FROM `gs_class_data` WHERE `classid` IN (SELECT `id` ,`class_title` FROM `gs_coach_class` WHERE `userid` = '$userid')");
-
-
-
-
-
-    $num = mysql_num_rows($query);
-
+  $num = mysql_num_rows($query);
   if ($num)
-
-  {
+ {
 
      while($row=mysql_fetch_assoc($query))
 
@@ -1665,18 +1632,37 @@ $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$us
 
 public function create_user_schedule($data)
 {
-   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created')");
+   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
   if($query)
   {
     return mysql_insert_id();
 
-  }else
+  }
+  else
+  {
 
     return "0";
+  }
 }
 
 
-/***************************************Update Schedule Function**************************************/
+public function edit_schedule($data)
+{
+  $query = mysql_query("UPDATE `gs_athletes_schedule` SET `phase`='$data->phase',`activity`='$data->activity',`time_of_day`='$data->time_of_day',`remarks`='$data->remarks',`schedule_duration_day`='$data->schedule_duration_day',`schedule_type`='$data->schedule_type',`active_status`='$data->active_status' WHERE `id`='$data->id'");
+  $num=mysql_affected_rows(); 
+  if ($num==1) 
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+
+
+/**********************Update Schedule Function*******************************/
 
 
 public function update_user_schedule($id,$time_of_day,$active_status)

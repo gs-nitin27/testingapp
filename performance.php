@@ -207,7 +207,7 @@ else if($_REQUEST['act'] == 'view_request_assessment')
      }
      else
      {
-       $data = array('status' => 0, 'data'=>$res, 'msg'=>'Now view request Assessment');
+       $data = array('status' => 0, 'data'=>$res, 'msg'=>'No Assessment Requested');
            echo json_encode($data);
      } 
 }

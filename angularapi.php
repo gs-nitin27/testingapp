@@ -20,7 +20,8 @@ if($_REQUEST['act'] == 'contentangular')
 else if($_REQUEST['act'] == 'angulartest')
 {
 	     $username       =  $_REQUEST['email'];
-		 $password       =  md5($_REQUEST['password']);   
+		   $password       =  md5($_REQUEST['password']); 
+       print_r($_REQUEST);die;  
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
          if($res)

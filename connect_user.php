@@ -239,11 +239,6 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 }
 
 
-
-
-
-
-
 /******************* Display Class Information Created By Coach*************/
 
   else if($_REQUEST['act'] == 'get_classes_info')
@@ -1030,7 +1025,7 @@ else if($_REQUEST['act'] == 'veiw_athlete_log')
 
 
 
-/************************************************Create Schedule********************************************/
+/*************************Create Schedule**********************************/
 
 else if ($_REQUEST['act'] == 'create_schedule') 
 {
@@ -1053,10 +1048,7 @@ else if ($_REQUEST['act'] == 'create_schedule')
 
 }
 
-
-
-
-/******************************View Schedule*******************/
+/*************************View Schedule**********************************/
 
   else if($_REQUEST['act'] == 'view_schedule')
   {
@@ -1071,6 +1063,31 @@ else if ($_REQUEST['act'] == 'create_schedule')
       else
       {
         $response = array('status' => '0','data'=>[],'msg'=>'Failure' );
+        echo json_encode($response);
+      }
+  }  
+
+
+
+
+
+
+
+/******************************Edit Schedule*******************/
+
+  else if($_REQUEST['act'] == 'edit_schedule')
+  {
+      $data     = json_decode(file_get_contents("php://input"));
+      $req      = new connect_userservice();
+      $res      = $req->edit_schedule($data);
+      if($res != "0")
+      {
+        $response = array('status' => '1','data'=>'1','msg'=>'Edit Success' );
+        echo json_encode($response);
+      }
+      else
+      {
+        $response = array('status' => '0','data'=>'0','msg'=>'Failure' );
         echo json_encode($response);
       }
   }  

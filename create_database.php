@@ -879,9 +879,17 @@ if($response)
 
                 }
               }
+
+                            for ($i=0; $i <count($response) ; $i++)
+                            { 
+                               $job_status      = $request->job_status($response[$i]['id'],$userid);
+                               $response[$i]['job_status'] =$job_status;
+                            }
                                        
-      $response      = $request ->getuserjobs($response,$userid);
-      $response      = $request ->getuserOffer($response,$userid);
+      //$response      = $request ->getuserjobs($response,$userid);
+
+    //  $response      = $request ->getuserOffer($response,$userid);
+
       $Result = array('status' => '1','data'=>$response ,'msg'=>'Searching successfully');
       echo json_encode($Result);
 }
@@ -963,7 +971,7 @@ else
 
 //********* CODE FOR the view of JOB , EVENT , TOURNAMENT ****//
 
-else if($_POST['act'] == "getsearchview")
+else if($_REQUEST['act'] == "getsearchview")
 {
  
     $type  = urldecode($_REQUEST['type']);
@@ -974,75 +982,22 @@ else if($_POST['act'] == "getsearchview")
     $res   = $req->getCreation($where , $type);
     if($res != 0)
     {
-    /*********************************/
-    $eligibility = $res[0]['eligibility1'];
-    $eligibility = explode("|",$eligibility);
-    $eligibility = array_filter(array_values($eligibility));
-    $size        = sizeof($eligibility);
-    $el = array();
-    for ($i=0; $i <$size ; $i++) 
-    { 
-        $index = "Eligibility ".($i +'1');
-        if($eligibility[$i] == '')
-        {
-        $el[$index] = "";
-        }
-        else
+      if($type == '2' || $type == '3')
         { 
-        $el[$index] = $eligibility[$i];
+          $eligibility = $res[0]['eligibility1'];
+          $eligibility = explode("|",$eligibility);
+          $res[0]['eligibility'] = $eligibility;
+          $terms_cond = $res[0]['terms_cond1'];
+          $terms_cond = explode("|",$terms_cond);
+          $res[0]['terms_cond'] = $terms_cond;
         }
-    $elig[] = $el[$index];
-    }
-
-    $res[0]['eligibility1'] = $elig;
-
-
-    if($type == '2')
-    {
-    $terms = $res[0]['terms_cond1'];
-    }
-    else if($type == '3')
-    {
-    $terms = $res[0]['terms_and_cond1'];
-    }
-    $terms = explode("|",$terms);
-    $terms = array_filter(array_values($terms));
-    $size  = sizeof($terms);
-
-    $tc = array();
-    for ($i=0; $i <$size ; $i++) 
-    { 
-    $index = "Terms & condition ".($i +'1');
-    if($terms[$i] == '')
-    {
-    $tc[$index] = "";
-    }
-    else
-    { 
-    $tc[$index] = $terms[$i];
-    }
-    
-    $t_and_c[] = $tc[$index];
-
-    }
-    $terms = $t_and_c;
-          if($type == '2')
-          {
-          $res[0]['terms_cond1'] = $terms;
-          }
-          else if($type == '3')
-          {
-
-          $res[0]['terms_and_cond1'] = $terms;
-        
-          }
   $req           =  new liteservice();
-  $res2          = $req->getfav($user_id,$type);
+  $res2          =  $req->getfav($user_id,$type);
                if($res2 != 0 && $res2['userfav'] != '')
               {
                 $res2 = split(",", $res2['userfav']);
                 foreach ($res as $key => $value)
-                {
+                {       
                     if(in_array($res[$key]['id'], $res2))
                     {
                        $res[$key]['fav'] = '1';
@@ -1053,42 +1008,42 @@ else if($_POST['act'] == "getsearchview")
                     }
 
                 }
-              }
-
-                         if ($type=='1')
-                         {  
-                            for ($i=0; $i <count($res) ; $i++)
-                            {  $request       =   new userdataservice();
-                               $job_status      = $request->job_status($res[$i]['id'],$user_id);
-                               $res[$i]['job_status'] = $job_status;
-                               $response = $res; 
-                            }
-                         }
-                        if($type=='2')
-                          {
-                            for ($i=0; $i <count($res) ; $i++)
-                            {  $request         =   new userdataservice();
-                               $event_status     = $request->event_status($res[$i]['id'],$user_id);
-                               $res[$i]['event'] = $event_status;
-                               $response = $res; 
-                            }
-                          } 
-                        
-                          if($type=='3') 
-                          {
-                            for ($i=0; $i <count($res) ; $i++)
-                            {  $request         =   new userdataservice();
-                               $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
-                               $res[$i]['tour'] = $tour_status;
-                               $response        = $res; 
-                            }
-                          }
-
+              } 
+       foreach ($res[0] as $key => $value) {
+         $res[0][$key] = utf8_encode($value);    // FOR ENCODING SPECIAL CHARACTERS IN DATA 
+        }
+       if ($type=='1')
+         {  
+            for ($i=0; $i <count($res) ; $i++)
+            {  $request       =   new userdataservice();
+               $job_status      = $request->job_status($res[$i]['id'],$user_id);
+               $res[$i]['job_status'] = $job_status;
+               $response = $res; 
+            }
+         }
+        if($type=='2')
+          {
+            for ($i=0; $i <count($res) ; $i++)
+            { 
+              $request         =   new userdataservice();
+               $event_status     = $request->event_status($res[$i]['id'],$user_id);
+               $res[$i]['event'] = $event_status;
+               $response = $res; 
+            }
+          } 
+        
+          if($type=='3') 
+          {
+            for ($i=0; $i <count($res) ; $i++)
+            {  $request         =   new userdataservice();
+               $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
+               $res[$i]['tour'] = $tour_status;
+               $response        = $res; 
+            }
+          }
    $data = array('data'=>$response  , 'status'=>'1');
    echo json_encode($data);
-
-
-          }
+       }
        else
        {
        $data = array('data'=>$response, 'status'=>'0');
@@ -1631,35 +1586,34 @@ else
   $sport         =   urldecode($_REQUEST ['sport']); 
   $location      =   urldecode($_REQUEST ['location']); 
   $key           =   urldecode($_REQUEST ['key']); 
-  $module ='6';                                       //  For Resources Then Module
+  $module ='6';                                       //  For 
   $request       =   new userdataservice();
-  $where[]       =   '1 =1 ORDER by `id` desc ';
+  //$where[]       =   '1 =1 ORDER by `id` desc ';
   $arr = array();
-
    if($key  != '')
    {
-      $where[] = " `description` LIKE '%$key%' ORDER by `id` desc ";
+      $where[] = " `description` LIKE '%$key%'  ";
       $arr['description'] =  $key  ; 
    }
   if($location  != '')
    {
-      $where[] = "`location` LIKE '%$location%' ORDER by `id` desc ";
+      $where[] = "`location` LIKE '%$location%'  ";
       $arr['location'] =  $location; 
    }
 
    if($title != '')
    {
-      $where[] = " `title` LIKE '%$title%' ORDER by `id` desc ";
+      $where[] = " `title` LIKE '%$title%' ";
       $arr['title'] =  $title ; 
    }
-  if($type != '')
+  if($topic != '')
   {
-    $where[] = " `topic_of_artical` LIKE '%$type%' ORDER by `id` desc ";
-    $arr['topic_of_artical'] =  $type ; 
+    $where[] = " `topic_of_artical` LIKE '%$topic%'  ";
+    $arr['topic_of_artical'] =  $topic ; 
   }
   if($sport != '')
   {
-    $where[] = " `sport` LIKE '%$sport%' ORDER by `id` desc ";
+    $where[] = " `sport` LIKE '%$sport%' ";
     $arr['sport'] =  $sport ; 
   }
     $whereclause   = implode('AND', $where);
