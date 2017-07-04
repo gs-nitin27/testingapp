@@ -1,5 +1,5 @@
 {
-            "Education": {
+    "Education": {
     "formalEducation": [],
     "otherCertification": [],
     "sportEducation": []
@@ -9,7 +9,7 @@
     "workExperience": []
   },
             "HeaderDetails": {
-                              "designation": " ",
+                    "designation": " ",
                     "acamedy": " ",
                     "location": "",
                     "description": " "

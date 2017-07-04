@@ -5,7 +5,7 @@ include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
 
-
+ 
 /******************This Act are used to Edit the User Profile********************************/
 
 if($_REQUEST['act'] == 'editUserData')	
@@ -80,6 +80,10 @@ else
                       $data = file_get_contents('json/coach_profile.json');
                     }
                     if ($prof_id==13) 
+                    {
+                      $data = file_get_contents('json/other_profile.json');
+                    }
+                    else
                     {
                       $data = file_get_contents('json/other_profile.json');
                     }
