@@ -75,11 +75,11 @@ else
                     {
                       $data = file_get_contents('json/Athletes.json');
                     }
-                    if ($prof_id==2) 
+                   else if ($prof_id==2) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
                     }
-                    if ($prof_id==13) 
+                   else if ($prof_id == 13) 
                     {
                       $data = file_get_contents('json/other_profile.json');
                     }
@@ -90,7 +90,9 @@ else
                }
                 else
                 {
+                  
                   $data = $res['user_detail'];
+
                 }
                   $data = json_decode($data); 
                   $count = 0;
