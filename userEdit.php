@@ -87,7 +87,7 @@ else
                     }
                     else
                     {
-                      $data = file_get_contents('json/coach_profile.json');
+                      $data = file_get_contents('json/other_profile.json');
                     }
                }
                 else
