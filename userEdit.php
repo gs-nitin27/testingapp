@@ -14,8 +14,10 @@ if($_REQUEST['act'] == 'editUserData')
    $userdata 	     =  json_decode(file_get_contents("php://input"));
    $userid         =  @$_REQUEST['userid'];
    $prof_id        =  @$_REQUEST['prof_id'];
-  //$userid        = $userdata->user->userid;
-  //$prof_id       = $userdata->user->prof_id;
+   $req            = new UserProfileService();
+   $res            = $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
+    //cho $userdata->Document;die;
+    
     if(is_null($userid))
    {
         $user = array('status' => 0, 'data'=> 'User Id is Empty ' , 'msg'=>'No User Id' );
@@ -30,11 +32,11 @@ if($_REQUEST['act'] == 'editUserData')
    }
     else
     {
-          $req 					 = new UserProfileService();
-          $res 					 = $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
+          
+          
         	if($res)
-        	{
-          	$user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
+        	{ $req->upload_Document_Image($userdata);
+            $user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
                     echo json_encode($user); 
           }
           else
@@ -123,16 +125,16 @@ else
                                             else
                                             {
                                                 ++$count1;
-                                            }
-                                      }                          
-                              }
+                                  }
+                              }                          
+                           }
                             
-                        }
+                      }
                   }
-}
-}
-}
-}
+              }
+          }
+      }
+  }
                      $comp = ($count/($count+$count1+1))*100;
                      $comp1=round($comp,2);
                      //$prof_status=$comp1.''.'%';

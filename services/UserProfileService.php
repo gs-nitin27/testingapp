@@ -436,8 +436,7 @@ public function listuserdata($userid)
 
 public function edit_user($userid,$prof_id,$data)
 {
-
-   $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+  $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
   if($query)
        {
          return 1;
@@ -531,10 +530,27 @@ public function get_imageName($userid)
 // }// End Function
 
 
+public function upload_Document_Image($userdata)
+{
+  
+$image = $userdata->Document->image;  
+$pos  = strpos($image, ';');
+$type = explode(':', substr($image, 0, $pos))[1];
+$type = explode('/', $type);
+$filename = "nitin".".".$type[1];
+$filepath=  UPLOAD_DIR.'/documents/'.$filename;
+$image_real = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
 
-
-// find_jobtitle($id)
-
+$upload = file_put_contents($filepath, $image_real);
+if($upload)
+{
+  return $upload;
+}
+else
+{
+  return 0;
+}
+}
 
 
 
