@@ -551,6 +551,14 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
         unset($userdata->Document);
         $data = json_encode($userdata);      
       }
+      
+      if($field =='Achivement_bestResult') 
+      {
+        $userdata->Achivement->bestResult[$position]->image=$img_name;
+        unset($userdata->Document);
+        $data = json_encode($userdata);      
+      }
+
       if($field =='LatestResults') 
       {
         $userdata->LatestResults[$position]->image =$img_name;
