@@ -533,11 +533,11 @@ public function get_imageName($userid)
 
 public function upload_Document_Image($userdata,$userid,$prof_id)
 {
-
+      $img_name  =  $userdata->Document->img_name;
       $img       =  $userdata->Document->image; 
       $field     =  $userdata->Document->field; 
       $position  =  $userdata->Document->position; 
-      $img_name  =  $userid."_".$field."_".$position.".png";
+      //$img_name  =  $userid."_".$field."_".$position.".png";
       $filepath  =  str_replace('data:image/png;base64,', '', $img);
       $img       =  str_replace('$filepath,', '', $img);
       $img       =  str_replace(' ', '+', $img);
@@ -545,20 +545,19 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
       $success   =  move_uploaded_file($img, $filepath);
       $file      =  UPLOAD_DIR.'documents/'.$img_name;
       $success   =  file_put_contents($file, $data);
+      
       if($field =='Achivement_awards') 
       {
         $userdata->Achivement->awards[$position]->image=$img_name;
         unset($userdata->Document);
         $data = json_encode($userdata);      
       }
-      
       if($field =='Achivement_bestResult') 
       {
         $userdata->Achivement->bestResult[$position]->image=$img_name;
         unset($userdata->Document);
         $data = json_encode($userdata);      
       }
-
       if($field =='LatestResults') 
       {
         $userdata->LatestResults[$position]->image =$img_name;
