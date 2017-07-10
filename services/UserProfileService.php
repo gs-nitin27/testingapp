@@ -562,7 +562,7 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
       
     if($query)
     {
-        return 1;
+        return $img_name;
     } 
     else
     {    
