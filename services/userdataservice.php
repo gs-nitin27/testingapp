@@ -1802,6 +1802,7 @@ public function createResources($data)
       $path= $url."/"."$userid"."_".$time.'.png';
       $success =move_uploaded_file($img, $filepath);
       $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+
       // echo "$file";die();
      // echo "-----";
      // echo "dev";
@@ -2190,6 +2191,7 @@ switch ($module)
    case 1:
      $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
+     
    case 2:
     $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
    $entry_passcode='';

@@ -436,6 +436,7 @@ public function listuserdata($userid)
 
 public function edit_user($userid,$prof_id,$data)
 {
+
   $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
   if($query)
        {
@@ -530,30 +531,46 @@ public function get_imageName($userid)
 // }// End Function
 
 
-public function upload_Document_Image($userdata)
+public function upload_Document_Image($userdata,$userid,$prof_id)
 {
-  
-$image = $userdata->Document->image;  
-$pos  = strpos($image, ';');
-$type = explode(':', substr($image, 0, $pos))[1];
-$type = explode('/', $type);
-$filename = "nitin".".".$type[1];
-$filepath=  UPLOAD_DIR.'/documents/'.$filename;
-$image_real = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
 
-$upload = file_put_contents($filepath, $image_real);
-if($upload)
-{
-  return $upload;
+      $img       =  $userdata->Document->image; 
+      $field     =  $userdata->Document->field; 
+      $position  =  $userdata->Document->position; 
+      $img_name  =  $userid."_".$field."_".$position.".png";
+      $filepath  =  str_replace('data:image/png;base64,', '', $img);
+      $img       =  str_replace('$filepath,', '', $img);
+      $img       =  str_replace(' ', '+', $img);
+      $data      =  base64_decode($img);
+      $success   =  move_uploaded_file($img, $filepath);
+      $file      =  UPLOAD_DIR.'documents/'.$img_name;
+      $success   =  file_put_contents($file, $data);
+      if($field =='Achivement_awards') 
+      {
+        $userdata->Achivement->awards[$position]->image=$img_name;
+        unset($userdata->Document);
+        $data = json_encode($userdata);      
+      }
+      if($field =='LatestResults') 
+      {
+        $userdata->LatestResults[$position]->image =$img_name;
+        unset($userdata->Document);
+        $data = json_encode($userdata); 
+      }   
+
+      $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+      
+    if($query)
+    {
+        return 1;
+    } 
+    else
+    {    
+        return 0;
+    }  
 }
-else
-{
-  return 0;
-}
-}
 
-
-
+     
 } // End of Class
 
 

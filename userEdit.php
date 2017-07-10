@@ -6,37 +6,34 @@ include('services/UserProfileService.php');
 include('services/emailService.php');
 
  
-/******************This Act are used to Edit the User Profile********************************/
+/******************This Act are used to Edit the User Profile*************/
 
 if($_REQUEST['act'] == 'editUserData')	
-{
-   $data 				   =  file_get_contents("php://input");
-   $userdata 	     =  json_decode(file_get_contents("php://input"));
-   $userid         =  @$_REQUEST['userid'];
-   $prof_id        =  @$_REQUEST['prof_id'];
-   $req            = new UserProfileService();
-   $res            = $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
-    //cho $userdata->Document;die;
-    
-    if(is_null($userid))
+{ 
+
+   $data 				 =  file_get_contents("php://input");
+   $userdata     =  json_decode($data);
+   $userid       =  @$_REQUEST['userid'];
+   $prof_id      =  @$_REQUEST['prof_id'];
+   $req          =  new UserProfileService();
+   $res          =  $req->upload_Document_Image($userdata,$userid,$prof_id);
+   //$res          =  $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
+
+   if(is_null($userid))
    {
         $user = array('status' => 0, 'data'=> 'User Id is Empty ' , 'msg'=>'No User Id' );
         echo json_encode($user);
-        die();
    }
   if(is_null($userdata))
-   {
+  {
         $user = array('status' => 0, 'data'=> 'Json is Invalid' , 'msg'=>'Invalid Json data' );
         echo json_encode($user);
-        die();
-   }
+  }
     else
     {
-          
-          
-        	if($res)
-        	{ $req->upload_Document_Image($userdata);
-            $user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
+         	if($res)
+        	{
+             $user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
                     echo json_encode($user); 
           }
           else
@@ -167,6 +164,7 @@ $user = array('status' => 1, 'data'=> json_decode($res), 'msg'=>'Success');
 echo json_encode($user);
 
 }// End If Statement
+
 
 
 
