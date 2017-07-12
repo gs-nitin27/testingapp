@@ -1521,7 +1521,6 @@ else if($_REQUEST['act'] == "gs_searching")
    if ($module=='2')
    {
       $response   = $request->eventsearch($keyword);
-
    }
    if ($module=='3')
   {
@@ -1592,15 +1591,15 @@ else
   $arr = array();
    if($key  != '')
    {
-      $where[] = " `description` LIKE '%$key%'  ";
-      $arr['description'] =  $key  ; 
+      $where[] = " `summary` LIKE '%$key%' || `topic_of_artical` LIKE '%$key%' ";
+      $arr['summary']           =  $key  ; 
+      $arr['topic_of_artical']  =  $key  ; 
    }
   if($location  != '')
    {
       $where[] = "`location` LIKE '%$location%'  ";
       $arr['location'] =  $location; 
    }
-
    if($title != '')
    {
       $where[] = " `title` LIKE '%$title%' ";
@@ -1617,6 +1616,7 @@ else
     $arr['sport'] =  $sport ; 
   }
     $whereclause   = implode('AND', $where);
+
     $response      = $request->findArticle($whereclause);
     $req           =  new liteservice();
     $res2          = $req->getfav($userid,$module);
