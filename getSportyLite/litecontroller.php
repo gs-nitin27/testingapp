@@ -422,8 +422,24 @@ else if($_REQUEST['act']=="gs_sub")
    $location     =  urldecode($_REQUEST ['location']);
    $topic        =  urldecode($_REQUEST ['topic']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
-   $user_id      =  urldecode($_REQUEST ['user_id']);
 
+   if($topic=='Jobs')
+   {
+     $module = 1;
+   }
+   if($topic=='Event')
+   {
+     $module = 2;
+   }
+   if($topic=='Tournaments')
+   {
+     $module = 3;
+   }
+   if($topic=='Articles')
+   {
+     $module = 6;
+   }
+   
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
@@ -470,7 +486,7 @@ else if($_REQUEST['act']=="gs_sub")
    $req = new liteservice();
 
 
-   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
+   $res = $req->saveSubscribe($module,$user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
 
    if($res != 0)
    {
