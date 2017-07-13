@@ -531,8 +531,12 @@ public function get_imageName($userid)
 // }// End Function
 
 
+
 public function upload_Document_Image($userdata,$userid,$prof_id)
 {
+
+      if ($prof_id == 1)
+      {
       $img_name  =  $userdata->Document->img_name;
       $img       =  $userdata->Document->image; 
       $field     =  $userdata->Document->field; 
@@ -545,7 +549,12 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
       $success   =  move_uploaded_file($img, $filepath);
       $file      =  UPLOAD_DIR.'documents/'.$img_name;
       $success   =  file_put_contents($file, $data);
-      
+      if(empty($img_name))
+      {
+        unset($userdata->Document);
+        $data = json_encode($userdata);      
+      }
+     
       if($field =='Achivement_awards') 
       {
         $userdata->Achivement->awards[$position]->image=$img_name;
@@ -564,7 +573,14 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
         unset($userdata->Document);
         $data = json_encode($userdata); 
       }   
+      }
+      else
+      {
+        $data = json_encode($userdata); 
+        $img_name   = 1;
 
+      }
+     
       $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
       
     if($query)
