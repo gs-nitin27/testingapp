@@ -422,6 +422,7 @@ else if($_REQUEST['act']=="gs_sub")
    $location     =  urldecode($_REQUEST ['location']);
    $topic        =  urldecode($_REQUEST ['topic']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
+   $module       =  urldecode($_REQUEST ['module']);
 
 
    $where[]      = ' 1=1 ';
@@ -470,7 +471,7 @@ else if($_REQUEST['act']=="gs_sub")
    $req = new liteservice();
 
 
-   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
+   $res = $req->saveSubscribe($module,$user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
 
    if($res != 0)
    {
