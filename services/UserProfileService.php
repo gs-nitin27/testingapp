@@ -319,6 +319,7 @@ return 0;
 
 public function editProfile($userdata)
 {
+
 $userid                  = $userdata->userid;
 $prof_id                 = $userdata->prof_id; 
 $proffession             = $userdata->proffession;
@@ -525,49 +526,53 @@ public function get_imageName($userid)
 
 public function upload_Document_Image($userdata,$userid,$prof_id)
 {
-     // print_r($userdata);die();
-
       if ($prof_id == 1)
       {
-      $img_name  =  $userdata->Document->img_name;
-      if (empty($img_name))
-      {
-         unset($userdata->Document);
-         $data = json_encode($userdata);  
-      }
-      else
-      {
-      $img       =  $userdata->Document->image; 
-      $field     =  $userdata->Document->field; 
-      $position  =  $userdata->Document->position; 
-      $filepath  =  str_replace('data:image/png;base64,', '', $img);
-      $img       =  str_replace('$filepath,', '', $img);
-      $img       =  str_replace(' ', '+', $img);
-      $data      =  base64_decode($img);
-      $success   =  move_uploaded_file($img, $filepath);
-      $file      =  UPLOAD_DIR.'documents/'.$img_name;
-      $success   =  file_put_contents($file, $data);
-      
-           
-      if($field =='Achivement_awards') 
-      {
-        $userdata->Achivement->awards[$position]->image=$img_name;
-        unset($userdata->Document);
-        $data = json_encode($userdata);      
-      }
-      if($field =='Achivement_bestResult') 
-      {
-        $userdata->Achivement->bestResult[$position]->image=$img_name;
-        unset($userdata->Document);
-        $data = json_encode($userdata);      
-      }
-      if($field =='LatestResults') 
-      {
-        $userdata->LatestResults[$position]->image =$img_name;
-        unset($userdata->Document);
-        $data = json_encode($userdata); 
-      }   
-      }
+
+              $dob            =  $userdata->Bio->dob;
+              $email          =  $userdata->Bio->email;
+              $gender         =  $userdata->Bio->gender;
+              $location       =  $userdata->Bio->location;
+
+              $this->update_user_table($dob,$email,$gender,$location,$userid);
+              $img_name  =  $userdata->Document->img_name;
+              if (empty($img_name))
+              {
+                 unset($userdata->Document);
+                 $data = json_encode($userdata);  
+              }
+              else
+              {
+              $img       =  $userdata->Document->image; 
+              $field     =  $userdata->Document->field; 
+              $position  =  $userdata->Document->position; 
+              $filepath  =  str_replace('data:image/png;base64,', '', $img);
+              $img       =  str_replace('$filepath,', '', $img);
+              $img       =  str_replace(' ', '+', $img);
+              $data      =  base64_decode($img);
+              $success   =  move_uploaded_file($img, $filepath);
+              $file      =  UPLOAD_DIR.'documents/'.$img_name;
+              $success   =  file_put_contents($file, $data);
+                         
+              if($field =='Achivement_awards') 
+              {
+                $userdata->Achivement->awards[$position]->image=$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata);      
+              }
+              if($field =='Achivement_bestResult') 
+              {
+                $userdata->Achivement->bestResult[$position]->image=$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata);      
+              }
+              if($field =='LatestResults') 
+              {
+                $userdata->LatestResults[$position]->image =$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata); 
+              }   
+            }
     }
       else
       {
@@ -587,6 +592,15 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
         return 0;
     }  
 }
+
+
+
+public function update_user_table($dob,$email,$gender,$location,$userid)
+{
+  $query  = mysql_query("UPDATE `user` SET `dob`='$dob' , `email`='$email',`gender`='$gender',`location`='$location' WHERE `userid` ='$userid' ");
+  return 1;
+}
+
 
      
 } // End of Class
