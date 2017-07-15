@@ -419,30 +419,38 @@ else if($_REQUEST['act']=="gs_sub")
 {
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
-   $location     =  urldecode($_REQUEST ['location']);
-   $topic        =  urldecode($_REQUEST ['topic']);
+   $module       =  urldecode($_REQUEST ['module']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
+   if($module=='1')
+   {
+       $table = "gs_jobInfo" ;
+   }
+   if($module=='2')
+   {
+    $table = "gs_eventinfo" ;
+   }
+   if($module=='3')
+   {
+     $table = "gs_tournament_info" ;
+   }
+   if($module=='6')
+   {
+     $table = "gs_resources" ;
+   }
 
-   if($topic=='Jobs')
-   {
-     $module = 1;
-   }
-   if($topic=='Event')
-   {
-     $module = 2;
-   }
-   if($topic=='Tournaments')
-   {
-     $module = 3;
-   }
-   if($topic=='Articles')
-   {
-     $module = 6;
-   }
-   
-   $where[]      = ' 1=1 ';
+   $where[]      = "$table WHERE 1=1 ";
    $arr = array();
-   if($sports != '')
+
+   
+   if($module != '')
+   {
+       $arr['module'] = $module;    
+   }
+   else
+   {
+        $arr['module'] = $module;  
+   }
+  if($sports != '')
    {
      $where[] = " `sport` = '$sports' ";
      $arr['sport'] = $sports;
@@ -452,26 +460,6 @@ else if($_REQUEST['act']=="gs_sub")
      $where[] = " `sport` LIKE '%$sports%' ";
      $arr['sport'] = $sports;
    }
-   if($location != '')
-   {
-     $where[] = " `location` = '$location' ";
-     $arr['location'] = $location;
-   }
-   else
-   {
-     $where[] = " `location` LIKE '%$location%' ";
-     $arr['location'] = $location;
-   }
-    if($topic != '')
-   {
-     $where[] = " `topic_of_artical` = '$topic' "; 
-     $arr['topic_of_artical'] = $topic;    
-   }
-    else
-    {
-      $where[] = " `topic_of_artical` LIKE '%$topic%' "; 
-      $arr['topic_of_artical'] = $topic; 
-    }
    if($key != '')
    {
      $where[] = " `description` LIKE '%$key%' ";
@@ -484,8 +472,6 @@ else if($_REQUEST['act']=="gs_sub")
    }
    $whereclause = implode('AND', $where);
    $req = new liteservice();
-
-
    $res = $req->saveSubscribe($module,$user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
 
    if($res != 0)
@@ -508,9 +494,8 @@ else if($_REQUEST['act']=="gs_sub")
   else if($_REQUEST['act'] == 'get_subs')
   {
     $userid    = $_REQUEST['user_id'];
-    $module    = '6';
     $req       = new liteservice();
-    $res       = $req->getSubs($userid,$module);
+    $res       = $req->getSubs($userid);
         if($res != 0)
         { 
         $data = array('data'=>$res,'user_id'=>$userid,'status'=>'Success');

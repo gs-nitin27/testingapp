@@ -247,18 +247,10 @@ else if($_REQUEST['act']=="editprofile")
 $data1                    =  json_decode($_POST[ 'data' ]);
 $item                     =  new stdClass();
 $item->userid             =  $data1->userid;
-$item->email              =  $data1->email;
-$item->mobile_no          =  $data1->mobile_no;
 $item->prof_id            =  $data1->prof_id;
 $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
-$item->gender             =  $data1->gender;
-$item->dob                =  $data1->dob;
 $item->status             =  $data1->status; 
-$item->link               =  $data1->link; 
-$item->location           =  $data1->location; 
-$item->ageGroupCoached    =  $data1->ageGroupCoached; 
-$item->languagesKnown     =  $data1->languagesKnown; 
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  if ($item->status==0) 
@@ -279,6 +271,8 @@ $user = array('status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
 echo json_encode($user);
 }
 }
+
+
 
 
 /******************************This Act for Manage Application*************************/

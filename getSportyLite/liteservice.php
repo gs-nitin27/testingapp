@@ -515,12 +515,13 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
-
+ 
 
      /***************Save the Subscribe query [Function]*******************/
 
     public function saveSubscribe($module,$userid , $where, $textjson)
     { 
+
       if($this->getsubscribed($userid,$textjson) == 0)
       {
        $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('0','$userid','$where',$module,'0','1',CURDATE(),'$textjson')");
@@ -542,9 +543,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
      /******************Get  the All Subscribe Alert [Function]*************************/
 
-    public function getSubs($userid,$module)
+    public function getSubs($userid)
     {
-      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '$module'";
+      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' ";
       $exec = mysql_query($query);
       if(mysql_num_rows($exec) > 0)
       {

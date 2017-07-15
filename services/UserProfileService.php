@@ -320,20 +320,11 @@ return 0;
 public function editProfile($userdata)
 {
 $userid                  = $userdata->userid;
-$email                   = $userdata->email;
-$mobile_no               = $userdata->mobile_no;
 $prof_id                 = $userdata->prof_id; 
 $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
-$gender                  = $userdata->gender;
-$dob                     = $userdata->dob;
-$status                  = $userdata->status;  //staus
-$link                    = $userdata->link;
-$ageGroupCoached         = $userdata->ageGroupCoached;
-$languagesKnown          = $userdata->languagesKnown;
-$location                = $userdata->location; 
-
-$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown',`location`='$location' WHERE `userid`='$userid'");
+$status                  = $userdata->status; 
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`staus`='$status' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
@@ -534,14 +525,21 @@ public function get_imageName($userid)
 
 public function upload_Document_Image($userdata,$userid,$prof_id)
 {
+     // print_r($userdata);die();
 
       if ($prof_id == 1)
       {
       $img_name  =  $userdata->Document->img_name;
+      if (empty($img_name))
+      {
+         unset($userdata->Document);
+         $data = json_encode($userdata);  
+      }
+      else
+      {
       $img       =  $userdata->Document->image; 
       $field     =  $userdata->Document->field; 
       $position  =  $userdata->Document->position; 
-      //$img_name  =  $userid."_".$field."_".$position.".png";
       $filepath  =  str_replace('data:image/png;base64,', '', $img);
       $img       =  str_replace('$filepath,', '', $img);
       $img       =  str_replace(' ', '+', $img);
@@ -549,12 +547,8 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
       $success   =  move_uploaded_file($img, $filepath);
       $file      =  UPLOAD_DIR.'documents/'.$img_name;
       $success   =  file_put_contents($file, $data);
-      if(empty($img_name))
-      {
-        unset($userdata->Document);
-        $data = json_encode($userdata);      
-      }
-     
+      
+           
       if($field =='Achivement_awards') 
       {
         $userdata->Achivement->awards[$position]->image=$img_name;
@@ -574,13 +568,14 @@ public function upload_Document_Image($userdata,$userid,$prof_id)
         $data = json_encode($userdata); 
       }   
       }
+    }
       else
       {
         $data = json_encode($userdata); 
         $img_name   = 1;
 
       }
-     
+      
       $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
       
     if($query)
