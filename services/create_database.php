@@ -242,23 +242,23 @@ else if($_REQUEST['act'] == "logout")
 // if Status=0 then Email are send to User for varify
 
 
-
 else if($_REQUEST['act']=="editprofile")
 {
 
-$data1                    =  json_decode($_POST[ 'data' ]);
+$data1                    =  json_decode($_POST['data']);
 $item                     =  new stdClass();
 $item->userid             =  $data1->userid;
 $item->prof_id            =  $data1->prof_id;
 $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
+$item->status             =  $data1->status; 
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
- // if ($item->status==0) 
- // {
- // $req2     = new emailService();
- // $res2     = $req2->emailVarification($item->email);
- // }
+ if ($item->status==0) 
+ {
+ $req2     = new emailService();
+ $res2     = $req2->emailVarification($item->email);
+ }
 if($res==1)
 {
 $req1                 = new userdataservice();
@@ -819,6 +819,8 @@ else if($_POST['act'] == "search_job")
  $title       =urldecode($_POST['job_title']);
  $sport       =urldecode($_POST['sport_name']);
  $location    =urldecode($_POST['location']);
+ $gender      =urldecode($_POST['gender']);
+ $key         =urldecode($_POST['key']);
  $module      = '1' ;                            // This is Job Module
  $request   =   new userdataservice();
  $req           =   new liteservice();
@@ -839,7 +841,18 @@ else if($_POST['act'] == "search_job")
      $where[] = "`title` LIKE '%$title%' "; 
      $arr['title'] = $title ;    
   }
-     $whereclause = implode('AND', $where);
+ if($key  != '')
+  {
+     $where[] = "`description` LIKE '%$key%' "; 
+     $arr['key'] =  $key;    
+  }
+
+if($gender  != '')
+  {
+     $where[]    = "`gender` LIKE '%$gender%' "; 
+     $arr['gender '] =   $gender ;    
+  }
+    $whereclause = implode('AND', $where);
     $response       = $request ->jobsearch_user($whereclause);
 if($response)
 {
@@ -892,12 +905,19 @@ else if ($_REQUEST['act'] == "search_event" )
 {
  $userid      = urldecode($_REQUEST['userid']);
  $key         = urldecode($_REQUEST['key']);
+ $title       = urldecode($_REQUEST['title']);
  $sport       = urldecode($_REQUEST['sport']);
  $location    = urldecode($_REQUEST['location']);
  $module      = '2';                                // for Event 
  $request    = new userdataservice();
  $where[]         =   '1 =1 ';
  $arr = array();
+
+  if($title != '')
+ {
+      $where[] = " `name` LIKE '%$title%' ";
+      $arr['name'] =  $title ; 
+ }
  if($key != '')
  {
       $where[] = " `description` LIKE '%$key%' ";
@@ -1555,8 +1575,10 @@ else
   else if($_REQUEST['act'] == "filter_article")
  {
   $userid        =   urldecode($_REQUEST ['userid']);
+  $title         =   urldecode($_REQUEST ['title']);
   $topic         =   urldecode($_REQUEST ['topic']);  // Topic of the Article
   $sport         =   urldecode($_REQUEST ['sport']); 
+  $location      =   urldecode($_REQUEST ['location']); 
   $key           =   urldecode($_REQUEST ['key']); 
   $module ='6';                                       //  For 
   $request       =   new userdataservice();
@@ -1568,7 +1590,16 @@ else
       $arr['summary']           =  $key  ; 
       $arr['topic_of_artical']  =  $key  ; 
    }
-   
+  if($location  != '')
+   {
+      $where[] = "`location` LIKE '%$location%'  ";
+      $arr['location'] =  $location; 
+   }
+   if($title != '')
+   {
+      $where[] = " `title` LIKE '%$title%' ";
+      $arr['title'] =  $title ; 
+   }
   if($topic != '')
   {
     $where[] = " `topic_of_artical` LIKE '%$topic%'  ";
@@ -1616,13 +1647,20 @@ else
  else if($_REQUEST['act'] == "filter_tournament")
  {
   $userid        =   urldecode($_REQUEST ['userid']);
-  $level         =   urldecode($_REQUEST ['level']);  // Topic of the Article//
+  $title         =   urldecode($_REQUEST ['title']);
+  $level         =   urldecode($_REQUEST ['level']);  // Topic of the Article
   $sport         =   urldecode($_REQUEST ['sport']); 
+  $age_group     =   urldecode($_REQUEST ['age_group']); 
+  $gender        =   urldecode($_REQUEST ['gender']);
   $module        =  '3'; 
   $request       =   new userdataservice();
   $where[]         =   '1 =1 ';
   $arr = array();
-   
+   if($title  != '')
+   {
+      $where[] = " `title` LIKE '%$title%' ";
+      $arr['title'] =  $key  ; 
+   }
    if($level != '')
    {
       $where[] = " `level` LIKE '%$level%' ";
@@ -1633,7 +1671,17 @@ else
     $where[] = " `sport` LIKE '%$sport%' ";
     $arr['sport'] =  $sport ; 
   }
+   if($age_group != '')
+  {
+    $where[] = " `age_group` LIKE '%$age_group%' ";
+    $arr['age_group'] =  $type ; 
+  }
  
+ if($gender != '')
+  {
+    $where[] = " `gender` LIKE '%$gender%' ";
+    $arr['gender'] =  $type ; 
+  }
 $whereclause    =   implode('AND', $where);
 $response       =   $request->findTournament($whereclause);
 $req            =    new liteservice();

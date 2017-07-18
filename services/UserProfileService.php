@@ -316,16 +316,13 @@ return 0;
 
 /************Function for Edit The user profile in user Table************************/
 
-
 public function editProfile($userdata)
 {
-
 $userid                  = $userdata->userid;
 $prof_id                 = $userdata->prof_id; 
 $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
-$status                  = $userdata->status; 
-$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`staus`='$status' WHERE `userid`='$userid'");
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
