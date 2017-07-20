@@ -199,12 +199,12 @@ else if($_REQUEST['act'] == 'edit_user_profile')
   $res            =   $req->edit_profile($userdata);
   if($res)
         {
-          $data = array('status' => 1, 'data'=> $res, 'msg'=>'updated');
+          $data = array('status' => '1', 'data'=> $res, 'msg'=>'updated');
                   echo json_encode($data);
         }
         else
         {
-            $data = array('status' => 1, 'data'=>$res, 'msg'=>'not updated');
+            $data = array('status' => '0', 'data'=>$res, 'msg'=>'not updated');
                   echo json_encode($data);
         }   
 

@@ -580,15 +580,10 @@ public function update_user_table($dob,$email,$gender,$location,$userid)
 
 
 
-
-
-
-
-
 public function edit_profile($userdata)
 {
-  $query  = mysql_query("UPDATE `user` SET `location`='$userdata->location' , `email`='$userdata->email',`dob`='$userdata->dob',`location`='$userdata->location',`age_group_coached`='$userdata->age_group_coached',`languages_known`='$userdata->lang_known',`link`='$userdata->personal_website_link'
-   WHERE `userid` ='$userdata->userid' ");
+  $query  = mysql_query("UPDATE `user` SET `location`='$userdata->location' , `email`='$userdata->email',`dob`='$userdata->dob',`age_group_coached`='$userdata->age_group_coached',`languages_known`='$userdata->languages_known',`link`='$userdata->personal_website_link',`gender`='$userdata->gender'
+   WHERE `userid` ='$userdata->userid'");
     $num = mysql_affected_rows();
     if($num)
     {
