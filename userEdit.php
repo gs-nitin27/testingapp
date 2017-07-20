@@ -183,13 +183,32 @@ else if($_REQUEST['act'] == 'imageupload')
         }
         else
         {
-            $data = array('status' => 1, 'data'=>$res, 'msg'=>'Failor');
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Failor');
                   echo json_encode($data);
         }          
 } // End of Statment
 
 
 
+
+
+else if($_REQUEST['act'] == 'edit_user_profile')
+{
+  $userdata       =   json_decode(file_get_contents("php://input"));
+  $req            =   new UserProfileService();
+  $res            =   $req->edit_profile($userdata);
+  if($res)
+        {
+          $data = array('status' => 1, 'data'=> $res, 'msg'=>'updated');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => 1, 'data'=>$res, 'msg'=>'not updated');
+                  echo json_encode($data);
+        }   
+
+}
 
 
 

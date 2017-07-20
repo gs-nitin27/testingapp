@@ -499,26 +499,6 @@ public function get_imageName($userid)
 
 
 
-/********************************************************************************/
-
-// public function find_jobtitle($id)
-// {
-//   $query=mysql_query("SELECT `user_image` FROM `user` where `userid`='$userid'");
-//   if(mysql_num_rows($query)>0)
-//        {
-//           while($row = mysql_fetch_assoc($query))
-//           {
-//             $data = $row;
-//           }
-//           return $data;
-//           }
-//           else 
-//           {
-//           return 0;
-//           }
-
-// }// End Function
-
 
 
 public function upload_Document_Image($userdata,$userid,$prof_id)
@@ -597,6 +577,32 @@ public function update_user_table($dob,$email,$gender,$location,$userid)
   $query  = mysql_query("UPDATE `user` SET `dob`='$dob' , `email`='$email',`gender`='$gender',`location`='$location' WHERE `userid` ='$userid' ");
   return 1;
 }
+
+
+
+
+
+
+
+
+public function edit_profile($userdata)
+{
+  $query  = mysql_query("UPDATE `user` SET `location`='$userdata->location' , `email`='$userdata->email',`dob`='$userdata->dob',`location`='$userdata->location',`age_group_coached`='$userdata->age_group_coached',`languages_known`='$userdata->lang_known',`link`='$userdata->personal_website_link'
+   WHERE `userid` ='$userdata->userid' ");
+    $num = mysql_affected_rows();
+    if($num)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+}
+
+
+
+
 
 
      
