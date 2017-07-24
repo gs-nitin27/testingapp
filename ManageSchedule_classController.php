@@ -10,6 +10,7 @@ if($_REQUEST['act'] == "create_class")
 {
 	//print_r("expression");die;
 							$data  = json_decode($_POST['data']);
+							print_r($data);
 							$item  = new stdClass();
 
                             $date = date_create($data->start_date);
