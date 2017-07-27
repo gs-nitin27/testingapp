@@ -212,3 +212,52 @@ else if($_REQUEST['act'] == 'edit_user_profile')
 
 
 
+
+/*****************************Create My Diet Plan**************************/
+
+else if($_REQUEST['act'] == 'my_diet_plan')
+{
+  $userdata       =   (file_get_contents("php://input"));
+
+  $userid         =   $_REQUEST['userid'];
+  $req            =   new UserProfileService();
+  $res            =   $req->diet_plan($userdata,$userid);
+
+  if($res)
+        {
+          $data = array('status' => '1', 'data'=> $res, 'msg'=>'Create diet plan');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>$res, 'msg'=>'not created');
+                  echo json_encode($data);
+        }   
+
+}
+
+
+
+
+/***********************Listing Diet Plan********************************/
+
+
+else if($_REQUEST['act'] == 'list_diet_plan')
+{
+  $userid         =   $_REQUEST['userid'];
+  $req            =   new UserProfileService();
+  $res            =   $req->list_plan($userid);
+  if($res)
+        {
+          $data = array('status' => '1', 'data'=> $res, 'msg'=>'List diet plan');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>[], 'msg'=>'not list');
+                  echo json_encode($data);
+        }   
+
+}
+
+
