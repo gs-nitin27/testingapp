@@ -597,10 +597,42 @@ public function edit_profile($userdata)
 
 
 
+public function diet_plan($userdata,$userid)
+{
+   $query = mysql_query("INSERT INTO `gs_diet_plan`(`userid`, `my_diet_plan`,`date_created`,`date_updated`) VALUES ($userid,'$userdata',CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `my_diet_plan`= '$userdata',`date_updated` = CURDATE()");
+   if($query)
+    {
+        return 1;
+    } 
+    else
+    {    
+        return 0;
+    } 
+}
 
 
 
-     
+
+public function list_plan($userid)
+{
+ $query=mysql_query("SELECT `my_diet_plan` FROM `gs_diet_plan` WHERE `userid`='$userid'");
+  if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $row['my_diet_plan']  =  json_decode($row['my_diet_plan']);
+            $data[] = $row;
+          }
+          return $data;
+          }
+          else 
+          {
+          return 0;
+          }
+}
+
+
+
 } // End of Class
 
 
