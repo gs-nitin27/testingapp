@@ -635,6 +635,25 @@ public function list_plan($userid)
 
 
 
+
+
+
+public function edit_plan($id,$my_diet_plan)
+{
+  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan' WHERE `id` ='$id' ");
+  $num = mysql_affected_rows();
+  if($num)
+  {
+      return 1;
+  }
+  else 
+  {
+     return 0;
+  }
+
+}
+
+
 } // End of Class
 
 

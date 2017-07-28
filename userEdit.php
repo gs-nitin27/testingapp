@@ -260,4 +260,26 @@ else if($_REQUEST['act'] == 'list_diet_plan')
 
 }
 
+/***********************Listing Diet Plan********************************/
+
+
+else if($_REQUEST['act'] == 'edit_diet_plan')
+{
+  $my_diet_plan   =   (file_get_contents("php://input"));
+  $id             =   $_REQUEST['id'];
+  $req            =   new UserProfileService();
+  $res            =   $req->edit_plan($id,$my_diet_plan);
+  if($res)
+        {
+          $data = array('status' => '1', 'data'=> $res, 'msg'=>'Updated diet plan');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>[], 'msg'=>'not updated diet plan');
+                  echo json_encode($data);
+        }   
+
+}
+
 
