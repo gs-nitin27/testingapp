@@ -615,13 +615,15 @@ public function diet_plan($userdata,$userid)
 
 public function list_plan($userid)
 {
- $query=mysql_query("SELECT `my_diet_plan` FROM `gs_diet_plan` WHERE `userid`='$userid'");
+ $query=mysql_query("SELECT `my_diet_plan`  FROM `gs_diet_plan` WHERE `userid`='$userid'");
   if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
           {
             $row['my_diet_plan']  =  json_decode($row['my_diet_plan']);
-            $data[] = $row;
+            //$row[]    =  $row['my_diet_plan'] ;
+
+            $data[] = $row['my_diet_plan'];
           }
           return $data;
           }
