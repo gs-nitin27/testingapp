@@ -10,16 +10,21 @@ if($_REQUEST['act'] == "create_class")
 {   
     $data  = json_decode(file_get_contents("php://input"));
 	$date = date_create($data->start_date);
-	
-    date_add($date, date_interval_create_from_date_string($data->duration.'months'));
-    $ndate = date_format($date, 'Y-m-d');
-     //print_r($data);
+	$start_date= date_format($date,'Y-m-d');
+	if($data->duration != 0){
+    $end_date = date_add($date, date_interval_create_from_date_string($data->duration.'months'));
+    $ndate = date_format($end_date, 'Y-m-d');
+    }else
+    {
+    $ndate = '';
+    }
+    //echo $start_date.'---'.$ndate;die;
 	$item->class_name      = $data->class_name;
 	$item->description     = $data->description;
 	$item->days            = $data->days;
 	$item->duration        = $data->duration;
-	$item->start_date      = strtotime($data->nameValuePairs->start_date);
-	$item->end_date        = strtotime($ndate);
+	$item->start_date      = $start_date;
+	$item->end_date        = $ndate;
 	$item->start_time      = $data->start_time;
 	$item->end_time        = $data->end_time;
 	$item->address         = $data->address;
