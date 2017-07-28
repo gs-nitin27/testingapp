@@ -7,33 +7,32 @@ error_reporting(E_ERROR | E_PARSE);
 
 
 if($_REQUEST['act'] == "create_class")
-{
+{   
     $data  = json_decode(file_get_contents("php://input"));
-	$item  = new stdClass();
-
-    $date = date_create($data->start_date);
+	$date = date_create($data->start_date);
+	
     date_add($date, date_interval_create_from_date_string($data->duration.'months'));
     $ndate = date_format($date, 'Y-m-d');
-
+     //print_r($data);
 	$item->class_name      = $data->class_name;
 	$item->description     = $data->description;
 	$item->days            = $data->days;
 	$item->duration        = $data->duration;
-	$item->start_date      = strtotime($data->start_date);
+	$item->start_date      = strtotime($data->nameValuePairs->start_date);
 	$item->end_date        = strtotime($ndate);
 	$item->start_time      = $data->start_time;
 	$item->end_time        = $data->end_time;
 	$item->address         = $data->address;
 	$item->user_id         = $data->user_id;
 	$item->location        = $data->location;
-	$item->fee             = $data->payment;
+	$item->fee             = json_encode($data->payment);
 	$item->age_group       = $data->age_group;
 	$item->class_strength  = $data->class_strength;
 	$item->class_host      = $data->class_host;
 	$item->phone_no        = $data->contact_no;
 	$item->classtype       = $data->classtype;
-
-      //print_r($data->contact_no);die;
+    
+    //print_r($item);die;
 
     $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
     
