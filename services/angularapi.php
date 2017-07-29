@@ -114,7 +114,7 @@ $query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`desc
 
 public function getjoblist($userid)
 {
-  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link` FROM `gs_jobinfo` WHERE `userid` = '$userid' limit 6");
+  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link` FROM `gs_jobInfo` WHERE `userid` = '$userid' limit 6");
   $row = mysql_num_rows($query);
   if($row)
   {
@@ -226,7 +226,7 @@ public function userdata($id)
 
 public function getjobdetails($id)
 {
-  $query = mysql_query("SELECT * FROM `gs_jobinfo` WHERE `id` = '$id'");
+  $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` = '$id'");
   if(mysql_num_rows($query))
   {
    while( $row = mysql_fetch_assoc($query))
@@ -265,7 +265,7 @@ public function listuserdata($userid)
 public function createjob($item)
 {
 
-$insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`,`gender`,`sport`,`type`,`job_link`,`work_experience`,`description`,`key_requirement`,`org_address1`,`org_address2`,`org_city`,`org_state`,`org_pin`,`organisation_name`,`qualification`,`address1`,`address2`,`state`,`pin`,`contact`,`email`,`image`,`date_created`)  VALUES ('$item->id','$item->userid','$item->title','$item->location','$item->gender','$item->sport','$item->type','$item->job_link','$item->work_experience','$item->description','$item->key_requirement','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->organisation_name','$item->qualification','$item->address1','$item->address2','$item->state','$item->pin','$item->contact','$item->email','$item->image',CURDATE()) ON DUPLICATE KEY UPDATE `title` = '$item->title' , `location` = '$item->location' , `gender` = '$item->gender',`sport` = '$item->sport' , `type` = '$item->type',`job_link` = '$item->job_link' , `work_experience` = '$item->work_experience' , `description` = '$item->description' , `key_requirement` = '$item->key_requirement' , `org_address1` = '$item->org_address1' , `org_address2` = '$item->org_address2' , `org_city` = '$item->org_city' , `org_state` = '$item->org_state' , `org_pin` = '$item->org_pin' , `organisation_name` = '$item->organisation_name' , `qualification` = '$item->qualification' ,`address1` = '$item->address1' , `address2` = '$item->address2' , `state` = '$item->state', `pin` = '$item->pin' , `contact` = '$item->contact' , `email` = '$item->email',`image` = '$item->image' ");
+$insert = mysql_query("INSERT INTO `gs_jobInfo`(`id`,`userid`,`title`,`location`,`gender`,`sport`,`type`,`job_link`,`work_experience`,`description`,`key_requirement`,`org_address1`,`org_address2`,`org_city`,`org_state`,`org_pin`,`organisation_name`,`qualification`,`address1`,`address2`,`state`,`pin`,`contact`,`email`,`image`,`about`,`desired_skills`,`date_created`)  VALUES ('$item->id','$item->userid','$item->title','$item->location','$item->gender','$item->sport','$item->type','$item->job_link','$item->work_experience','$item->description','$item->key_requirement','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->organisation_name','$item->qualification','$item->address1','$item->address2','$item->state','$item->pin','$item->contact','$item->email','$item->image','$item->about','$item->desired_skills',CURDATE()) ON DUPLICATE KEY UPDATE `title` = '$item->title' , `location` = '$item->location' , `gender` = '$item->gender',`sport` = '$item->sport' , `type` = '$item->type',`job_link` = '$item->job_link' , `work_experience` = '$item->work_experience' , `description` = '$item->description' , `key_requirement` = '$item->key_requirement' , `org_address1` = '$item->org_address1' , `org_address2` = '$item->org_address2' , `org_city` = '$item->org_city' , `org_state` = '$item->org_state' , `org_pin` = '$item->org_pin' , `organisation_name` = '$item->organisation_name' , `qualification` = '$item->qualification' ,`address1` = '$item->address1' , `address2` = '$item->address2' , `state` = '$item->state', `pin` = '$item->pin' , `contact` = '$item->contact' , `email` = '$item->email',`image` = '$item->image',`about` = '$item->about',`desired_skills` = '$item->desired_skills'");
 
   if($insert)
   {

@@ -297,8 +297,7 @@ echo json_encode($user);
 else if($_REQUEST['act'] == 'createjob')
 {
    $data = json_decode(file_get_contents("php://input"));
-   
-   $item = new stdClass();
+    $item = new stdClass();
 
     $item->id                        = $data->id;
     $item->userid                    = $data->userid;
@@ -310,18 +309,19 @@ else if($_REQUEST['act'] == 'createjob')
     $item->job_link                  = $data->job_link;
     $item->work_experience           = $data->work_experience;
     $item->description               = $data->description;
+    $item->about                     = $data->about;
     $item->key_requirement           = $data->key_requirement;
     $item->org_address1              = $data->org_address1;
     $item->org_address2              = $data->org_address2;
     $item->org_city                  = $data->org_city;
     $item->org_state                 = $data->org_state;
     $item->org_pin                   = $data->org_pin;
+    $item->desired_skills            = $data->desired_skills;
     $item->organisation_name         = $data->organisation_name;
     $item->qualification             = $data->qualification;
     $item->address1                  = $data->address1;
     $item->address2                  = $data->address2;
     $item->state                     = $data->state;
-    // $item->city                      = $data->city;
     $item->pin                       = $data->pin;
     $item->contact                   = $data->contact;
     $item->email                     = $data->email;
