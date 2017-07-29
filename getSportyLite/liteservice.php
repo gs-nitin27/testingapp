@@ -12,8 +12,7 @@
 
     public function  userExits($where)
     {
-     //echo "SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` $where"; die();
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
+     $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
