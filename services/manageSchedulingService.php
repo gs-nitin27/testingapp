@@ -216,7 +216,7 @@ if($date == ""){
 $date = "FROM_UNIXTIME(".$date.")";
 }
 
-$query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date` , $date) < 0 OR DATEDIFF(`class_start_date` , $date) = 0) AND (DATEDIFF(`class_end_date` , $date) > 0 OR DATEDIFF(`class_end_date` , $date) = 0) OR IF(`class_end_date` = NULL ,DATEDIFF(`class_start_date` , $date) < 0 , DATEDIFF(`class_start_date` , $date) = 0) ORDER BY `class_start_timing` DESC");
+$query = mysql_query("SELECT `id`, `class_title`, `classtype`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date` , $date) < 0 OR DATEDIFF(`class_start_date` , $date) = 0) AND (DATEDIFF(`class_end_date` , $date) > 0 OR DATEDIFF(`class_end_date` , $date) = 0) OR IF(`class_end_date` = NULL ,DATEDIFF(`class_start_date` , $date) < 0 , DATEDIFF(`class_start_date` , $date) = 0) ORDER BY `class_start_timing` DESC");
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
