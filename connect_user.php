@@ -245,7 +245,14 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  {
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
+ if(isset($_REQUEST['coach_id']))
+ {
  $coach_id         =  $_REQUEST['coach_id'] ;
+ }
+ else
+ {
+  $coach_id = '';
+ }
  $request          =  new connect_userservice();
  $con_res          =  $request->getConnect($student_id,$coach_id);
  $response         =  $request->getClassInfo($class_id);
