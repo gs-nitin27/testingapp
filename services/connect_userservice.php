@@ -505,6 +505,7 @@ public function getClass($userid)
         $row=mysql_fetch_assoc($query);
 
         $row['join_status']=0;
+        $row['class_fee'] = json_decode($row['class_fee']);
 
         $data[]=$row;
 
