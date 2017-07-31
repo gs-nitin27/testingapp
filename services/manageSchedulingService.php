@@ -221,6 +221,7 @@ if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
 {
+$row['class_fee'] = json_decode($row['class_fee']);
 $data[] = $row; 
 }
 return $data;
