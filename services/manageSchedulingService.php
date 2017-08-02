@@ -83,11 +83,18 @@ return '1';
 public function updateClass($item,$code)
 {
 
+// $start_date = $item->start_date;
+// $end_date =   $item->end_date;
 $start_date = $item->start_date;
-$end_date =   $item->end_date;
+if($item->end_date != '')
+{
+  $end_date = "'".$item->end_date."'";
+}else
+{
+  $end_date = 'NULL';
+}
 
-
-$query = mysql_query("UPDATE `gs_coach_class` SET `class_title` = '$item->class_name',`description`='$item->description',`days` = '$item->days',`class_fee` = '$item->fee',`age_group` = '$item->age_group',`class_strength` = '$item->class_strength',`class_host`= '$item->class_host',`contact_no` = '$item->phone_no' , `location` = '$item->location' ,`class_code`='$code', `class_start_timing`='$item->start_time',`class_end_timing`='$item->end_time',`class_start_date` = FROM_UNIXTIME ($start_date),`class_end_date` = FROM_UNIXTIME ($end_date), `venue` = '$item->address' WHERE `id` = '$item->class_id'");
+$query = mysql_query("UPDATE `gs_coach_class` SET `class_title` = '$item->class_name',`description`='$item->description',`days` = '$item->days',`class_fee` = '$item->fee',`age_group` = '$item->age_group',`class_strength` = '$item->class_strength',`class_host`= '$item->class_host',`contact_no` = '$item->phone_no' , `location` = '$item->location' ,`class_code`='$code', `class_start_timing`='$item->start_time',`class_end_timing`='$item->end_time',`class_start_date` = '$start_date',`class_end_date` = '$end_date', `venue` = '$item->address' WHERE `id` = '$item->class_id'");
 if($query)
 {
 return 1;
