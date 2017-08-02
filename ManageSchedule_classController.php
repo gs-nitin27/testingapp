@@ -107,7 +107,7 @@ else if($_REQUEST['act'] == "update_class")
 						    {
 						    $ndate = ''; 	
 						    }
-
+                         
                             $item->user_id        = $data->user_id;
 							$item->class_name     = $data->class_name;
 							$item->description    = $data->description;
@@ -119,7 +119,7 @@ else if($_REQUEST['act'] == "update_class")
 							$item->end_time       = $data->end_time;
 							$item->address        = $data->address;
 							$item->class_id       = $data->class_id;
-							$item->fee            = $data->fee;
+							$item->fee            = json_encode($data->payment);
 							$item->age_group      = $data->age_group;
 							$item->class_strength = $data->class_strength;
 							$item->class_host     = $data->class_host;

@@ -1407,7 +1407,7 @@ public function sendNotification($registration_ids, $message,$google_api)
         );
           $message = array('data1'=>$message);
           $data = array('data'=>$message,'to'=>$registration_ids);
-          json_encode($data);
+       //   json_encode($data);
 
         //print_r($fields);
     // Google Cloud Messaging GCM API Key
@@ -1426,12 +1426,13 @@ public function sendNotification($registration_ids, $message,$google_api)
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         $result = curl_exec($ch);       
+       print_r($result);//die;
         if ($result === FALSE) {
             //die('Curl failed: ' . curl_error($ch));
         return 0;
         }
         curl_close($ch);
-       // return $result;
+       
        return 1;
 }
 
@@ -1439,9 +1440,9 @@ public function sendNotification($registration_ids, $message,$google_api)
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
 {
      $device=(explode("|",$registatoin_ids));
-
-  foreach ($device as $key => $value) {
-    $registration_ids = $value;
+    foreach ($device as $key => $value) {
+    $registration_ids = 'f68mbsHoZ_8:APA91bEgdx6mxmTJutkuFCS3C1iHbwv7fjVmlqP45ZnkFVH9zFdYIFeLfReAmGIPdc__04VsSK9Z7sT7zWgTsrUwEO-8FGPtxG34am8FVKNkDiBMNfPOLx-OmXqouPvmxwx3J8P753iN';//$value;
+    //echo $registration_ids;
     $google_api = "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU";
    $this->sendNotification($registration_ids, $message,$google_api);
   }
