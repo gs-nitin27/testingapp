@@ -88,7 +88,8 @@ if($_REQUEST['act'] == "create_class")
 else if($_REQUEST['act'] == "update_class")
  {
 
-							$data  = json_decode($_POST['data']);
+							//$data  = json_decode($_POST['data']);
+							$data  = json_decode(file_get_contents("php://input"));
 							$item = new stdClass();
 
 							// $date = date_create($data->start_date);

@@ -1399,52 +1399,80 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
 public function sendNotification($registration_ids, $message,$google_api)
 {
-   //Google cloud messaging GCM-API url
-        $url = 'https://gcm-http.googleapis.com/gcm/send';
-        $fields = array(
-            'registration_ids' => $registration_ids,
-            'data' => $message,
-        );
-          $message = array('data1'=>$message);
-          $data = array('data'=>$message,'to'=>$registration_ids);
-       //   json_encode($data);
+    $msg = array
+  (
+    'body'  => $message,
+    'title' => 'GS Notification',
+              'icon'  => 'myicon',/*Default Icon*/
+                'sound' => 'mySound'/*Default sound*/
+          );
 
-        //print_r($fields);
-    // Google Cloud Messaging GCM API Key
-        //define("GOOGLE_API", $google_api);    
-        $headers = array(
-            'Authorization: key=' .$google_api,
-            'Content-Type: application/json'
-        );
+      $fields = array
+      (
+        'to'    => $registration_ids,
+        'notification'  => $msg
+      );
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        $result = curl_exec($ch);       
-       print_r($result);//die;
-        if ($result === FALSE) {
-            //die('Curl failed: ' . curl_error($ch));
-        return 0;
-        }
-        curl_close($ch);
+      $headers = array
+      (
+        'Authorization: key=' . $google_api,
+        'Content-Type: application/json'
+      );
+
+      $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+    $result = curl_exec($ch );
+    curl_close( $ch );
+
+    #Echo Result Of FireBase Server
+    echo $result;
+       //  $url = 'https://gcm-http.googleapis.com/gcm/send';
+       //  $fields = array(
+       //      'registration_ids' => $registration_ids,
+       //      'data' => $message,
+       //  );
+       //    $message = array('data1'=>$message);
+       //    $data = array('data'=>$message,'to'=>$registration_ids);
+ 
+       //  $headers = array(
+       //      'Authorization: key=' .$google_api,
+       //      'Content-Type: application/json'
+       //  );
+
+       //  $ch = curl_init();
+       //  curl_setopt($ch, CURLOPT_URL, $url);
+       //  curl_setopt($ch, CURLOPT_POST, true);
+       //  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+       //  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       //  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); 
+       //  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+       //  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+       //  $result = curl_exec($ch);       
+       // print_r($result);//die;
+       //  if ($result === FALSE) {
+       //      //die('Curl failed: ' . curl_error($ch));
+       //  return 0;
+       //  }
+       //  curl_close($ch);
        
-       return 1;
+       // return 1;
 }
 
 
 public function sendLitePushNotificationToGCM($registatoin_ids, $message) 
 {
-     $device=(explode("|",$registatoin_ids));
-    foreach ($device as $key => $value) {
-    $registration_ids = 'f68mbsHoZ_8:APA91bEgdx6mxmTJutkuFCS3C1iHbwv7fjVmlqP45ZnkFVH9zFdYIFeLfReAmGIPdc__04VsSK9Z7sT7zWgTsrUwEO-8FGPtxG34am8FVKNkDiBMNfPOLx-OmXqouPvmxwx3J8P753iN';//$value;
-    //echo $registration_ids;
-    $google_api = "AIzaSyAx3VrWlzsiEnFedeDBoCUhYe8lU5nR7VU";
+    $device=(explode("|",$registatoin_ids));
+
+  foreach ($device as $key => $value) {
+    $registration_ids = $value;
+    $google_api = "AAAAMqxmg1k:APA91bFQf3rioyM-A4FecC7fCStzzyYyOc-yQIv23Lt3NnNlxGDvpFgv7jxFb0iNvwSROLI3_r0dNUFqbiPOFtvfh41vVzhNRFJ6NUDK2nY7H6Ch5Aqnc8WiRsFVn1juRBu60w9XPNZ7OQHQAvSL97S-5MWYAt8sGQ";
    $this->sendNotification($registration_ids, $message,$google_api);
+  //  return $Notification;
   }
 
 }
