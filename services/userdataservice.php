@@ -1388,7 +1388,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
   foreach ($device as $key => $value) {
     $registration_ids = $value;
-    $google_api = "AIzaSyAF1SYN40Gf_JD2J6496-cLnfT_eX4gRt8";
+    $google_api = " AAAA4tB9Uc0:APA91bGbqN1wcmle8pHsQpgGiNYSeyMA7hrsPpUeShphDcy0lgnMkhrT__hRnEGQVwqRdvkbGCYUYqAbnD4EBUQXNaJDOMjhXpcYLCM2IcgYWsjnbnMoVb2roEvOLO4cn3kG2Q4x7iRj";
    $this->sendNotification($registration_ids, $message,$google_api);
   //  return $Notification;
   }

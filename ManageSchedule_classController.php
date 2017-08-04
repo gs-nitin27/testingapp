@@ -11,14 +11,15 @@ if($_REQUEST['act'] == "create_class")
     $data  = json_decode(file_get_contents("php://input"));
 	$date = date_create($data->start_date);
 	$start_date= date_format($date,'Y-m-d');
-	
-	if($data->classtype == 2 && $data->duration != 0){
+
+    if($data->classtype == 2 && $data->duration != 0){
     $end_date = date_add($date, date_interval_create_from_date_string($data->duration.'months'));
     $ndate = date_format($end_date, 'Y-m-d');
     }
     else if($data->classtype == 2 && $data->duration == 0)
     {
-    $ndate = date_create($data->end_date);
+    $end_date = date_create($data->end_date);
+	$ndate= date_format($date,'Y-m-d');
     }else
     {
     $ndate = ''; 	
@@ -46,43 +47,58 @@ if($_REQUEST['act'] == "create_class")
 
     $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
     
-    $req2 = new manageSchedulingService();
-    $res2 = $req2->CheckforExistingClass($item);
-              if($res2 == 1)
+    $req = new manageSchedulingService();
+    $res = $req->CheckforExistingClass($item);
+              if($res == 0)
             {
-					    
-						$req = new manageSchedulingService();
-						$res = $req->createClass($item,$code);
+			    $req = new manageSchedulingService();
+				$res = $req->createClass($item,$code);
+             if($res != 0)
+             {
+              
+                 $data  = array('status'=>1,'data'=>$res,'msg'=>'Success');
+                 echo json_encode($data);
+             }else
+             {
+	             $data  = array('status'=>0,'data'=>$res,'msg'=>'Failure');
+	             echo json_encode($data);
+             }
 
-		      if($res == 1)
-		    {
+		 //      if($res == 1)
+		 //    {
 
-						 $req1 = new manageSchedulingService();
-						 $res1 =  $req1->getclassdata($item);
-		      if($res1 != 0)
-		    {
-						 $data= array('data'=>$res1, 'status'=>1);
-						 echo json_encode($data);
-		    }
-		    else
-		    {
-                         $data= array('data'=>0 , 'status'=>1);
-						 echo json_encode($data); 
-            }
-		    }
-		    else    
-		    {
-					     $data= array('data'=>0 , 'status'=>0);
-						 echo json_encode($data); 
-			}
-			    }
-			 else
-			    {
-				           $data= array('data'=>$res2, 'status'=>2, 'message'=>'already exist for same schedule');
-				 		  echo json_encode($data); 
-				}
+			// 			 $req1 = new manageSchedulingService();
+			// 			 $res1 =  $req1->getclassdata($item);
+		 //      if($res1 != 0)
+		 //    {
+			// 			 $data= array('data'=>$res1, 'status'=>1);
+			// 			 echo json_encode($data);
+		 //    }
+		 //    else
+		 //    {
+   //                       $data= array('data'=>0 , 'status'=>1);
+			// 			 echo json_encode($data); 
+   //          }
+		 //    }
+		 //    else    
+		 //    {
+			// 		     $data= array('data'=>0 , 'status'=>0);
+			// 			 echo json_encode($data); 
+			// }
+			//     }
+			//  else
+			//     {
+			// 	           $data= array('data'=>$res2, 'status'=>2, 'message'=>'already exist for same schedule');
+			// 	 		  echo json_encode($data); 
+			// 	}
+
+		}else
+		{
+                 $data  = array('status'=>2,'data'=>$res,'msg'=>'Class alreday exist for same schedule');
+	             echo json_encode($data);
 
 		}
+	}
 
 
 else if($_REQUEST['act'] == "update_class")
@@ -97,13 +113,15 @@ else if($_REQUEST['act'] == "update_class")
        //                      $ndate = date_format($date, 'Y-m-d');
                             $date = date_create($data->start_date);
 							$start_date= date_format($date,'Y-m-d');
+
 	                        if($data->classtype == 2 && $data->duration != 0){
 						    $end_date = date_add($date, date_interval_create_from_date_string($data->duration.'months'));
 						    $ndate = date_format($end_date, 'Y-m-d');
 						    }
 						    else if($data->classtype == 2 && $data->duration == 0)
 						    {
-						    $ndate = date_create($data->end_date);
+						    $end_date = date_create($data->end_date);
+							$ndate= date_format($date,'Y-m-d');
 						    }else
 						    {
 						    $ndate = ''; 	
@@ -114,8 +132,8 @@ else if($_REQUEST['act'] == "update_class")
 							$item->description    = $data->description;
 							$item->days           = $data->days;
 							$item->duration       = $data->duration;
-							$item->start_date     = $data->start_date;//strtotime($data->start_date);
-							$item->end_date       = $data->end_date;//strtotime($ndate);
+							$item->start_date     = $start_date;//strtotime($data->start_date);
+							$item->end_date       = $ndate;//strtotime($ndate);
 							$item->start_time     = $data->start_time;
 							$item->end_time       = $data->end_time;
 							$item->address        = $data->address;
@@ -133,34 +151,31 @@ else if($_REQUEST['act'] == "update_class")
 
 							$req = new manageSchedulingService();
                                $cheakClass_timing = $req->CheckforExistingClass($item);
-                             //$cheakClass_timing = $req->cheakclass_exist_update($item);
 
-                             if($cheakClass_timing == 0)
-                             {
-							  $res = $req->updateClass($item,$code);
-                            if($res)
+                            if($cheakClass_timing == 0)
                             {
-							$cdata =$req->get_updated_classdata($item);
-
-							$data= array('status'=>$res , 'data' => $cdata);
-						    echo json_encode($data);
+							  $res = $req->updateClass($item,$code);
+    					    if($res != 0)
+    					    {
+    					         $data= array('status'=>1 , 'data' => $res ,'msg'=>'record updated');
+						         echo json_encode($data);
 							}
-							else
+							 else
 							{
-								 $data = array('status' => $res);
+								 $data = array('status' => 0,'data' => $res , 'msg'=>'record not updated');
 								 echo json_encode($data);
 							}
-							//echo $res;
+							
 						}
 						else
 						{
-							     $data = array('status' => 2);
+							     $data = array('status' => 2 , 'msg'=>'class Already exist with Same Schedule' );
 								 echo json_encode($data);
 						}
 
 
 			 }
-  
+   
 
 else if($_REQUEST['act'] == "get_studentlist")
  {
