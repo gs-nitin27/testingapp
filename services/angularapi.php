@@ -17,23 +17,20 @@ public function getContentInfo()
 
 public function angulartest($username,$password)
 {
-	
-          $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
-          if($query)
+  $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
+        if($query)
           {
             while($row = mysql_fetch_assoc($query))
             {   
                //$data1= $row; 
-			         $data['customer'] = $row['name'];
-               $data['customerId'] = $row['userType'];
-               $data['lxDrivePath'] =  $row['name'];
+			         $data['Name'] = $row['name'];
+               $data['userType'] = $row['userType'];
+               $data['prof_id'] =  $row['prof_id'];
                $data['name']     =  $row['name'];
                $data['password'] =$row['password'];
                $data['userId'] = $row['userid'];
-               $data['userName'] =$row['email'];
-               $data['imageUrl'] =$row['name'];
-			   
-			   
+               $data['email'] =$row['email'];
+               $data['user_image'] =$row['user_image']; 
                return $data;
              }
            }
@@ -98,7 +95,7 @@ public function getuserevent($userid)
 
 public function getuserdashboardevent($userid)
 {
-$query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`description` FROM `gs_eventinfo` WHERE `userid` = '$userid' limit 6");
+$query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`description` FROM `gs_eventinfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6 ");
 
   $row = mysql_num_rows($query);
   if($row)
@@ -114,7 +111,7 @@ $query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`desc
 
 public function getjoblist($userid)
 {
-  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link` FROM `gs_jobInfo` WHERE `userid` = '$userid' limit 6");
+  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link` FROM `gs_jobInfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6");
   $row = mysql_num_rows($query);
   if($row)
   {
@@ -148,17 +145,10 @@ public function createcontent($item)
 
 }
 
-public function DateForomateChange($data)
-{
-     
 
-
-}
 
 public function createevent($item)
-{ 
-  
-
+{  
 if($item->start_date)
 {
 $start_date = date("Y-m-d", strtotime($item->start_date));

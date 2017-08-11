@@ -80,53 +80,6 @@ return 0;
 }
 
 
-// public function CheckforExistingClass_update($item)
-// {
-
-//    $end_date   = "FROM_UNIXTIME(".$item->end_date.")";
-//    $start_date = "FROM_UNIXTIME(".$item->start_date.")";
-
-// $query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , $start_date) < 0 OR DATEDIFF(`class_start_date` , $start_date) = 0) AND (DATEDIFF(`class_end_date` , $end_date) > 0 OR DATEDIFF(`class_end_date` , $end_date) = 0) AND (`class_start_timing` = '$item->start_time')AND (`class_end_timing` = '$item->end_time')ORDER BY `class_start_timing` DESC");
-
-// if(mysql_num_rows($query)>0)
-// {
-
-// while($row = mysql_fetch_assoc($query))
-// {
-
-
-// $data[] = $row;
-
-// }
-// return $data;
-// }
-// else
-// return '1';
-
-
-// }
-
-// public function cheakclass_exist_update($item,$code)
-// {
-//    $query = mysql_query("SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (`class_start_timing` = '$item->start_time' OR `class_end_timing`= '$item->end_time')");
-
-// if(mysql_num_rows($query)>0)
-// {
-// while($rows = mysql_fetch_assoc($query))
-// {
-// $data[] = $rows;
-
-// }
-// return $data;
-
-// }
-// else{
-
-// return 0;
-
-//         }
-// }
-
 public function getclassdata($id)
 {
 $query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$id' ORDER BY `id` DESC LIMIT 1");
@@ -212,25 +165,33 @@ return 0;
 
 public function getclasslisting($userid, $date)
 {
-if($date == ""){
-	$date = 'CURDATE()';
+$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date`,'$date') = 0 || DATEDIFF(`class_start_date`,'$date')< 0) ");
+if(mysql_num_rows($query)> 0)
+{
+   while($row = mysql_fetch_assoc($query))
+   {   $row['class_fee'] = json_decode($row['class_fee']);
+     if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
+     {  // echo 
+        $to = strtotime($date); // or your date as well
+        $now = strtotime($row['class_end_date']);
+        $datediff =  $now-$to;
+        $datediff =  floor($datediff / (60 * 60 * 24));//die;
+        if($datediff > 0 || $datediff = 0)
+        {
+         $rows[] = $row; 
+        }
+     }
+     else
+     {
+      $rows[] = $row;
+     }
+   }
+    //print_r($rows);;
 
-}else if($date != "")
-{
-$date = "FROM_UNIXTIME(".$date.")";
-}
-
-$query = mysql_query("SELECT `id`, `class_title`, `classtype`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_fee`,`class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date` , $date) < 0 OR DATEDIFF(`class_start_date` , $date) = 0) AND (DATEDIFF(`class_end_date` , $date) > 0 OR DATEDIFF(`class_end_date` , $date) = 0) OR IF(`class_end_date` = NULL ,DATEDIFF(`class_start_date` , $date) < 0 , DATEDIFF(`class_start_date` , $date) = 0) ORDER BY `class_start_timing` DESC");
-if(mysql_num_rows($query)>0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-$row['class_fee'] = json_decode($row['class_fee']);
-$data[] = $row; 
-}
-return $data;
+return $rows;
 }else
-return false;
+return 0;
+
 }
 
 public function varify_existing($item, $data)

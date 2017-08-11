@@ -63,35 +63,6 @@ if($_REQUEST['act'] == "create_class")
 	             $data  = array('status'=>0,'data'=>$res,'msg'=>'Failure');
 	             echo json_encode($data);
              }
-
-		 //      if($res == 1)
-		 //    {
-
-			// 			 $req1 = new manageSchedulingService();
-			// 			 $res1 =  $req1->getclassdata($item);
-		 //      if($res1 != 0)
-		 //    {
-			// 			 $data= array('data'=>$res1, 'status'=>1);
-			// 			 echo json_encode($data);
-		 //    }
-		 //    else
-		 //    {
-   //                       $data= array('data'=>0 , 'status'=>1);
-			// 			 echo json_encode($data); 
-   //          }
-		 //    }
-		 //    else    
-		 //    {
-			// 		     $data= array('data'=>0 , 'status'=>0);
-			// 			 echo json_encode($data); 
-			// }
-			//     }
-			//  else
-			//     {
-			// 	           $data= array('data'=>$res2, 'status'=>2, 'message'=>'already exist for same schedule');
-			// 	 		  echo json_encode($data); 
-			// 	}
-
 		}else
 		{
                  $data  = array('status'=>2,'data'=>$res,'msg'=>'Class alreday exist for same schedule');
@@ -103,14 +74,8 @@ if($_REQUEST['act'] == "create_class")
 
 else if($_REQUEST['act'] == "update_class")
  {
-
-							//$data  = json_decode($_POST['data']);
 							$data  = json_decode(file_get_contents("php://input"));
 							$item = new stdClass();
-
-							// $date = date_create($data->start_date);
-       //                      date_add($date, date_interval_create_from_date_string($data->duration.'months'));
-       //                      $ndate = date_format($date, 'Y-m-d');
                             $date = date_create($data->start_date);
 							$start_date= date_format($date,'Y-m-d');
 
@@ -247,8 +212,8 @@ else if($_REQUEST['act'] == "get_classlisting")
 						$time_in_24_hour_format  = date("H:i", strtotime("7 p.m"));
 
 						$userid = urldecode($_REQUEST['userid']);
-						$date   = urldecode(strtotime($_REQUEST['date']));
-
+						$date   = urldecode(date_format(date_create($_REQUEST['date']),'Y-m-d'));
+                        //echo $date;die;
 						$req = new manageSchedulingService();
 						$res = $req->getclasslisting($userid, $date);
 					if($res != 0)
@@ -256,8 +221,6 @@ else if($_REQUEST['act'] == "get_classlisting")
 
 						$resc  = new manageSchedulingService();
 						$resc1 = $resc->get_reschedule($date);
-					//print_r($resc1);
-					//unset($res[0]['id']);
 					if($resc1 != 0)
 					{
 

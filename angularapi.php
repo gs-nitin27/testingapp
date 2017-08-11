@@ -17,8 +17,7 @@ if($_REQUEST['act'] == 'contentangular')
 else if($_REQUEST['act'] == 'angulartest')
 {
 	     $username       =  $_REQUEST['email'];
-		   $password       =  md5($_REQUEST['password']); 
-      // print_r($_REQUEST);die;  
+		   $password       =  md5($_REQUEST['password']);
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
          if($res)
@@ -146,7 +145,6 @@ else if($_REQUEST['act'] == 'createevent')
 
 else if($_REQUEST['act'] == 'upload')
 {   
-
 $data =  file_get_contents("php://input");
 $imageData = base64_decode($data);
 $source = imagecreatefromstring($imageData);
@@ -154,12 +152,37 @@ $angle = 0;
 $imageName = 'res_'.time().'.jpeg';
 $rotate = imagerotate($source, $angle, 0); 
 $imageSave = imagejpeg($rotate,$imageName,100);
+$newpath = UPLOAD_DIR_JOB."/".$imageName;
+rename($imageName,$newpath);
+echo json_encode($newpath);
+}
 
-$newpath = UPLOAD_DIR_EVENT;
-move_uploaded_file($imageSave,$newpath.$imageSave);
-
+else if($_REQUEST['act'] == 'eventimage')
+{   
+$data =  file_get_contents("php://input");
+$imageData = base64_decode($data);
+$source = imagecreatefromstring($imageData);
+$angle = 0;
+$imageName = 'res_'.time().'.jpeg';
+$rotate = imagerotate($source, $angle, 0); 
+$imageSave = imagejpeg($rotate,$imageName,100);
+$newpath = UPLOAD_DIR_EVENT."/".$imageName;
+rename($imageName,$newpath);
 echo json_encode($imageName);
+}
 
+else if($_REQUEST['act'] == 'jobimage')
+{   
+$data =  file_get_contents("php://input");
+$imageData = base64_decode($data);
+$source = imagecreatefromstring($imageData);
+$angle = 0;
+$imageName = 'res_'.time().'.jpeg';
+$rotate = imagerotate($source, $angle, 0); 
+$imageSave = imagejpeg($rotate,$imageName,100);
+$newpath = UPLOAD_DIR_JOB."/".$imageName;
+rename($imageName,$newpath);
+echo json_encode($imageName);
 }
 
 else if($_REQUEST['act'] == 'test')
@@ -297,7 +320,8 @@ echo json_encode($user);
 else if($_REQUEST['act'] == 'createjob')
 {
    $data = json_decode(file_get_contents("php://input"));
-    $item = new stdClass();
+   
+   $item = new stdClass();
 
     $item->id                        = $data->id;
     $item->userid                    = $data->userid;

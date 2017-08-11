@@ -69,6 +69,7 @@ $where                        =  "WHERE `email`= '$email' ";
 $req                          =  new userdataservice();
 $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
 $user_image                   =  $data1->user_image;
+$gender                       =  $data1->gender;
 switch ($logintype)
 {
   case '1':

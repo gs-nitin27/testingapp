@@ -177,6 +177,7 @@ $userType           =  $data->usertype;
 $logintype          =  $data->logintype;
 $password1          =  md5($password);
 $user_image         =  $data->user_image;
+$gender             =  $data->gender;
     if($logintype ==2 || $logintype==3)
      {
            $status=1;   // The Status set 1 becuse these User is Signup using Google and Facebook
@@ -186,7 +187,7 @@ $user_image         =  $data->user_image;
             $status=0;
      }
     
-       $query =mysql_query("INSERT INTO `user`(`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`) VALUES('$userType','$name','$email','$password1','$device_id',' $status','$user_image')");
+       $query =mysql_query("INSERT INTO `user`(`userType`,`name`, `email`, `password`,`device_id`,`status`,`user_image`,`gender`) VALUES('$userType','$name','$email','$password1','$device_id',' $status','$user_image','$gender')");
        if($query)
        {
              $id = mysql_insert_id();
@@ -1388,7 +1389,7 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
   foreach ($device as $key => $value) {
     $registration_ids = $value;
-    $google_api = " AAAA4tB9Uc0:APA91bGbqN1wcmle8pHsQpgGiNYSeyMA7hrsPpUeShphDcy0lgnMkhrT__hRnEGQVwqRdvkbGCYUYqAbnD4EBUQXNaJDOMjhXpcYLCM2IcgYWsjnbnMoVb2roEvOLO4cn3kG2Q4x7iRj";
+    $google_api = "AAAA4tB9Uc0:APA91bGbqN1wcmle8pHsQpgGiNYSeyMA7hrsPpUeShphDcy0lgnMkhrT__hRnEGQVwqRdvkbGCYUYqAbnD4EBUQXNaJDOMjhXpcYLCM2IcgYWsjnbnMoVb2roEvOLO4cn3kG2Q4x7iRj";
    $this->sendNotification($registration_ids, $message,$google_api);
   //  return $Notification;
   }
@@ -1399,18 +1400,16 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
 public function sendNotification($registration_ids, $message,$google_api)
 {
+    
     $msg = array
   (
-    'body'  => $message,
-    'title' => 'GS Notification',
-              'icon'  => 'myicon',/*Default Icon*/
-                'sound' => 'mySound'/*Default sound*/
-          );
-
+    'data1'  => $message
+  );
       $fields = array
       (
-        'to'    => $registration_ids,
-        'notification'  => $msg
+        'to'  => $registration_ids,
+        'priority' => 'high',
+        'data'=>$msg
       );
 
       $headers = array
@@ -1428,9 +1427,12 @@ public function sendNotification($registration_ids, $message,$google_api)
     curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
     $result = curl_exec($ch );
     curl_close( $ch );
-
+    if($result)
+      return true;
+    else
+      return false;
     #Echo Result Of FireBase Server
-    echo $result;
+   //echo $result;
        //  $url = 'https://gcm-http.googleapis.com/gcm/send';
        //  $fields = array(
        //      'registration_ids' => $registration_ids,

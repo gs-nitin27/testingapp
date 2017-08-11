@@ -393,8 +393,8 @@ public function getConnectedUser($userid,$usertype)
   if($usertype=='M')
 
   {
-
-  $query = mysql_query(" SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid ) ");
+   // echo "SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid )";//die;
+  $query = mysql_query("SELECT `userid`,`name`,`sport`,`gender`,`prof_id`,`prof_name`,`user_image`,`location`,`age_group_coached` FROM `user` WHERE `userid` IN(SELECT `lite_user_id` FROM `gs_connect` WHERE `prof_user_id`=$userid ) ");
 
   }
 
@@ -539,8 +539,8 @@ if ($usertype=='L')
     $filed =`lite_user_id`; 
 }
 else if ($usertype=='M')
-{
-   $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
+{ //  echo "SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid";//die;
+  $query= mysql_query("SELECT `id`,`lite_user_id`, `req_status` FROM `gs_connect` WHERE prof_user_id =$userid");
 }
     $num=mysql_num_rows($query);
   if ($num!=0) 
@@ -562,13 +562,9 @@ else if ($usertype=='M')
                   $response[$i]['req_status']=$data[$i]['req_status'];
                   $response[$i]['connection_id']=$data[$i]['id'];
                 }
-                else
-                {
-                 $response[$i]['req_status']=$data[$i]['req_status'];
-                 $response[$i]['connection_id']=$data[$i]['id'];
-                }
+              
             }
-              return $response;  
+            return $response;  
   }
    else
   {
