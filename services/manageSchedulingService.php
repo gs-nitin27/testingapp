@@ -165,11 +165,18 @@ return 0;
 
 public function getclasslisting($userid, $date)
 {
+$day = date('w', strtotime($date));
 $query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date`,'$date') = 0 || DATEDIFF(`class_start_date`,'$date')< 0) ");
 if(mysql_num_rows($query)> 0)
 {
    while($row = mysql_fetch_assoc($query))
-   {   $row['class_fee'] = json_decode($row['class_fee']);
+   {
+    $mystring = $row['days'];
+    $pos = strpos($mystring, $day);
+    if($pos != '')
+    {  
+    $row['class_fee'] = json_decode($row['class_fee']);
+
      if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
      {  // echo 
         $to = strtotime($date); // or your date as well
@@ -186,6 +193,7 @@ if(mysql_num_rows($query)> 0)
       $rows[] = $row;
      }
    }
+ }
     //print_r($rows);;
 
 return $rows;
