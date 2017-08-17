@@ -95,7 +95,7 @@ public function getuserevent($userid)
 
 public function getuserdashboardevent($userid)
 {
-$query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`description` FROM `gs_eventinfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6 ");
+$query = mysql_query("SELECT * FROM `gs_eventinfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6 ");
 
   $row = mysql_num_rows($query);
   if($row)
@@ -111,7 +111,7 @@ $query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` ,`desc
 
 public function getjoblist($userid)
 {
-  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link` FROM `gs_jobInfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6");
+  $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `userid` = '$userid' ORDER BY id DESC limit 6");
   $row = mysql_num_rows($query);
   if($row)
   {

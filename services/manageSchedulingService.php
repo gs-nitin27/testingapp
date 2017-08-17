@@ -172,8 +172,8 @@ if(mysql_num_rows($query)> 0)
    while($row = mysql_fetch_assoc($query))
    {
     $mystring = $row['days'];
-    $pos = strpos($mystring, $day);
-    if($pos != '')
+    $match = preg_match("/".$day."/i", "".$mystring."");
+    if($match != 0)
     {  
     $row['class_fee'] = json_decode($row['class_fee']);
 
