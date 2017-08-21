@@ -357,6 +357,9 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
     // }
     $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
     $obj               =  new connect_userservice();
+    $varify            =  $obj->checkExistingStudent($data);
+    if($varify == 1)
+    {
     $req               =  $obj->add_athlete($data,$student_code);
     if($req != 0)
     { 
@@ -377,7 +380,12 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
     {
       $resp = array('status'=>$req,'message'=>'Failure');
     }
-    echo json_encode($resp);
+  }else
+  {
+      $resp = array('status'=>'0','message'=>'Child Already added to class');
+   
+  }
+   echo json_encode($resp);
 }
 
 

@@ -1700,21 +1700,30 @@ else
 }  // End Function 
 
 public function add_athlete($data,$student_code)
-{  $query = mysql_query("INSERT INTO `gs_class_data` (`classid`,`student_name`,`student_code`,`date_added`,`phone`,`email`,`coach_id`,`status`)VALUES('$data->classid','$data->student_name','$student_code',CURDATE(),'$data->phone','$data->email','$data->coach_id','0')");
-if($query)
-{ 
-  return 1;  
+{  
+  $query = mysql_query("INSERT INTO `gs_class_data` (`classid`,`student_name`,`student_code`,`date_added`,`phone`,`email`,`coach_id`,`status`)VALUES('$data->classid','$data->student_name','$student_code',CURDATE(),'$data->phone','$data->email','$data->coach_id','0')");
+  if($query)
+  { 
+    return 1;  
+  }
+  else
+  {
+    return 0;
+  }
 }
-else
+
+public function checkExistingStudent($item)
 {
-  return 0;
+
+$query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
+if(mysql_num_rows($query) > 0)
+{
+
+return 1;
+
+}else
+return 0;
 }
-
-
-
-}
-
-
 
 
 
