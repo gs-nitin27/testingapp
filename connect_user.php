@@ -358,17 +358,15 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
     $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
     $obj               =  new connect_userservice();
     $req               =  $obj->add_athlete($data,$student_code);
-    
     if($req != 0)
     { 
      
     if ($data->phone != '')
     {
-    $phone = $data->phone;
-    $email  = $data->email;
     $msg = "Hi +".$data->student_name."\r\n"." + your + Class + Join + Code + is + ".$student_code; 
+    $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
     }
-    if($email != '')  
+    if($data->email != '')  
     {
     $msg = "Hi ".$data->student_name."</br>"." your Class Join Code is ".$student_code; 
     $emailObj = new emailService();
