@@ -358,7 +358,7 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
     $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
     $obj               =  new connect_userservice();
     $varify            =  $obj->checkExistingStudent($data);
-    if($varify == 1)
+    if($varify == 0)
     {
     $req               =  $obj->add_athlete($data,$student_code);
     if($req != 0)
