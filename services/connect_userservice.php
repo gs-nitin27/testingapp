@@ -1699,6 +1699,22 @@ else
 }
 }  // End Function 
 
+public function add_athlete($data,$student_code)
+{
+   $query = mysql_query("INSERT INTO `gs_class_data` (`classid`,`student_name`,`student_code`,`date_added`,`phone`,`email`,`coach_id`,`status`)VALUES('$data->classid','$data->student_name','$student_code',CURDATE(),'$data->phone','$data->email','$data->coach_id','0')");
+if($query)
+{ 
+  return 1;  
+}
+else
+{
+  return 0;
+}
+
+
+
+}
+
 
 
 

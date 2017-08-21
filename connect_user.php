@@ -4,6 +4,8 @@ include('services/userdataservice.php');
 include('services/connect_userservice.php');
 include('services/manageSchedulingService.php');
 include('services/inventryservice.php');
+include('services/smsOtpService.php');
+include('services/emailService.php');
 
  
 
@@ -300,13 +302,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $student_id        =  $userdata->student_id; 
   $student_name      =  $userdata->student_name;  
   $class_name        =  $userdata->class_name; 
-  $date              = date("F j, Y, g:i a"); 
+  $date              =  date("F j, Y, g:i a"); 
   $req               =  new inventryservice();
-  $sno               = $req->inventrylastid();
-  $s_no              = $sno['sno'] +1;
-  $month             = date("m");
-  $year              = date("y");
-  $invoice           = "DHS/".$month.$year."/".$s_no;
+  $sno               =  $req->inventrylastid();
+  $s_no              =  $sno['sno'] +1;
+  $month             =  date("m");
+  $year              =  date("y");
+  $invoice           =  "DHS/".$month.$year."/".$s_no;
   $res               =  $req->createinventry($invoice,$userdata,$s_no);
   if($res)
   {
@@ -342,10 +344,49 @@ else
 
 
 
+/*
+Below Section code is for coach to add Athlete to his class 
+*/
+
+else if ($_REQUEST['act'] == 'add_athlete_to_class') {
+  
+    $data = json_decode(file_get_contents("php://input"));
+    // foreach ($data->student_record as $key => $value) {
+    // $student_code      =  
+    
+    // }
+    $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
+    $obj               =  new connect_userservice();
+    $req               =  $obj->add_athlete($data,$student_code);
+    
+    if($req != 0)
+    { 
+     
+    if ($data->phone != '')
+    {
+    $phone = $data->phone;
+    $email  = $data->email;
+    $msg = "Hi +".$data->student_name."\r\n"." + your + Class + Join + Code + is + ".$student_code; 
+    }
+    if($email != '')  
+    {
+    $msg = "Hi ".$data->student_name."</br>"." your Class Join Code is ".$student_code; 
+    $emailObj = new emailService();
+    $send = $emailObj->email_athlete($data,$msg); 
+    } 
+    $resp = array('status'=>$req,'message'=>'Success');
+    }else
+    {
+      $resp = array('status'=>$req,'message'=>'Failure');
+    }
+    echo json_encode($resp);
+}
 
 
 
 
+
+/*END OF SECTION */
 
 
 
@@ -1148,6 +1189,16 @@ else if($_REQUEST['act'] == 'log_unassign')
   echo json_encode($response);
 }
 
+// **************************Add Student by the coach***********************************
+
+// else if($_REQUEST['act'] == 'add_athlete')
+// {
+  
+
+
+
+
+// }
 
 
 

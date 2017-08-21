@@ -1432,7 +1432,7 @@ public function sendNotification($registration_ids, $message,$google_api)
     // else
     //   return false;
     // #Echo Result Of FireBase Server
-   echo $result;
+  // echo $result;
        //  $url = 'https://gcm-http.googleapis.com/gcm/send';
        //  $fields = array(
        //      'registration_ids' => $registration_ids,
