@@ -5,6 +5,8 @@ include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
 
+
+
  
 /******************This Act are used to Edit the User Profile*************/
 
@@ -218,11 +220,9 @@ else if($_REQUEST['act'] == 'edit_user_profile')
 else if($_REQUEST['act'] == 'my_diet_plan')
 {
   $userdata       =   (file_get_contents("php://input"));
-
   $userid         =   $_REQUEST['userid'];
   $req            =   new UserProfileService();
   $res            =   $req->diet_plan($userdata,$userid);
-
   if($res)
         {
           $data = array('status' => '1', 'data'=> $res, 'msg'=>'Create diet plan');
@@ -242,11 +242,12 @@ else if($_REQUEST['act'] == 'my_diet_plan')
 /***********************Listing Diet Plan********************************/
 
 
+
 else if($_REQUEST['act'] == 'list_diet_plan')
 {
   $userid         =   $_REQUEST['userid'];
-  $req            =   new UserProfileService();
-  $res            =   $req->list_plan($userid);
+ $req            =   new UserProfileService();
+ $res            =   $req->list_plan($userid);
   if($res)
         {
           $data = array('status' => '1', 'data'=> $res, 'msg'=>'List diet plan');
@@ -270,13 +271,13 @@ else if($_REQUEST['act'] == 'edit_diet_plan')
   $req            =   new UserProfileService();
   $res            =   $req->edit_plan($id,$my_diet_plan);
   if($res)
-        {
-          $data = array('status' => '1', 'data'=> $res, 'msg'=>'Updated diet plan');
+  {
+      $data = array('status' => '1', 'data'=> "$res", 'msg'=>'Updated diet plan');
                   echo json_encode($data);
         }
         else
         {
-            $data = array('status' => '0', 'data'=>[], 'msg'=>'not updated diet plan');
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not updated diet plan');
                   echo json_encode($data);
         }   
 

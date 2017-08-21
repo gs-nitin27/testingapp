@@ -1,4 +1,5 @@
 <?php
+
  class UserProfileService
  {
 
@@ -599,6 +600,7 @@ public function edit_profile($userdata)
 
 public function diet_plan($userdata,$userid)
 {
+
    $query = mysql_query("INSERT INTO `gs_diet_plan`(`userid`, `my_diet_plan`,`date_created`,`date_updated`) VALUES ($userid,'$userdata',CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `my_diet_plan`= '$userdata',`date_updated` = CURDATE()");
    if($query)
     {
@@ -608,7 +610,12 @@ public function diet_plan($userdata,$userid)
     {    
         return 0;
     } 
+
+
+
+
 }
+
 
 
 
