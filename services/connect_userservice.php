@@ -856,7 +856,7 @@ public function alluserdata($userid)
 
 
 
-/********************This Function are used to find the Class informatino********************/
+/********************This Function are used to find the Class informatino***************/
 
 
 
@@ -892,7 +892,9 @@ public function ClassInfo($student_id)
                 $row['rating']   = 0;
               }
 
+              $row['class_fee']   = json_decode($row['class_fee']);
               $data[]   = $row ;
+              
            }
         return $data;
   }

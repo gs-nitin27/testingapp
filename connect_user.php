@@ -374,7 +374,8 @@ Student Id and Result is display all Class Information
  { 
  $student_id           =  $_REQUEST['userid'];
  $request              =  new connect_userservice();
- $response             =  $request->ClassInfo($student_id);
+  $response             =  $request->ClassInfo($student_id);
+
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
@@ -1127,7 +1128,7 @@ else if($_REQUEST['act'] == 'update_schedule')
 
 
 
-/***************************Un Assign log  By The Coach************************************/
+/***************************Un Assign log  By The Coach***********************/
 
 else if($_REQUEST['act'] == 'log_unassign')
 {

@@ -245,7 +245,7 @@ else if($_REQUEST['act'] == 'my_diet_plan')
 
 else if($_REQUEST['act'] == 'list_diet_plan')
 {
-  $userid         =   $_REQUEST['userid'];
+ $userid         =   $_REQUEST['userid'];
  $req            =   new UserProfileService();
  $res            =   $req->list_plan($userid);
   if($res)
