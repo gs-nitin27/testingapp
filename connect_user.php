@@ -395,10 +395,25 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
 
 /*END OF SECTION */
 
+/*
+Below Section code is for Athlete With code . from Which He could Directly join the class 
+*/
+else if ($_REQUEST['act'] == 'add_code_joining') {
+ 
+ $data = json_decode(file_get_contents("php://input"));
+ $Obj  = new connect_userservice();
+ $req  = $Obj->join_class_usingCode($data);
+ if($req != 0)
+ {
+  $resp = array('status'=> $req, 'msg'=>'Success');
+ }else
+ {
+  $resp = array('status'=>$req, 'msg'=>'Failure');
+ }
+ echo json_encode($resp);
+ }
 
-
-
-
+/*END OF SECTION */
 
 
 

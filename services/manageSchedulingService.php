@@ -113,9 +113,9 @@ return 0;;
 
 public function getstudentlist($id)
 {
-/*$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user INNER JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
+/*$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user LEFT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
 */
-$query= mysql_query("SELECT * FROM `gs_class_data` WHERE `classid`=$id");
+$query= mysql_query("SELECT `gs_class_data`.`student_name`,`gs_class_data`.`status`,`gs_class_data`.`student_id`,`gs_class_data`.`joining_date`,`gs_class_data`.`student_code`,`gs_class_data`.`phone`, user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$id'");
 if($query)
 {
 while($row = mysql_fetch_assoc($query))

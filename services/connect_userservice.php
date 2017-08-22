@@ -1723,7 +1723,22 @@ return 1;
 return 0;
 }
 
+public function join_class_usingCode($item)
+{
+$code = $item->student_code;
+$data = $item->user_info;
+$query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
 
+if($query)
+{
+  return 1;
+}
+else
+{
+  return 0;
+}
+
+}
 
 
 
