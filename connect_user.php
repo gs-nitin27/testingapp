@@ -384,8 +384,21 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
       $resp = array('status'=>$req,'message'=>'Failure');
     }
   }else
-  {
-      $resp = array('status'=>'0','message'=>'Child Already added to class');
+  {   ///print_r($varify);die;
+      $resp = array('status'=>'0','message'=>'Athlete '.$varify['student_name'].' Already added to class');
+      if ($data->phone != '')
+    {
+    $msg = "Hi +".$data->student_name."+ , coach + has + accepted + your + request + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$varify['student_code']." +  to + join + his + class"; 
+    $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
+    }
+    if($data->email != '')  
+    {
+    $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
+coach  has has accepted your  request to join the class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to verify your account.
+Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
+    $emailObj = new emailService();
+    $send = $emailObj->email_athlete($data,$msg); 
+    } 
    
   }
       echo json_encode($resp);

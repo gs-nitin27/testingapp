@@ -1719,7 +1719,7 @@ $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->cl
 if(mysql_num_rows($query) > 0)
 {
 
-return 1;
+return mysql_fetch_assoc($query);
 
 }else
 return 0;
