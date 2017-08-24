@@ -1742,8 +1742,58 @@ else
 
 }
 
+public function create_demo_request($data)
+{
+  $data = $data->data[0];
+  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`) VALUES ('$data->id','$data->userid','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->demo_timing')");
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+   return 0;
+  }
+}
+
+public function fetch_demoRequestlist($coach_id,$class_id)
+{
+
+  $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
+  if(mysql_num_rows($query)> 0)
+  {
+  while ($row = mysql_fetch_assoc($query)) {
+    $rows[] = $row;
+  }
+  return $row;
+  }
+  else
+  {
+    return 0;
+  }
 
 
+}
+
+
+public function fetch_demoClassList($athlete_id)
+{
+
+  $query = mysql_query("SELECT `cc`.`class_title`,`cc`.`class_start_timing`,`cc`.`class_end_timing`,`cc`.`class_start_date`,`cc`.`class_fee` ,`cc`.`venue`, `cc`.`location`,`cc`.`days` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `gs_coach_class` AS cc ON `cc`.`id` = `ad`.`class_id` WHERE `ad`.`athlete_id` = '$athlete_id' ");
+  if(mysql_num_rows($query)> 0)
+  {
+  while ($row = mysql_fetch_assoc($query)) {
+    $rows[] = $row;
+  }
+  return $row;
+  }
+  else
+  {
+    return 0;
+  }
+
+
+}
 
 
 } // End Class

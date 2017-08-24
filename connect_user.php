@@ -414,7 +414,6 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
 Below Section code is for Athlete With code . from Which He could Directly join the class 
 */
 else if ($_REQUEST['act'] == 'add_joining_code') {
- //echo "fddffd";die;
  $data = json_decode(file_get_contents("php://input"));
  $Obj  = new connect_userservice();
  $req  = $Obj->join_class_usingCode($data);
@@ -429,6 +428,87 @@ else if ($_REQUEST['act'] == 'add_joining_code') {
  }
 
 /*END OF SECTION */
+
+/*
+Below Section for maintaining demo log for the Athlete
+*/
+
+else if($_REQUEST['act'] == 'creating_a_demo_request')
+{
+  $data  =  json_decode(file_get_contents("php://input"));
+  $obj   =  new connect_userservice();
+  $req   =  $obj->create_demo_request($data);
+  if($req != 0)
+  {
+    $resp = array('ststus'=>$req , 'msg'=>'Success');
+    $obj1 =   new userdataservice();
+    $get_id = $obj1->getdeviceid($data->data[0]->$userid);
+    if($notify != '')
+    {
+    $message = array('title'=> 'Class Demo Request', 'message'=>$notify['name'].' has sent you a demo request for class '.$data->data[0]->class_title  , 'device_id' => $device_id , 'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM();
+    }
+  }
+  else
+  {
+    $resp = array('status' => $req, 'msg'=>'Failure');
+  }
+  echo json_encode($resp);
+}
+
+
+
+
+/*END OF SECTION*/
+
+
+/*
+Below section if for Fetching the requested demo students list For coach and Athlete
+*/
+
+else if($_REQUEST['act'] == 'demo_request_list')
+{
+  $coach_id =  $_REQUEST['coach_id'];
+  $class_id =  $_REQUEST['class_id'];
+  $where  = "`coach_id` ='$coach_id' AND `class_id`  = '$class_id'"; 
+  $obj  = new connect_userservice();
+  $req  = $obj->fetch_demoRequestlist($coach_id,$class_id);
+  if($req != 0)
+  {
+  $resp = array('status'=>1,'data'=>$req,'msg'=>'Success');
+  }else
+  {
+  $resp = array('status'=>$req,'data'=>[],'msg'=>'Failure');  
+  }
+  echo json_encode($resp);
+}
+
+/*END OF SECTION*/
+
+/*
+Below Section fetches the list of demo class_scheduled
+*/
+
+else if($_REQUEST['act'] == 'demo_class_list')
+{
+  $athlete_id =  $_REQUEST['athlete_id'];
+  $where  = "`coach_id` ='$coach_id' AND `class_id`  = '$class_id'"; 
+  $obj    = new connect_userservice();
+  $req    = $obj->fetch_demoClassList($athlete_id); 
+  if($req != 0)
+  {
+  $resp = array('status'=>1,'data'=>$req,'msg'=>'Success');
+  }else
+  {
+  $resp = array('status'=>$req,'data'=>[],'msg'=>'Failure');  
+  }
+  echo json_encode($resp);
+}
+/*
+END OF SECTION
+*/
+
+
 
 
 
