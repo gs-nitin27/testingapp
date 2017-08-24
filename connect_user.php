@@ -413,13 +413,25 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
 /*
 Below Section code is for Athlete With code . from Which He could Directly join the class 
 */
-else if ($_REQUEST['act'] == 'add_joining_code') {
+else if ($_REQUEST['act'] == 'add_joining_code') 
+{
  $data = json_decode(file_get_contents("php://input"));
+
  $Obj  = new connect_userservice();
  $req  = $Obj->join_class_usingCode($data);
  if($req != 0)
  {
   $resp = array('status'=> $req, 'msg'=>'Success');
+  $obj1 =   new userdataservice();
+    //echo $data->data[0]->userid;die;
+    $data = json_decode($item->user_info);
+    $userid = $data->userid;
+    $get_id = $obj1->getdeviceid($userid);
+    if($get_id != '')
+    {
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM();
+    }
  }else
  {
   $resp = array('status'=>$req, 'msg'=>'Failure');
@@ -442,10 +454,11 @@ else if($_REQUEST['act'] == 'creating_a_demo_request')
   {
     $resp = array('ststus'=>$req , 'msg'=>'Success');
     $obj1 =   new userdataservice();
-    $get_id = $obj1->getdeviceid($data->data[0]->$userid);
-    if($notify != '')
+    //echo $data->data[0]->userid;die;
+    $get_id = $obj1->getdeviceid($data->data[0]->userid);
+    if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$notify['name'].' has sent you a demo request for class '.$data->data[0]->class_title  , 'device_id' => $device_id , 'indicator' =>10);  
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'], 'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
   }
