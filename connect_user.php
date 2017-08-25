@@ -4,6 +4,8 @@ include('services/userdataservice.php');
 include('services/connect_userservice.php');
 include('services/manageSchedulingService.php');
 include('services/inventryservice.php');
+include('services/smsOtpService.php');
+include('services/emailService.php');
 
  
 
@@ -245,7 +247,14 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  {
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
+ if(isset($_REQUEST['coach_id']))
+ {
  $coach_id         =  $_REQUEST['coach_id'] ;
+ }
+ else
+ {
+  $coach_id = '';
+ }
  $request          =  new connect_userservice();
  $con_res          =  $request->getConnect($student_id,$coach_id);
  $response         =  $request->getClassInfo($class_id);
@@ -293,13 +302,13 @@ else if($_REQUEST['act'] == 'get_organized_classes')
   $student_id        =  $userdata->student_id; 
   $student_name      =  $userdata->student_name;  
   $class_name        =  $userdata->class_name; 
-  $date              = date("F j, Y, g:i a"); 
+  $date              =  date("F j, Y, g:i a"); 
   $req               =  new inventryservice();
-  $sno               = $req->inventrylastid();
-  $s_no              = $sno['sno'] +1;
-  $month             = date("m");
-  $year              = date("y");
-  $invoice           = "DHS/".$month.$year."/".$s_no;
+  $sno               =  $req->inventrylastid();
+  $s_no              =  $sno['sno'] +1;
+  $month             =  date("m");
+  $year              =  date("y");
+  $invoice           =  "DHS/".$month.$year."/".$s_no;
   $res               =  $req->createinventry($invoice,$userdata,$s_no);
   if($res)
   {
@@ -335,13 +344,183 @@ else
 
 
 
+/*
+Below Section code is for coach to add Athlete to his class 
+*/
+
+else if ($_REQUEST['act'] == 'add_athlete_to_class') {
+  
+    $data = json_decode(file_get_contents("php://input"));
+    // foreach ($data->student_record as $key => $value) {
+    // $student_code      =  
+    
+    // }
+    $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
+    $obj               =  new connect_userservice();
+   // print_r($data);
+    $varify            =  $obj->checkExistingStudent($data);
+    if($varify == 0)
+    {
+    $req               =  $obj->add_athlete($data,$student_code);
+    if($req != 0)
+    { 
+     
+    if ($data->phone != '')
+    {
+    $msg = "Hi +".$data->student_name."+ , coach + has + accepted + your + request + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class"; 
+    $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
+    }
+    if($data->email != '')  
+    {
+    $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
+coach  has has accepted your  request to join the class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to verify your account.
+Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
+    $emailObj = new emailService();
+    $send = $emailObj->email_athlete($data,$msg); 
+    } 
+    $resp = array('status'=>$req,'message'=>'Success');
+    }else
+    {
+      $resp = array('status'=>$req,'message'=>'Failure');
+    }
+  }else
+  {   ///print_r($varify);die;
+      $resp = array('status'=>'0','message'=>'Athlete '.$varify['student_name'].' Already added to class');
+      if ($data->phone != '')
+    {
+    $msg = "Hi +".$data->student_name."+ , coach + has + accepted + your + request + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$varify['student_code']." +  to + join + his + class"; 
+    $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
+    }
+    if($data->email != '')  
+    {
+    $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
+coach  has has accepted your  request to join the class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to verify your account.
+Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
+    $emailObj = new emailService();
+    $send = $emailObj->email_athlete($data,$msg); 
+    } 
+   
+  }
+      echo json_encode($resp);
+}
 
 
 
 
 
+/*END OF SECTION */
+
+/*
+Below Section code is for Athlete With code . from Which He could Directly join the class 
+*/
+else if ($_REQUEST['act'] == 'add_joining_code') 
+{
+ $data = json_decode(file_get_contents("php://input"));
+
+ $Obj  = new connect_userservice();
+ $req  = $Obj->join_class_usingCode($data);
+ if($req != 0)
+ {
+  $resp = array('status'=> $req, 'msg'=>'Success');
+  $obj1 =   new userdataservice();
+    //echo $data->data[0]->userid;die;
+    $data = json_decode($item->user_info);
+    $userid = $data->userid;
+    $get_id = $obj1->getdeviceid($userid);
+    if($get_id != '')
+    {
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM();
+    }
+ }else
+ {
+  $resp = array('status'=>$req, 'msg'=>'Failure');
+ }
+ echo json_encode($resp);
+ }
+
+/*END OF SECTION */
+
+/*
+Below Section for maintaining demo log for the Athlete
+*/
+
+else if($_REQUEST['act'] == 'creating_a_demo_request')
+{
+  $data  =  json_decode(file_get_contents("php://input"));
+  $obj   =  new connect_userservice();
+  $req   =  $obj->create_demo_request($data);
+  if($req != 0)
+  {
+    $resp = array('status'=>$req , 'msg'=>'Success');
+    $obj1 =   new userdataservice();
+    //echo $data->data[0]->userid;die;
+    $get_id = $obj1->getdeviceid($data->data[0]->userid);
+    if($get_id != '')
+    {
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'], 'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM();
+    }
+  }
+  else
+  {
+    $resp = array('status' => $req, 'msg'=>'Failure');
+  }
+  echo json_encode($resp);
+}
 
 
+
+
+/*END OF SECTION*/
+
+
+/*
+Below section if for Fetching the requested demo students list For coach and Athlete
+*/
+
+else if($_REQUEST['act'] == 'demo_request_list')
+{
+  $coach_id =  $_REQUEST['coach_id'];
+  $class_id =  $_REQUEST['class_id'];
+  $where  = "`coach_id` ='$coach_id' AND `class_id`  = '$class_id'"; 
+  $obj  = new connect_userservice();
+  $req  = $obj->fetch_demoRequestlist($coach_id,$class_id);
+  //echo $req;die;
+  if($req != 0)
+  {
+  $resp = array('status'=>1,'data'=>$req,'msg'=>'Success');
+  }else
+  {
+  $resp = array('status'=>$req,'data'=>[],'msg'=>'Failure');  
+  }
+  echo json_encode($resp);
+}
+
+/*END OF SECTION*/
+
+/*
+Below Section fetches the list of demo class_scheduled
+*/
+
+else if($_REQUEST['act'] == 'demo_class_list')
+{
+  $athlete_id =  $_REQUEST['athlete_id'];
+  $where  = "`coach_id` ='$coach_id' AND `class_id`  = '$class_id'"; 
+  $obj    = new connect_userservice();
+  $req    = $obj->fetch_demoClassList($athlete_id); 
+  if($req != 0)
+  {
+  $resp = array('status'=>1,'data'=>$req,'msg'=>'Success');
+  }else
+  {
+  $resp = array('status'=>$req,'data'=>[],'msg'=>'Failure');  
+  }
+  echo json_encode($resp);
+}
+/*
+END OF SECTION
+*/
 
 
 
@@ -367,7 +546,8 @@ Student Id and Result is display all Class Information
  { 
  $student_id           =  $_REQUEST['userid'];
  $request              =  new connect_userservice();
- $response             =  $request->ClassInfo($student_id);
+  $response             =  $request->ClassInfo($student_id);
+
    if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
@@ -418,7 +598,6 @@ $response       =  $request->getClass($userid);
 
 
 else if($_REQUEST['act'] == 'daily_log')
-
 {
  $data               =  file_get_contents("php://input");
  $userdata           =  json_decode(file_get_contents("php://input"));
@@ -458,42 +637,22 @@ if($response)
 
 
 else if($_REQUEST['act'] == 'view_dailylog')
-
 {
-
   $userid            =   @$_REQUEST['userid'];
-
   $request           =  new connect_userservice();
-
   $response          =  $request->viewDailyLog($userid);
-
   if($response)
-
      {     
-
                $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
-
                echo json_encode($Result);
-
      }
-
      else
-
      {                     
-
             $Result = array('status' => '0','data'=>[] ,'msg'=>'No Daily Log');
-
             echo json_encode($Result);
-
      } 
 
   }
-
-
-
-
-
-
 
 /****************************List of paid **********************************/
 
@@ -1120,7 +1279,7 @@ else if($_REQUEST['act'] == 'update_schedule')
 
 
 
-/***************************Un Assign log  By The Coach************************************/
+/***************************Un Assign log  By The Coach***********************/
 
 else if($_REQUEST['act'] == 'log_unassign')
 {
@@ -1141,6 +1300,16 @@ else if($_REQUEST['act'] == 'log_unassign')
   echo json_encode($response);
 }
 
+// **************************Add Student by the coach***********************************
+
+// else if($_REQUEST['act'] == 'add_athlete')
+// {
+  
+
+
+
+
+// }
 
 
 

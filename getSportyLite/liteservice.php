@@ -12,8 +12,7 @@
 
     public function  userExits($where)
     {
-     //echo "SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` $where"; die();
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
+     $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -204,7 +203,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
   } // end function
 
-    /****************************Listing Resources GetSporty [Function]*************************/
+    /*******************Listing Resources GetSporty [Function]****************/
 
     public function getList()
     { 
@@ -515,19 +514,20 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
-
+ 
 
      /***************Save the Subscribe query [Function]*******************/
 
-    public function saveSubscribe($userid , $where, $textjson)
+    public function saveSubscribe($module,$userid , $where, $textjson)
     { 
+
       if($this->getsubscribed($userid,$textjson) == 0)
       {
-       $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('0','$userid','$where','6','0','1',CURDATE(),'$textjson')");
+       $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('0','$userid','$where',$module,'0','1',CURDATE(),'$textjson')");
       }
       else
       {
-        $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = '6' AND `para_json`='$textjson' ");
+        $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = $module AND `para_json`='$textjson' ");
       }
       if($query)
       {
@@ -542,9 +542,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
      /******************Get  the All Subscribe Alert [Function]*************************/
 
-    public function getSubs($userid,$module)
+    public function getSubs($userid)
     {
-      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '$module'";
+      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' ";
       $exec = mysql_query($query);
       if(mysql_num_rows($exec) > 0)
       {

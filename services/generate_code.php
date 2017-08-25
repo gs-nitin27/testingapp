@@ -30,7 +30,6 @@ $mail = new PHPMailer();
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
               $mail->AddAttachment("QrCodeImage/qr-code.png"); 
-
               $mail->Body = '<html lang="en">
 <head>
   <meta charset="utf-8"> 

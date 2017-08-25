@@ -5,30 +5,42 @@ class manageSchedulingService
 public function createClass($item,$code)
 {
 $start_date = $item->start_date;
-$end_date = $item->end_date;
-
-$query = mysql_query("INSERT INTO `gs_coach_class`(`userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `venue`,`location`,`description`,`date_created`,`days`,`age_group`,`class_fee`,`class_strength`,`contact_no`,`class_host`,`duration`,`classtype`) VALUES ('$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time',FROM_UNIXTIME ('$start_date'),FROM_UNIXTIME ('$end_date'),'$item->address','$item->location','$item->description',CURDATE(),'$item->days','$item->age_group','$item->fee','$item->class_strength','$item->phone_no','$item->class_host','$item->duration','$item->classtype')");
+if($item->end_date != '')
+{
+  $end_date = "'".$item->end_date."'";
+}else
+{
+  $end_date = 'DEFAULT(`class_end_date`)';
+}
+$query = mysql_query("INSERT INTO `gs_coach_class`(`userid`, `class_title`,`class_code`, `class_start_timing`,`class_end_timing`, `class_start_date`,`class_end_date`, `venue`,`location`,`description`,`date_created`,`days`,`age_group`,`class_fee`,`class_strength`,`contact_no`,`class_host`,`duration`,`classtype`) VALUES ('$item->user_id','$item->class_name','$code','$item->start_time','$item->end_time','$start_date',".$end_date.",'$item->address','$item->location','$item->description',CURDATE(),'$item->days','$item->age_group','$item->fee','$item->class_strength','$item->phone_no','$item->class_host','$item->duration','$item->classtype')");
+$last_id = mysql_insert_id();   
 if($query)
 {
-return true;
+$getData = $this->getclassdata($last_id);
+//print_r($getdata);die;
+return $getData;
 }
 else 
 {
-return false;
+return 0;
 }
 }
 
 
 public function CheckforExistingClass($item)
+{ 
+	$start_date = $item->start_date;
+  $end_date   = $item->end_date;
+if(isset($item->class_id))
 {
-	$end_date   = "FROM_UNIXTIME(".$item->end_date.")";
-	$start_date = "FROM_UNIXTIME(".$item->start_date.")";
-
-$query = mysql_query("SELECT `class_title` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , $start_date) < 0 OR DATEDIFF(`class_start_date` , $start_date) = 0) AND (DATEDIFF(`class_end_date` , $end_date) > 0 OR DATEDIFF(`class_end_date` , $end_date) = 0) AND (`class_start_timing` = '$item->start_time')AND (`class_end_timing` = '$item->end_time')ORDER BY `class_start_timing` DESC");
-
+  $update_where = 'AND `id` NOT IN($item->class_id)';
+}else
+{
+  $update_where = '';
+}
+$query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0) AND (DATEDIFF(`class_end_date` , '$end_date') > 0 OR DATEDIFF(`class_end_date` , '$end_date') = 0) OR IF(`class_end_date` = NULL ,DATEDIFF(`class_start_date` , '$start_date') < 0 , DATEDIFF(`class_start_date` , '$start_date') = 0) AND (`class_start_timing` = '$item->start_time')OR (`class_end_timing` = '$item->end_time') ".$update_where." ORDER BY `class_start_timing` DESC ");
 if(mysql_num_rows($query)>0)
 {
-
 while($row = mysql_fetch_assoc($query))
 {
 
@@ -39,112 +51,71 @@ $data[] = $row;
 return $data;
 }
 else
-return '1';
-}
-
-public function CheckforExistingClass_update($item)
 {
-
-   $end_date   = "FROM_UNIXTIME(".$item->end_date.")";
-   $start_date = "FROM_UNIXTIME(".$item->start_date.")";
-
-$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , $start_date) < 0 OR DATEDIFF(`class_start_date` , $start_date) = 0) AND (DATEDIFF(`class_end_date` , $end_date) > 0 OR DATEDIFF(`class_end_date` , $end_date) = 0) AND (`class_start_timing` = '$item->start_time')AND (`class_end_timing` = '$item->end_time')ORDER BY `class_start_timing` DESC");
-
-if(mysql_num_rows($query)>0)
-{
-
-while($row = mysql_fetch_assoc($query))
-{
-
-
-$data[] = $row;
-
+  return 0;
 }
-return $data;
 }
-else
-return '1';
 
 
-}
 
 public function updateClass($item,$code)
 {
 
 $start_date = $item->start_date;
-$end_date =   $item->end_date;
-
-
-$query = mysql_query("UPDATE `gs_coach_class` SET `class_title` = '$item->class_name',`description`='$item->description',`days` = '$item->days',`class_fee` = '$item->fee',`age_group` = '$item->age_group',`class_strength` = '$item->class_strength',`class_host`= '$item->class_host',`contact_no` = '$item->phone_no' , `location` = '$item->location' ,`class_code`='$code', `class_start_timing`='$item->start_time',`class_end_timing`='$item->end_time',`class_start_date` = FROM_UNIXTIME ($start_date),`class_end_date` = FROM_UNIXTIME ($end_date), `venue` = '$item->address' WHERE `id` = '$item->class_id'");
+if($item->end_date != '')
+{
+  $end_date = "'".$item->end_date."'";
+}else
+{
+  $end_date = 'DEFAULT(`class_end_date`)';
+}
+$query = mysql_query("UPDATE `gs_coach_class` SET `class_title` = '$item->class_name',`description`='$item->description',`days` = '$item->days',`class_fee` = '$item->fee',`age_group` = '$item->age_group',`class_strength` = '$item->class_strength',`class_host`= '$item->class_host',`contact_no` = '$item->phone_no' , `location` = '$item->location' ,`class_code`='$code', `class_start_timing`='$item->start_time',`class_end_timing`='$item->end_time',`class_start_date` = '$start_date',`class_end_date` = $end_date, `venue` = '$item->address' WHERE `id` = '$item->class_id'");
 if($query)
 {
-return 1;
+$getData = $this->get_updated_classdata($item->class_id);
+return $getData;
 }
 else 
 return 0;
 }
 
-public function cheakclass_exist_update($item,$code)
-{
-   $query = mysql_query("SELECT `id` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (`class_start_timing` = '$item->start_time' OR `class_end_timing`= '$item->end_time')");
 
-if(mysql_num_rows($query)>0)
+public function getclassdata($id)
 {
-while($rows = mysql_fetch_assoc($query))
-{
-$data[] = $rows;
+$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$id' ORDER BY `id` DESC LIMIT 1");
+if(mysql_num_rows($query) != 0){
+$row = mysql_fetch_assoc($query);
+return $row;
 
 }
-return $data;
-
-}
-else{
+else 
 
 return 0;
 
-        }
 }
 
-public function getclassdata($item)
+public function get_updated_classdata($id)
 {
-
-$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid`  = '$item->user_id' ORDER BY `id` DESC LIMIT 1");
-if(mysql_num_rows($query) == 1){
+//echo "SELECT * FROM `gs_coach_class` WHERE `id`  = '$id'";die;
+$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$id'");
+if(mysql_num_rows($query) != 0){
 	while($row = mysql_fetch_assoc($query))
 	{
-       $data = $row;
-       return $data;
-
-	}
+    return $row; 
+  }
       }
 else 
 
-return false;
-
-}
-
-public function get_updated_classdata($item)
-{
-
-$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$item->class_id'");
-if(mysql_num_rows($query) == 1){
-	while($row = mysql_fetch_assoc($query))
-	{
-       $data = $row;
-       return $data;
-
-	}
-      }
-else 
-
-return false;
+return 0;;
 
 }
 
 
 public function getstudentlist($id)
 {
-$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user INNER JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
+/*$query= mysql_query("SELECT user.* , `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user LEFT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid`=$id");
+*/
+$query= mysql_query("SELECT `gs_class_data`.`student_name` AS name,`gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$id'");
 if($query)
 {
 while($row = mysql_fetch_assoc($query))
@@ -196,24 +167,41 @@ return 0;
 
 public function getclasslisting($userid, $date)
 {
-if($date == ""){
-	$date = 'CURDATE()';
+$day = date('w', strtotime($date));
+$query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$userid' AND (DATEDIFF(`class_start_date`,'$date') = 0 || DATEDIFF(`class_start_date`,'$date')< 0) ");
+if(mysql_num_rows($query)> 0)
+{
+   while($row = mysql_fetch_assoc($query))
+   {
+    $mystring = $row['days'];
+    $match = preg_match("/".$day."/i", "".$mystring."");
+    if($match != 0)
+    {  
+    $row['class_fee'] = json_decode($row['class_fee']);
 
-}else if($date != "")
-{
-$date = "FROM_UNIXTIME(".$date.")";
-}
+     if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
+     {  // echo 
+        $to = strtotime($date); // or your date as well
+        $now = strtotime($row['class_end_date']);
+        $datediff =  $now-$to;
+        $datediff =  floor($datediff / (60 * 60 * 24));//die;
+        if($datediff > 0 || $datediff = 0)
+        {
+         $rows[] = $row; 
+        }
+     }
+     else
+     {
+      $rows[] = $row;
+     }
+   }
+ }
+    //print_r($rows);;
 
-$query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` GROUP BY `class_code` HAVING `userid` = '$userid' AND (DATEDIFF(`class_start_date` , $date) < 0 OR DATEDIFF(`class_start_date` , $date) = 0) AND (DATEDIFF(`class_end_date` , $date) > 0 OR DATEDIFF(`class_end_date` , $date) = 0) ORDER BY `class_start_timing` DESC");
-if(mysql_num_rows($query)>0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-$data[] = $row; 
-}
-return $data;
+return $rows;
 }else
-return false;
+return 0;
+
 }
 
 public function varify_existing($item, $data)

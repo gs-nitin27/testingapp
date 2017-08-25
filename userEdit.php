@@ -1,40 +1,42 @@
 <?php
+
 include('config1.php');
 include('services/userdataservice.php');
 include('services/searchdataservice.php');
 include('services/UserProfileService.php');
 include('services/emailService.php');
 
+
+
  
-/******************This Act are used to Edit the User Profile********************************/
+/******************This Act are used to Edit the User Profile*************/
 
 if($_REQUEST['act'] == 'editUserData')	
-{
-   $data 				   =  file_get_contents("php://input");
-   $userdata 	     =  json_decode(file_get_contents("php://input"));
-   $userid         =  @$_REQUEST['userid'];
-   $prof_id        =  @$_REQUEST['prof_id'];
-  //$userid        = $userdata->user->userid;
-  //$prof_id       = $userdata->user->prof_id;
-    if(is_null($userid))
+{ 
+
+   $data 				 =  file_get_contents("php://input");
+   $userdata     =  json_decode($data);
+   $userid       =  @$_REQUEST['userid'];
+   $prof_id      =  @$_REQUEST['prof_id'];
+   $req          =  new UserProfileService();
+   $res          =  $req->upload_Document_Image($userdata,$userid,$prof_id);
+   //$res          =  $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
+
+   if(is_null($userid))
    {
         $user = array('status' => 0, 'data'=> 'User Id is Empty ' , 'msg'=>'No User Id' );
         echo json_encode($user);
-        die();
    }
   if(is_null($userdata))
-   {
+  {
         $user = array('status' => 0, 'data'=> 'Json is Invalid' , 'msg'=>'Invalid Json data' );
         echo json_encode($user);
-        die();
-   }
+  }
     else
     {
-          $req 					 = new UserProfileService();
-          $res 					 = $req->edit_user($userid,$prof_id,mysql_real_escape_string($data));
-        	if($res)
+         	if($res)
         	{
-          	$user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
+             $user = array('status' => 1, 'data'=> $res , 'msg'=>'Updated' );
                     echo json_encode($user); 
           }
           else
@@ -123,16 +125,16 @@ else
                                             else
                                             {
                                                 ++$count1;
-                                            }
-                                      }                          
-                              }
+                                  }
+                              }                          
+                           }
                             
-                        }
+                      }
                   }
-}
-}
-}
-}
+              }
+          }
+      }
+  }
                      $comp = ($count/($count+$count1+1))*100;
                      $comp1=round($comp,2);
                      //$prof_status=$comp1.''.'%';
@@ -168,6 +170,7 @@ echo json_encode($user);
 
 
 
+
 else if($_REQUEST['act'] == 'imageupload')
 {
    $data           =  file_get_contents("php://input");
@@ -183,7 +186,7 @@ else if($_REQUEST['act'] == 'imageupload')
         }
         else
         {
-            $data = array('status' => 1, 'data'=>$res, 'msg'=>'Failor');
+            $data = array('status' => 0, 'data'=>$res, 'msg'=>'Failor');
                   echo json_encode($data);
         }          
 } // End of Statment
@@ -192,4 +195,23 @@ else if($_REQUEST['act'] == 'imageupload')
 
 
 
+else if($_REQUEST['act'] == 'edit_user_profile')
+{
+  $userdata       =   json_decode(file_get_contents("php://input"));
+  $req            =   new UserProfileService();
+  $res            =   $req->edit_profile($userdata);
+  if($res)
+        {
+          $data = array('status' => '1', 'data'=> $res, 'msg'=>'updated');
+                  echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>$res, 'msg'=>'not updated');
+                  echo json_encode($data);
+        }   
 
+}
+
+
+?>

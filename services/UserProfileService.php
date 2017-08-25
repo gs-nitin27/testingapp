@@ -1,4 +1,5 @@
 <?php
+
  class UserProfileService
  {
 
@@ -316,24 +317,13 @@ return 0;
 
 /************Function for Edit The user profile in user Table************************/
 
-
 public function editProfile($userdata)
 {
 $userid                  = $userdata->userid;
-$email                   = $userdata->email;
-$mobile_no               = $userdata->mobile_no;
 $prof_id                 = $userdata->prof_id; 
 $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
-$gender                  = $userdata->gender;
-$dob                     = $userdata->dob;
-$status                  = $userdata->status;  //staus
-$link                    = $userdata->link;
-$ageGroupCoached         = $userdata->ageGroupCoached;
-$languagesKnown          = $userdata->languagesKnown;
-$location                = $userdata->location; 
-
-$query = mysql_query("UPDATE `user` SET `email`='$email',`contact_no`='$mobile_no',`prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport',`dob`='$dob',`gender`='$gender',`link`='$link', `age_group_coached`='$ageGroupCoached',`languages_known`='$languagesKnown',`location`='$location' WHERE `userid`='$userid'");
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' WHERE `userid`='$userid'");
         if($query)
         {
           return 1;   
@@ -437,7 +427,7 @@ public function listuserdata($userid)
 public function edit_user($userid,$prof_id,$data)
 {
 
-   $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+  $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
   if($query)
        {
          return 1;
@@ -510,30 +500,101 @@ public function get_imageName($userid)
 
 
 
-/********************************************************************************/
-
-// public function find_jobtitle($id)
-// {
-//   $query=mysql_query("SELECT `user_image` FROM `user` where `userid`='$userid'");
-//   if(mysql_num_rows($query)>0)
-//        {
-//           while($row = mysql_fetch_assoc($query))
-//           {
-//             $data = $row;
-//           }
-//           return $data;
-//           }
-//           else 
-//           {
-//           return 0;
-//           }
-
-// }// End Function
 
 
+public function upload_Document_Image($userdata,$userid,$prof_id)
+{
+      if ($prof_id == 1)
+      {
+
+              $dob            =  $userdata->Bio->dob;
+              $email          =  $userdata->Bio->email;
+              $gender         =  $userdata->Bio->gender;
+              $location       =  $userdata->Bio->location;
+
+              $this->update_user_table($dob,$email,$gender,$location,$userid);
+              $img_name  =  $userdata->Document->img_name;
+              if (empty($img_name))
+              {
+                 unset($userdata->Document);
+                 $data = json_encode($userdata);  
+              }
+              else
+              {
+              $img       =  $userdata->Document->image; 
+              $field     =  $userdata->Document->field; 
+              $position  =  $userdata->Document->position; 
+              $filepath  =  str_replace('data:image/png;base64,', '', $img);
+              $img       =  str_replace('$filepath,', '', $img);
+              $img       =  str_replace(' ', '+', $img);
+              $data      =  base64_decode($img);
+              $success   =  move_uploaded_file($img, $filepath);
+              $file      =  UPLOAD_DIR.'documents/'.$img_name;
+              $success   =  file_put_contents($file, $data);
+                         
+              if($field =='Achivement_awards') 
+              {
+                $userdata->Achivement->awards[$position]->image=$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata);      
+              }
+              if($field =='Achivement_bestResult') 
+              {
+                $userdata->Achivement->bestResult[$position]->image=$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata);      
+              }
+              if($field =='LatestResults') 
+              {
+                $userdata->LatestResults[$position]->image =$img_name;
+                unset($userdata->Document);
+                $data = json_encode($userdata); 
+              }   
+            }
+    }
+      else
+      {
+        $data = json_encode($userdata); 
+        $img_name   = 1;
+
+      }
+      
+      $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
+      
+    if($query)
+    {
+        return $img_name;
+    } 
+    else
+    {    
+        return 0;
+    }  
+}
 
 
-// find_jobtitle($id)
+
+public function update_user_table($dob,$email,$gender,$location,$userid)
+{
+  $query  = mysql_query("UPDATE `user` SET `dob`='$dob' , `email`='$email',`gender`='$gender',`location`='$location' WHERE `userid` ='$userid' ");
+  return 1;
+}
+
+
+
+public function edit_profile($userdata)
+{
+  $query  = mysql_query("UPDATE `user` SET `location`='$userdata->location' , `email`='$userdata->email',`dob`='$userdata->dob',`age_group_coached`='$userdata->age_group_coached',`languages_known`='$userdata->languages_known',`link`='$userdata->personal_website_link',`gender`='$userdata->gender'
+   WHERE `userid` ='$userdata->userid'");
+    $num = mysql_affected_rows();
+    if($num)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+}
 
 
 

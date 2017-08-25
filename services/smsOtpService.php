@@ -191,24 +191,22 @@ function find_otp_code($userid)
 
 function sendWay2SMS($uid, $pwd, $phone, $msg)
 {
-  
-$varUserName='t1gstport';
-$varPWD='19705751';
-$varSenderID='GTSPOR';
+$varUserName='t1ntnagarwalsms';
+$varPWD='44824769';
+$varSenderID='GSCORT';  
 $varPhNo=$phone;
 $varMSG= $msg;//"message to send";
 $url="http://nimbusit.co.in/api/swsendSingle.asp";
 $data="username=".$varUserName."&password=".$varPWD."&sender=".$varSenderID."&sendto=".$varPhNo."&message=".$varMSG;
 $result =  postData($url,$data); 
 
-//print_r($result);die;
 if($result)
 {
-return 1;
+return '1';
 }
 else
 {
-  return 0;
+return '0';
 }
 }
 
