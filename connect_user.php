@@ -452,7 +452,7 @@ else if($_REQUEST['act'] == 'creating_a_demo_request')
   $req   =  $obj->create_demo_request($data);
   if($req != 0)
   {
-    $resp = array('ststus'=>$req , 'msg'=>'Success');
+    $resp = array('status'=>$req , 'msg'=>'Success');
     $obj1 =   new userdataservice();
     //echo $data->data[0]->userid;die;
     $get_id = $obj1->getdeviceid($data->data[0]->userid);
@@ -486,6 +486,7 @@ else if($_REQUEST['act'] == 'demo_request_list')
   $where  = "`coach_id` ='$coach_id' AND `class_id`  = '$class_id'"; 
   $obj  = new connect_userservice();
   $req  = $obj->fetch_demoRequestlist($coach_id,$class_id);
+  //echo $req;die;
   if($req != 0)
   {
   $resp = array('status'=>1,'data'=>$req,'msg'=>'Success');
@@ -597,7 +598,6 @@ $response       =  $request->getClass($userid);
 
 
 else if($_REQUEST['act'] == 'daily_log')
-
 {
  $data               =  file_get_contents("php://input");
  $userdata           =  json_decode(file_get_contents("php://input"));
@@ -637,42 +637,22 @@ if($response)
 
 
 else if($_REQUEST['act'] == 'view_dailylog')
-
 {
-
   $userid            =   @$_REQUEST['userid'];
-
   $request           =  new connect_userservice();
-
   $response          =  $request->viewDailyLog($userid);
-
   if($response)
-
      {     
-
                $Result = array('status'=>'1','data'=>$response ,'msg'=>'View Daily Log');
-
                echo json_encode($Result);
-
      }
-
      else
-
      {                     
-
             $Result = array('status' => '0','data'=>[] ,'msg'=>'No Daily Log');
-
             echo json_encode($Result);
-
      } 
 
   }
-
-
-
-
-
-
 
 /****************************List of paid **********************************/
 

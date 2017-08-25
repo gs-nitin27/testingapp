@@ -1758,14 +1758,14 @@ public function create_demo_request($data)
 
 public function fetch_demoRequestlist($coach_id,$class_id)
 {
-
-  $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
+   // echo "SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'";die;
+  $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` ,`us`.`prof_id`,`us`.`sport` ,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
   if(mysql_num_rows($query)> 0)
   {
   while ($row = mysql_fetch_assoc($query)) {
     $rows[] = $row;
   }
-  return $row;
+  return $rows;
   }
   else
   {
