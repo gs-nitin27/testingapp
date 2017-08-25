@@ -21,7 +21,7 @@ else if($_REQUEST['act'] == 'angulartest')
 {
 	     $username       =  $_REQUEST['email'];
 		   $password       =  md5($_REQUEST['password']); 
-       print_r($_REQUEST);die;  
+      // print_r($_REQUEST);die;  
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
          if($res)
@@ -41,7 +41,7 @@ else if($_REQUEST['act'] == 'angulartest')
 if($_REQUEST['act'] == 'contentangularlex')
 {
 
-     $userid      =  $_REQUEST['userid'];
+  $userid      =  $_REQUEST['userid'];
 	$req    =   new angularapi();
 	$res= $req->getContent($userid);
     echo json_encode($res); 
@@ -120,6 +120,13 @@ $newpath = "/image/";
 move_uploaded_file($imageSave,$newpath.$imageSave);
 
 echo json_encode($imageName);
+
+}
+
+else if($_REQUEST['act'] == 'test')
+{
+  $data = file_get_contents("php://input");
+  print_r($data);
 
 }
 ?>
