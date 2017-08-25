@@ -671,7 +671,36 @@ public function getClassInfo($class_id)
 
 //End Function 
 
+public function get_class_Join_status($class_id,$studentid)
+{
 
+$query = mysql_query("SELECT `status` FROM `gs_class_data` WHERE `student_id`='$student_id' AND `classid` = '$class_id'")
+if(mysql_num_rows($query)>0)
+{
+  return mysql_fetch_assoc($query);
+}else
+{
+  return 0;
+}
+
+
+}
+
+
+public function get_class_demo_status($class_id, $student_id)
+{
+
+$query = mysql_query("SELECT `demo_status` FROM `gs_athlete_demo` WHERE `athlete_id`='$student_id' AND `class_id` = '$class_id'")
+if(mysql_num_rows($query)>0)
+{
+  return mysql_fetch_assoc($query);
+}
+else
+{
+  return 0;
+}
+
+}
 
 /**************************************************************************************/
 
