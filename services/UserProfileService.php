@@ -26,7 +26,7 @@ $query = mysql_query("INSERT INTO `gs_user_education`(`id`, `userid`, `Degree_co
 if($query)
 {
 return 1;
-}
+} 
 else
 {
 return 0;
@@ -346,7 +346,7 @@ $query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proff
   public function userdata($id)
     {
     
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`prof_id`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
