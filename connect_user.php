@@ -279,34 +279,37 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 
 else if($_REQUEST['act'] == 'get_class_view_status')
 {
-$class_id         =  @$_REQUEST['class_id'];
-$student_id       =  $_REQUEST['student_userid'];
-$request          =  new connect_userservice();
-$response         =  $request->getClassInfo($class_id);
-if(isset($student_id))
-{
-  $join_status      =  $request->get_class_Join_status($class_id, $student_id);
-  if($join_status != 0)
-  {
-    $response[0]['joining_status'] = $join_status['status'];
+  $class_id         =  @$_REQUEST['class_id'];
+  $student_id       =  $_REQUEST['student_userid'];
+  $request          =  new connect_userservice();
+  $response         =  $request->getClassInfo($class_id);
+  $status = '0';
+  if(isset($student_id))
+  { 
+    $join_status      =  $request->get_class_Join_status($class_id, $student_id);
+    $demo_status      = $request->get_class_demo_status($class_id, $student_id);
+    if($join_status != 0 )
+    {
+      if($join_status['status'] == 1)
+      {
+        $status = '2';
+      }else
+      {
+        $status = '0';
+      }
+    }
+    else if($demo_status != 0)
+    {
+      $status = '1';
+    }else
+    {
+      $status = '0';
+    }
+    
+    
   }
-  else
-  {
-    $response[0]['joining_status'] = 0;
-  }
-  $demo_status    = $request->get_class_demo_status($class_id, $student_id);
-  if($demo_status != 0)
-  {
-
-  $response[0]['demo_status'] = $join_status['demo_status'];
-
-  }else
-  {
-  $response[0]['demo_status'] = 0;  
-  }
-}
-$resp = array('status' => '1','data'=>$response ,'msg'=>'class Information');
-echo json_encode($resp);
+  $resp = array('status' => '1','data'=>$response ,'msg'=>'class Information');
+  echo json_encode($resp);
 }
 
 
