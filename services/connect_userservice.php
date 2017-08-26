@@ -1744,30 +1744,36 @@ public function add_athlete($data,$student_code)
 
 public function checkExistingStudent($item)
 {
-$query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
-if(mysql_num_rows($query) > 0)
-{
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
+  if(mysql_num_rows($query) > 0)
+  {
 
-return mysql_fetch_assoc($query);
+  return mysql_fetch_assoc($query);
 
-}else
-return 0;
+  }else
+  return 0;
 }
 
 public function join_class_usingCode($item)
 {
-$code = $item->student_code;
-$data = json_decode($item->user_info);
-$query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
-echo mysql_affected_rows();die;
-if($query)
-{
-  return 1;
-}
-else
-{
-  return 0;
-}
+  $code = $item->student_code;
+  if(!isset($item->deviceType))
+  {
+  $data = json_decode($item->user_info);
+  }else
+  {
+  $data = $item->user_info;
+  }
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
+  //echo mysql_affected_rows();die;
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 
 }
 
