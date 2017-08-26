@@ -221,7 +221,7 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
  $student_id     =  $_REQUEST['student_userid'];  // Student User Id
  $request        =  new connect_userservice();
- $response       =  $request->getClass($userid);
+ $response       =  $request->getClassList($userid);
  if ($response)
  {
  	if (!empty($student_id))
