@@ -1783,8 +1783,7 @@ public function join_class_usingCode($item)
 
 public function create_demo_request($data)
 {
-  // $data = $data->data[0];
-  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`) VALUES ('$data->classid','$data->coach_id','$data->student_id',CURDATE(),'0','$data->demo_date','$data->class_end_timing".'-'."$data->class_start_timing')");
+  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time')");
   if($query)
   {
     return 1;

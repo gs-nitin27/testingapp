@@ -478,16 +478,16 @@ else if ($_REQUEST['act'] == 'add_joining_code')
 Below Section for maintaining demo log for the Athlete
 */
 
-else if($_REQUEST['act'] == 'creating_a_demo_request')
-{
+else if($_REQUEST['act'] == 'create_demo_request')
+{ 
   $data  =  json_decode(file_get_contents("php://input"));
+  print_r($data);die;
   $obj   =  new connect_userservice();
   $req   =  $obj->create_demo_request($data);
   if($req != 0)
   {
     $resp = array('status'=>$req , 'msg'=>'Success');
     $obj1 =   new userdataservice();
-    //echo $data->data[0]->userid;die;
     $get_id = $obj1->getdeviceid($data->data[0]->userid);
     if($get_id != '')
     {
