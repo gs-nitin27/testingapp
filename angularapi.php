@@ -17,7 +17,7 @@ if($_REQUEST['act'] == 'contentangular')
 else if($_REQUEST['act'] == 'angulartest')
 {
 	     $username       =  $_REQUEST['email'];
-		   $password       =  md5($_REQUEST['password']);
+		   $password       =  md5($_REQUEST['password']); 
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
          if($res)
@@ -36,6 +36,7 @@ else if($_REQUEST['act'] == 'angulartest')
 
 else if($_REQUEST['act'] == 'contentangularlex')
 {
+
   $userid      =  $_REQUEST['userid'];
 	$req    =   new angularapi();
 	$res= $req->getContent($userid);
@@ -280,6 +281,7 @@ else
                         }
                   }
 }
+
 }
 }
 }
@@ -356,4 +358,5 @@ else if($_REQUEST['act'] == 'createjob')
     echo json_encode($res);
 }
 
+>>>>>>> a5e28451123829d0da331a75beca7dfbf284637b
 ?>

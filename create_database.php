@@ -53,7 +53,6 @@ if($_REQUEST['act'] == 'gs_signup')
 
 
 
-
 /*  Login The User is using GetsportyLite   
 
 //********************Code for User Login************/
