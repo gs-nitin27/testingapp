@@ -308,6 +308,7 @@ else if($_REQUEST['act'] == 'get_class_view_status')
     
     
   }
+  $response[0]['status'] = $status;
   $resp = array('status' => '1','data'=>$response ,'msg'=>'class Information');
   echo json_encode($resp);
 }
