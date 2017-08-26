@@ -481,18 +481,17 @@ Below Section for maintaining demo log for the Athlete
 else if($_REQUEST['act'] == 'create_demo_request')
 { 
   $data  =  json_decode(file_get_contents("php://input"));
-  print_r($data);die;
   $obj   =  new connect_userservice();
   $req   =  $obj->create_demo_request($data);
   if($req != 0)
   {
     $resp = array('status'=>$req , 'msg'=>'Success');
     $obj1 =   new userdataservice();
-    $get_id = $obj1->getdeviceid($data->data[0]->userid);
+    $get_id = $obj1->getdeviceid($data->coach_id);
     if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'], 'indicator' =>10);  
-    $notify = $obj1->sendPushNotificationToGCM();
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'], 'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
     }
   }
   else
