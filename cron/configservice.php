@@ -56,7 +56,6 @@ public function assign_log($data)
 
 public function log_diet()
 {
-
 $query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE NOW() between `start_date` and `end_date` ");
 	$num = mysql_num_rows($query);
 if($num)
@@ -64,32 +63,46 @@ if($num)
 		while($row = mysql_fetch_assoc($query))
 		{
 			$id_diet  = $row['id'];
-			if($this->check_log_diet($id_diet)) 
-			{
-				return 0;
+			$userid   = $row['userid'];
+$data        = json_decode($row['my_diet_plan']);
+$start_date  = $data->start_date;
+$end_date    = $data->end_date;
+$name        = $data->name;
+$date        =  date('Y-m-d');
+$day         =  strtolower(date("l"));
+$value       = $data->diet_food->$day;
+$log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
+$log_data1 = json_encode($log_data);
+
+        mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$id_diet','$log_data1',CURDATE()) ");
+//$data[] = "('0','".$row['userid']."','".$row['id']."','".$log_data1."',CURDATE() )"; 
+
+
 			}
-			else
-			{
-	$data[] = "('0','".$row['userid']."','".$row['id']."','".$row['my_diet_plan']."',CURDATE() )"; 
+			return 1;
+		
 		}
+		else
+		{
+			return 0;
+		}
+		
 
-	}
+// 			if($this->assign_log_diet($data))
+// 			{
+// 				return 1;
+// 			}
+// 			else
+// 			{
+// 				return 0;
+// 			}
+// }
+// else
+// {
 
-	
-			if($this->assign_log_diet($data))
-			{
-				return 1;
-			}
-			else
-			{
-				return 0;
-			}
-}
-else
-{
+// 	return 0;
+// }
 
-	return 0;
-}
 }
 
 
@@ -98,29 +111,22 @@ else
 
 /***********************Assign Log Diet*****************************************/
 
+
+
 public function assign_log_diet($data)
 {
 	
 	$values = implode(',', $data);
+
 	mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES $values");
+
 				return 1;
 }
 
 
-public function check_log_diet($id_diet)
-{
-	$query 	= mysql_query("SELECT *FROM  `gs_diet_log` WHERE `id_diet` =$id_diet ");
-	$num = mysql_num_rows($query);
-	//echo "$num";
-	if($num)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+
+
+
 
 
 
