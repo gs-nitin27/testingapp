@@ -476,7 +476,7 @@ public function getConnectedUser($userid,$usertype)
 public function getClassList($userid)
 {
  $date = 'CURDATE()';
- $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'  AND (DATEDIFF(`class_start_date`, $date) = 0 || DATEDIFF(`class_start_date`,$date)< 0)  ");
+ $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
   if(mysql_num_rows($query) > 0)
   {
     while ($row = mysql_fetch_assoc($query)) {
@@ -1782,8 +1782,9 @@ public function join_class_usingCode($item)
 }
 
 public function create_demo_request($data)
-{ //print_r($data);die;
-  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time')");
+{ 
+  $demo_code = $data->classid.$data->athlete_id;
+  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`, `demo_code`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time', '$demo_code')");
   if($query)
   {
     return 1;
@@ -1796,7 +1797,6 @@ public function create_demo_request($data)
 
 public function fetch_demoRequestlist($coach_id,$class_id)
 {
-   // echo "SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'";die;
   $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` ,`us`.`prof_id`,`us`.`sport` ,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
   if(mysql_num_rows($query)> 0)
   {
