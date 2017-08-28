@@ -461,7 +461,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+  $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
  }else
@@ -480,7 +480,6 @@ Below Section for maintaining demo log for the Athlete
 else if($_REQUEST['act'] == 'create_demo_request')
 { 
   $data  =  json_decode(file_get_contents("php://input"));
-  //print_r($data);die;
   $obj   =  new connect_userservice();
   $req   =  $obj->create_demo_request($data);
   if($req != 0)

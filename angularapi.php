@@ -9,20 +9,20 @@ include('services/getListingService.php');
 
 if($_REQUEST['act'] == 'contentangular')
 {
-	$req    =   new angularapi();
-	$res= $req->getContentInfo();
+  $req    =   new angularapi();
+  $res= $req->getContentInfo();
     echo json_encode($res); 
 }
 
 else if($_REQUEST['act'] == 'angulartest')
 {
-	     $username       =  $_REQUEST['email'];
-		   $password       =  md5($_REQUEST['password']); 
+       $username       =  $_REQUEST['email'];
+       $password       =  md5($_REQUEST['password']);
          $req    =   new angularapi();
          $res = $req->angulartest($username, $password);
          if($res)
          {
-         $data = array("data" =>$res);		 
+         $data = array("data" =>$res);     
           echo json_encode($res);
           }
           else
@@ -36,14 +36,29 @@ else if($_REQUEST['act'] == 'angulartest')
 
 else if($_REQUEST['act'] == 'contentangularlex')
 {
-
   $userid      =  $_REQUEST['userid'];
-	$req    =   new angularapi();
-	$res= $req->getContent($userid);
+  $req    =   new angularapi();
+  $res= $req->getContent($userid);
    
   echo json_encode($res); 
 }
 
+else if($_REQUEST['act'] == "participantList")
+{
+  $event_id = $_REQUEST['event_id'];
+  $req = new angularapi();
+  $res = $req->participantList($event_id);
+  echo json_encode($res);
+}
+
+else if($_REQUEST['act'] == 'jobapplyUser')
+{
+  $job_id = $_REQUEST['id'];
+  $req = new angularapi();
+  $res = $req->jobapplyUser($job_id);
+  echo json_encode($res);
+
+}
 else if($_REQUEST['act'] == 'getuserevent')
 {
    $userid = $_REQUEST['userid'];
@@ -51,23 +66,19 @@ else if($_REQUEST['act'] == 'getuserevent')
    $res = $req->getuserevent($userid);
    echo json_encode($res);
 }
-
 else if($_REQUEST['act'] == 'geteventdetails')
 {
    $id = $_REQUEST['id'];
    $req = new angularapi();
    $res = $req->geteventdetails($id);
    echo json_encode($res);
-
 }
-
 else if($_REQUEST['act'] == 'getuserdashboardevent')
 {
   $id = $_REQUEST['userid'];
   $req = new angularapi();
   $res = $req->getuserdashboardevent($id);
-  echo json_encode($res); 
-
+  echo json_encode($res);
 }
 else if($_REQUEST['act'] == 'getjoblist')
 {
@@ -85,7 +96,30 @@ else if($_REQUEST['act'] == 'getjobdetails')
   echo json_encode($res);
 
 }
+else if($_REQUEST['act'] == 'socialLogin')
+{
+  $data = json_decode(file_get_contents("php://input"));
+  $email  = $data->email;
+  $name   = $data->name;
+  $password = md5($email);
+  $req = new angularapi();
+  $res = $req->angulartest($email, $password);
+  if($res)
+  {
+    echo json_encode($res);
+  }else
+  {
+    $res = $req->socialLogin($email,$password,$name);
+    echo json_encode($res);
+  }
 
+
+ // $res = $req->socialLogin($email,$password,$name);
+
+ 
+
+
+}
 else if($_REQUEST['act'] == 'createcontent')
 {        
 
@@ -100,7 +134,7 @@ else if($_REQUEST['act'] == 'createcontent')
         $item->publish      =  "0";
 
         $req    =   new angularapi();
-        $res = $req->createcontent($item);		 
+        $res = $req->createcontent($item);     
         echo json_encode($res);
 }
 
@@ -144,20 +178,6 @@ else if($_REQUEST['act'] == 'createevent')
         echo json_encode($res);
 }
 
-else if($_REQUEST['act'] == 'upload')
-{   
-$data =  file_get_contents("php://input");
-$imageData = base64_decode($data);
-$source = imagecreatefromstring($imageData);
-$angle = 0;
-$imageName = 'res_'.time().'.jpeg';
-$rotate = imagerotate($source, $angle, 0); 
-$imageSave = imagejpeg($rotate,$imageName,100);
-$newpath = UPLOAD_DIR_JOB."/".$imageName;
-rename($imageName,$newpath);
-echo json_encode($newpath);
-}
-
 else if($_REQUEST['act'] == 'eventimage')
 {   
 $data =  file_get_contents("php://input");
@@ -167,7 +187,7 @@ $angle = 0;
 $imageName = 'res_'.time().'.jpeg';
 $rotate = imagerotate($source, $angle, 0); 
 $imageSave = imagejpeg($rotate,$imageName,100);
-$newpath = UPLOAD_DIR_EVENT."/".$imageName;
+$newpath = "image/event/".$imageName;
 rename($imageName,$newpath);
 echo json_encode($imageName);
 }
@@ -181,7 +201,7 @@ $angle = 0;
 $imageName = 'res_'.time().'.jpeg';
 $rotate = imagerotate($source, $angle, 0); 
 $imageSave = imagejpeg($rotate,$imageName,100);
-$newpath = UPLOAD_DIR_JOB."/".$imageName;
+$newpath = "image/job/".$imageName;
 rename($imageName,$newpath);
 echo json_encode($imageName);
 }
@@ -281,7 +301,6 @@ else
                         }
                   }
 }
-
 }
 }
 }
@@ -358,5 +377,4 @@ else if($_REQUEST['act'] == 'createjob')
     echo json_encode($res);
 }
 
->>>>>>> a5e28451123829d0da331a75beca7dfbf284637b
 ?>
