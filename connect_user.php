@@ -1331,25 +1331,40 @@ else if($_REQUEST['act'] == 'log_unassign')
   echo json_encode($response);
 }
 
-// **************************Add Student by the coach***********************************
 
-// else if($_REQUEST['act'] == 'add_athlete')
-// {
-  
+
+// **************************   ********************************
 
 
 
+else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
+    $data              = json_decode(file_get_contents("php://input"));
+    $athlete_name      = $data->athlete_name;
+    $coach_sport       = $data->coach_sport;
+    $athlete_no        =  $data->athlete_no;
+    $coach_contact_no  =  $data->coach_contact_no;
+    $athlete_email     = $data->athlete_email;
+    if($coach_contact_no != '')
+    {
+    $msg = "You +have +received +connection+ request +from +".$athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$athlete_no."+ or+ ".$athlete_email.""; 
+    $res = sendWay2SMS(9528454915,8824784642, $coach_contact_no, $msg);
+    $resp = array('status'=>1,'message'=>'Success');
+      echo json_encode($resp);
+    }
+    else
+    {
+      $resp = array('status'=>0,'message'=>'Failure');
+      echo json_encode($resp);
 
-// }
+    }
+    
+}
 
 
 
 
 
-
-
-
-
+?>
 
 
 
