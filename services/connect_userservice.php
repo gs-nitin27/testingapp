@@ -469,7 +469,41 @@ public function getConnectedUser($userid,$usertype)
  }
 
 
+/*GET CURRENTLY RUNNING CLASS LIST OF COACH*/
 
+
+
+public function getClassList($userid)
+{
+ $date = 'CURDATE()';
+ $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
+  if(mysql_num_rows($query) > 0)
+  {
+    while ($row = mysql_fetch_assoc($query)) {
+        $row['class_fee'] = json_decode($row['class_fee']);
+         if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
+          {  // echo $row['class_end_date'];
+          $to = strtotime($row['today']); // or your date as well
+          $now = strtotime($row['class_end_date']);
+          $datediff =  $now-$to;
+          $datediff =  floor($datediff / (60 * 60 * 24));//die;
+          if($datediff > 0 || $datediff = 0)
+          {
+           $rows[] = $row; 
+          }
+
+         }else
+         {
+          $rows[] = $row; 
+         }
+       
+   }
+  return $rows;
+  }else
+  {
+    return  0;
+  }
+}
 
 
 
@@ -481,43 +515,36 @@ public function getConnectedUser($userid,$usertype)
 
 
 public function getClass($userid)
-
 {
- $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  FROM `gs_coach_class` where `userid`=$userid");
-
- $num=mysql_num_rows($query);
-
-  if ($num!=0) 
-
- {
-
-      for ($i=0; $i <$num ; $i++) 
-
-      {
-
-        $row=mysql_fetch_assoc($query);
-
-        $row['join_status']=0;
+ //$date = 'CURDATE()';
+ $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
+  if(mysql_num_rows($query) > 0)
+  {
+    while ($row = mysql_fetch_assoc($query)) {
         $row['class_fee'] = json_decode($row['class_fee']);
+         // if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
+         //  {  // echo $row['class_end_date'];
+         //  $to = strtotime($row['today']); // or your date as well
+         //  $now = strtotime($row['class_end_date']);
+         //  $datediff =  $now-$to;
+         //  $datediff =  floor($datediff / (60 * 60 * 24));//die;
+         //  if($datediff > 0 || $datediff = 0)
+         //  {
+         //   $rows[] = $row; 
+         //  }
 
-        $data[]=$row;
-
-      }
-
-return $data;  
-
+         // }else
+         // {
+           $rows[] = $row; 
+         // }
+       
+   }
+  return $rows;
+  }else
+  {
+    return  0;
+  }
 }
-
-else
-
-{
-
- return 0;
-
-}
-
-}
-
 
 
 
@@ -1052,51 +1079,28 @@ else
 
 
 public function studentPaidListing($class_id,$flag)
-
 {
-
-  if ($flag==1) 
-
-  {
-
+if ($flag==1) 
+{
     $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `gs_class_data`.`fees`=`paid`");
-
   }
-
   else
-
   {
-
    $query= mysql_query("SELECT *FROM `gs_class_data`  WHERE `classid`='$class_id' AND `gs_class_data`.`fees`!=`paid`"); 
-
   }
-
   $num = mysql_num_rows($query);
-
   if ($num)
-
   {
-
      while($row=mysql_fetch_assoc($query))
-
                    {
-
                      $data[]   = $row ;
-
                    }
-
                    return $data;
-
   }
-
   else
-
   {
-
      return 0;
-
   }
-
 }
 
 
@@ -1744,37 +1748,43 @@ public function add_athlete($data,$student_code)
 
 public function checkExistingStudent($item)
 {
-$query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
-if(mysql_num_rows($query) > 0)
-{
+  $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
+  if(mysql_num_rows($query) > 0)
+  {
 
-return mysql_fetch_assoc($query);
+  return mysql_fetch_assoc($query);
 
-}else
-return 0;
+  }else
+  return 0;
 }
 
 public function join_class_usingCode($item)
 {
-$code = $item->student_code;
-$data = json_decode($item->user_info);
-$query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
-echo mysql_affected_rows();die;
-if($query)
-{
-  return 1;
-}
-else
-{
-  return 0;
-}
+  $code = $item->student_code;
+  if(!isset($item->deviceType))
+  {
+  $data = json_decode($item->user_info);
+  }else
+  {
+  $data = $item->user_info;
+  }
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
+  //echo mysql_affected_rows();die;
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 
 }
 
 public function create_demo_request($data)
-{
-  // $data = $data->data[0];
-  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`) VALUES ('$data->classid','$data->coach_id','$data->student_id',CURDATE(),'0','$data->demo_date','$data->class_end_timing".'-'."$data->class_start_timing')");
+{ 
+  $demo_code = $data->classid.$data->athlete_id;
+  $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`, `demo_code`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time', '$demo_code')");
   if($query)
   {
     return 1;
@@ -1787,7 +1797,6 @@ public function create_demo_request($data)
 
 public function fetch_demoRequestlist($coach_id,$class_id)
 {
-   // echo "SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'";die;
   $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` ,`us`.`prof_id`,`us`.`sport` ,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
   if(mysql_num_rows($query)> 0)
   {
