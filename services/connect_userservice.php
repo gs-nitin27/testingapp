@@ -1770,6 +1770,7 @@ public function join_class_usingCode($item)
   $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
   if(mysql_affected_rows() == 1)
   {
+    mysql_query("DELETE FROM `gs_athlete_demo` WHERE `demo_code` = (SELECT `demo_code` FROM `gs_class_data` WHERE `demo_code` = CONCAT(`class_id`,`athlete_id`) AND `status` = 1)"); 
     return 1;
   }
   else
@@ -1830,6 +1831,7 @@ public function fetch_demoClassList($athlete_id)
 
 
 }
+
 
 
 } // End Class

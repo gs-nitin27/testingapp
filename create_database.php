@@ -274,7 +274,11 @@ echo json_encode($user);
 }
 }
 
+// else if ($_REQUEST['act'] == 'otp_varify') {
 
+  
+
+// }
 
 
 /******************************This Act for Manage Application*************************/

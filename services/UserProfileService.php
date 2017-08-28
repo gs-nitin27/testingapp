@@ -325,14 +325,14 @@ $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
 $contact_no              = $userdata->mobile_no;
 $query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' WHERE `userid`='$userid'");
-        if($query)
-        {
-          return 1;   
-        }
-         else
-         {    
-            return 0;
-         } 
+if($query)
+{
+  return 1;   
+}
+ else
+ {    
+    return 0;
+ } 
 
 
 }// End of Function
