@@ -1769,8 +1769,8 @@ public function join_class_usingCode($item)
   $data = $item->user_info;
   }
   $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
-  //echo mysql_affected_rows();die;
-  if($query)
+  //mysql_affected_rows()//;die;
+  if(mysql_affected_rows() == 1)
   {
     return 1;
   }
@@ -1821,6 +1821,7 @@ public function fetch_demoClassList($athlete_id)
   if(mysql_num_rows($query)> 0)
   {
   while ($row = mysql_fetch_assoc($query)) {
+    $row['class_fee'] = json_decode($row['class_fee']); 
     $rows[] = $row;
   }
   return $rows;

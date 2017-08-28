@@ -252,6 +252,7 @@ $item->userid             =  $data1->userid;
 $item->prof_id            =  $data1->prof_id;
 $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
+$item->mobile_no          =  $data1->mobile_no;
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
