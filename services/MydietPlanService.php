@@ -87,7 +87,7 @@ public function edit_plan($id,$my_diet_plan)
 
 public function list_ashin_log($userid)
 {
-  $query  = mysql_query("SELECT *FROM `gs_diet_log` WHERE userid = $userid");
+  $query  = mysql_query("SELECT *FROM `gs_diet_log` WHERE userid = '$userid' ORDER BY `assign_date` DESC ");
   $num    = mysql_num_rows($query);
   $date = date('Y-m-d');
   if($num)
