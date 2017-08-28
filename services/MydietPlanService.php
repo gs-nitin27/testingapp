@@ -19,7 +19,7 @@ $day         =  strtolower(date("l"));
        if($start_date==$date) 
        {
       $value       = $data->diet_food->$day;
-     $log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
+      $log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
       $log_data1 = json_encode($log_data);
         mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$id_diet','$log_data1',CURDATE()) ");
         }
