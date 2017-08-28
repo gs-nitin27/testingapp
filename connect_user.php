@@ -778,7 +778,7 @@ if($response)
     $item->coach_id                =   $data->coach_id; 
     $item->phase                   =   $data->phase;
     $item->activity                =   $data->activity;
-    $item->duration                =   $data->duration;
+    $item->duration                =   $data->duration;https://mail.google.com/mail/u/1/#inbox
     $item->distance                =   $data->distance;
     $item->time_of_day             =   $data->time_of_day;
     $item->remark                  =   $data->remark;
