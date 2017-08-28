@@ -449,7 +449,6 @@ Below Section code is for Athlete With code . from Which He could Directly join 
 else if ($_REQUEST['act'] == 'add_joining_code') 
 {
  $data = json_decode(file_get_contents("php://input"));
-
  $Obj  = new connect_userservice();
  $req  = $Obj->join_class_usingCode($data);
  if($req != 0)
@@ -490,7 +489,7 @@ else if($_REQUEST['act'] == 'create_demo_request')
     $get_id = $obj1->getdeviceid($data->coach_id);
     if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'], 'indicator' =>10);  
+    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'],'id'=>$data->classid ,'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
     //print_r($notify);
     }
@@ -779,7 +778,7 @@ if($response)
     $item->coach_id                =   $data->coach_id; 
     $item->phase                   =   $data->phase;
     $item->activity                =   $data->activity;
-    $item->duration                =   $data->duration;
+    $item->duration                =   $data->duration;https://mail.google.com/mail/u/1/#inbox
     $item->distance                =   $data->distance;
     $item->time_of_day             =   $data->time_of_day;
     $item->remark                  =   $data->remark;
