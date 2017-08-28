@@ -1384,7 +1384,7 @@ $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`
 
 public function sendPushNotificationToGCM($registatoin_ids, $message) 
 {
-
+  
   $device=(explode("|",$registatoin_ids));
 
   foreach ($device as $key => $value) {

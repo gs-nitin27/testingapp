@@ -1,8 +1,6 @@
 <?php 
 include('../config1.php');
 include('configservice.php');
-
-
 $req = new ConfigService();
 $res = $req->log_diet();
 if($res == 1)

@@ -72,7 +72,7 @@ else if($_REQUEST['act'] == 'edit_diet_plan')
 }
 
 
-else if ($_REQUEST['act']=='find_diet_log') 
+else if($_REQUEST['act']=='find_diet_log') 
 {
   $userid            =   $_REQUEST['userid'];
   $req               =   new MydietPlanService();
@@ -80,7 +80,7 @@ else if ($_REQUEST['act']=='find_diet_log')
 
   if($res)
   {
-    $data = array('status' => '0', 'data'=>$res, 'msg'=>'ashin diet plan log');
+    $data = array('status' => '1', 'data'=>$res, 'msg'=>'ashin diet plan log');
                   echo json_encode($data);
   }
   else
@@ -89,11 +89,30 @@ else if ($_REQUEST['act']=='find_diet_log')
                   echo json_encode($data);
   }
 
-
-  
 }
 
 
+
+
+
+else if($_REQUEST['act'] == 'edit_diet_log')
+{
+  $my_diet_log   =   (file_get_contents("php://input"));
+  $id             =   $_REQUEST['id'];
+  $req            =   new MydietPlanService();
+  $res            =   $req->edit_log($id,$my_diet_log);
+        if($res)
+        {
+            $data = array('status' => '1', 'data'=> "$res", 'msg'=>'Updated diet log');
+                        echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not updated diet log');
+                  echo json_encode($data);
+        }   
+
+}
 
 
 
