@@ -1757,7 +1757,6 @@ public function checkExistingStudent($item)
   }else
   return 0;
 }
-
 public function join_class_usingCode($item)
 {
   $code = $item->student_code;
@@ -1769,7 +1768,6 @@ public function join_class_usingCode($item)
   $data = $item->user_info;
   }
   $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
-  //mysql_affected_rows()//;die;
   if(mysql_affected_rows() == 1)
   {
     return 1;
@@ -1778,7 +1776,6 @@ public function join_class_usingCode($item)
   {
     return 0;
   }
-
 }
 
 public function create_demo_request($data)
