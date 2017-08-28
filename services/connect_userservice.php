@@ -1823,7 +1823,7 @@ public function fetch_demoClassList($athlete_id)
   while ($row = mysql_fetch_assoc($query)) {
     $rows[] = $row;
   }
-  return $row;
+  return $rows;
   }
   else
   {
