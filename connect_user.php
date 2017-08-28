@@ -429,7 +429,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+  $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
  }else
