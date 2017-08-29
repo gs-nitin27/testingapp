@@ -7,6 +7,7 @@ include('services/emailService.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/generate_code.php');
+include('services/smsOtpService.php');
 
 error_reporting(E_ERROR | E_PARSE);
 
