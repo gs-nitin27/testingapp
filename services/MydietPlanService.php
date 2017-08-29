@@ -111,20 +111,13 @@ public function list_ashin_log($userid)
 
 public function edit_log($id,$my_diet_log)
 {
-  //$query  = mysql_query("SELECT *FROM `gs_diet_log` WHERE `id` = '$id' ");
-//   $row    = mysql_fetch_object($query);
-
-//  $row->my_diet_plan->diet_food=$my_diet_log;
-  
-//   $row['my_diet_plan']  =  json_decode($row['my_diet_plan']);
-
-// print_r($row['my_diet_plan']);die();
-
-//   $row['my_diet_plan']->diet_food = $my_diet_log;
-
-
- 
- $query  = mysql_query("UPDATE `gs_diet_log` SET `my_diet_plan`='$my_diet_log' WHERE `id` ='$id' ");
+  $query  = mysql_query("SELECT *FROM `gs_diet_log` WHERE `id` = '$id' ");
+  $row    = mysql_fetch_assoc($query);
+  $sa     = json_decode($row['my_diet_plan']);
+  $sa->diet_food=json_decode(json_decode($my_diet_log));
+  $row['my_diet_plan'] = json_encode($sa);
+  $row1 = $row['my_diet_plan'];
+  $query  = mysql_query("UPDATE `gs_diet_log` SET `my_diet_plan`='$row1' WHERE `id` ='$id' ");
   $num = mysql_affected_rows();
   if($num)
   {
