@@ -273,6 +273,7 @@ $message = 'Contact Number not verified';
 }
 else
 {
+$req2['otp'] = $item->otp;  
 $message = 'Successfully updated';
 }
 
