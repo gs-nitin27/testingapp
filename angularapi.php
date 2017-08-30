@@ -4,9 +4,6 @@ include('config1.php');
 include('services/angularapi.php');
 include('services/getListingService.php');
 
-
-    
-
 if($_REQUEST['act'] == 'contentangular')
 {
   $req    =   new angularapi();
@@ -16,23 +13,41 @@ if($_REQUEST['act'] == 'contentangular')
 
 else if($_REQUEST['act'] == 'angulartest')
 {
-       $username       =  $_REQUEST['email'];
-       $password       =  md5($_REQUEST['password']);
-         $req    =   new angularapi();
-         $res = $req->angulartest($username, $password);
-         if($res)
-         {
-         $data = array("data" =>$res);     
-          echo json_encode($res);
-          }
-          else
-          {
-          $data = array("data" =>0);        
-          echo json_encode($res);
-          }
-
+        $username       =  $_REQUEST['email'];
+        $password       =  md5($_REQUEST['password']);
+        $req    =   new angularapi();
+        $res = $req->angulartest($username, $password);
+        if($res)
+        {
+        $data = array("data" =>$res);     
+        echo json_encode($res);
+        }
+        else
+        {
+        $data = array("data" =>0);        
+        echo json_encode($res);
+        }
 }
 
+else if($_REQUEST['act'] == 'profile_data_update')
+{
+   $data = json_decode(file_get_contents("php://input"));
+
+   $userid    = $data->userid; 
+   $prof_id   = $data->prof_id;
+   $profile   = json_encode($data->profiledata);
+
+   $req       = new angularapi();
+   $res       = $req->profile_data_update($userid,$prof_id,$profile);
+   if($res)
+   {
+    echo json_encode($res);
+   }else
+   {
+    echo json_encode($res);
+   }
+
+}
 
 else if($_REQUEST['act'] == 'contentangularlex')
 {
