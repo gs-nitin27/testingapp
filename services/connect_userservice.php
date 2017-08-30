@@ -1768,9 +1768,9 @@ public function join_class_usingCode($item)
   $data = $item->user_info;
   }
   $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
-  //echo mysql_affected_rows();die;
   if(mysql_affected_rows() == 1)
   {
+    
     return 1;
   }
   else
@@ -1815,10 +1815,11 @@ public function fetch_demoRequestlist($coach_id,$class_id)
 public function fetch_demoClassList($athlete_id)
 {
 
-  $query = mysql_query("SELECT `cc`.`class_title`,`cc`.`class_start_timing`,`cc`.`class_end_timing`,`cc`.`class_start_date`,`cc`.`class_fee` ,`cc`.`venue`, `cc`.`location`,`cc`.`days` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `gs_coach_class` AS cc ON `cc`.`id` = `ad`.`class_id` WHERE `ad`.`athlete_id` = '$athlete_id' ");
+  $query = mysql_query("SELECT `cc`.`class_title`,`cc`.`class_start_timing`,`cc`.`class_end_timing`,`cc`.`class_start_date`,`cc`.`class_fee` ,`cc`.`venue`, `cc`.`location`,`cc`.`days` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `gs_coach_class` AS cc ON `cc`.`id` = `ad`.`class_id` WHERE `ad`.`athlete_id` = '$athlete_id' AND `ad`.`athlete_id` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `student_id` = '$athlete_id' AND `classid` = `ad`.`class_id` AND `status` = 1)");
   if(mysql_num_rows($query)> 0)
   {
   while ($row = mysql_fetch_assoc($query)) {
+    $row['class_fee'] = json_decode($row['class_fee']); 
     $rows[] = $row;
   }
   return $rows;
@@ -1830,6 +1831,7 @@ public function fetch_demoClassList($athlete_id)
 
 
 }
+
 
 
 } // End Class

@@ -400,13 +400,13 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
      
     if ($data->phone != '')
     {
-    $msg = "Hi +".$data->student_name."+ , coach + has + accepted + your + request + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class"; 
+    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class"; 
     $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
     }
     if($data->email != '')  
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
-coach  has has accepted your  request to join the class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to verify your account.
+coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to verify your account.
 Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
@@ -421,13 +421,13 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
       $resp = array('status'=>'0','message'=>'Athlete '.$varify['student_name'].' Already added to class');
       if ($data->phone != '')
     {
-    $msg = "Hi +".$data->student_name."+ , coach + has + accepted + your + request + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$varify['student_code']." +  to + join + his + class"; 
+    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class  +  Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$varify['student_code']." +  to + join + his + class"; 
     $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
     }
     if($data->email != '')  
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
-coach  has has accepted your  request to join the class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to verify your account.
+coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to verify your account.
 Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
@@ -461,7 +461,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
     {
-  $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+  $message = array('title'=> 'Class Demo Request', 'message'=>$data->data[0]->userName.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>11);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
  }else
@@ -488,7 +488,7 @@ else if($_REQUEST['act'] == 'create_demo_request')
     $get_id = $obj1->getdeviceid($data->coach_id);
     if($get_id != '')
     {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$get_id['name'].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'],'id'=>$data->classid ,'indicator' =>10);  
+    $message = array('title'=> 'Class Demo Request', 'message'=>$username[0].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'],'id'=>$data->classid ,'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
     //print_r($notify);
     }
@@ -1331,25 +1331,40 @@ else if($_REQUEST['act'] == 'log_unassign')
   echo json_encode($response);
 }
 
-// **************************Add Student by the coach***********************************
 
-// else if($_REQUEST['act'] == 'add_athlete')
-// {
-  
+
+// **************************   ********************************
 
 
 
+else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
+    $data              = json_decode(file_get_contents("php://input"));
+    $athlete_name      = $data->athlete_name;
+    $coach_sport       = $data->coach_sport;
+    $athlete_no        =  $data->athlete_no;
+    $coach_contact_no  =  $data->coach_contact_no;
+    $athlete_email     = $data->athlete_email;
+    if($coach_contact_no != '')
+    {
+    $msg = "You +have +received +connection+ request +from +".$athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$athlete_no."+ or+ ".$athlete_email.""; 
+    $res = sendWay2SMS(9528454915,8824784642, $coach_contact_no, $msg);
+    $resp = array('status'=>1,'message'=>'Success');
+      echo json_encode($resp);
+    }
+    else
+    {
+      $resp = array('status'=>0,'message'=>'Failure');
+      echo json_encode($resp);
 
-// }
+    }
+    
+}
 
 
 
 
 
-
-
-
-
+?>
 
 
 

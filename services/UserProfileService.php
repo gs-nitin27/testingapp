@@ -323,15 +323,16 @@ $userid                  = $userdata->userid;
 $prof_id                 = $userdata->prof_id; 
 $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
-$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' WHERE `userid`='$userid'");
-        if($query)
-        {
-          return 1;   
-        }
-         else
-         {    
-            return 0;
-         } 
+$contact_no              = $userdata->mobile_no;
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' WHERE `userid`='$userid'");
+if($query)
+{
+  return 1;   
+}
+ else
+ {    
+    return 0;
+ } 
 
 
 }// End of Function

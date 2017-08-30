@@ -7,6 +7,7 @@ include('services/emailService.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/generate_code.php');
+include('services/smsOtpService.php');
 
 error_reporting(E_ERROR | E_PARSE);
 
@@ -252,6 +253,8 @@ $item->userid             =  $data1->userid;
 $item->prof_id            =  $data1->prof_id;
 $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
+$item->mobile_no          =  $data1->mobile_no;
+$item->otp                =  $data1->otp;
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
@@ -263,7 +266,19 @@ if($res==1)
 {
 $req1                 = new userdataservice();
 $req2                 = $req1->getuserdata($item->userid);
-$user = array('status' => 1, 'data'=> $req2, 'msg'=>'Updated' );
+$msg                  = "Hello + athlete + your + otp + varification + code + is +".$item->otp;
+$sms = sendWay2SMS(9528454915,8824784642, $item->mobile_no, $msg);
+if($sms != 1)
+{
+$message = 'Contact Number not verified';
+}
+else
+{
+$req2['otp'] = $item->otp;  
+$message = 'Successfully updated';
+}
+
+$user = array('status' => 1, 'data'=> $req2, 'msg'=>$message );
 echo json_encode($user);
 }
 else
@@ -273,7 +288,11 @@ echo json_encode($user);
 }
 }
 
+// else if ($_REQUEST['act'] == 'otp_varify') {
 
+  
+
+// }
 
 
 /******************************This Act for Manage Application*************************/
