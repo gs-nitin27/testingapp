@@ -390,20 +390,15 @@ else
 /*************************New Device id find**********************************/
 public function getdeviceid($id)
 {
+
   $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
   $row = mysql_num_rows($query);
   if($row == 1)
   {
     $row1  = mysql_fetch_assoc($query);
-  // print_r($row1); die();
-    return $row1;
+      return $row1;
 
-     // while($data = mysql_fetch_assoc($query))
-     // {
-     // $dev = $data;
-     // }
-      //pri
-       // return $dev;
+    
        
   }
   else 
@@ -1462,7 +1457,7 @@ public function sendNotification($registration_ids, $message,$google_api)
        //  }
        //  curl_close($ch);
        
-       // return 1;
+       //return 1;
 }
 
 
