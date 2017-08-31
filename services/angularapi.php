@@ -155,6 +155,17 @@ public function getjoblist($userid)
 
 }
 
+public function profile_data_update($userid,$prof_id,$profliedata)
+{
+  $insert = mysql_query("INSERT INTO `gs_userdata`(`userid`,`prof_id`,`user_detail`,`created_date`) VALUES('$userid','$prof_id','$profliedata',CURDATE())  ON DUPLICATE KEY UPDATE `user_detail` = '$profliedata', `updated_date` = CURDATE()");
+  if($insert)
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
+}
 
 
 public function createcontent($item)
