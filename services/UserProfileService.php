@@ -478,7 +478,6 @@ public function edit_user($userid,$prof_id,$data)
           echo json_encode($res);
           return 0;
         }
-
     } // End IF
 
 

@@ -1,4 +1,5 @@
 <?php
+
 class ConfigService
 {
 	
@@ -56,8 +57,12 @@ public function assign_log($data)
 
 public function log_diet()
 {
+
+
+
 $query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` ");
 	$num = mysql_num_rows($query);
+
 
 if($num)
 {
@@ -65,22 +70,27 @@ if($num)
 		{
 			$id_diet  = $row['id'];
 			$userid   = $row['userid'];
-$data        = json_decode($row['my_diet_plan']);
-$start_date  = $data->start_date;
-$end_date    = $data->end_date;
-$name        = $data->name;
-$date        =  date('Y-m-d');
-$day         =  strtolower(date("l"));
-$value       = $data->diet_food->$day;
-$log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
-$log_data1 = json_encode($log_data);
+			$data        = json_decode($row['my_diet_plan']);
+			$start_date  = $data->start_date;
+			$end_date    = $data->end_date;
+			$name        = $data->name;
+			$date        =  date('Y-m-d');
+			$day         =  strtolower(date("l"));
+			$value       = $data->diet_food->$day;
+			$log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
+			$log_data1   = json_encode($log_data);
+			$req          =   new userdataservice();
+			$pushobj 	  =   new userdataservice();			   
+			$get_id = $req ->getdeviceid($userid);
+			$device_id = $get_id['device_id'];
+			$message_data  = json_decode($log_data1);
+            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$id_diet','$log_data1',CURDATE()) ");
+            $log_id = mysql_insert_id();
+ $message      = array('message'=>array('my_diet_plan'=>$message_data,'id'=>$log_id),'title'=>$name,'indicator'=>8);
+$jsondata      =   json_encode($message);
+$pushnote      =   $pushobj->sendLitePushNotificationToGCM($device_id, $jsondata);
 
-        mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$id_diet','$log_data1',CURDATE()) ");
-
-//$data[] = "('0','".$row['userid']."','".$row['id']."','".$log_data1."',CURDATE() )"; 
-
-
-			}
+		}
 			return 1;
 		
 		}
@@ -88,42 +98,22 @@ $log_data1 = json_encode($log_data);
 		{
 			return 0;
 		}
+
+
+
+
+
+
+
+
 		
 
-// 			if($this->assign_log_diet($data))
-// 			{
-// 				return 1;
-// 			}
-// 			else
-// 			{
-// 				return 0;
-// 			}
-// }
-// else
-// {
-
-// 	return 0;
-// }
-
 }
 
 
 
 
 
-/***********************Assign Log Diet*****************************************/
-
-
-
-public function assign_log_diet($data)
-{
-	
-	$values = implode(',', $data);
-
-	mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES $values");
-
-				return 1;
-}
 
 
 

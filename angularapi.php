@@ -3,9 +3,7 @@
 include('config1.php');
 include('services/angularapi.php');
 include('services/getListingService.php');
-
-
-    
+include('services/smsOtpService.php');
 
 if($_REQUEST['act'] == 'contentangular')
 {
@@ -16,20 +14,78 @@ if($_REQUEST['act'] == 'contentangular')
 
 else if($_REQUEST['act'] == 'angulartest')
 {
-       $username       =  $_REQUEST['email'];
-       $password       =  md5($_REQUEST['password']);
-         $req    =   new angularapi();
-         $res = $req->angulartest($username, $password);
-         if($res)
-         {
-         $data = array("data" =>$res);     
-          echo json_encode($res);
-          }
-          else
-          {
-          $data = array("data" =>0);        
-          echo json_encode($res);
-          }
+        $username       =  $_REQUEST['email'];
+        $password       =  md5($_REQUEST['password']);
+        $req    =   new angularapi();
+        $res = $req->angulartest($username, $password);
+        if($res)
+        {
+        $data = array("data" =>$res);     
+        echo json_encode($res);
+        }
+        else
+        {
+        $data = array("data" =>0);        
+        echo json_encode($res);
+        }
+}
+
+else if($_REQUEST['act'] == 'mobileVerify')
+{
+  $mobileNo  = $_REQUEST['mobileNo']; 
+  $userid    = $_REQUEST['userid'];
+  $forgot_code          =  mt_rand(1000,10000);
+
+  $req = new angularapi();
+  $res = $req->mobileVerify($mobileNo,$userid,$forgot_code);
+  if($res)
+  {
+     echo json_encode($res);
+     $msg   = "Hello + athlete + your + otp + varification + code + is +".$forgot_code;
+     $sms = sendWay2SMS(9528454915,8824784642, $mobileNo, $msg);
+  }
+  else
+  {
+    echo json_encode($res);
+  }
+}
+
+else if($_REQUEST['act'] == 'OTPVerify')
+{
+  $otpcode = $_REQUEST['otpcode'];
+  $userid    = $_REQUEST['userid'];
+
+  $req = new angularapi();
+  $res = $req->OTPVerify($otpcode,$userid);
+  if($res)
+  {
+     echo json_encode($res);
+  }
+  else
+  {
+    echo json_encode($res);
+  }
+
+
+}
+
+else if($_REQUEST['act'] == 'profile_data_update')
+{
+   $data = json_decode(file_get_contents("php://input"));
+
+   $userid    = $data->userid; 
+   $prof_id   = $data->prof_id;
+   $profile   = json_encode($data->profiledata);
+
+   $req       = new angularapi();
+   $res       = $req->profile_data_update($userid,$prof_id,$profile);
+   if($res)
+   {
+    echo json_encode($res);
+   }else
+   {
+    echo json_encode($res);
+   }
 
 }
 
@@ -96,11 +152,14 @@ else if($_REQUEST['act'] == 'getjobdetails')
   echo json_encode($res);
 
 }
+
 else if($_REQUEST['act'] == 'socialLogin')
 {
   $data = json_decode(file_get_contents("php://input"));
   $email  = $data->email;
   $name   = $data->name;
+  $image  = $data->image;
+  $forgot_code   =  mt_rand(1000,10000);
   $password = md5($email);
   $req = new angularapi();
   $res = $req->angulartest($email, $password);
@@ -109,17 +168,12 @@ else if($_REQUEST['act'] == 'socialLogin')
     echo json_encode($res);
   }else
   {
-    $res = $req->socialLogin($email,$password,$name);
+    $res = $req->socialLogin($email,$password,$name,$forgot_code,$image);
     echo json_encode($res);
   }
-
-
  // $res = $req->socialLogin($email,$password,$name);
-
- 
-
-
 }
+
 else if($_REQUEST['act'] == 'createcontent')
 {        
 
