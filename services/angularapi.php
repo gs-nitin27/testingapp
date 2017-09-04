@@ -69,9 +69,9 @@ public function OTPVerify($otpcode,$userid)
   }
 }
 
-public function socialLogin($email,$password,$name,$forget_code)
+public function socialLogin($email,$password,$name,$forget_code,$image)
 {   
-  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`forget_code`) VALUES('$email','$password','$name','104','1','$forget_code')");
+  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','$forget_code','$image')");
    if($insert)
    {
 
@@ -83,7 +83,7 @@ public function socialLogin($email,$password,$name,$forget_code)
       $data['password'] =$password;
       $data['userId'] = mysql_insert_id();
       $data['email'] =$email;
-      $data['user_image'] =""; 
+      $data['user_image'] =$image; 
       return $data;
    } 
    else
