@@ -255,6 +255,7 @@ $item->proffession        =  $data1->proffession;
 $item->sport              =  $data1->sport;
 $item->mobile_no          =  $data1->mobile_no;
 $item->otp                =  $data1->otp;
+$item->dob                =  $data1->dob;
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
@@ -393,184 +394,184 @@ else
 
 //***********************Get User Data*********************************/
 
-else if($_REQUEST['act']=="getUserData")
-{
- $userid =urldecode($_REQUEST['userid']);
- $formaledu = 0;//$res1;
- $sportsedu = 0;
- $otheredu = 0;
- $work_exp = 0;
- $sport_exp = 0;
- $other_exp = 0;
- $other_skills = 0;
-$req = new userdataservice();
-$res = $req->getuserData($userid);
-if($res != '0')
-{
-$user = $res;
-}
-else
-{
-$user = 0;
-}
+// else if($_REQUEST['act']=="getUserData")
+// {
+//  $userid =urldecode($_REQUEST['userid']);
+//  $formaledu = 0;//$res1;
+//  $sportsedu = 0;
+//  $otheredu = 0;
+//  $work_exp = 0;
+//  $sport_exp = 0;
+//  $other_exp = 0;
+//  $other_skills = 0;
+// $req = new userdataservice();
+// $res = $req->getuserData($userid);
+// if($res != '0')
+// {
+// $user = $res;
+// }
+// else
+// {
+// $user = 0;
+// }
 
-$userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-if(in_array(0, $userdata))
-{
-  $userdata['status'] = 0; 
-}else
-{
-  $userdata['status'] = 1;
-}
- $user = array('status' => $userdata['status'], 'data'=> $userdata, 'msg'=>'Success');
- echo json_encode($user);
-}
-
-
-
-else if($_POST['act']=="getUserData")
-{
-
-$userid =urldecode($_POST['userid']);
-$eduid  = '1';
-$req1 = new UserProfileService();
-$res1 = $req1->getUserEducation($userid,$eduid); 
-
-if($res1 != '0')
-{
-
-$formaledu = $res1;
-
-}
-else
-{
-$formaledu =  0;
-}
+// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
+// if(in_array(0, $userdata))
+// {
+//   $userdata['status'] = 0; 
+// }else
+// {
+//   $userdata['status'] = 1;
+// }
+//  $user = array('status' => $userdata['status'], 'data'=> $userdata, 'msg'=>'Success');
+//  echo json_encode($user);
+// }
 
 
 
-$req2 = new UserProfileService();
-$res2 = $req2->getSportsEducation($userid);
-if($res2 != '0')
-{
+// else if($_POST['act']=="getUserData")
+// {
 
-$sportsedu = $res2;
+// $userid =urldecode($_POST['userid']);
+// $eduid  = '1';
+// $req1 = new UserProfileService();
+// $res1 = $req1->getUserEducation($userid,$eduid); 
 
-}else{
-$sportsedu = 0;
-}
+// if($res1 != '0')
+// {
 
-$eduid  = '3';
-$req3   = new UserProfileService();
-$res3   = $req3->getUserEducation($userid,$eduid);
-if($res3 != '0')
-{
-$otheredu = $res3;
-}
-else
-{
+// $formaledu = $res1;
 
-$otheredu = 0;
-
-}
-
-$user_exp = '1';
-
-$req4 = new UserProfileService();
-$res4 = $req4->getUserExperience($userid,$user_exp);
-if($res4 != '0')
-{
-$work_exp = $res4;
-}
-else
-{
-
-$work_exp = 0;
-
-}
-
-$req5 = new UserProfileService();
-$res5 = $req5->getUserSportsExp($userid);
-if($res5 != '0')
-{
-
-$sport_exp = $res5;
-
-}
-else
-{
-
-$sport_exp = 0;
-
-}
-
-$user_exp = '2';
-
-$req6 = new UserProfileService();
-$res6 = $req6->getUserExperience($userid,$user_exp);
-if($res6 != '0')
-{
-$other_exp = $res6;
-}
-else
-{
-
-$other_exp = 0;
-
-}
-
-$req7         = new UserProfileService();
-$res7         = $req7->getUserSkill($userid);
-if($res7 != 0)
-{
-
-$other_skills = $res7;
-
-}
-else
-{
-
-$other_skills = 0;
-
-}
+// }
+// else
+// {
+// $formaledu =  0;
+// }
 
 
-$req = new UserProfileService();
-$res = $req->getuserData($userid);
-if($res != '0')
-{
 
-$user = $res;
-}
-else
-{
+// $req2 = new UserProfileService();
+// $res2 = $req2->getSportsEducation($userid);
+// if($res2 != '0')
+// {
 
-$user = 0;
+// $sportsedu = $res2;
 
-}
+// }else{
+// $sportsedu = 0;
+// }
 
-$userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
-if(in_array(0, $userdata)){
+// $eduid  = '3';
+// $req3   = new UserProfileService();
+// $res3   = $req3->getUserEducation($userid,$eduid);
+// if($res3 != '0')
+// {
+// $otheredu = $res3;
+// }
+// else
+// {
 
-  $userdata['status'] = 0; 
+// $otheredu = 0;
 
-}else{
+// }
 
-  $userdata['status'] = 1;
-}
-//print_r($userdata);
+// $user_exp = '1';
 
-if($res)
-{
-$user = array('Status' => 1, 'data'=> $res, 'msg'=>'Updated' );
-echo json_encode($user);
-}
-else
-{
-$user = array('Status' => 0, 'data'=> $res, 'msg'=>'Notupdated' );
-echo json_encode($user);
-}
-}
+// $req4 = new UserProfileService();
+// $res4 = $req4->getUserExperience($userid,$user_exp);
+// if($res4 != '0')
+// {
+// $work_exp = $res4;
+// }
+// else
+// {
+
+// $work_exp = 0;
+
+// }
+
+// $req5 = new UserProfileService();
+// $res5 = $req5->getUserSportsExp($userid);
+// if($res5 != '0')
+// {
+
+// $sport_exp = $res5;
+
+// }
+// else
+// {
+
+// $sport_exp = 0;
+
+// }
+
+// $user_exp = '2';
+
+// $req6 = new UserProfileService();
+// $res6 = $req6->getUserExperience($userid,$user_exp);
+// if($res6 != '0')
+// {
+// $other_exp = $res6;
+// }
+// else
+// {
+
+// $other_exp = 0;
+
+// }
+
+// $req7         = new UserProfileService();
+// $res7         = $req7->getUserSkill($userid);
+// if($res7 != 0)
+// {
+
+// $other_skills = $res7;
+
+// }
+// else
+// {
+
+// $other_skills = 0;
+
+// }
+
+
+// $req = new UserProfileService();
+// $res = $req->getuserData($userid);
+// if($res != '0')
+// {
+
+// $user = $res;
+// }
+// else
+// {
+
+// $user = 0;
+
+// }
+
+// $userdata = array('formal_education' => $formaledu , 'sport_education' => $sportsedu , 'other_certification' => $otheredu , 'work_experience' => $work_exp , 'other_experience' => $other_exp , 'experience_as_player' => $sport_exp,'other_skills'=>$other_skills , 'user_info' => $user);
+// if(in_array(0, $userdata)){
+
+//   $userdata['status'] = 0; 
+
+// }else{
+
+//   $userdata['status'] = 1;
+// }
+// //print_r($userdata);
+
+// if($res)
+// {
+// $user = array('Status' => 1, 'data'=> $res, 'msg'=>'Updated' );
+// echo json_encode($user);
+// }
+// else
+// {
+// $user = array('Status' => 0, 'data'=> $res, 'msg'=>'Notupdated' );
+// echo json_encode($user);
+// }
+// }
 
 //********* CODE FOR CREATING JOBS **********//
 

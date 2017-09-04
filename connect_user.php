@@ -306,9 +306,8 @@ else if($_REQUEST['act'] == 'get_class_view_status')
       $status = '0';
     }
     
-    
+  $response[0]['status'] = $status; 
   }
-  $response[0]['status'] = $status;
   $resp = array('status' => '1','data'=>$response ,'msg'=>'class Information');
   echo json_encode($resp);
 }
@@ -406,7 +405,7 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class') {
     if($data->email != '')  
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
-coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to verify your account.
+coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to join his class.
 Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
@@ -427,7 +426,7 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
     if($data->email != '')  
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
-coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to verify your account.
+coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$varify['student_code']." to join his class.
 Please click on the link to download the App.".'<br><br>'."https://play.google.com/store/apps/details?id=getsportylite.darkhoprsesport.com.getsportylite&hl=en"; 
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
@@ -461,7 +460,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
     {
-  $message = array('title'=> 'Class Demo Request', 'message'=>$data->data[0]->userName.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>11);  
+  $message = array('title'=> 'Class Demo Request', 'message'=>$data->data[0]->userName.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
  }else
@@ -482,22 +481,24 @@ else if($_REQUEST['act'] == 'create_demo_request')
   $data  =  json_decode(file_get_contents("php://input"));
   $obj   =  new connect_userservice();
   $req   =  $obj->create_demo_request($data);
+  $get_id = '';
   if($req != 0)
   { $resp = array('status'=>$req , 'msg'=>'Success');
     $obj1 =   new userdataservice();
     $get_id = $obj1->getdeviceid($data->coach_id);
-    if($get_id != '')
-    {
-    $message = array('title'=> 'Class Demo Request', 'message'=>$username[0].' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'],'id'=>$data->classid ,'indicator' =>10);  
-    $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
-    //print_r($notify);
-    }
+    
   }
   else
   {
     $resp = array('status' => $req, 'msg'=>'Failure');
   }
   echo json_encode($resp);
+  if($get_id != '')
+    {
+    $message = array('title'=> 'Class Demo Request', 'message'=>$data->userName.' has sent you a demo request for class '.$data->class_title  , 'device_id' => $get_id['device_id'],'id'=>$data->classid ,'indicator' =>10);  
+    $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
+    //print_r($notify);
+    }
 }
 
 
@@ -777,7 +778,7 @@ if($response)
     $item->coach_id                =   $data->coach_id; 
     $item->phase                   =   $data->phase;
     $item->activity                =   $data->activity;
-    $item->duration                =   $data->duration;https://mail.google.com/mail/u/1/#inbox
+    $item->duration                =   $data->duration;
     $item->distance                =   $data->distance;
     $item->time_of_day             =   $data->time_of_day;
     $item->remark                  =   $data->remark;
