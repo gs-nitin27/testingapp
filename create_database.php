@@ -256,6 +256,7 @@ $item->sport              =  $data1->sport;
 $item->mobile_no          =  $data1->mobile_no;
 $item->otp                =  $data1->otp;
 $item->dob                =  $data1->dob;
+$item->gender             =  $data1->gender;
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
