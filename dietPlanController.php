@@ -11,7 +11,7 @@ if($_REQUEST['act'] == 'my_diet_plan')
 {
   $userdata       =   (file_get_contents("php://input"));
   $userid         =   $_REQUEST['userid'];
-  $userid         =   $_REQUEST['usertype'];
+  $usertype       =   $_REQUEST['usertype'];
   $req            =   new MydietPlanService();
   $res            =   $req->diet_plan($userdata,$userid,$usertype);
   if($res)
@@ -98,6 +98,31 @@ else if($_REQUEST['act']=='find_diet_log')
 
 
 
+else if($_REQUEST['act'] == 'studnet_plan_list')
+{
+$coach_id         =   $_REQUEST['coach_id'];
+$diet_id          =   $_REQUEST['diet_id'];
+$req              =   new MydietPlanService();
+$res              =   $req->studnet_list($coach_id,$diet_id);
+        if($res)
+        {
+            $data = array('status' => '1', 'data'=> $res, 'msg'=>'studnet list');
+                       echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>[], 'msg'=>'studnet is not in list');
+                  echo json_encode($data);
+        }   
+
+}
+
+
+
+
+
+
+
 
 
 else if($_REQUEST['act'] == 'assign_diet_plan')
@@ -112,11 +137,11 @@ else if($_REQUEST['act'] == 'assign_diet_plan')
   $list_id               =   explode(',', $athelete_id);
 foreach($list_id as $value)
 {
-$num[]  = "('0','$coach_id','$value','$diet_id',CURDATE())";
+$num[]  = "('0','$coach_id','$value','$diet_id',CURDATE(),'0')";
 }
   $data                  =   implode(',', $num); 
   $req                   =   new MydietPlanService();
-  $res                   =   $req->assign_plan($data,$coach_name,$diet_id,$list_id);
+  $res                   =   $req->assign_plan($data,$coach_name,$diet_id,$athelete_id);
         if($res)
         {
             $data = array('status' => '1', 'data'=> "$res", 'msg'=>'assign diet plan');
@@ -127,6 +152,31 @@ $num[]  = "('0','$coach_id','$value','$diet_id',CURDATE())";
             $data = array('status' => '0', 'data'=>"0", 'msg'=>'not assign diet plan');
                   echo json_encode($data);
         }   
+
+}
+
+
+
+
+else if($_REQUEST['act'] == 'edit_assign_plan')
+{
+
+  $diet_plan             =   (file_get_contents("php://input"));
+  $data                  =   json_decode($diet_plan);
+  $assign_id             =   $data->assign_id;
+  $assign_status             =   $data->assign_status;
+  $req                   =   new MydietPlanService();
+  $res                   =   $req->edit_assign($assign_id,$assign_status);
+if($res)
+        {
+            $data = array('status' => '1', 'data'=> "1", 'msg'=>'edit assign diet plan');
+                       echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not edit assign diet plan');
+                  echo json_encode($data);
+        }
 
 }
 
