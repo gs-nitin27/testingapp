@@ -14,6 +14,7 @@ $date        =  date('Y-m-d');
 
 
 $day         =  strtolower(date("l"));
+
 //$value       = $data->diet_food->$day;
 
 if($usertype=='M')
@@ -162,58 +163,78 @@ public function edit_log($id,$my_diet_log)
 
 
 
-public function assign_plan($data,$coach_name,$diet_id,$list_id)
+public function studnet_list($coach_id,$diet_id)
+{
+$query = mysql_query("SELECT * FROM `gs_class_data`  WHERE `coach_id` = $coach_id AND `status`='1' AND `student_id`  NOT IN (SELECT `athlete_id` FROM `gs_assign_diet_plan` WHERE `diet_id`='$diet_id' )" );
+$num   =  mysql_num_rows($query);
+if($num)
 {
 
-$query  =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`) VALUES $data ");
-if($query)
-{
-
-
-
-
-//$query1      = mysql_query("SELECT *FROM gs_diet_plan WHERE id = '$diet_id' ") ;
- //$row         = mysql_fetch_assoc($query1);
-
-// $message_data  = $row['my_diet_plan'];
-
-
- //$message       = array('message'=>array('my_diet_plan'=>json_decode($message_data)),'title'=>$coach_name.' has assigned New diet plan','indicator'=>9,'assign_id'=>$assign_id);
-
-
-// echo json_encode($message);
-
-
-
-
-  return 1;
+  while ($row = mysql_fetch_assoc($query)){
+    $data[]    = $row;
 }
+return $data;  
+}
+
 else
 {
   return 0;
 }
 
 
-//  $list_id               =   explode(',', $athelete_id);
+}
 
 
-// foreach($list_id as $value)
-// {
 
 
-// //$num[]  = "('0','$coach_id','$value','$diet_id',CURDATE())";
+
+public function assign_plan($data,$coach_name,$diet_id,$athelete_id)
+{
+
+$query  =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`,`assign_status`) VALUES $data ");
+if($query)
+{
+
+$query1      =  mysql_query("SELECT *FROM gs_diet_plan WHERE id = '$diet_id' ") ;
+ $row        =  mysql_fetch_assoc($query1);
+$message_data  = $row['my_diet_plan'];
+
+$this->find_asign_id($athelete_id,$message_data,$coach_name);
+
+  return 1;
+
+}
+else
+{
+  return 0;
+}
+
+}
 
 
-// }
 
 
-// $query1         = mysql_query("SELECT *FROM gs_diet_plan WHERE id = '$diet_id' ") ;
+public function find_asign_id($athelete_id,$message_data,$coach_name)
+{
+  $query  = mysql_query("SELECT *FROM gs_assign_diet_plan WHERE `athlete_id` IN($athelete_id)  ");
+  $query1 = mysql_query("SELECT *FROM user WHERE `userid` IN($athelete_id)  ");
+  while ($row = mysql_fetch_assoc($query))
+  {
+        $asign_id_list[] = $row['assign_id'];
+        $row1      = mysql_fetch_assoc($query1);
+        $device_id_list[] = $row1['device_id'];
 
-// $row            = mysql_fetch_assoc($query1);
-// $message_data   = $row['my_diet_plan'];
-// $message        = array('message'=>array('my_diet_plan'=>json_decode($message_data)),'title'=>$coach_name.' has assigned New diet plan','indicator'=>9,'assign_id'=>$assign_id);
+  }
+ for($i=0; $i <count($asign_id_list) ; $i++) 
+ { 
+ $message       = array('message'=>array('my_diet_plan'=>json_decode($message_data)),'title'=>$coach_name.' has assigned New diet plan','indicator'=>9,'assign_id'=>$asign_id_list[$i]);
 
+$json_data     =  json_encode($message);
 
+$userdata      = new userdataservice();
+
+$notification  = $userdata->sendLitePushNotificationToGCM($device_id_list[$i],$json_data);
+}
 
 }
 
@@ -221,7 +242,19 @@ else
 
 
 
-
+public function edit_assign($assign_id,$assign_status)
+{
+  $query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
+  $num  = mysql_affected_rows();
+  if ($num)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 
 } // End of Class

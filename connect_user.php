@@ -845,10 +845,7 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
       if($data->indicator == 'studentlist')
 
       {
-
-       
-
-          $studentlist = $req->studentlist($data->userid,$data->logid);
+         $studentlist = $req->studentlist($data->userid,$data->logid);
 
           if($studentlist)
 
