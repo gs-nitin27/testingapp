@@ -324,7 +324,9 @@ $prof_id                 = $userdata->prof_id;
 $proffession             = $userdata->proffession;
 $sport                   = $userdata->sport;
 $contact_no              = $userdata->mobile_no;
-$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' WHERE `userid`='$userid'");
+$dob                     = $userdata->dob;
+$gender                  = $userdata->gender;
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' , `dob`='$dob' , `gender` = '$gender' WHERE `userid`='$userid'");
 if($query)
 {
   return 1;   
@@ -431,12 +433,12 @@ public function edit_user($userid,$prof_id,$data)
   $query = mysql_query("INSERT INTO `gs_userdata`(`userid`, `prof_id`, `user_detail`,`created_date`,`updated_date`) VALUES ('$userid','$prof_id','$data', CURDATE(), CURDATE()) ON DUPLICATE KEY UPDATE `prof_id`= '$prof_id',`user_detail`='$data',`updated_date` = CURDATE()");
   if($query)
        {
-         return 1;
+          return 1;
        } 
-        else
-        {    
-            return 0;
-        }  
+      else
+      {    
+          return 0;
+      }  
         
 } 
 
@@ -477,7 +479,6 @@ public function edit_user($userid,$prof_id,$data)
           echo json_encode($res);
           return 0;
         }
-
     } // End IF
 
 

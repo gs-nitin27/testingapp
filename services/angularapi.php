@@ -27,10 +27,11 @@ public function angulartest($username,$password)
                $data['Name'] = $row['name'];
                $data['userType'] = $row['userType'];
                $data['prof_id'] =  $row['prof_id'];
-               $data['name']     =  $row['name'];
+               $data['contact_no']     =  $row['contact_no'];
                $data['password'] =$row['password'];
                $data['userId'] = $row['userid'];
                $data['email'] =$row['email'];
+               $data['forget_code'] = $row['forget_code'];
                $data['user_image'] =$row['user_image']; 
                return $data;
              }
@@ -39,15 +40,38 @@ public function angulartest($username,$password)
             {
                return 0;
             } 
-  
-  
-  
 }
 
-public function socialLogin($email,$password,$name)
-{   
+public function mobileVerify($mobile,$userid,$forget_code)
+{
+   $insert = mysql_query("UPDATE `user` SET  `contact_no` = '$mobile' , `forget_code` = '$forget_code' WHERE `userid` ='$userid'");
+   if($insert)
+   {
+     return 1;
+   }
+   else
+   {
+    return 0 ;
+   }
+}
 
-  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`) VALUES('$email','$password','$name','104','1')");
+public function OTPVerify($otpcode,$userid)
+{
+  $insert = mysql_query("UPDATE `user` SET  `forget_code` = ''  WHERE `userid` ='$userid' AND `forget_code` ='$otpcode'");
+  $num = mysql_affected_rows();
+  if($num)
+  {
+     return 1;
+  }
+  else
+  {
+    return 0 ;
+  }
+}
+
+public function socialLogin($email,$password,$name,$forget_code,$image)
+{   
+  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','$forget_code','$image')");
    if($insert)
    {
 
@@ -55,10 +79,11 @@ public function socialLogin($email,$password,$name)
       $data['userType'] = "104";
       $data['prof_id'] =  "1";
       $data['name']     = $name;
+      $data['forget_code'] = $forget_code;
       $data['password'] =$password;
-      $data['userId'] = mysql_insert_id();;
+      $data['userId'] = mysql_insert_id();
       $data['email'] =$email;
-      $data['user_image'] =""; 
+      $data['user_image'] =$image; 
       return $data;
    } 
    else
@@ -340,4 +365,5 @@ $insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`
 
 }
 }
+
 ?>
