@@ -2,7 +2,7 @@
 include('config1.php');
 include('services/MydietPlanService.php');
 include('services/userdataservice.php');
-include('cron/ConfigService.php');
+include('cron/configservice.php');
 
 
 /*****************************Create My Diet Plan**************************/
