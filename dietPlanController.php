@@ -164,9 +164,11 @@ else if($_REQUEST['act'] == 'edit_assign_plan')
   $diet_plan             =   (file_get_contents("php://input"));
   $data                  =   json_decode($diet_plan);
   $assign_id             =   $data->assign_id;
-  $assign_status             =   $data->assign_status;
+  $assign_status         =   $data->assign_status;
+  $diet_id               =   $data->diet_id;
+  $userid                =   $data->userid;
   $req                   =   new MydietPlanService();
-  $res                   =   $req->edit_assign($assign_id,$assign_status);
+  $res                   =   $req->edit_assign($assign_id,$assign_status,$diet_id,$userid);
 if($res)
         {
             $data = array('status' => '1', 'data'=> "1", 'msg'=>'edit assign diet plan');
