@@ -39,23 +39,25 @@ if(isset($item->class_id))
 {
   $update_where = '';
 }
- $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0) AND (DATEDIFF(`class_end_date` , '$end_date') > 0 OR DATEDIFF(`class_end_date` , '$end_date') = 0) OR IF(`class_end_date` = NULL ,DATEDIFF(`class_start_date` , '$start_date') < 0 , DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
-
+ $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
 if(mysql_num_rows($query)>0)
-{
+{echo mysql_num_rows($query);
 while($row = mysql_fetch_assoc($query))
 {
-$start_time = date("H:i", strtotime($row['class_start_timing']));
-$end_time   = date("H:i", strtotime($row['class_end_timing']));
-$given_start_time = date("H:i", strtotime($item->start_time));
-$given_end_time = date("H:i", strtotime($item->end_time));
- if(($given_start_time >= $start_time && $given_start_time <= $end_time)&& ($given_end_time >= $start_time && $given_end_time <= $end_time))
+$start_time = date("G:i", strtotime($row['class_start_timing']));
+$end_time   = date("G:i", strtotime($row['class_end_timing']));
+$given_start_time = date("G:i", strtotime($item->start_time));
+$given_end_time = date("G:i", strtotime($item->end_time));
+echo 'Given==>'.$given_start_time.'==start time->'.$start_time;die;
+ if(($given_start_time <= $start_time && $given_start_time >= $end_time) || ($given_end_time <= $start_time && $given_end_time >= $end_time))
  {
    $data[] = $row;
- } 
 
+ } 
+//die;
 }
-return $data;
+echo json_encode($data);
+die;return $data;
 }
 else
 {
