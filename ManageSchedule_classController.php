@@ -75,7 +75,6 @@ if($_REQUEST['act'] == "create_class")
 		   {
                  $msg['time_clash'] = $res['time_clash'];
                  $msg['days_clash'] = $res['days_clash'];
-                 //$msg = json_encode($msg);
                  $data  = array('status'=>2,'data'=>$res[0],'msg'=>$msg);
 	             echo json_encode($data);
 
