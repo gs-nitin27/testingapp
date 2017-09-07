@@ -15,6 +15,7 @@ public function getContentInfo()
    }    
 }
 
+
 public function angulartest($username,$password)
 {
   $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
@@ -42,6 +43,22 @@ public function angulartest($username,$password)
             } 
 }
 
+public function AthletedashboardData($userid)
+{
+  $query = mysql_query("SELECT * FROM `user` WHERE `userid` = '$userid'");
+  if($query)
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data = $row;
+    }
+    return $data;
+  }else
+  {
+    return 0;
+  }
+
+}
 public function mobileVerify($mobile,$userid,$forget_code)
 {
    $insert = mysql_query("UPDATE `user` SET  `contact_no` = '$mobile' , `forget_code` = '$forget_code' WHERE `userid` ='$userid'");
