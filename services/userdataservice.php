@@ -1422,12 +1422,20 @@ public function sendNotification($registration_ids, $message,$google_api)
     curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
     $result = curl_exec($ch );
     curl_close( $ch );
+    $response = json_decode($result);
+    if($response->success == 1)
+    {
+      return 1;
+    }else
+    {
+      return 0;
+    }
     // if($result)
     //   return true;
     // else
     //   return false;
     // #Echo Result Of FireBase Server
-  // echo $result;
+  
        //  $url = 'https://gcm-http.googleapis.com/gcm/send';
        //  $fields = array(
        //      'registration_ids' => $registration_ids,

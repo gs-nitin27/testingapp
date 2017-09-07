@@ -382,4 +382,5 @@ $insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`
 
 }
 }
+
 ?>

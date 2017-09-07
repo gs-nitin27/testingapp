@@ -57,19 +57,16 @@ public function assign_log($data)
 
 public function log_diet()
 {
-
-
-
-$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` ");
+$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` AND `status`='1' ");
 	$num = mysql_num_rows($query);
-
-
 if($num)
 {
 		while($row = mysql_fetch_assoc($query))
 		{
-			$id_diet  = $row['id'];
-			$userid   = $row['userid'];
+			$id_diet 	 = $row['id'];
+			$userid  	 = $row['userid'];
+			$status   	 = $row['status'];
+			$usertype 	 = $row['userType'];
 			$data        = json_decode($row['my_diet_plan']);
 			$start_date  = $data->start_date;
 			$end_date    = $data->end_date;
@@ -79,12 +76,12 @@ if($num)
 			$value       = $data->diet_food->$day;
 			$log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
 			$log_data1   = json_encode($log_data);
-			$req          =   new userdataservice();
-			$pushobj 	  =   new userdataservice();			   
-			$get_id = $req ->getdeviceid($userid);
-			$device_id = $get_id['device_id'];
+			$req         =   new userdataservice();
+			$pushobj 	 =   new userdataservice();			   
+			$get_id 	 = $req ->getdeviceid($userid);
+			$device_id   = $get_id['device_id'];
 			$message_data  = json_decode($log_data1);
-            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$id_diet','$log_data1',CURDATE()) ");
+            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`,`status`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE(),'$status') ");
             $log_id = mysql_insert_id();
  $message      = array('message'=>array('my_diet_plan'=>$message_data,'id'=>$log_id),'title'=>$name,'indicator'=>8);
 $jsondata      =   json_encode($message);
