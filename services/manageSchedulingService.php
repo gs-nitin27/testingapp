@@ -57,15 +57,16 @@ if(!empty($result))
 $var[] = $row['class_title'].' on '.implode(',', $result).' is in clash';
 }
  if((($given_start_time > $start_time && $given_start_time < $end_time) || ($given_end_time > $start_time && $given_end_time < $end_time))||($given_start_time == $start_time && $given_end_time == $end_time));
- { 
+ { /*print_r($row);die;*/
    $time_clash[] = 'timing of class'.$row['class_title'].' ia also in clash';
    $row['class_fee'] = json_decode($row['class_fee']);
    $data[] = $row;
-   $data['time_clash'] = $time_clash;
-   $data['days_clash'] = $var;
+   // $data['time_clash'] = $time_clash;
+   // $data['days_clash'] = $var;
  } 
 
 }
+//print_r($data);die;
 return $data;
 }
 else
