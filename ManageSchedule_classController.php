@@ -73,9 +73,11 @@ if($_REQUEST['act'] == "create_class")
 		    }
 		else
 		   {
-                 $msg['time_clash'] = $res['time_clash'];
-                 $msg['days_clash'] = $res['days_clash'];
-                 $data  = array('status'=>2,'data'=>$res[0],'msg'=>$msg);
+/*
+                $msg['time_clash'] = $res['time_clash'];
+                 $msg['days_clash'] = $res['days_clash'];*/
+
+                 $data  = array('status'=>2,'data'=>$res[0],'msg'=>'Class alreday exist for same schedule');
 	             echo json_encode($data);
 
 		   }
