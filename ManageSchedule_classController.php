@@ -47,37 +47,29 @@ if($_REQUEST['act'] == "create_class")
 
     $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
     
-   if($data->check_availability == 1)
-   {
-   	 $req = new manageSchedulingService();
-     $res = $req->CheckforExistingClass($item);
-   } 
-   else
-   {
-   	$res = 0;
-   }         
-   if($res == 0)
-    {
-	 $req = new manageSchedulingService();
-     $res = $req->createClass($item,$code);
-     if($res != 0)
-     {
-      
-         $data  = array('status'=>1,'data'=>$res,'msg'=>'Success');
-         echo json_encode($data);
-     }else
-     {
-         $data  = array('status'=>0,'data'=>$res,'msg'=>'Failure');
-         echo json_encode($data);
-     }
-	}
-	else
-	{
-         $data  = array('status'=>2,'data'=>$res,'msg'=>'Class alreday exist for same schedule');
-         echo json_encode($data);
+    $req = new manageSchedulingService();
+    $res = $req->CheckforExistingClass($item);
+              if($res == 0)
+            {
+			    $req = new manageSchedulingService();
+				$res = $req->createClass($item,$code);
+             if($res != 0)
+             {
+              
+                 $data  = array('status'=>1,'data'=>$res,'msg'=>'Success');
+                 echo json_encode($data);
+             }else
+             {
+	             $data  = array('status'=>0,'data'=>$res,'msg'=>'Failure');
+	             echo json_encode($data);
+             }
+		}else
+		{
+                 $data  = array('status'=>2,'data'=>$res,'msg'=>'Class alreday exist for same schedule');
+	             echo json_encode($data);
 
+		}
 	}
-  }
 
 
 else if($_REQUEST['act'] == "update_class")

@@ -29,37 +29,38 @@ return 0;
 
 public function CheckforExistingClass($item)
 { 
-  	$start_date = $item->start_date;
-    $end_date   = $item->end_date;
+	$start_date = $item->start_date;
+  $end_date   = $item->end_date;
 
-  if(isset($item->class_id))
-  {
-    $update_where = 'AND `id` NOT IN($item->class_id)';
-  }else
-  {
-    $update_where = '';
-  }
-   $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
-  if(mysql_num_rows($query)>0)
-  {//echo mysql_num_rows($query);
-  while($row = mysql_fetch_assoc($query))
-  {
-  $start_time = date("H:i", strtotime($row['class_start_timing']));
-  $end_time   = date("H:i", strtotime($row['class_end_timing']));
-  $given_start_time = date("H:i", strtotime($item->start_time));
-  $given_end_time = date("H:i", strtotime($item->end_time));
-   if(($given_start_time > $start_time && $given_start_time < $end_time) || ($given_end_time > $start_time && $given_end_time < $end_time))
-   { 
-     $data[] = $row;
-   } 
+if(isset($item->class_id))
+{
+  $update_where = 'AND `id` NOT IN($item->class_id)';
+}else
+{
+  $update_where = '';
+}
+ $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
+if(mysql_num_rows($query)>0)
+{
+while($row = mysql_fetch_assoc($query))
+{
+$start_time = date("H:i", strtotime($row['class_start_timing']));
+$end_time   = date("H:i", strtotime($row['class_end_timing']));
+$given_start_time = date("H:i", strtotime($item->start_time));
+$given_end_time = date("H:i", strtotime($item->end_time));
+//print_r($row);
+ if((($given_start_time > $start_time && $given_start_time < $end_time) || ($given_end_time > $start_time && $given_end_time < $end_time))||($given_start_time == $start_time && $given_end_time == $end_time))
+ { 
+   $data[] = $row;
+ } 
 
-  }
-  return $data;
-  }
-  else
-  {
+}
+return $data;
+}
+else
+{
   return 0;
-  }
+}
 }
 
 
