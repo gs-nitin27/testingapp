@@ -24,7 +24,7 @@ return 1;
 }
 else
 {
-   $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date') ");
+   $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date','$status') ");
    if($query)
     {
        $id_diet = mysql_insert_id();
@@ -214,7 +214,7 @@ else
 
 
 
-public function find_asign_id($athelete_id,$message_data,$coach_name)
+public function find_asign_id($athelete_id,$message_data,$coach_name,$diet_id)
 {
   $query  = mysql_query("SELECT *FROM gs_assign_diet_plan WHERE `athlete_id` IN($athelete_id)  ");
   $query1 = mysql_query("SELECT *FROM user WHERE `userid` IN($athelete_id)  ");
@@ -252,13 +252,16 @@ $my_diet_plan   =  $data['my_diet_plan'] ;
 $start_date     =  $data['start_date'];
 $end_date       =  $data['end_date'];
 $decative       = mysql_query("UPDATE gs_diet_plan set `plan_status` ='0' WHERE userid= '$userid' ");
-$active   = mysql_query("INSERT INTO gs_diet_plan(`id`,`userid`,`my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES(0,'$userid','$my_diet_plan','$start_date','$end_date','$assign_status')");
+$active         = mysql_query("INSERT INTO gs_diet_plan(`id`,`userid`,`my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES('0','$userid','$my_diet_plan','$start_date','$end_date','$assign_status')");
+  $query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
+  $num  = mysql_affected_rows();
  }
  else
  {
 
   $query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
   $num  = mysql_affected_rows();
+ }
   if ($num)
   {
     return 1;
@@ -268,7 +271,7 @@ $active   = mysql_query("INSERT INTO gs_diet_plan(`id`,`userid`,`my_diet_plan`,`
     return 0;
   }
 }
-}
+
 
 
 } // End of Class
