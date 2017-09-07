@@ -63,11 +63,11 @@ if($_REQUEST['act'] == "create_class")
              if($res != 0)
              {
               
-                 $data  = array('status'=>'1','data'=>$res,'msg'=>'Success');
+                 $data  = array('status'=>'1','data'=>[],'msg'=>'Success');
                  echo json_encode($data);
              }else
              {
-	             $data  = array('status'=>'0','data'=>$res,'msg'=>'Failure');
+	             $data  = array('status'=>'0','data'=>[],'msg'=>'Failure');
 	             echo json_encode($data);
              }
 		    }
