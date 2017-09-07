@@ -39,7 +39,7 @@ if(isset($item->class_id))
 {
   $update_where = '';
 }
- $query = mysql_query("SELECT `id`, `class_title`,`userid`,`class_start_timing`,`class_end_timing`, `class_start_date`, `class_end_date`, `class_host`, `contact_no`, `venue`, `location`, `date_created` , `days`FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
+ $query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `userid` = '$item->user_id' AND (DATEDIFF(`class_start_date` , '$start_date') < 0 OR DATEDIFF(`class_start_date` , '$start_date') = 0)".$update_where." ORDER BY `class_start_timing` DESC ");
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
