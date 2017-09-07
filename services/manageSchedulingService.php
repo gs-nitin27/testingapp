@@ -104,6 +104,7 @@ public function getclassdata($id)
 $query = mysql_query("SELECT * FROM `gs_coach_class` WHERE `id`  = '$id' ORDER BY `id` DESC LIMIT 1");
 if(mysql_num_rows($query) != 0){
 $row = mysql_fetch_assoc($query);
+$row['class_fee'] = json_decode($row['class_fee']);
 return $row;
 
 }
