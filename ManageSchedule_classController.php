@@ -46,29 +46,37 @@ if($_REQUEST['act'] == "create_class")
     //print_r($item);die;
 
     $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
-    
-    $req = new manageSchedulingService();
-    $res = $req->CheckforExistingClass($item);
-              if($res == 0)
+    if($data->check_availability == 1)
+    { 	
+      $req = new manageSchedulingService();
+      $res = $req->CheckforExistingClass($item);
+    } 
+    else
+    {
+      	$res = 0;
+    }        
+
+    if($res == 0)
             {
 			    $req = new manageSchedulingService();
 				$res = $req->createClass($item,$code);
              if($res != 0)
              {
               
-                 $data  = array('status'=>1,'data'=>$res,'msg'=>'Success');
+                 $data  = array('status'=>'1','data'=>[],'msg'=>'Success');
                  echo json_encode($data);
              }else
              {
-	             $data  = array('status'=>0,'data'=>$res,'msg'=>'Failure');
+	             $data  = array('status'=>'0','data'=>[],'msg'=>'Failure');
 	             echo json_encode($data);
              }
-		}else
-		{
-                 $data  = array('status'=>2,'data'=>$res,'msg'=>'Class alreday exist for same schedule');
+		    }
+		else
+		   {
+	             $data  = array('status'=>'2','data'=>$res,'msg'=>'Class alreday exist for same schedule');
 	             echo json_encode($data);
 
-		}
+		   }
 	}
 
 
@@ -113,30 +121,35 @@ else if($_REQUEST['act'] == "update_class")
 	 
 							
 	                        $code = $item->user_id.'@'.substr(str_replace(' ','', $item->start_time),0,3).substr($data->start_date, 3,2).substr($data->start_date,8,2);
-
-							$req = new manageSchedulingService();
-                               $cheakClass_timing = $req->CheckforExistingClass($item);
-
-                            if($cheakClass_timing == 0)
-                            {
-							  $res = $req->updateClass($item,$code);
-    					    if($res != 0)
-    					    {
-    					         $data= array('status'=>1 , 'data' => $res ,'msg'=>'record updated');
-						         echo json_encode($data);
-							}
-							 else
-							{
-								 $data = array('status' => 0,'data' => $res , 'msg'=>'record not updated');
-								 echo json_encode($data);
-							}
+		    $req = new manageSchedulingService();
+		    if($data->check_availability == 1)
+			    { 
+			      $cheakClass_timing = $req->CheckforExistingClass($item);
+			    } 
+		    else
+			    { 
+			      	$cheakClass_timing = 0;
+			    }      
+			 if($cheakClass_timing == 0)
+                {
+				  $res = $req->updateClass($item,$code);
+			    if($res != 0)
+			    {
+			         $data= array('status'=>'1' , 'data' => [] ,'msg'=>'record updated');
+			         echo json_encode($data);
+				}
+				 else
+				{
+					 $data = array('status' =>'0' ,'data' => [] , 'msg'=>'record not updated');
+					 echo json_encode($data);
+				}
 							
-						}
-						else
-						{
-							     $data = array('status' => 2 , 'msg'=>'class Already exist with Same Schedule' );
-								 echo json_encode($data);
-						}
+				}
+				else
+				{
+				     $data = array('status' => '2' ,'data'=>$cheakClass_timing, 'msg'=>'class Already exist with Same Schedule' );
+					 echo json_encode($data);
+				}
 
 
 			 }

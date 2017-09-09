@@ -29,7 +29,15 @@ else if($_REQUEST['act'] == 'angulartest')
         echo json_encode($res);
         }
 }
+else if($_REQUEST['act']=='AthletedashboardData')
+{
+  $userid = $_REQUEST['userid'];
+  $req = new angularapi(); 
+  $res = $req->AthletedashboardData($userid);
+  echo json_encode($res);
 
+
+}
 else if($_REQUEST['act'] == 'mobileVerify')
 {
   $mobileNo  = $_REQUEST['mobileNo']; 
