@@ -37,8 +37,9 @@ if($_REQUEST['act'] == 'my_diet_plan')
 else if($_REQUEST['act'] == 'list_diet_plan')
 {
  $userid         =   $_REQUEST['userid'];
+ $usertype       =   $_REQUEST['usertype'];
  $req            =   new MydietPlanService();
- $res            =   $req->list_plan($userid);
+ $res            =   $req->list_plan($userid,$usertype);
   if($res)
         {
           $data = array('status' => '1', 'data'=> $res, 'msg'=>'List diet plan');
@@ -181,6 +182,62 @@ if($res)
         }
 
 }
+
+
+
+else if($_REQUEST['act'] == 'active_diet_plan')
+{
+
+  $diet_plan             =   (file_get_contents("php://input"));
+  $data                  =   json_decode($diet_plan);
+  $athelete_id           =   $data->athelete_id;
+  $diet_id               =   $data->diet_id;
+  $status                =   $data->status;
+  $req                   =   new MydietPlanService();
+  $res                   =   $req->active_plan($athelete_id,$diet_id,$status);
+        if($res)
+        {
+            $data = array('status' => '1', 'data'=> "1", 'msg'=>'active diet plan');
+                       echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not active diet plan');
+                  echo json_encode($data);
+        }   
+
+}
+
+
+
+
+
+else if($_REQUEST['act'] == 'show_diet_plan')
+{
+
+  $athlete_id            =   $_REQUEST['athlete_id'];
+  $req                   =   new MydietPlanService();
+  $res                   =   $req->show_plan($athlete_id);
+        if($res)
+        {
+            $data = array('status' => '1', 'data'=> $res, 'msg'=>'show diet plan');
+                       echo json_encode($data);
+        }
+        else
+        {
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'show diet plan');
+                  echo json_encode($data);
+        }   
+
+}
+
+
+
+
+
+
+
+
 
 
 

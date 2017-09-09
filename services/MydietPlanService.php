@@ -8,43 +8,84 @@ $data        = json_decode($userdata);
 $start_date  = $data->start_date;
 $end_date    = $data->end_date;
 $name        = $data->name;
-$status      = $data->status;
-
+//$status      = $data->status;
 $date        =  date('Y-m-d');
-
-
 $day         =  strtolower(date("l"));
+  $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date') ");
 
-//$value       = $data->diet_food->$day;
-
-if($usertype=='M')
+if($query)
 {
-$query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date') ");
-return 1;
+  
+// $id_diet = mysql_insert_id();
+// if($start_date==$date) 
+// {
+//     $value       = $data->diet_food->$day;
+//     $log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
+//     $log_data1 = json_encode($log_data);
+//     mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
+// }
+
+   return 1;
 }
-else
-{
-   $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date','$status') ");
-   if($query)
-    {
-       $id_diet = mysql_insert_id();
-
-       if($start_date==$date) 
-       {
-        
-      $value       = $data->diet_food->$day;
-      $log_data    = array('diet_food'=>array($day=>$value),'start_date'=>$start_date,'end_date'=>$end_date,'name'=>$name);
-      $log_data1 = json_encode($log_data);
-        mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
-        }
-          
-        return 1;
-    } 
     else
     {    
         return 0;
     } 
+}  // End Function 
+
+
+
+public function active_plan($athelete_id,$diet_id,$status)
+{
+if ($status==1)
+{
+ $query =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`,`assign_status`) VALUES('0','0',$athelete_id,'$diet_id',CURDATE(),$status) ");
+  if($query) 
+  {
+    return 1;
   }
+  else
+  {
+      return 0 ;
+  }
+}
+else
+{
+ return 0;
+}
+
+}  // End of Function
+
+
+
+
+public function show_plan($athlete_id)
+{
+  $query = mysql_query("SELECT *FROM `gs_assign_diet_plan` WHERE `athlete_id`='$athlete_id'");
+  $row  = mysql_fetch_assoc($query);
+  $diet_id  =  $row['diet_id'];
+  $query1=mysql_query("SELECT *FROM `gs_diet_plan` WHERE  `userid`='$athlete_id'  OR `id` IN ($diet_id) ");
+while ($row1  = mysql_fetch_assoc($query1)) 
+{
+$diet_id1  =  $row1['id'];
+if($diet_id ==$diet_id1)
+{
+  $row1['status']='1';
+}
+else
+{
+  $row1['status']='0';
+}
+
+  //$row1['status']='1';
+
+  $data[]  = $row1;
+  }
+
+  return $data;
+
+//print_r($data);
+
 
 }
 
@@ -54,13 +95,16 @@ else
 
 
 
-
-
-
-public function list_plan($userid)
+public function list_plan($userid,$usertype)
 {
-  
+if ($usertype=='L') 
+{
+    $query=mysql_query("SELECT `my_diet_plan`, `id`  FROM `gs_diet_plan` WHERE `userid`='$userid'");
+}
+else
+{
  $query=mysql_query("SELECT `my_diet_plan`, `id`  FROM `gs_diet_plan` WHERE `userid`='$userid'");
+}
   if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -90,17 +134,17 @@ public function edit_plan($id,$my_diet_plan)
   $status      = $data->status;
   $start_date  = $data->start_date;
   $end_date    = $data->end_date;
-
-  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`status`='$status',`start_date`='$start_date',`end_date`='$end_date' WHERE `id` ='$id' ");
+  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`plan_status`='$status',`start_date`='$start_date',`end_date`='$end_date' WHERE `id` ='$id' ");
   $num = mysql_affected_rows();
   if($num)
   {
-     
- if($status==1)
-  {
-    $req    =  new ConfigService();
-    $res =   $req->log_diet();
-  }
+
+ // if($status==1)
+ //  {
+ //    $req    =  new ConfigService();
+ //   $res =   $req->log_diet();
+ //  }
+
    return 1;
 
   }
@@ -110,6 +154,7 @@ public function edit_plan($id,$my_diet_plan)
   }
 
 }
+
 
 
 
@@ -244,20 +289,27 @@ $notification  = $userdata->sendLitePushNotificationToGCM($device_id_list[$i],$j
 
 public function edit_assign($assign_id,$assign_status,$diet_id,$userid)
 {
+  
+
 if($assign_status=='1') 
 {
-$row            =  mysql_query("SELECT *FROM gs_diet_plan  WHERE id = '$diet_id' ");
-$data           =  mysql_fetch_assoc($row);
-$my_diet_plan   =  $data['my_diet_plan'] ;
-$start_date     =  $data['start_date'];
-$end_date       =  $data['end_date'];
-$decative       = mysql_query("UPDATE gs_diet_plan set `plan_status` ='0' WHERE userid= '$userid' ");
-$active         = mysql_query("INSERT INTO gs_diet_plan(`id`,`userid`,`my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES('0','$userid','$my_diet_plan','$start_date','$end_date','$assign_status')");
-  $query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
-  $num  = mysql_affected_rows();
- }
- else
- {
+//$row            =  mysql_query("SELECT *FROM gs_diet_plan  WHERE id = '$diet_id' ");
+
+
+
+//$data           =  mysql_fetch_assoc($row);
+//$my_diet_plan   =  $data['my_diet_plan'] ;
+//$start_date     =  $data['start_date'];
+//$end_date       =  $data['end_date'];
+
+$decative       = mysql_query("UPDATE gs_diet_plan set `athlete_id` ='$userid' WHERE id= '$diet_id' ");
+
+//$active         = mysql_query("INSERT INTO gs_diet_plan(`id`,`userid`,`my_diet_plan`,`start_date`,`end_date`,`plan_status`) VALUES('0','$userid','$my_diet_plan','$start_date','$end_date','$assign_status')");
+  //$query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
+  //$num  = mysql_affected_rows();
+ //}
+ //else
+ //{
 
   $query1 = mysql_query("UPDATE gs_assign_diet_plan set `assign_status` ='$assign_status' WHERE assign_id= '$assign_id' "); 
   $num  = mysql_affected_rows();
