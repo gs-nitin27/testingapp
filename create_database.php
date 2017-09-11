@@ -664,9 +664,12 @@ else if($_REQUEST['act'] == 'publish')
 
 else if($_POST['act'] == "createtournament")
 {
+
 $status = array('failure' => 0 , 'success' => 1);
 $data1 = json_decode($_REQUEST[ 'data' ]);
 $item = new stdClass();
+
+
 $item->id                      = $data1->id;
 $item->tournament_name         = $data1->tournament_name;
 $item->tournament_level        = $data1->tournament_level;
@@ -700,6 +703,7 @@ $item->file                    = $data1->file;
 $item->email_app_collection    = $data1->email_app_collection;
 $item->phone_app_collection    = $data1->phone_app_collection;
 $item->sport                   = $data1->sport;
+$item->image                   = $data1->image;
 $eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
 $eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
 $terms = json_decode($data1->terms_and_conditions1);
@@ -768,6 +772,7 @@ $item->entry_end_date           = strtotime($data1->entry_end_date);//strtotime(
 $item->file_name                = $data1->file_name;
 $item->file                     = $data1->file;
 $item->email_app_collection     = $data1->emailid;
+$item->image                    = $data1->image;
 $eligibility = json_decode($data1->eligibility1);
 $eligibility = implode("|", $eligibility);
 $terms       = json_decode($data1->terms_and_conditions1);

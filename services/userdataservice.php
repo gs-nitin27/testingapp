@@ -538,27 +538,70 @@ $num=mysql_affected_rows();
 public function create_tournament($item)
 {
   //print_r($item);die();
+
+   $image =$item->image;
+   $table ="gs_tournament_info";
+
 $query = mysql_query("INSERT INTO `gs_tournament_info`(`id`, `userid`, `name`, `address_1`, `address_2`, `location`,`state`, `pin`, `description`,`sport` ,`level`, `age_group`, `gender`, `eligibility1`,`eligibility2`, `terms_and_cond1`,`organiser_name`, `mobile`, `landline`, `email`, `org_address1`, `org_address2`, `org_city`, `org_pin`, `tournaments_link`, `start_date`, `end_date`, `event_entry_date`, `event_end_date`, `file_name`, `file`, `email_app_collection`, `phone_app_collection`,`date_created`) VALUES ('$item->id','$item->userid','$item->tournament_name','$item->address_line1','$item->address_line2','$item->city','$item->state','$item->pin','$item->description','$item->sport','$item->tournament_level','$item->tournament_ageGroup','$item->gender','$item->eligibility1','$item->eligibility2','$item->terms_and_conditions1','$item->organizer_name','$item->mobile','$item->landline','$item->emailid','$item->organizer_address_line1','$item->organizer_address_line2','$item->organizer_city','$item->organizer_pin','$item->tournament_links',FROM_UNIXTIME ('$item->start_date'),FROM_UNIXTIME ('$item->end_date'),FROM_UNIXTIME('$item->entry_start_date') ,FROM_UNIXTIME ('$item->entry_end_date'),'$item->file_name','$item->file','$item->email_app_collection','$item->phone_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `name` = '$item->tournament_name', `address_1` = '$item->address_line1' , `address_2` = '$item->address_line2' , `location` = '$item->city' ,`state`='$item->state' ,`pin` = '$item->pin' , `description` = '$item->description',`sport`='$item->sport',`level` = '$item->tournament_level',`age_group`='$item->tournament_ageGroup',`gender` = '$item->gender',`eligibility1` = '$item->eligibility1' ,`eligibility2` = '$item->eligibility2', `terms_and_cond1` = '$item->terms_and_conditions1',`organiser_name` = '$item->organizer_name' , `mobile` = '$item->mobile' ,`landline` = '$item->landline' , `email` = '$item->emailid' , `org_address1` = '$item->organizer_address_line1' , `org_address2` = '$item->organizer_address_line2' , `org_city` = '$item->organizer_city', `org_pin` = '$item->organizer_pin' , `tournaments_link` = '$item->tournament_links' ,`start_date` = FROM_UNIXTIME ('$item->start_date') , `end_date` = FROM_UNIXTIME ('$item->end_date') , `event_entry_date` = FROM_UNIXTIME ('$item->entry_start_date') , `event_end_date` = FROM_UNIXTIME ('$item->entry_end_date'), `file_name` = '$item->file_name' , `file` = '$item->file' , `email_app_collection` = '$item->email_app_collection' , `phone_app_collection` = '$item->phone_app_collection'");
 
-if($query){
+if($query)
+{   
+  $id = mysql_insert_id();
 
-
-  return true;
-}else
-  return false;
-
-
+           if($id!=NULL && $image!=NULL)
+             {
+              $image = $this->imageupload($image,$id,$table);
+             // return $image;
+             }
+             if($image)
+             {
+              return $image;
+             }
+             else
+             {
+              return 1;
+             }
 }
+else
+{
+  return false;
+}
+
+
+}   
 
 public function create_event($item)
 {
 
+$image =$item->image;
+$table ="gs_eventinfo";
 $query = mysql_query("INSERT INTO `gs_eventinfo`(`id`, `userid`, `type`,`name`,`address_1`, `address_2`, `location`, `PIN`,`state` ,`description`, `sport`,`eligibility1`, `terms_cond1`,`organizer_name`, `mobile`,`organizer_address_line1`, `organizer_address_line2`, `organizer_city`, `organizer_pin`,`organizer_state` ,`event_links`, `start_date`, `end_date`, `entry_start_date`, `entry_end_date`, `file_name`, `file`, `email_app_collection`, `dateCreated`) VALUES ('$item->id','$item->userid','$item->type','$item->name','$item->address1','$item->address2','$item->city','$item->pin','$item->state','$item->description','$item->sport','$item->eligibility1','$item->tandc1','$item->organizer_name','$item->mobile','$item->org_address1','$item->org_address2','$item->organizer_city','$item->organizer_pin','$item->organizer_state','$item->event_links',FROM_UNIXTIME ('$item->start_date'),FROM_UNIXTIME ('$item->end_date'),FROM_UNIXTIME ('$item->entry_start_date'),FROM_UNIXTIME ('$item->entry_end_date'),'$item->file_name','$item->file','$item->email_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `type` = '$item->type',`name` = '$item->name' ,`address_1` = '$item->address1' ,`address_2` = '$item->address2' ,`location` = '$item->city' ,`state` = '$item->state', `PIN` = '$item->pin' , `description` = '$item->description',`sport` = '$item->sport',`eligibility1` = '$item->eligibility1', `terms_cond1` = '$item->tandc1',`organizer_name` = '$item->organizer_name' ,  `mobile` ='$item->mobile' ,`organizer_address_line1` = '$item->org_address1' , `organizer_address_line2` = '$item->org_address2' , `organizer_city` = '$item->organizer_city' , `organizer_pin` = '$item->organizer_pin', `organizer_state` = '$item->organizer_state' ,  `event_links` = '$item->event_links' , `start_date` = FROM_UNIXTIME ('$item->start_date') ,`end_date` = FROM_UNIXTIME ('$item->end_date') ,  `entry_start_date` = FROM_UNIXTIME ('$item->entry_start_date') , `entry_end_date` = FROM_UNIXTIME ('$item->entry_end_date') , `file_name` = '$item->file_name' ,`file` = '$item->file', `email_app_collection` = '$item->email_app_collection'");
+    
+    if($query)
+    {
+           $id = mysql_insert_id();
+           if($id!=NULL && $image!=NULL)
+             {
+              $image = $this->imageupload($image,$id,$table);
+              }
+             if($image)
+             {
+              return $image;
+             }
+             else
+             {
+              return 1;
+             }
+     } 
 
-if($query)
-  return true;
-else
-  return false;
+    else
+    {
+      
+      return false;
+
+    }
+
+
 }
 
 
@@ -1826,14 +1869,12 @@ public function createResources($data)
 
 
  public function imageupload($image,$userid,$table)
-    {
+{
 
-      //echo $userid;
-     // echo $table;die();
+
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
-      //$img = str_replace('data:image/png;base64,', '', $img);
       $filepath =str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
@@ -1841,50 +1882,31 @@ public function createResources($data)
       $img_name= "$userid"."_".$time; // This is code for upload the Image for User
       $path= $url."/"."$userid"."_".$time.'.png';
       $success =move_uploaded_file($img, $filepath);
-      $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+      
+      if ($table=='gs_jobinfo') 
+      {
+        $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+      }
+      if ($table=='gs_tournament_info') 
+      {
+        $file   = UPLOAD_DIR_TOUR.$img_name.'.png';
+      }
+      if($table=='gs_eventinfo') 
+      {
+        $file   = UPLOAD_DIR_EVENT.$img_name.'.png';
+      }
 
-      // echo "$file";die();
-     // echo "-----";
-     // echo "dev";
-     // $data="RAM";
+    
+
+
       $success = file_put_contents($file, $data);
-    //  echo "$success";die();
-     
-   //  define('UPLOAD_DIR','../staging/uploads/job/');
-      // This is a Local Path of so Please update the path After Upload the Testingapp on Live
-    //  define('UPLOAD_DIR','gs_images/Prof_pic/');
-     // $now = new DateTime();
-     // $time=$now->getTimestamp(); 
-     // $img = $image;
-      //$img = str_replace('data:image/png;base64,', '', $img);
-     // $filepath =str_replace('data:image/png;base64,', '', $img);
-    //  $img = str_replace('$filepath,', '', $img);
-     // $img = str_replace(' ', '+', $img);
-     // $data = base64_decode($img);
-
-     // $img_name= "$userid"."_".$time; // This is code for upload the Image for User
-     // $img_name= "res"."_".$time;
-
-     // $success=move_uploaded_file($img, $filepath);
-     // $file = UPLOAD_DIR_JOB.$img_name.'.png';
-     // $success = file_put_contents($file, $data);
-
-      //if($success)
-      //{
-         $img_name = $img_name. '.png';
-       // echo "update `$table` set `image`='$img_name' where `userid`='$userid'";die();
-       // This code is Used for Create Resource for Uploading the Image
-       // $updateImage = mysql_query("update `gs_resources` set `image`='$img_name' where `id`='$id'");
-        // This is code for 
-       $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
-     // }
+      $img_name = $img_name. '.png';
+      $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
       if($updateImage)
       {
-
         return 1;
       
       }
-    //}
       else
         {
           $res = array('data' =>'Image is Not Upload' ,'status' => 0);
