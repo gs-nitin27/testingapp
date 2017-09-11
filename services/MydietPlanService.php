@@ -77,14 +77,11 @@ else
   $row1['status']='0';
 }
 
-  //$row1['status']='1';
-
   $data[]  = $row1;
   }
 
   return $data;
 
-//print_r($data);
 
 
 }

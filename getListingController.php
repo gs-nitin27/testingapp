@@ -5,19 +5,28 @@ include('services/userdataservice.php');
 include('services/getListingService.php');
 
 
+
+
 //*********CODE FOR STATE LISTING *************//
+
+
 if($_REQUEST['act'] == "statelisting")
 {
-$sug = $_POST['suggest'];
-if ($sug == '')
-{
 
-	$fwhere = 'WHERE 1';
+// $sug = $_POST['suggest'];
+
+// if ($sug == '')
+// {
+
+// 	$fwhere = 'WHERE 1';
 	
-}else 
-{
-	$fwhere = "WHERE `state` LIKE '%".$sug."%'";
-}
+// }
+// else 
+// {
+// 	$fwhere = "WHERE `state` LIKE '%".$sug."%'";
+// }
+
+$fwhere = 'WHERE 1';
 $req = new GetListingService();
 $res = $req->getstate_listing($fwhere);
 
