@@ -869,6 +869,22 @@ if($query)
 
 /***********************************************************************************************************/
 
+public function class_fee_date($userid,$classid)
+{
+  $query = mysql_query("SELECT `for_month` FROM `gs_inventry` WHERE `userid` = '$userid' AND `classid` = '$classid' ORDER BY `date_of_transaction` ASC");
+  if(mysql_num_rows($query)>0)
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data =  date('n') - $row['for_month'];
+    }
+    return $data;
+  }else
+  {
+    return -100;
+  }
+}
+
 
 public function userdata($userid)
     {
@@ -923,21 +939,37 @@ public function ClassInfo($student_id)
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
-            {
+            { 
               $row=mysql_fetch_assoc($query);
               $userid       =   $row['userid'];
+              $duedate = $this->class_fee_date($student_id,$row['classid']);
+              if($duedate == '-100')
+              {
+                $paydate = $duedate;
+              }
+              else if($duedate > $row['payment_plan'])
+              {
+                $paydate = $duedate;
+              }
+              else
+              {
+                $paydate = 0;
+              }
                $row1        =   $this->userdata($userid); 
                if ($row1 !=0) 
                {
                   $row['user_image']       = $row1['user_image'];
                   $row['name']             = $row1['name'];
+                  $row['due_date']         = $paydate;
                }
                else
                {
                 $row['user_image']       = "No Image";
                 
                }
+             
                
+
               $row1           =  $this->rating($userid);
               if ($row1['rating'] !=null)
               {
@@ -947,7 +979,6 @@ public function ClassInfo($student_id)
               {
                 $row['rating']   = 0;
               }
-
               $row['class_fee']   = json_decode($row['class_fee']);
               $data[]   = $row ;
               
