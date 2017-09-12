@@ -347,7 +347,7 @@ if($query)
 
 
   public function userdata($id)
-    {
+  {
     
        $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`prof_id`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known` FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)

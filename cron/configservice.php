@@ -57,7 +57,7 @@ public function assign_log($data)
 
 public function log_diet()
 {
-$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` AND `status`='1' ");
+$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` AND `plan_status`='1' ");
 	$num = mysql_num_rows($query);
 if($num)
 {
