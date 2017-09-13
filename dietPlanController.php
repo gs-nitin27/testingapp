@@ -21,7 +21,7 @@ if($_REQUEST['act'] == 'my_diet_plan')
         }
         else
         {
-            $data = array('status' => '0', 'data'=>$res, 'msg'=>'not created');
+          $data = array('status' => '0', 'data'=>$res, 'msg'=>'not created');
                   echo json_encode($data);
         }   
 
@@ -117,12 +117,6 @@ $res              =   $req->studnet_list($coach_id,$diet_id);
         }   
 
 }
-
-
-
-
-
-
 
 
 
@@ -230,19 +224,5 @@ else if($_REQUEST['act'] == 'show_diet_plan')
         }   
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ?>

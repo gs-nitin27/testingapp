@@ -60,6 +60,25 @@ $query = mysql_query("SELECT DISTINCT `sports` FROM `gs_sports`");
 	}
 }
 
+public function getEventType()
+{
+  $query = mysql_query("SELECT DISTINCT `type` FROM `gs_eventinfo` WHERE `type` <> NULL UNION SELECT DISTINCT `type` FROM `gs_eventType` WHERE '1=1'");
+  if(mysql_num_rows($query)>0)
+  {
+
+  while($row = mysql_fetch_assoc($query))
+  {
+
+  $rows[] = $row;
+
+  }
+  return $rows;
+
+  }
+
+  return false;
+}
+
 
 
 
