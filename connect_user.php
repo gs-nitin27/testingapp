@@ -1219,6 +1219,8 @@ else if ($_REQUEST['act'] == 'create_schedule')
 {
   $data = json_decode(file_get_contents("php://input"));
   $obj  = new connect_userservice();
+
+ 
   $res  = $obj->create_user_schedule($data);
   
 
@@ -1237,12 +1239,13 @@ else if ($_REQUEST['act'] == 'create_schedule')
     $msg = 'Failure';
     $status = 0;
     }
+  }
     else
     {
     $msg = 'Success';
     $status = 1;
     }
-    }
+    
   }
   else
   {
