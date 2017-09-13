@@ -1724,7 +1724,6 @@ public function save_athlete_schedule($athlete_id,$schedule_id)
 
 public function create_user_schedule($data)
 {
-  // echo "INSERT INTO `gs_athletes_schedule`(`userid`,`userType`,`phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid',$data->userType,'$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')";die;
 
    $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`,`userType`,`phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->userType','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
   if($query)
