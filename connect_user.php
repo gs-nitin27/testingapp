@@ -1219,11 +1219,33 @@ else if ($_REQUEST['act'] == 'create_schedule')
 {
   $data = json_decode(file_get_contents("php://input"));
   $obj  = new connect_userservice();
+
+ 
   $res  = $obj->create_user_schedule($data);
+  
+
   if($res != 0)
-  {
+  {  
+    if($data->userType =='L')
+    {
+    $assigned = $obj->save_athlete_schedule($data->userid,$res); 
+    if($assigned)
+    {
     $msg = 'Success';
     $status = 1;
+    }
+    else
+    {
+    $msg = 'Failure';
+    $status = 0;
+    }
+  }
+    else
+    {
+    $msg = 'Success';
+    $status = 1;
+    }
+    
   }
   else
   {
@@ -1305,7 +1327,75 @@ else if($_REQUEST['act'] == 'update_schedule')
   $response = array('status' => $status,'data'=>$res,'msg'=>$message );
   echo json_encode($response);
 }
+/**************************** Assign Schedule to Athlete**********************/
 
+
+ else if($_REQUEST['act'] == 'schedule_assign')
+ {
+    $data = json_decode(file_get_contents("php://input"));
+
+    $coach = new userdataservice();
+    $coachdata = $coach->userdata($data->coach_id);
+ 
+    $req = new connect_userservice();
+    $date = date("Y-m-d ");
+    $athlete_list = explode(",", $data->athlete_id_list);
+    $value  ="";
+    $athleteid = $athlete_list;
+    $st ="(";
+    $coach_id             = $data->coach_id;
+    $schedule_id          = $data->schedule_id;
+    $status               = 1;
+    $k  = ")";
+for($i=0;$i<sizeof($athleteid);$i++)
+{    
+    if($i == 0)
+    {
+    $value  .=$st."'".$athleteid[$i]."','".$coach_id."','".$schedule_id."','".$date."','".$status."'".$k;
+    }
+    else
+    {
+    $value  .=",".$st."'".$athleteid[$i]."','".$coach_id."','".$schedule_id."','".$date."','".$status."'".$k;
+    }  
+}
+   
+    $res= $req->new_schedule_assign($value);
+
+
+    if($res)
+    {
+       $result =  array('status' =>1);
+       echo json_encode($result);
+       
+            $alldevice = $req->alluserdata($data->athlete_id_list);  
+            $alertdata = "";
+            $k=0;
+            foreach ($alldevice as $value) {
+              $start = "(";
+              $user_id = $athleteid[$k];
+              $end = ")";  
+              $message  = array('message'=>$coachdata['name']." "." has assigned you a task" ,'title'=>'New Assignment','date_assign'=>$date,'id'=>$schedule_id,'indicator' => 6);
+              $jsondata       = json_encode($message);
+               if($k==0)
+              {
+                $k = $k+1;
+                $alertdata .=$start.$user_id.",'L','".$jsondata."','".$date."'".$end;
+              }
+              else
+              {
+                $k = $k+1;
+                $alertdata .=",".$start.$user_id.",'L','".$jsondata."','".$date."'".$end;
+              }
+               $coach->sendLitePushNotificationToGCM($value['device_id'],$jsondata);
+            }
+              $req->bulk_alerts_save($alertdata);
+    }
+    else
+    {
+       $result =  array('status' =>0);
+       echo json_encode($result);
+    }
+ }
 
 
 /***************************Un Assign log  By The Coach***********************/
