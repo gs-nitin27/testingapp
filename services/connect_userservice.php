@@ -1424,6 +1424,7 @@ public function new_log_assign($data)
 }
 
 
+
 /*******************Get log data  ********************/
 
 
@@ -1667,28 +1668,63 @@ $num = mysql_num_rows($query);
 
 }  // End Function
 
-public function view_user_schedule($user_id)
-{
-$query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$user_id'");
-    if(mysql_num_rows($query)!= 0)
-    {
 
-    while ($row = mysql_fetch_assoc($query)) {
+// public function view_user_schedule($user_id)
+// {
+// $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$user_id'");
+//     if(mysql_num_rows($query)!= 0)
+//     {
+
+//     while ($row = mysql_fetch_assoc($query)) {
       
-    $rows[] = $row;
+//     $rows[] = $row;
 
-    }
-    return $rows;
-    }else
+//     }
+//     return $rows;
+//     }else
+//     {
+//       return "0";
+//     }
+// }
+
+
+public function view_user_schedule($userid)
+{
+   $query = mysql_query("SELECT *  FROM `gs_athletes_schedule` WHERE `id` IN (SELECT `schedule_id` FROM `gs_schedule_assign` WHERE `athlete_id` = '$userid')");
+
+   if(mysql_num_rows($query) != 0)
+   {
+    while ($row = mysql_fetch_assoc($query))
     {
-      return "0";
+      $data[] = $row; 
     }
+    return $data;
+   }else
+   {
+    return 0;
+   }
 }
 
 
+public function save_athlete_schedule($athlete_id,$schedule_id)
+{
+   $date = date("Y-m-d ");
+   $query = mysql_query("INSERT INTO  `gs_schedule_assign`(`athlete_id`,`coach_id`,`schedule_id`,`date_assign`,`status`) VALUES('$athlete_id','0','$schedule_id','$date','1')");
+   if($query)
+   {
+    return 1;
+   }
+   else
+   {
+    return 0;
+   }
+  
+ 
+}
+
 public function create_user_schedule($data)
 {
-   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
+   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`,`userType`,`phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid',$data->userType,'$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
   if($query)
   {
     return mysql_insert_id();
@@ -1700,6 +1736,9 @@ public function create_user_schedule($data)
     return "0";
   }
 }
+
+
+
 
 
 public function edit_schedule($data)
@@ -1747,6 +1786,24 @@ public function update_user_schedule($id,$time_of_day,$active_status)
   }
 
 }  // End of Function
+
+/************************** Assign Schedule ******************************/
+public function new_schedule_assign($data)
+{
+  $string = "INSERT INTO `gs_schedule_assign` (`athlete_id`,`coach_id`,`schedule_id`,`date_assign`,`status`) VALUES $data";
+$query = mysql_query($string);
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }    
+} 
+
+
+
 
 
 
