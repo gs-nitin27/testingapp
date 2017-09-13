@@ -1220,7 +1220,7 @@ else if ($_REQUEST['act'] == 'create_schedule')
   $data = json_decode(file_get_contents("php://input"));
   $obj  = new connect_userservice();
 
- 
+
   $res  = $obj->create_user_schedule($data);
   
 
@@ -1279,7 +1279,24 @@ else if ($_REQUEST['act'] == 'create_schedule')
 
 
 
+/*********************View coach schedule *************************/
 
+  else if($_REQUEST['act'] == 'view_coach_schedule')
+  {
+      $user_id = $_REQUEST['user_id'];
+      $req = new connect_userservice();
+      $res = $req->view_coach_schedule($user_id);
+      if($res != "0")
+      {
+        $response = array('status' => '1','data'=>$res,'msg'=>'Success' );
+        echo json_encode($response);
+      }
+      else
+      {
+        $response = array('status' => '0','data'=>[],'msg'=>'Failure' );
+        echo json_encode($response);
+      }
+  }  
 
 
 

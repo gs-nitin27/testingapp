@@ -1669,23 +1669,22 @@ $num = mysql_num_rows($query);
 }  // End Function
 
 
-// public function view_user_schedule($user_id)
-// {
-// $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$user_id'");
-//     if(mysql_num_rows($query)!= 0)
-//     {
+public function view_coach_schedule($user_id)
+{
+$query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$user_id'");
+    if(mysql_num_rows($query)!= 0)
+    {
 
-//     while ($row = mysql_fetch_assoc($query)) {
-      
-//     $rows[] = $row;
+    while ($row = mysql_fetch_assoc($query)) {
+    $rows[] = $row;
 
-//     }
-//     return $rows;
-//     }else
-//     {
-//       return "0";
-//     }
-// }
+    }
+    return $rows;
+    }else
+    {
+      return "0";
+    }
+}
 
 
 public function view_user_schedule($userid)
