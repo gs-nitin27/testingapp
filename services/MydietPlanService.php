@@ -25,7 +25,7 @@ if($query)
 //     mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
 // }
 
-   return 1;
+        return 1;
 }
     else
     {    
@@ -59,32 +59,32 @@ else
 
 
 
-public function show_plan($athlete_id)
-{
-  $query = mysql_query("SELECT *FROM `gs_assign_diet_plan` WHERE `athlete_id`='$athlete_id'");
-  $row  = mysql_fetch_assoc($query);
-  $diet_id  =  $row['diet_id'];
-  $query1=mysql_query("SELECT *FROM `gs_diet_plan` WHERE  `userid`='$athlete_id'  OR `id` IN ($diet_id) ");
-while ($row1  = mysql_fetch_assoc($query1)) 
-{
-$diet_id1  =  $row1['id'];
-if($diet_id ==$diet_id1)
-{
-  $row1['status']='1';
-}
-else
-{
-  $row1['status']='0';
-}
+// public function show_plan($athlete_id)
+// {
+//   $query = mysql_query("SELECT *FROM `gs_assign_diet_plan` WHERE `athlete_id`='$athlete_id'");
+//   $row  = mysql_fetch_assoc($query);
+//   $diet_id  =  $row['diet_id'];
+//   $query1=mysql_query("SELECT *FROM `gs_diet_plan` WHERE  `userid`='$athlete_id'  OR `id` IN ($diet_id) ");
+// while ($row1  = mysql_fetch_assoc($query1)) 
+// {
+// $diet_id1  =  $row1['id'];
+// if($diet_id ==$diet_id1)
+// {
+//   $row1['status']='1';
+// }
+// else
+// {
+//   $row1['status']='0';
+// }
 
-  $data[]  = $row1;
-  }
+//   $data[]  = $row1;
+//   }
 
-  return $data;
+//   return $data;
 
 
 
-}
+// }
 
 
 
@@ -120,7 +120,25 @@ else
 }
 
 
+public function show_plan($athlete_id)
+{  $query = mysql_query("SELECT a.`id`, a.`userType`,a.`my_diet_plan`, a.`start_date`,a.`end_date`, b.`athlete_id`,b.`coach_id`, b.`diet_id` , b.`assign_status` AS status FROM `gs_diet_plan` AS a JOIN `gs_assign_diet_plan` AS b ON a.`userid` = b.`athlete_id` WHERE a.`userid` = '$athlete_id'  ");
+ if(mysql_num_rows($query)>0)
+ {
+    while($row = mysql_fetch_assoc($query))
+    {
+          $data[] = $row;
+    }
+ 
+ return $data;
+}
+else
+{
+  return 0;
+}
 
+
+
+}
 
 
 
@@ -321,7 +339,24 @@ $decative       = mysql_query("UPDATE gs_diet_plan set `athlete_id` ='$userid' W
   }
 }
 
+// public function getListing($data)
+// {
 
+//   $id = implode(',', $data);
+//   $query = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `id` IN ($id)");
+//   if(mysql_num_rows($query)>0)
+//   {
+//   while ($row = mysql_fetch_assoc($query)) {
+//     $rows[] = $row;
+//   }
+//   return $rows;
+//   }
+//   else
+//   {
+//     return 0;
+//   }
+
+// }
 
 } // End of Class
 
