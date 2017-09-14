@@ -1849,6 +1849,8 @@ public function checkExistingStudent($item)
 public function join_class_usingCode($item)
 {
   $code = $item->student_code;
+  $payment_plan = $item->payment_plan;
+
   if(!isset($item->deviceType))
   {
   $data = json_decode($item->user_info);
@@ -1856,7 +1858,7 @@ public function join_class_usingCode($item)
   {
   $data = $item->user_info;
   }
-  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
   if(mysql_affected_rows() == 1)
   {
     
