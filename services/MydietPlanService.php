@@ -121,13 +121,19 @@ else
 
 
 public function show_plan($athlete_id)
-{  $query = mysql_query("SELECT a.`id`, a.`userType`,a.`my_diet_plan`, a.`start_date`,a.`end_date`, b.`athlete_id`,b.`coach_id`, b.`diet_id` , b.`assign_status` AS status FROM `gs_diet_plan` AS a JOIN `gs_assign_diet_plan` AS b ON a.`userid` = b.`athlete_id` WHERE a.`userid` = '$athlete_id'  ");
+{  $query = mysql_query("SELECT `id` , `userType` AS status FROM `gs_diet_plan` WHERE `userid` = '$athlete_id' AND `id` NOT IN (SELECT `diet_id` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id')UNION SELECT `diet_id` , `assign_status` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id' ");
  if(mysql_num_rows($query)>0)
  {
     while($row = mysql_fetch_assoc($query))
-    {
-          $data[] = $row;
-    }
+     {
+      $id = $row['id'];
+      $status = $row['status'];
+      $list = $this->getListing($id,$status);
+      if($list != 0)
+      {
+      $data[] = $list;
+      }
+     }
  
  return $data;
 }
@@ -339,24 +345,23 @@ $decative       = mysql_query("UPDATE gs_diet_plan set `athlete_id` ='$userid' W
   }
 }
 
-// public function getListing($data)
-// {
+public function getListing($id,$status)
+{
 
-//   $id = implode(',', $data);
-//   $query = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `id` IN ($id)");
-//   if(mysql_num_rows($query)>0)
-//   {
-//   while ($row = mysql_fetch_assoc($query)) {
-//     $rows[] = $row;
-//   }
-//   return $rows;
-//   }
-//   else
-//   {
-//     return 0;
-//   }
+  //$id = implode(',', $data);
+  $query = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `id` IN ($id)");
+  if(mysql_num_rows($query)>0)
+  {
+  $row = mysql_fetch_assoc($query);
+  $row['status'] = $status;
+  return $row;
+  }
+  else
+  {
+    return 0;
+  }
 
-// }
+}
 
 } // End of Class
 
