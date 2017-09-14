@@ -1251,7 +1251,6 @@ else if ($_REQUEST['act'] == 'create_schedule')
   {
     $msg = 'Failure';
     $status = 0;
-
   }
     $response = array('status'=>$status,'data'=>$res,'msg'=>$msg);
     echo json_encode($response);
