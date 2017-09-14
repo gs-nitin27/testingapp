@@ -734,13 +734,17 @@ echo json_encode($status['failure']);
 
 
 
+
+
 //********* CODE FOR CREATING EVENTS **********//
 
 else if ($_POST['act'] == 'createevent') 
 {
-$status = array('failure' => 0 , 'success' => 1);
-$data1 = json_decode($_REQUEST[ 'data' ]);
-$item = new stdClass();
+
+$status                         = array('failure' => 0 , 'success' => 1);
+$data1                          = json_decode($_REQUEST[ 'data' ]);
+$item                           = new stdClass();
+
 $item->id                       = $data1->id;
 $item->userid                   = $data1->userid;
 $item->type                     = $data1->type;
@@ -773,10 +777,10 @@ $item->file_name                = $data1->file_name;
 $item->file                     = $data1->file;
 $item->email_app_collection     = $data1->emailid;
 $item->image                    = $data1->image;
-$eligibility = json_decode($data1->eligibility1);
-$eligibility = implode("|", $eligibility);
-$terms       = json_decode($data1->terms_and_conditions1);
-$terms       = implode("|",$terms);
+$eligibility                    = json_decode($data1->eligibility1);
+$eligibility                    = implode("|", $eligibility);
+$terms                          = json_decode($data1->terms_and_conditions1);
+$terms                          = implode("|",$terms);
 $item->eligibility1 = $eligibility;
 $item->tandc1       = $terms;
 $req = new userdataservice();
@@ -788,6 +792,7 @@ echo json_encode($status['success']);
 else
 echo json_encode($status['failure']);
 }
+
 
 
 
@@ -810,6 +815,9 @@ $where2 = "  AND `id` = '".$id."'";
 $where = $where1.$where2;
 $req = new userdataservice();
 $res = $req->getCreation($where, $type);
+
+
+
 if($res != 0)
 {
   if(sizeof($res == '1'))
@@ -834,6 +842,8 @@ else
 $data = array('data'=>$res, 'status'=>$status);
 echo json_encode($data);
 }
+
+
 
 
 
@@ -1986,6 +1996,65 @@ if($response)
 
 
 
+
+
+else if($_REQUEST['act'] == "create_event") 
+{
+  $data     =   (file_get_contents("php://input"));
+  $item     =  json_decode($data);
+  $req      =   new userdataservice();
+  $res      =   $req->save_event($item);
+
+if($res) 
+  {
+       $output = array('status' => '1','data'=>[] ,'msg'=>'event is created');
+       echo json_encode($output);
+  }
+  else
+  {
+      $output = array('status' => '0','data'=>'0' ,'msg'=>'event is not created');
+       echo json_encode($output);
+  }
+}
+
+
+
+
+
+else if($_REQUEST['act'] == "create_tournament") 
+{
+  $data     =   (file_get_contents("php://input"));
+  
+  $item     =  json_decode($data);
+  $req      =   new userdataservice();
+  $res      =   $req->save_tournament($item);
+
+if($res) 
+  {
+       $output = array('status' => '1','data'=>[] ,'msg'=>'tournament is created');
+       echo json_encode($output);
+  }
+  else
+  {
+      $output = array('status' => '0','data'=>'0' ,'msg'=>'tournament is not created');
+       echo json_encode($output);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //**********CODE FOR VIDEO UPLOAD**************************//
 
 if($_SERVER['REQUEST_METHOD']=='POST')
@@ -2001,4 +2070,14 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  //echo "http://getsporty.in/VideoUpload/".$file_name;
 
 }
+
+
+
+
+
+
+
+
+
+
 ?>  
