@@ -869,6 +869,22 @@ if($query)
 
 /***********************************************************************************************************/
 
+public function class_fee_date($userid,$classid)
+{
+  $query = mysql_query("SELECT `for_month` FROM `gs_inventry` WHERE `userid` = '$userid' AND `classid` = '$classid' ORDER BY `date_of_transaction` ASC");
+  if(mysql_num_rows($query)>0)
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data =  date('n') - $row['for_month'];
+    }
+    return $data;
+  }else
+  {
+    return -100;
+  }
+}
+
 
 public function userdata($userid)
     {
@@ -923,21 +939,37 @@ public function ClassInfo($student_id)
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
-            {
+            { 
               $row=mysql_fetch_assoc($query);
               $userid       =   $row['userid'];
+              $duedate = $this->class_fee_date($student_id,$row['classid']);
+              if($duedate == '-100')
+              {
+                $paydate = $duedate;
+              }
+              else if($duedate > $row['payment_plan'])
+              {
+                $paydate = $duedate;
+              }
+              else
+              {
+                $paydate = 0;
+              }
                $row1        =   $this->userdata($userid); 
                if ($row1 !=0) 
                {
                   $row['user_image']       = $row1['user_image'];
                   $row['name']             = $row1['name'];
+                  $row['due_date']         = $paydate;
                }
                else
                {
                 $row['user_image']       = "No Image";
                 
                }
+             
                
+
               $row1           =  $this->rating($userid);
               if ($row1['rating'] !=null)
               {
@@ -947,7 +979,6 @@ public function ClassInfo($student_id)
               {
                 $row['rating']   = 0;
               }
-
               $row['class_fee']   = json_decode($row['class_fee']);
               $data[]   = $row ;
               
@@ -1393,6 +1424,7 @@ public function new_log_assign($data)
 }
 
 
+
 /*******************Get log data  ********************/
 
 
@@ -1636,14 +1668,14 @@ $num = mysql_num_rows($query);
 
 }  // End Function
 
-public function view_user_schedule($user_id)
+
+public function view_coach_schedule($user_id)
 {
 $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$user_id'");
     if(mysql_num_rows($query)!= 0)
     {
 
     while ($row = mysql_fetch_assoc($query)) {
-      
     $rows[] = $row;
 
     }
@@ -1655,9 +1687,44 @@ $query = mysql_query("SELECT * FROM `gs_athletes_schedule` WHERE `userid` = '$us
 }
 
 
+public function view_user_schedule($userid)
+{
+   $query = mysql_query("SELECT *  FROM `gs_athletes_schedule` WHERE `id` IN (SELECT `schedule_id` FROM `gs_schedule_assign` WHERE `athlete_id` = '$userid')");
+
+   if(mysql_num_rows($query) != 0)
+   {
+    while ($row = mysql_fetch_assoc($query))
+    {
+      $data[] = $row; 
+    }
+    return $data;
+   }else
+   {
+    return 0;
+   }
+}
+
+
+public function save_athlete_schedule($athlete_id,$schedule_id)
+{
+   $date = date("Y-m-d ");
+   $query = mysql_query("INSERT INTO  `gs_schedule_assign`(`athlete_id`,`coach_id`,`schedule_id`,`date_assign`,`status`) VALUES('$athlete_id','0','$schedule_id','$date','1')");
+   if($query)
+   {
+    return 1;
+   }
+   else
+   {
+    return 0;
+   }
+  
+ 
+}
+
 public function create_user_schedule($data)
 {
-   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`, `phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
+
+   $query = mysql_query("INSERT INTO `gs_athletes_schedule`(`userid`,`userType`,`phase`, `activity`, `time_of_day`, `remarks`,  `schedule_duration_day`, `schedule_type`,`active_status`, `date_created`,`start_date`,`end_date`) VALUES ('$data->userid','$data->userType','$data->phase','$data->activity','$data->time_of_day','$data->remarks','$data->schedule_duration_day','$data->type','$data->active_status','$data->date_created','$data->start_date','$data->end_date')");
   if($query)
   {
     return mysql_insert_id();
@@ -1669,6 +1736,9 @@ public function create_user_schedule($data)
     return "0";
   }
 }
+
+
+
 
 
 public function edit_schedule($data)
@@ -1717,6 +1787,24 @@ public function update_user_schedule($id,$time_of_day,$active_status)
 
 }  // End of Function
 
+/************************** Assign Schedule ******************************/
+public function new_schedule_assign($data)
+{
+  $string = "INSERT INTO `gs_schedule_assign` (`athlete_id`,`coach_id`,`schedule_id`,`date_assign`,`status`) VALUES $data";
+$query = mysql_query($string);
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }    
+} 
+
+
+
+
 
 
 /*****************************Log Unassign*****************************/
@@ -1761,6 +1849,8 @@ public function checkExistingStudent($item)
 public function join_class_usingCode($item)
 {
   $code = $item->student_code;
+  $payment_plan = $item->payment_plan;
+
   if(!isset($item->deviceType))
   {
   $data = json_decode($item->user_info);
@@ -1768,7 +1858,7 @@ public function join_class_usingCode($item)
   {
   $data = $item->user_info;
   }
-  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
   if(mysql_affected_rows() == 1)
   {
     

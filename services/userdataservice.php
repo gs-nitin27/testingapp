@@ -773,9 +773,9 @@ else
         return 0;
       }
 
-	}
-	else
-	{
+  }
+  else
+  {
          while($data = mysql_fetch_assoc($record))
           {
              
@@ -783,7 +783,7 @@ else
                 return $row;
                // print_r($row);
           }          
-	}
+  }
 
     
    }
@@ -793,14 +793,14 @@ else
 public function updatefav($id,$user_id,$data)
 { $data = rtrim($data,"");
   $data = rtrim($data,",");
-	//echo "UPDATE `users_fav` SET `users_fav` = '$data' WHERE `userid` = '$user_id' AND `id` = '$id' ";die();
+  //echo "UPDATE `users_fav` SET `users_fav` = '$data' WHERE `userid` = '$user_id' AND `id` = '$id' ";die();
 $query = mysql_query("UPDATE `users_fav` SET `userfav` = '$data' WHERE `userid` = '$user_id' AND `id` = '$id' ");
 if($query)
 {
-	return 1;
+  return 1;
 }else
 {
-	return 0;
+  return 0;
 }
 
   }
@@ -821,7 +821,7 @@ $rows[] = $row;
  } 
   else
  {
- 	return 0;
+  return 0;
    }
 }
 
@@ -847,7 +847,7 @@ $rows[] = $row;
  } 
   else
  {
- 	return 0;
+  return 0;
    }
 }
 
@@ -872,7 +872,7 @@ $rows[] = $row;
  } 
   else
  {
- 	return 0;
+  return 0;
    }
 }
 
@@ -889,8 +889,8 @@ $rows[] = $row;
  
 //echo "SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'";die();
 
-  	error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
-    	$query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
+    error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
+      $query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
 
 
 
@@ -926,13 +926,13 @@ $rows[] = $row;
 
               array_push($data[$i]['fav'], 1);
               $data[$i]['fav'] = "1";
-            	
+              
             }
             else
             {
 
-            	array_push($data[$i]['fav'], 0);
-            	$data[$i]['fav'] = "0";
+              array_push($data[$i]['fav'], 0);
+              $data[$i]['fav'] = "0";
             }
              
                 }
@@ -951,7 +951,7 @@ else
         {    
             $val = $data[$i][$type];
              array_push($data[$i]['fav'], 1);
-           	$data[$i]['fav'] = "0";
+            $data[$i]['fav'] = "0";
         }
             return $data;
       }
@@ -973,7 +973,7 @@ return $data;
 }
 else
 {
-	return 0;
+  return 0;
    }
 }
 
@@ -985,17 +985,17 @@ error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch
 $id= $favdata;
 if($type == '1'){
 
-	//$table = 'gs_jobInfo';
+  //$table = 'gs_jobInfo';
   $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` WHERE `id` = '$id' ");
  // $id1    = 'id';
 }else if($type == '2'){
 
-	//$table = 'gs_eventinfo';
+  //$table = 'gs_eventinfo';
   $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE `id` = '$id' ORDER BY `dateCreated` DESC ");
  // $id1    = 'id';
 }else if($type == '3'){
 
-	$query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,'')AS name, IFNull(`address_1`,'') AS address_1
+  $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,'')AS name, IFNull(`address_1`,'') AS address_1
 
 
 , IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`state`,'') AS state
@@ -1023,7 +1023,7 @@ while($row = mysql_fetch_assoc($query)){
 
                 $data = $row;
                 array_push($data['fav'], 1);
-            	  $data['fav'] = "1";
+                $data['fav'] = "1";
 
 }
 return $data;
@@ -1031,14 +1031,14 @@ return $data;
 }
 else{
 
-	return 0;
+  return 0;
 }
 
 }
 
 public function saverecent($fwhere,$type, $id)
 
-{	
+{ 
 
 $query = mysql_query("SELECT * FROM `recent_search` WHERE `userid` = '$id' AND `module` = '$type'");
 $row  = mysql_num_rows($query);
@@ -1055,9 +1055,9 @@ $query1 = mysql_query("INSERT INTO `recent_search`(`id`, `userid`, `recent_act`,
 
 if($query){
 
-	return 1;
+  return 1;
 }else{
-	return 0;
+  return 0;
 }
 
   }
@@ -2724,3 +2724,4 @@ public function get_creations($id)
 }//end class
 
 ?>
+

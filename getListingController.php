@@ -104,7 +104,18 @@ if($_REQUEST['act']=="agegrouplisting")
 	$data = array('data'=>$res);
 	echo json_encode($data);
 }
-
-
-http://192.168.0.116/testingapp/create_database.php?
+if($_REQUEST['act']=='event_type_list')
+{
+	$obj = new GetListingService();
+	$res = $obj->getEventType();
+	if($res != false)
+	{
+     $resp = array('data'=>$res, 'status'=>1);
+	}
+	else
+	{
+	 $resp = array('data'=>[],'status'=>0);
+    }
+    echo json_encode($resp); 
+}
 ?>

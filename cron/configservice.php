@@ -96,15 +96,6 @@ $pushnote      =   $pushobj->sendLitePushNotificationToGCM($device_id, $jsondata
 			return 0;
 		}
 
-
-
-
-
-
-
-
-		
-
 }
 
 
