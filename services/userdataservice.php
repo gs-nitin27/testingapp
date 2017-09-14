@@ -1883,7 +1883,7 @@ public function createResources($data)
       $path= $url."/"."$userid"."_".$time.'.png';
       $success =move_uploaded_file($img, $filepath);
       
-      if ($table=='gs_jobinfo') 
+      if ($table=='gs_jobInfo') 
       {
         $file   = UPLOAD_DIR_JOB.$img_name.'.png';
 
