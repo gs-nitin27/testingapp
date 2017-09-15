@@ -638,7 +638,7 @@ $res = $req->getCreation($where, $type);
   }
   else
   {
-      $output = array('status' => '0','data'=>'0' ,'msg'=>'listing  is not show');
+      $output = array('status' => '0','data'=>[] ,'msg'=>'listing  is not show');
        echo json_encode($output);
   }
 }
