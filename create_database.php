@@ -613,7 +613,7 @@ echo json_encode($status['failure']);
 
 
 
-//*********CODE FOR FETCHING THE CREATED DATA***********//
+//**********************Disply of the all Record form Table********//
 
 else if($_REQUEST['act'] == "editcreation")
 {
@@ -631,33 +631,46 @@ $where2 = "  AND `id` = '".$id."'";
 $where = $where1.$where2;
 $req = new userdataservice();
 $res = $req->getCreation($where, $type);
+ if($res) 
+  {
+       $output = array('status' => '1','data'=>$res ,'msg'=>'listing is show');
+       echo json_encode($output);
+  }
+  else
+  {
+      $output = array('status' => '0','data'=>'0' ,'msg'=>'listing  is not show');
+       echo json_encode($output);
+  }
+}
 
 
 
-if($res != 0)
-{
-  if(sizeof($res == '1'))
-{
-if($type == '2' || $type == '3')
-{ 
-$eligibility = $res[0]['eligibility1'];
-$eligibility = explode("|",$eligibility);
-$res[0]['eligibility'] = $eligibility;
-$terms_cond = $res[0]['terms_cond1'];
-$terms_cond = explode("|",$terms_cond);
-$res[0]['terms_cond'] = $terms_cond;
- }
-}
-  $status = 1;
-}
-else
-{
-  $status = 0;
-  $res = [];
-} 
-$data = array('data'=>$res, 'status'=>$status);
-echo json_encode($data);
-}
+//   if(sizeof($res == '1'))
+// {
+// if($type == '2' || $type == '3')
+// { 
+// $eligibility = $res[0]['eligibility1'];
+// $eligibility = explode("|",$eligibility);
+// $res[0]['eligibility'] = $eligibility;
+// $terms_cond = $res[0]['terms_cond1'];
+// $terms_cond = explode("|",$terms_cond);
+// $res[0]['terms_cond'] = $terms_cond;
+//  }
+// }
+//   $status = 1;
+// }
+// else
+// {
+//   $status = 0;
+//   $res = [];
+// } 
+// $data = array('data'=>$res, 'status'=>$status);
+// echo json_encode($data);
+// }
+
+// }
+
+
 
 
 
@@ -1820,15 +1833,14 @@ else if($_REQUEST['act'] == "create_event")
   $item     =  json_decode($data);
   $req      =   new userdataservice();
   $res      =   $req->save_event($item);
-
 if($res) 
   {
-       $output = array('status' => '1','data'=>[] ,'msg'=>'event is created');
+       $output = array('status' => '1','data'=>[] );
        echo json_encode($output);
   }
   else
   {
-      $output = array('status' => '0','data'=>'0' ,'msg'=>'event is not created');
+      $output = array('status' => '0','data'=>'0' );
        echo json_encode($output);
   }
 }
@@ -1840,19 +1852,18 @@ if($res)
 else if($_REQUEST['act'] == "create_tournament") 
 {
   $data     =   (file_get_contents("php://input"));
-  
   $item     =  json_decode($data);
   $req      =   new userdataservice();
   $res      =   $req->save_tournament($item);
 
 if($res) 
   {
-       $output = array('status' => '1','data'=>[] ,'msg'=>'tournament is created');
+       $output = array('status' => '1','data'=>[]);
        echo json_encode($output);
   }
   else
   {
-      $output = array('status' => '0','data'=>'0' ,'msg'=>'tournament is not created');
+      $output = array('status' => '0','data'=>'0');
        echo json_encode($output);
   }
 }
