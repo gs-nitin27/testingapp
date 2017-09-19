@@ -213,8 +213,7 @@ public function updateseennotification($id)
 
 
   public function rating($userid)
-
-  {
+ {
 
      $query = mysql_query("SELECT avg(total_rating) AS rating ,COUNT(*) AS total_user FROM gs_rating where entity_id=$userid ");
      $row   =mysql_fetch_assoc($query);
@@ -541,7 +540,7 @@ public function getClass($userid)
    }
   return $rows;
   }else
-  {
+  {listing
     return  0;
   }
 }
