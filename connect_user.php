@@ -199,9 +199,6 @@ if($_REQUEST['act'] == 'connect')
 /******************display Coach Profile and Total Student *******************/
 
 
-
-
-
 else if($_REQUEST['act'] == 'get_organized_classes')
  { 
  $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
@@ -217,18 +214,15 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
         echo json_encode($Result);
  }
-   else
-   {                     
+else
+  {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
           echo json_encode($Result);
-
-   } 
-
+  } 
 }
 
 
 /******************* Display Class Information Created By Coach*************/
-
   else if($_REQUEST['act'] == 'get_classes_info')
  {
  $class_id         =  @$_REQUEST['class_id'];
@@ -967,11 +961,7 @@ else if ($_REQUEST['act'] == 'coach_log_list')
         $result = array('status' => 0, 'data' => []);
        echo json_encode($result);
        }
-
 }
-
-
-
  /****************************activity search for autocomplete  **********************************/
 else if($_REQUEST['act'] == 'activity_search')
 {
