@@ -6,10 +6,8 @@ include('services/userdataservice.php');
 
 if($_POST['act'] == "create_class")
 {
-
 			$data  = json_decode($_REQUEST['data']);
 			$item  = new stdClass();
-			
 			$item->class_name   = $data->class_name;
 			$item->start_date   = strtotime($data->start_date);
 			$item->end_date     = strtotime($data->end_date);

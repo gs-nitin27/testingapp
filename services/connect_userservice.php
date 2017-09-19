@@ -939,15 +939,15 @@ public function ClassInfo($student_id)
   if ($num!=0) 
   {
             for ($i=0; $i <$num ; $i++) 
-            { 
-              $row=mysql_fetch_assoc($query);
-              $userid       =   $row['userid'];
-              $duedate = $this->class_fee_date($student_id,$row['classid']);
-              if($duedate == '-100')
-              {
-                $paydate = $duedate;
-              }
-              else if($duedate > $row['payment_plan'])
+            {
+            $row=mysql_fetch_assoc($query);
+            $userid       =   $row['userid'];
+            $duedate = $this->class_fee_date($student_id,$row['classid']);
+            if($duedate == '-100')
+            {
+              $paydate = $duedate;
+            }
+            else if($duedate > $row['payment_plan'])
               {
                 $paydate = $duedate;
               }

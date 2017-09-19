@@ -379,10 +379,10 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class')
     { 
     if ($data->phone != '')
     {
-    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class"; 
+    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class";
     $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
     }
-    if($data->email != '')  
+    if($data->email != '')
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
 coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to join his class.
@@ -411,20 +411,14 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
     } 
-   
   }
       echo json_encode($resp);
 }
-
-
-
-
-
 /*END OF SECTION */
-
 /*
 Below Section code is for Athlete With code . from Which He could Directly join the class 
 */
+
 else if ($_REQUEST['act'] == 'add_joining_code') 
 {
  $data = json_decode(file_get_contents("php://input"));
@@ -435,7 +429,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
   $resp = array('status'=> $req, 'msg'=>'Success');
   $obj1 =   new userdataservice();
     //echo $data->data[0]->userid;die;
-    $data = json_decode($item->user_info);
+    $data = json_decode($data->user_info);
     $userid = $data->userid;
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')

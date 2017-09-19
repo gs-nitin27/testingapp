@@ -14,7 +14,7 @@ if($_REQUEST['act'] == 'classlist')
    {
    	echo json_encode($res);
    }
-   else
+   else 
    {
    	echo json_encode($res);
    }
