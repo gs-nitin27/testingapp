@@ -72,33 +72,19 @@ if($_REQUEST['act'] == 'connect')
    {
 
          $user_id       =  $req->getuserid($request_id);
-
          $lite_user_id  =$user_id[0]['lite_user_id'];
-
          $userdata      = new userdataservice();
-
          $request_user  = $userdata->getuserdata($lite_user_id);
-
          $response_user  = $userdata->getuserdata($user_id[0]['prof_user_id']);
-
          $response_user_name = $response_user['name'];
-
          $device_id = $request_user['device_id'];
-
          $array_data = array('title'=> 'New Connection ', 'message'=> $response_user_name.' is connected with you' , 'device_id' => $device_id , 'indicator' =>2);
-
          $json_data = json_encode($array_data);
-
          $notification = $userdata->sendLitePushNotificationToGCM($device_id,$array_data);
-
          $alerts =$req->alerts($lite_user_id ,$user_app , $json_data) ;
-
          $message_seen = $req->updateseennotification($alerts);
-
          $user = array('status' => 1, 'message'=>'User Connected' );
-
          echo json_encode($user);
-
    }
 
    else if($res == 2)
@@ -213,9 +199,6 @@ if($_REQUEST['act'] == 'connect')
 /******************display Coach Profile and Total Student *******************/
 
 
-
-
-
 else if($_REQUEST['act'] == 'get_organized_classes')
  { 
  $userid         =  @$_REQUEST['userid'];         // this is a User Id whose Create the Class
@@ -231,18 +214,15 @@ else if($_REQUEST['act'] == 'get_organized_classes')
 	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
         echo json_encode($Result);
  }
-   else
-   {                     
+else
+  {                     
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No available class');
           echo json_encode($Result);
-
-   } 
-
+  } 
 }
 
 
 /******************* Display Class Information Created By Coach*************/
-
   else if($_REQUEST['act'] == 'get_classes_info')
  {
  $class_id         =  @$_REQUEST['class_id'];
@@ -380,29 +360,23 @@ else
 Below Section code is for coach to add Athlete to his class 
 */
 
-else if ($_REQUEST['act'] == 'add_athlete_to_class') {
-  
+else if ($_REQUEST['act'] == 'add_athlete_to_class') 
+{
     $data = json_decode(file_get_contents("php://input"));
-    // foreach ($data->student_record as $key => $value) {
-    // $student_code      =  
-    
-    // }
     $student_code      =  $data->coach_id.$data->classid.rand(100,1000);
     $obj               =  new connect_userservice();
-   // print_r($data);
     $varify            =  $obj->checkExistingStudent($data);
     if($varify == 0)
     {
     $req               =  $obj->add_athlete($data,$student_code);
     if($req != 0)
     { 
-     
     if ($data->phone != '')
     {
-    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class"; 
+    $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class";
     $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
     }
-    if($data->email != '')  
+    if($data->email != '')
     {
     $msg = "Hello ".$data->student_name.'<br>'.", Greetings from GetSporty".'<br>'."
 coach  has added you to his class. To join and interact with your coach and team-mates, please download GetSporty App from Google play store. Use code ".$student_code." to join his class.
@@ -431,20 +405,14 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
     } 
-   
   }
       echo json_encode($resp);
 }
-
-
-
-
-
 /*END OF SECTION */
-
 /*
 Below Section code is for Athlete With code . from Which He could Directly join the class 
 */
+
 else if ($_REQUEST['act'] == 'add_joining_code') 
 {
  $data = json_decode(file_get_contents("php://input"));
@@ -455,7 +423,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
   $resp = array('status'=> $req, 'msg'=>'Success');
   $obj1 =   new userdataservice();
     //echo $data->data[0]->userid;die;
-    $data = json_decode($item->user_info);
+    $data = json_decode($data->user_info);
     $userid = $data->userid;
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
@@ -993,11 +961,7 @@ else if ($_REQUEST['act'] == 'coach_log_list')
         $result = array('status' => 0, 'data' => []);
        echo json_encode($result);
        }
-
 }
-
-
-
  /****************************activity search for autocomplete  **********************************/
 else if($_REQUEST['act'] == 'activity_search')
 {
