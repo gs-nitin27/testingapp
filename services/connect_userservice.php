@@ -933,56 +933,65 @@ public function alluserdata($userid)
 
 public function ClassInfo($student_id)
 {
- $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
+ // $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
+  $query = mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE (`gs_class_data`.`student_id`=$student_id OR `gs_class_data`.`phone`= '$phone' OR `gs_class_data`.`email`= '$email') GROUP BY `gs_class_data`.`classid`"); 
   $num=mysql_num_rows($query);
   if ($num!=0) 
-  {
-            for ($i=0; $i <$num ; $i++) 
-            {
-            $row=mysql_fetch_assoc($query);
-            $userid       =   $row['userid'];
-            $duedate = $this->class_fee_date($student_id,$row['classid']);
-            if($duedate == '-100')
-            {
-              $paydate = $duedate;
-            }
-            else if($duedate > $row['payment_plan'])
-              {
-                $paydate = $duedate;
-              }
-              else
-              {
-                $paydate = 0;
-              }
-               $row1        =   $this->userdata($userid); 
-               if ($row1 !=0) 
-               {
-                  $row['user_image']       = $row1['user_image'];
-                  $row['name']             = $row1['name'];
-                  $row['due_date']         = $paydate;
-               }
-               else
-               {
-                $row['user_image']       = "No Image";
+  {   while($row = mysql_fetch_assoc($query))
+    {
+      $rows[] = $row;
+    }
+      return $rows;
+        //     for ($i=0; $i <$num ; $i++) 
+        //     {
+        //     $row=mysql_fetch_assoc($query);
+        //     $userid       =   $row['userid'];
+        //     $duedate = $this->class_fee_date($student_id,$row['classid']);
+        //     if($duedate == '-100')
+        //     {
+        //       $paydate = $duedate;
+        //     }
+        //     else if($duedate > $row['payment_plan'])
+        //       {
+        //         $paydate = $duedate;
+        //       }
+        //       else
+        //       {
+        //         $paydate = 0;
+        //       }
+        //        $row1        =   $this->userdata($userid); 
+        //        if ($row1 !=0) 
+        //        {
+        //           $row['user_image']       = $row1['user_image'];
+        //           $row['name']             = $row1['name'];
+        //           $row['due_date']         = $paydate;
+        //        }
+        //        else
+        //        {
+        //         $row['user_image']       = "No Image";
                 
-               }
+        //        }
              
                
 
-              $row1           =  $this->rating($userid);
-              if ($row1['rating'] !=null)
-              {
-                $row['rating']       = (float)$row1['rating'];
-              }
-              else
-              {
-                $row['rating']   = 0;
-              }
-              $row['class_fee']   = json_decode($row['class_fee']);
-              $data[]   = $row ;
+        //       $row1           =  $this->rating($userid);
+        //       if ($row1['rating'] !=null)
+        //       {
+        //         $row['rating']       = (float)$row1['rating'];
+        //       }
+        //       else
+        //       {
+        //         $row['rating']   = 0;
+        //       }
+        //       $row['class_fee']   = json_decode($row['class_fee']);
+        //       $data[]   = $row ;
               
-           }
-        return $data;
+        //    }
+        // return $data;
+
+  }else
+  {
+    return 0;
   }
 }
 

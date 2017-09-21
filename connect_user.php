@@ -543,12 +543,14 @@ Student Id and Result is display all Class Information
 
 
  else if($_REQUEST['act'] == 'class_info' ) 
- { 
+{ 
  $student_id           =  $_REQUEST['userid'];
+ $phone                =  $_REQUEST['contact_no'];
+ $email                =  $_REQUEST['email'];
  $request              =  new connect_userservice();
- $response             =  $request->ClassInfo($student_id);
+ $response             =  $request->ClassInfo($student_id,$phone,$email);
 
-   if($response)
+   if($response != 0)
    {
               $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
               echo json_encode($Result);
