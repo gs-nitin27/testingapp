@@ -546,17 +546,17 @@ Student Id and Result is display all Class Information
  { 
  $student_id           =  $_REQUEST['userid'];
  $request              =  new connect_userservice();
-  $response             =  $request->ClassInfo($student_id);
+ $response             =  $request->ClassInfo($student_id);
 
    if($response)
    {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
-             echo json_encode($Result);
+              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
+              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
-          echo json_encode($Result);
+              $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
+              echo json_encode($Result);
    } 
 
 }

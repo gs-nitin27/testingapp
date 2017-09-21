@@ -139,12 +139,12 @@ $num[]  = "('0','$coach_id','$value','$diet_id',CURDATE(),'0')";
   $res                   =   $req->assign_plan($data,$coach_name,$diet_id,$athelete_id);
         if($res)
         {
-            $data = array('status' => '1', 'data'=> "$res", 'msg'=>'assign diet plan');
+            $data = array('status' => '1', 'data'=>[], 'msg'=>'assign diet plan');
                        echo json_encode($data);
         }
         else
         {
-            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not assign diet plan');
+            $data = array('status' => '0', 'data'=>[], 'msg'=>'not assign diet plan');
                   echo json_encode($data);
         }   
 
