@@ -347,12 +347,11 @@ $decative       = mysql_query("UPDATE gs_diet_plan set `athlete_id` ='$userid' W
 
 public function getListing($id,$status)
 {
-
-  //$id = implode(',', $data);
   $query = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `id` IN ($id)");
   if(mysql_num_rows($query)>0)
   {
   $row = mysql_fetch_assoc($query);
+  $row['my_diet_plan'] = json_decode($row['my_diet_plan']);
   $row['status'] = $status;
   return $row;
   }
