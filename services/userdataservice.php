@@ -615,18 +615,30 @@ public function save_event($item)
 {
 
   $eligibility = json_encode($item->eligibility) ;
-$terms_cond  = json_encode($item->terms_cond) ;
-$image =$item->image;
+$terms_cond    =   json_encode($item->terms_cond) ;
+$image         =   $item->image;
+$edit_id       =   $item->id;
+
 $table ="gs_eventinfo";
 $query = mysql_query("INSERT INTO `gs_eventinfo`(`id`, `userid`, `type`,`name`,`address_1`, `address_2`, `location`, `PIN`,`state` ,`description`, `sport`,`eligibility1`, `terms_cond1`,`organizer_name`, `mobile`,`organizer_address_line1`, `organizer_address_line2`, `organizer_city`, `organizer_pin`,`organizer_state` ,`event_links`, `start_date`, `end_date`, `entry_start_date`, `entry_end_date`, `file_name`, `file`, `email_app_collection`, `dateCreated`) VALUES ('$item->id','$item->userid','$item->type','$item->name','$item->address1','$item->address2','$item->city','$item->pin','$item->state','$item->description','$item->sport','$eligibility','$terms_cond','$item->organizer_name','$item->mobile','$item->org_address1','$item->org_address2','$item->organizer_city','$item->organizer_pin','$item->organizer_state','$item->event_links','$item->start_date','$item->end_date','$item->entry_start_date','$item->entry_end_date','$item->file_name','$item->file','$item->email_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `type` = '$item->type',`name` = '$item->name' ,`address_1` = '$item->address1' ,`address_2` = '$item->address2' ,`location` = '$item->city' ,`state` = '$item->state', `PIN` = '$item->pin' , `description` = '$item->description',`sport` = '$item->sport',`eligibility1` = '$eligibility', `terms_cond1` = '$terms_cond',`organizer_name` = '$item->organizer_name' ,  `mobile` ='$item->mobile' ,`organizer_address_line1` = '$item->org_address1' , `organizer_address_line2` = '$item->org_address2' , `organizer_city` = '$item->organizer_city' , `organizer_pin` = '$item->organizer_pin', `organizer_state` = '$item->organizer_state' ,  `event_links` = '$item->event_links' , `start_date` = '$item->start_date' ,`end_date` = '$item->end_date' ,  `entry_start_date` = '$item->entry_start_date' , `entry_end_date` = '$item->entry_end_date' , `file_name` = '$item->file_name' ,`file` = '$item->file', `email_app_collection` = '$item->email_app_collection'");
+
+
    
     if($query)
     {
            $id = mysql_insert_id();
-           if($id!=NULL && $image!=NULL)
+
+           if($edit_id == '0' && $image!=NULL)
              {
               $image = $this->imageupload($image,$id,$table);
-              }
+             }
+             if($edit_id != '0' && $image!=NULL)
+             {
+              $image = $this->imageupload($image,$edit_id,$table);
+             }
+
+
+
              if($image)
              {
               return $image;
@@ -653,7 +665,11 @@ public function save_tournament($item)
 {
    $eligibility = json_encode($item->eligibility) ;
    $terms_cond  = json_encode($item->terms_cond) ;
-   $image =$item->image;
+   $image       =$item->image;
+   $edit_id     =$item->id;
+
+
+
    $table ="gs_tournament_info";
 $query = mysql_query("INSERT INTO `gs_tournament_info`(`id`, `userid`, `name`, `address_1`, `address_2`, `location`,`state`, `pin`, `description`,`sport` ,`level`, `age_group`, `gender`, `eligibility1`, `terms_and_cond1`,`organiser_name`, `mobile`, `landline`, `email`, `org_address1`, `org_address2`, `org_city`, `org_pin`, `tournaments_link`, `start_date`, `end_date`, `event_entry_date`, `event_end_date`, `file_name`, `file`, `email_app_collection`, `phone_app_collection`,`date_created`) VALUES ('$item->id','$item->userid','$item->tournament_name','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->description','$item->sport','$item->tournament_level','$item->tournament_ageGroup','$item->gender','$eligibility','$terms_cond','$item->organizer_name','$item->mobile','$item->landline','$item->emailid','$item->org_address1','$item->org_address2','$item->organizer_city','$item->organizer_pin','$item->tournament_links','$item->start_date','$item->end_date','$item->entry_start_date' ,'$item->entry_end_date','$item->file_name','$item->file','$item->email_app_collection','$item->phone_app_collection',CURDATE()) ON DUPLICATE KEY UPDATE `name` = '$item->tournament_name', `address_1` = '$item->address_line1' , `address_2` = '$item->address_line2' , `location` = '$item->city' ,`state`='$item->state' ,`pin` = '$item->pin' , `description` = '$item->description',`sport`='$item->sport',`level` = '$item->tournament_level',`age_group`='$item->tournament_ageGroup',`gender` = '$item->gender',`eligibility1` = '$eligibility' , `terms_and_cond1` = '$terms_cond',`organiser_name` = '$item->organizer_name' , `mobile` = '$item->mobile' ,`landline` = '$item->landline' , `email` = '$item->emailid' , `org_address1` = '$item->org_address1' , `org_address2` = '$item->org_address2' , `org_city` = '$item->organizer_city', `org_pin` = '$item->organizer_pin' , `tournaments_link` = '$item->tournament_links' ,`start_date` = '$item->start_date' , `end_date` = '$item->end_date' , `event_entry_date` = '$item->entry_start_date' , `event_end_date` = '$item->entry_end_date', `file_name` = '$item->file_name' , `file` = '$item->file' , `email_app_collection` = '$item->email_app_collection' , `phone_app_collection` = '$item->phone_app_collection'");
 
@@ -661,11 +677,18 @@ if($query)
 {   
   $id = mysql_insert_id();
 
-           if($id!=NULL && $image!=NULL)
+           if($edit_id=='0' && $image!=NULL)
              {
               $image = $this->imageupload($image,$id,$table);
              // return $image;
              }
+
+             if($edit_id !='0' && $image!=NULL)
+             {
+              $image = $this->imageupload($image,$edit_id,$table);
+             }
+
+
              if($image)
              {
               return $image;
