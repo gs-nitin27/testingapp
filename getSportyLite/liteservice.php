@@ -839,6 +839,11 @@ switch ($module)
   }//End of Switch
 }//End of Function
 
+
+
+/*******************This API for www. getsporty.in **********************************/
+
+
  public function getBlogData($where)
   {  
     $query = mysql_query("SELECT * FROM `gs_resources`".$where."");
@@ -846,7 +851,6 @@ switch ($module)
     {
     while ($row = mysql_fetch_assoc($query))
     { 
-      //$row['description'] = nl2br(htmlentities($row['description'], ENT_QUOTES, 'UTF-8'));
       $row['description'] = nl2br($row['description']);
       $rows[] = $row;
     } 
@@ -854,10 +858,60 @@ switch ($module)
     }
      else
      {
-      return $row;
+      return 0;
      }
 
   } 
+
+
+
+
+public function get_Job_Data($where)
+{  
+
+    $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE $where ");
+    if(mysql_num_rows($query)>0)
+    {
+    while ($row = mysql_fetch_assoc($query))
+    { 
+      $row['description'] = nl2br($row['description']);
+      $rows[] = $row;
+    } 
+      return $rows;
+    }
+     else
+     {
+      return 0;
+     }
+
+  } 
+
+
+
+
+public function get_Event__tour_Data()
+{  
+$event_query = mysql_query("SELECT `id` `name`,`description`,`image` FROM `gs_eventinfo`  WHERE `publish` = '1' ");
+$tour_query  = mysql_query("SELECT `name`,`description`,`image` FROM `gs_tournament_info` WHERE `publish` = '1' ");
+while($event_row = mysql_fetch_assoc($event_query) )
+{ 
+      $event_row['description'] = nl2br($event_row['description']);
+      $event_row['Path']  = 'E';
+      $event_data[]              = $event_row;
+} 
+
+while($tour_row = mysql_fetch_assoc($tour_query))
+{ 
+      $tour_row['description'] = nl2br($tour_row['description']);
+      $event_row['Path']  = 'T';
+      $tour_data[] = $tour_row;
+} 
+
+return array_merge($event_data,$tour_data);
+} 
+
+
+
 
 } // End of Class
  

@@ -786,6 +786,12 @@ else if($_REQUEST['act'] == "gs_searching")
     }
 }
   
+
+
+
+
+/*******************This API Get the DAta for www. getsporty.in **********************************/
+
 else if($_REQUEST['act'] == "blog_api")
 {
 
@@ -813,9 +819,48 @@ echo json_encode($data);
 
 
 
+/*****************************Get Data From Job Table******************************************/
+
+else if($_REQUEST['act'] == "job_api")
+{
+ $where      = " `publish` = '1' ORDER BY `date_created` DESC ";
+$req         = new liteservice();
+$res          = $req->get_Job_Data($where);
+if($res != 0)
+{
+ $data = array('data'=>$res,'status'=>'1');
+ 
+}
+else
+{
+  $data = array('data'=>$res,'status'=>'');
+}
+echo json_encode($data);
+}
 
 
 
+
+/*****************************Get Data Event Table******************************************/
+
+
+
+else if($_REQUEST['act'] == "event_and_tour_api")
+{
+ $where      = " `publish` = '1' ORDER BY `dateCreated` DESC ";
+$req         = new liteservice();
+$res          = $req->get_Event__tour_Data($where);
+if($res != 0)
+{
+ $data = array('data'=>$res,'status'=>'1');
+ 
+}
+else
+{
+  $data = array('data'=>$res,'status'=>'');
+}
+echo json_encode($data);
+}
 
 
 
