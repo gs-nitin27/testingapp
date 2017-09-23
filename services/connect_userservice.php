@@ -540,7 +540,7 @@ public function getClass($userid)
    }
   return $rows;
   }else
-  {listing
+  {
     return  0;
   }
 }
