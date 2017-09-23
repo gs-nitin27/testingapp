@@ -1429,7 +1429,20 @@ else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
     }
     
 }
-
+else if($_REQUEST['act'] == 'remove_demo_athlete')
+{
+  $demo_code = $_REQUEST['demo_code'];
+  $obj = new connect_userservice();
+  $req = $obj->remove_demo_request($demo_code);
+  if($req != 0)
+  {
+    $resp = array('status' => $req , 'msg'=>'Success' );
+  }else
+  {
+    $resp = array('status'=>$req,'msg'=>'Failure');
+  }
+  echo json_encode($resp);
+}
 
 
 
