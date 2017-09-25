@@ -37,9 +37,6 @@ class connect_userservice
 
 
 
-
-
-
      }
 
      else 
@@ -516,11 +513,13 @@ public function getClassList($userid)
 public function getClass($userid)
 {
  //$date = 'CURDATE()';
+  
  $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
   if(mysql_num_rows($query) > 0)
   {
     while ($row = mysql_fetch_assoc($query)) {
         $row['class_fee'] = json_decode($row['class_fee']);
+
          // if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
          //  {  // echo $row['class_end_date'];
          //  $to = strtotime($row['today']); // or your date as well
@@ -541,6 +540,7 @@ public function getClass($userid)
   return $rows;
   }else
   {
+
     return  0;
   }
 }

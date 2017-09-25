@@ -632,6 +632,7 @@ $query = mysql_query("INSERT INTO `gs_eventinfo`(`id`, `userid`, `type`,`name`,`
              {
               $image = $this->imageupload($image,$id,$table);
              }
+
              if($edit_id != '0' && $image!=NULL)
              {
               $image = $this->imageupload($image,$edit_id,$table);
@@ -1968,7 +1969,6 @@ public function createResources($data)
 
  public function imageupload($image,$userid,$table)
 {
-
 
       $now = new DateTime();
       $time=$now->getTimestamp(); 
