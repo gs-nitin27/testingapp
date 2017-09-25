@@ -191,6 +191,7 @@ $query= mysql_query("SELECT `user`.`name` , `gs_athlit_performance`.* FROM user 
 	$numberDays 		= $timeDiff/86400;  // 86400 seconds in one day
 	$numberDays 		= intval($numberDays);
 	$row['next_assessment']=$numberDays;
+	$row['data'] 		= json_decode($row['data']);
 	$data[]=$row;
 	}
 	return $data;
@@ -253,6 +254,8 @@ public function viewPerformanceguide($item,$agegropup)
 
  public function save_request_assessment($userdata)
  {
+
+
  	$request_type		=	 $userdata->request_type;
 	$assessment_type 	=	 $userdata->assessment_type;
 	$athlete_id 		=	 $userdata->athlete_id;
@@ -260,7 +263,7 @@ public function viewPerformanceguide($item,$agegropup)
 	$date 				=	 $userdata->date;
 	$time 				=	 $userdata->time;
 	$venue 				=	 $userdata->venue;
-   $query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link','$date','$time','$venue')");
+    $query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link','$date','$time','$venue')");
 	if($query)
 	{
 	   return 1;
