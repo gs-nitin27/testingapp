@@ -934,7 +934,7 @@ public function alluserdata($userid)
 public function ClassInfo($student_id,$phone,$email)
 {
  // $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
-  $query = mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE (`gs_class_data`.`student_id`=$student_id OR `gs_class_data`.`phone`= '$phone' OR `gs_class_data`.`email`= '$email') GROUP BY `gs_class_data`.`classid`"); 
+  $query = mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE (`gs_class_data`.`student_id`=$student_id OR `gs_class_data`.`phone`= '$phone' OR `gs_class_data`.`email`= '$email') AND `status` >= 0 GROUP BY `gs_class_data`.`classid`"); 
   $num=mysql_num_rows($query);
   if ($num!=0) 
   {   while($row = mysql_fetch_assoc($query))
@@ -1954,10 +1954,36 @@ public function remove_demo_request($demo_code)
     return 0;
   }
 }
-// public function add_athlete_via_demo($data)
-// {
-//   $query =mysql_query("INSERT INTO `gs_class_data`(`id`, `classid`, `student_id`, `student_name`, `student_dob`, `location`, `gender`, `height`, `waight`, `joining_date`, `fees`, `paid`, `date_added`, `mode_of_payment`, `transaction_id`, `payment_id`, `remark`, `coach_id`, `student_code`, `phone`, `email`, `status`, `demo_code`, `payment_plan`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14],[value-15],[value-16],[value-17],[value-18],[value-19],[value-20],[value-21],[value-22],[value-23],[value-24])");
-// }
+
+public function decline_joinclass_offer($data)
+{
+
+  $query = mysql_query("UPDATE `gs_class_data` SET `status` = '-2' WHERE `student_code` = '$data->student_code'");
+  if($query)
+   {
+     return $this->add_athlete_feedback($data);     
+   }
+   else
+  {
+    return 0;
+  }
+
+
+}
+
+
+public function add_athlete_feedback($data)
+{
+
+  $query =mysql_query("INSERT INTO `gs_democlass_feedback`(`athlete_id`, `class_id`, `coach_id`, `feedback_detail`, `date_created`) VALUES ('$data->athlete_id','$data->class_id','$data->coach_id','$data->feedback_detail',CURDATE())");
+  if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
+}
 
 
 } // End Class
