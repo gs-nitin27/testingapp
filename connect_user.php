@@ -543,20 +543,22 @@ Student Id and Result is display all Class Information
 
 
  else if($_REQUEST['act'] == 'class_info' ) 
- { 
+{ 
  $student_id           =  $_REQUEST['userid'];
+ $phone                =  $_REQUEST['contact_no'];
+ $email                =  $_REQUEST['email'];
  $request              =  new connect_userservice();
-  $response             =  $request->ClassInfo($student_id);
+ $response             =  $request->ClassInfo($student_id,$phone,$email);
 
-   if($response)
+   if($response != 0)
    {
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
-             echo json_encode($Result);
+              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
+              echo json_encode($Result);
    }
    else
    {                     
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
-          echo json_encode($Result);
+              $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
+              echo json_encode($Result);
    } 
 
 }
@@ -1427,7 +1429,20 @@ else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
     }
     
 }
-
+else if($_REQUEST['act'] == 'remove_demo_athlete')
+{
+  $demo_code = $_REQUEST['demo_code'];
+  $obj = new connect_userservice();
+  $req = $obj->remove_demo_request($demo_code);
+  if($req != 0)
+  {
+    $resp = array('status' => $req , 'msg'=>'Success' );
+  }else
+  {
+    $resp = array('status'=>$req,'msg'=>'Failure');
+  }
+  echo json_encode($resp);
+}
 
 
 

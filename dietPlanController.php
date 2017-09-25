@@ -131,20 +131,20 @@ else if($_REQUEST['act'] == 'assign_diet_plan')
   $coach_name            =   $data->coach_name;
   $list_id               =   explode(',', $athelete_id);
 foreach($list_id as $value)
-{
-$num[]  = "('0','$coach_id','$value','$diet_id',CURDATE(),'0')";
+{$assign_id = $value.$diet_id;
+$num[]  = "('$assign_id','$coach_id','$value','$diet_id',CURDATE(),'0')";
 }
   $data                  =   implode(',', $num); 
   $req                   =   new MydietPlanService();
   $res                   =   $req->assign_plan($data,$coach_name,$diet_id,$athelete_id);
         if($res)
         {
-            $data = array('status' => '1', 'data'=> "$res", 'msg'=>'assign diet plan');
+            $data = array('status' => '1', 'data'=>[], 'msg'=>'assign diet plan');
                        echo json_encode($data);
         }
         else
         {
-            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not assign diet plan');
+            $data = array('status' => '0', 'data'=>[], 'msg'=>'not assign diet plan');
                   echo json_encode($data);
         }   
 
@@ -186,17 +186,33 @@ else if($_REQUEST['act'] == 'active_diet_plan')
   $data                  =   json_decode($diet_plan);
   $athelete_id           =   $data->athelete_id;
   $diet_id               =   $data->diet_id;
+  $coach_id              =   $data->coach_id;
   $status                =   $data->status;
   $req                   =   new MydietPlanService();
-  $res                   =   $req->active_plan($athelete_id,$diet_id,$status);
-        if($res)
+  if($coach_id != 0)
+  {
+  $res                   =   $req->follow_coach_dietplan($data);                  
+  }
+  else
+  {
+  $res                   =   $req->active_plan($athelete_id,$diet_id,$status);    
+  }
+  if($status == 0)
+  {
+    $plan = 'deactivate';
+  }else
+  {
+    $plan = 'activate';
+  }
+
+        if($res != 0)
         {
-            $data = array('status' => '1', 'data'=> "1", 'msg'=>'active diet plan');
+            $data = array('status' => '1', 'data'=> "1", 'msg'=>'diet plan '.$plan.'d');
                        echo json_encode($data);
         }
         else
         {
-            $data = array('status' => '0', 'data'=>"0", 'msg'=>'not active diet plan');
+            $data = array('status' => '0', 'data'=>"0", 'msg'=>'unable to '.$plan);
                   echo json_encode($data);
         }   
 
@@ -220,7 +236,7 @@ else if($_REQUEST['act'] == 'show_diet_plan')
         else
         {
             $data = array('status' => '0', 'data'=>"0", 'msg'=>'show diet plan');
-                  echo json_encode($data);
+                       echo json_encode($data);
         }   
 
 }

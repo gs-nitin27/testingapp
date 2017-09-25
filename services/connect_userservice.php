@@ -541,7 +541,6 @@ public function getClass($userid)
   }else
   {
 
-
     return  0;
   }
 }
@@ -932,58 +931,78 @@ public function alluserdata($userid)
 
 
 
-public function ClassInfo($student_id)
+public function ClassInfo($student_id,$phone,$email)
 {
- $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
+ // $query= mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE `student_id`=$student_id");
+  $query = mysql_query("SELECT gs_class_data.* , gs_coach_class.* FROM gs_class_data INNER JOIN gs_coach_class ON `gs_class_data`.`classid`=`gs_coach_class`.id WHERE (`gs_class_data`.`student_id`=$student_id OR `gs_class_data`.`phone`= '$phone' OR `gs_class_data`.`email`= '$email') GROUP BY `gs_class_data`.`classid`"); 
   $num=mysql_num_rows($query);
   if ($num!=0) 
-  {
-            for ($i=0; $i <$num ; $i++) 
-            {
-            $row=mysql_fetch_assoc($query);
-            $userid       =   $row['userid'];
-            $duedate = $this->class_fee_date($student_id,$row['classid']);
-            if($duedate == '-100')
-            {
-              $paydate = $duedate;
-            }
-            else if($duedate > $row['payment_plan'])
-              {
-                $paydate = $duedate;
-              }
-              else
-              {
-                $paydate = 0;
-              }
-               $row1        =   $this->userdata($userid); 
-               if ($row1 !=0) 
-               {
-                  $row['user_image']       = $row1['user_image'];
-                  $row['name']             = $row1['name'];
-                  $row['due_date']         = $paydate;
-               }
-               else
-               {
-                $row['user_image']       = "No Image";
+  {   while($row = mysql_fetch_assoc($query))
+    { $row['class_fee'] = json_decode($row['class_fee']); 
+      $class_id[] = $row['id'];
+      $rows[] = $row;
+    }
+      $id = implode(',', $class_id);
+      $where = "WHERE `student_id` = '$student_id' AND `id` NOT IN ($id)";
+      //echo $where;die;
+      $demo_data = $this->fetch_demoClassList($where);
+      if($demo_data != 0)
+      {
+      return array_merge($demo_data,$rows);
+      }else
+      {
+      return $rows;
+      }
+        //     for ($i=0; $i <$num ; $i++) 
+        //     {
+        //     $row=mysql_fetch_assoc($query);
+        //     $userid       =   $row['userid'];
+        //     $duedate = $this->class_fee_date($student_id,$row['classid']);
+        //     if($duedate == '-100')
+        //     {
+        //       $paydate = $duedate;
+        //     }
+        //     else if($duedate > $row['payment_plan'])
+        //       {
+        //         $paydate = $duedate;
+        //       }
+        //       else
+        //       {
+        //         $paydate = 0;
+        //       }
+        //        $row1        =   $this->userdata($userid); 
+        //        if ($row1 !=0) 
+        //        {
+        //           $row['user_image']       = $row1['user_image'];
+        //           $row['name']             = $row1['name'];
+        //           $row['due_date']         = $paydate;
+        //        }
+        //        else
+        //        {
+        //         $row['user_image']       = "No Image";
                 
-               }
+        //        }
              
                
 
-              $row1           =  $this->rating($userid);
-              if ($row1['rating'] !=null)
-              {
-                $row['rating']       = (float)$row1['rating'];
-              }
-              else
-              {
-                $row['rating']   = 0;
-              }
-              $row['class_fee']   = json_decode($row['class_fee']);
-              $data[]   = $row ;
+        //       $row1           =  $this->rating($userid);
+        //       if ($row1['rating'] !=null)
+        //       {
+        //         $row['rating']       = (float)$row1['rating'];
+        //       }
+        //       else
+        //       {
+        //         $row['rating']   = 0;
+        //       }
+        //       $row['class_fee']   = json_decode($row['class_fee']);
+        //       $data[]   = $row ;
               
-           }
-        return $data;
+        //    }
+        // return $data;
+
+  }else
+  {
+    return 0;
   }
 }
 
@@ -1858,7 +1877,7 @@ public function join_class_usingCode($item)
   {
   $data = $item->user_info;
   }
-  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 1 WHERE `status` = 0 AND `student_code`='$code'");
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`=CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 2 WHERE `status` = 0 AND `student_code`='$code'");
   if(mysql_affected_rows() == 1)
   {
     
@@ -1871,11 +1890,12 @@ public function join_class_usingCode($item)
 }
 
 public function create_demo_request($data)
-{ 
+{ $class_code = $data->coach_id.$data->classid.rand(100,1000);
   $demo_code = $data->classid.$data->athlete_id;
   $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`, `demo_code`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time', '$demo_code')");
   if($query)
   {
+    $this->add_athlete_for_demo($data);
     return 1;
   }
   else
@@ -1886,10 +1906,11 @@ public function create_demo_request($data)
 
 public function fetch_demoRequestlist($coach_id,$class_id)
 {
-  $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` ,`us`.`prof_id`,`us`.`sport` ,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id'");
+  $query = mysql_query("SELECT `us`.`name`,`us`.`email`,`us`.`contact_no`,`us`.`gender`,`us`.`dob` ,`us`.`user_image`, `us`.`location`,`us`.`device_id` ,`us`.`prof_id`,`us`.`sport` ,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `user` AS us ON `ad`.`athlete_id` = `us`.`userid` WHERE `ad`.`coach_id` = '$coach_id' AND `ad`.`class_id` = '$class_id' AND `ad`.`demo_status` <> '-1' ");
   if(mysql_num_rows($query)> 0)
   {
   while ($row = mysql_fetch_assoc($query)) {
+    
     $rows[] = $row;
   }
   return $rows;
@@ -1903,14 +1924,14 @@ public function fetch_demoRequestlist($coach_id,$class_id)
 }
 
 
-public function fetch_demoClassList($athlete_id)
+public function fetch_demoClassList($where)
 {
-
-  $query = mysql_query("SELECT `cc`.`class_title`,`cc`.`class_start_timing`,`cc`.`class_end_timing`,`cc`.`class_start_date`,`cc`.`class_fee` ,`cc`.`venue`, `cc`.`location`,`cc`.`days` , `ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `gs_coach_class` AS cc ON `cc`.`id` = `ad`.`class_id` WHERE `ad`.`athlete_id` = '$athlete_id' AND `ad`.`athlete_id` NOT IN (SELECT `student_id` FROM `gs_class_data` WHERE `student_id` = '$athlete_id' AND `classid` = `ad`.`class_id` AND `status` = 1)");
+  $query = mysql_query("SELECT `cc`.*,`ad`.* FROM `gs_athlete_demo` AS ad LEFT JOIN `gs_coach_class` AS cc ON `cc`.`id` = `ad`.`class_id` WHERE `ad`.`athlete_id` = '122' AND `ad`.`athlete_id` NOT IN (SELECT `student_id` FROM `gs_class_data` ".$where.")");
   if(mysql_num_rows($query)> 0)
   {
   while ($row = mysql_fetch_assoc($query)) {
     $row['class_fee'] = json_decode($row['class_fee']); 
+    $row['status']= 0;
     $rows[] = $row;
   }
   return $rows;
@@ -1922,7 +1943,21 @@ public function fetch_demoClassList($athlete_id)
 
 
 }
-
+public function remove_demo_request($demo_code)
+{
+  $query = mysql_query("UPDATE `gs_athlete_demo` SET `demo_status` = '-1' WHERE `demo_code` = '$demo_code'");
+  if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
+}
+// public function add_athlete_via_demo($data)
+// {
+//   $query =mysql_query("INSERT INTO `gs_class_data`(`id`, `classid`, `student_id`, `student_name`, `student_dob`, `location`, `gender`, `height`, `waight`, `joining_date`, `fees`, `paid`, `date_added`, `mode_of_payment`, `transaction_id`, `payment_id`, `remark`, `coach_id`, `student_code`, `phone`, `email`, `status`, `demo_code`, `payment_plan`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14],[value-15],[value-16],[value-17],[value-18],[value-19],[value-20],[value-21],[value-22],[value-23],[value-24])");
+// }
 
 
 } // End Class

@@ -11,7 +11,8 @@ $name        = $data->name;
 //$status      = $data->status;
 $date        =  date('Y-m-d');
 $day         =  strtolower(date("l"));
-  $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date') ");
+
+  $query = mysql_query("INSERT INTO `gs_diet_plan`(`id`,`userid`,`userType`, `my_diet_plan`,`start_date`,`end_date` , `date_created`, `date_updated`) VALUES ('0','$userid','$usertype','$userdata','$start_date', '$end_date',CURDATE(),CURDATE()) ");
 
 if($query)
 {
@@ -34,21 +35,19 @@ if($query)
 }  // End Function 
 
 
+/*
 
+Funation to activate the diet plan
+
+*/
 public function active_plan($athelete_id,$diet_id,$status)
 {
-if ($status==1)
-{
- $query =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`,`assign_status`) VALUES('0','0',$athelete_id,'$diet_id',CURDATE(),$status) ");
+ $assign_id = $athelete_id.$diet_id;
+ $query =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`,`assign_status`) VALUES('$assign_id','0',$athelete_id,'$diet_id',CURDATE(),$status) ON DUPLICATE KEY UPDATE `assign_status` = '$status'");
   if($query) 
   {
     return 1;
   }
-  else
-  {
-      return 0 ;
-  }
-}
 else
 {
  return 0;
@@ -58,33 +57,52 @@ else
 
 
 
+public function follow_coach_dietplan($data)
+{
+  $assign_id = $data->athelete_id.$data->diet_id;
+  $query  = mysql_query("UPDATE `gs_assign_diet_plan` SET `assign_status` = '$data->status' WHERE `assign_id` = '$assign_id'");
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 
-// public function show_plan($athlete_id)
-// {
-//   $query = mysql_query("SELECT *FROM `gs_assign_diet_plan` WHERE `athlete_id`='$athlete_id'");
-//   $row  = mysql_fetch_assoc($query);
-//   $diet_id  =  $row['diet_id'];
-//   $query1=mysql_query("SELECT *FROM `gs_diet_plan` WHERE  `userid`='$athlete_id'  OR `id` IN ($diet_id) ");
-// while ($row1  = mysql_fetch_assoc($query1)) 
-// {
-// $diet_id1  =  $row1['id'];
-// if($diet_id ==$diet_id1)
-// {
-//   $row1['status']='1';
-// }
-// else
-// {
-//   $row1['status']='0';
-// }
-
-//   $data[]  = $row1;
-//   }
-
-//   return $data;
+}
 
 
 
-// }
+// public function remove_active_diet_plan()
+// {}
+
+// // public function show_plan($athlete_id)
+// // {
+// //   $query = mysql_query("SELECT *FROM `gs_assign_diet_plan` WHERE `athlete_id`='$athlete_id'");
+// //   $row  = mysql_fetch_assoc($query);
+// //   $diet_id  =  $row['diet_id'];
+// //   $query1=mysql_query("SELECT *FROM `gs_diet_plan` WHERE  `userid`='$athlete_id'  OR `id` IN ($diet_id) ");
+// // while ($row1  = mysql_fetch_assoc($query1)) 
+// // {
+// // $diet_id1  =  $row1['id'];
+// // if($diet_id ==$diet_id1)
+// // {
+// //   $row1['status']='1';
+// // }
+// // else
+// // {
+// //   $row1['status']='0';
+// // }
+
+// //   $data[]  = $row1;
+// //   }
+
+// //   return $data;
+
+
+
+// // }
 
 
 
@@ -121,29 +139,27 @@ else
 
 
 public function show_plan($athlete_id)
-{  $query = mysql_query("SELECT `id` , `userType` AS status FROM `gs_diet_plan` WHERE `userid` = '$athlete_id' AND `id` NOT IN (SELECT `diet_id` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id')UNION SELECT `diet_id` , `assign_status` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id' ");
- if(mysql_num_rows($query)>0)
- {
-    while($row = mysql_fetch_assoc($query))
-     {
-      $id = $row['id'];
-      $status = $row['status'];
-      $list = $this->getListing($id,$status);
-      if($list != 0)
-      {
-      $data[] = $list;
-      }
-     }
- 
- return $data;
-}
-else
-{
-  return 0;
-}
-
-
-
+{  
+  $query = mysql_query("SELECT `id` , `userType` AS status FROM `gs_diet_plan` WHERE `userid` = '$athlete_id' AND `id` NOT IN (SELECT `diet_id` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id')UNION SELECT `diet_id` , `assign_status` FROM `gs_assign_diet_plan` WHERE `athlete_id` = '$athlete_id' ");
+   if(mysql_num_rows($query)>0)
+   {
+      while($row = mysql_fetch_assoc($query))
+       {
+        $id = $row['id'];
+        $status = $row['status'];
+        $list = $this->getListing($id,$status);
+        if($list != 0)
+        {
+        $data[] = $list;
+        }
+       }
+   
+   return $data;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 
@@ -155,7 +171,7 @@ public function edit_plan($id,$my_diet_plan)
   $status      = $data->status;
   $start_date  = $data->start_date;
   $end_date    = $data->end_date;
-  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`plan_status`='$status',`start_date`='$start_date',`end_date`='$end_date' WHERE `id` ='$id' ");
+  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`plan_status`='$status',`start_date`='$start_date',`end_date`='$end_date' `date_updated` = CURDATE() WHERE `id` ='$id' ");
   $num = mysql_affected_rows();
   if($num)
   {
@@ -276,8 +292,6 @@ else
 }
 
 }
-
-
 
 
 public function find_asign_id($athelete_id,$message_data,$coach_name,$diet_id)
