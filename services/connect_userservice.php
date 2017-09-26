@@ -1222,7 +1222,7 @@ public function coach_log_list($coachid)
 
 public function studentschedulelist($userid , $schedule_id)
 {
- $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid' AND `gs_class_data`.`student_id` NOT IN (SELECT `userid` FROM `gs_athletes_schedule` WHERE `schedule_id` = '$schedule_id')");
+ $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE `gs_coach_class`.`userid` = '$userid' AND `gs_class_data`.`student_id` NOT IN (SELECT `athlete_id` FROM `gs_schedule_assign` WHERE `schedule_id` = '$schedule_id')");
  
   $num = mysql_num_rows($query);
   if ($num)
