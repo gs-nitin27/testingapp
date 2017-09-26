@@ -57,15 +57,20 @@ public function assign_log($data)
 
 public function log_diet()
 {
-$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE CURDATE() between `start_date` and `end_date` AND `plan_status`='1' ");
-	$num = mysql_num_rows($query);
+$select_id = mysql_query("SELECT  `athlete_id` FROM `gs_assign_diet_plan` WHERE `assign_status` = '1' ");
+while ($row = mysql_fetch_assoc($select_id)) {
+$data [] = implode(',', $row);
+}
+$total_id  =  implode(',', $data);
+$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `userid` IN ($total_id)");
+$num = mysql_num_rows($query);
 if($num)
 {
 		while($row = mysql_fetch_assoc($query))
 		{
 			$id_diet 	 = $row['id'];
 			$userid  	 = $row['userid'];
-			$status   	 = $row['status'];
+			//$status   	 = $row['status'];
 			$usertype 	 = $row['userType'];
 			$data        = json_decode($row['my_diet_plan']);
 			$start_date  = $data->start_date;
@@ -81,8 +86,11 @@ if($num)
 			$get_id 	 = $req ->getdeviceid($userid);
 			$device_id   = $get_id['device_id'];
 			$message_data  = json_decode($log_data1);
-            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`,`status`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE(),'$status') ");
+
+            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
+
             $log_id = mysql_insert_id();
+
  $message      = array('message'=>array('my_diet_plan'=>$message_data,'id'=>$log_id),'title'=>$name,'indicator'=>8);
 $jsondata      =   json_encode($message);
 $pushnote      =   $pushobj->sendLitePushNotificationToGCM($device_id, $jsondata);

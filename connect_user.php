@@ -127,30 +127,18 @@ if($_REQUEST['act'] == 'connect')
  $usertype       =  @$_REQUEST['usertype'];
  $request        =  new connect_userservice();
  $response       =  $request->getConnectedUser($userid,$usertype);
-  $response       =  $request->getConnectedStatus($response,$userid,$usertype);
-  if($response)
-
+ $response       =  $request->getConnectedStatus($response,$userid,$usertype);
+if($response)
   {
-
-             $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
-
+            $Result = array('status' => '1','data'=>$response ,'msg'=>'All Connected user');
              echo json_encode($Result);
-
-   }
-
-   else 
+  }
+  else 
    {                       
-
-          $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connected');
-
+         $Result = array('status' => '0','data'=>$response ,'msg'=>'User is Not Connected');
           echo json_encode($Result);
-
    } 
 }
-
-
-
-
 
 /********************************Get All Requested Users************************/
 
@@ -826,52 +814,29 @@ else if ($_REQUEST['act'] == 'coach_log_student_list')
 {
 
       $data = json_decode($_POST['data']);
-
       $req = new  connect_userservice();
-
       if($data->indicator == 'studentlist')
-
       {
          $studentlist = $req->studentlist($data->userid,$data->logid);
-
-          if($studentlist)
-
-          {
-
+         if($studentlist)
+         {
             $result = array('status' =>1 , 'data' =>$studentlist);
-
             echo json_encode($result);
-
          }
-
-          else
-
-             {
-
-              $result =  array('status' =>0  ,'data' => []);
-
-              echo json_encode($result);
-
-             }
-
+         else
+         {
+            $result =  array('status' =>0  ,'data' => []);
+            echo json_encode($result);
+         }
       }
-
       else if($data->indicator == 'class')
-
       {
-
         $res = $req->getClass($data->userid);
-
         $result = array('status' =>1 , 'data' =>$res);
-
         echo json_encode($result); 
-
       }
-
       else if($data->indicator == 'gender')
-
       {
-
         $studentlist = $req->studentlistgender($data->userid,$data->parameter,$data->logid);
 
         if($studentlist){
@@ -1461,7 +1426,20 @@ else if($_REQUEST['act'] == 'remove_demo_athlete')
   echo json_encode($resp);
 }
 
-
+else if($_REQUEST['act'] == 'decline_coachclass_offer')
+{
+  $data = json_decode(file_get_contents("php://input"));
+  $obj = new connect_userservice();
+  $req = $obj->decline_joinclass_offer($data);
+  if($req != 0)
+  {
+    $resp = array('status' => $req , 'msg'=>'Success' );
+  }else
+  {
+    $resp = array('status'=>$req,'msg'=>'Failure');
+  }
+  echo json_encode($resp);
+}
 
 
 ?>

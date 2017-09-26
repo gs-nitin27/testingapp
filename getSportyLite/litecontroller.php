@@ -847,9 +847,8 @@ echo json_encode($data);
 
 else if($_REQUEST['act'] == "event_and_tour_api")
 {
- $where      = " `publish` = '1' ORDER BY `dateCreated` DESC ";
 $req         = new liteservice();
-$res          = $req->get_Event__tour_Data($where);
+$res          = $req->get_Event__tour_Data();
 if($res != 0)
 {
  $data = array('data'=>$res,'status'=>'1');
