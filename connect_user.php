@@ -784,17 +784,31 @@ if($response)
 
 else if($_REQUEST['act'] == 'coach_schedule_student_list')
 {
-
-      $data = json_decode($_POST['data']);
-      
+      $data = json_decode($_POST['data']);     
       $req = new  connect_userservice();
-
-         $studentlist = $req->studentschedulelist($data->userid,$data->schedule_id);
-          if($studentlist)
+      $studentlist = $req->studentschedulelist($data->userid,$data->schedule_id);
+        if($studentlist)
           {
-
             $result = array('status' =>1 , 'data' =>$studentlist);
+            echo json_encode($result);
+         }
+        else
+          {
+              $result =  array('status' =>0  ,'data' => []);
+              echo json_encode($result);
+          }
+    
+}
 
+
+else if($_REQUEST['act'] == 'view_schedule_assign_list')
+{
+      $data = json_decode($_POST['data']);     
+      $req = new  connect_userservice();
+      $studentlist = $req->view_schedule_assign($data->userid,$data->schedule_id);
+        if($studentlist)
+          {
+            $result = array('status' =>1 , 'data' =>$studentlist);
             echo json_encode($result);
          }
         else
