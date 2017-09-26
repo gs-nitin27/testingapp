@@ -1985,6 +1985,14 @@ public function add_athlete_feedback($data)
   }
 }
 
+public function create_memo($data)
+{
+
+$query = mysql_query("");
+
+
+}
+
 
 } // End Class
 
