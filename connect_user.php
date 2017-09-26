@@ -157,15 +157,10 @@ if($_REQUEST['act'] == 'connect')
 
 
  else if($_REQUEST['act'] == 'get_requested_users')
-
  { 
-
  $userid         =  @$_REQUEST['userid'];
-
  $usertype       =  @$_REQUEST['usertype'];
-
  $request        =  new connect_userservice();
-
  $response       =  $request->getRequestedUser($userid,$usertype);
 
    if($response)
@@ -675,11 +670,8 @@ else if($_REQUEST['act'] == 'get_paidclasslisting')
   if($response)
 
      {     
-
                $Result = array('status'=>'1','data'=>$response ,'msg'=>'Get Paid Listing');
-
                echo json_encode($Result);
-
      }
 
      else
@@ -802,10 +794,35 @@ if($response)
 
 /****************************For  Log list filters   **********************************/
 
+else if($_REQUEST['act'] == 'coach_schedule_student_list')
+{
+
+      $data = json_decode($_POST['data']);
+      
+      $req = new  connect_userservice();
+
+         $studentlist = $req->studentschedulelist($data->userid,$data->schedule_id);
+          if($studentlist)
+          {
+
+            $result = array('status' =>1 , 'data' =>$studentlist);
+
+            echo json_encode($result);
+         }
+        else
+          {
+              $result =  array('status' =>0  ,'data' => []);
+              echo json_encode($result);
+          }
+    
+}
+
+//--------------------------------------------------
+
+
 
 
 else if ($_REQUEST['act'] == 'coach_log_student_list')
-
 {
 
       $data = json_decode($_POST['data']);
