@@ -30,9 +30,9 @@ class connect_userservice
 
      {
 
-     	$data =mysql_insert_id();
+      $data =mysql_insert_id();
 
-     	return $data;
+      return $data;
 
 
 
@@ -43,9 +43,9 @@ class connect_userservice
 
      {
 
-     	
+      
 
-     	  return 0 ;
+        return 0 ;
 
 
 
@@ -71,7 +71,7 @@ class connect_userservice
 
      {
 
-     	return 1;
+      return 1;
 
      }
 
@@ -79,7 +79,7 @@ class connect_userservice
 
      {
 
-     	return 2;
+      return 2;
 
      }
 
@@ -119,11 +119,11 @@ class connect_userservice
 
   if($query)
     {
-  	return 1;
+    return 1;
     }
  else
    {
-  	return 0;
+    return 0;
    }
 }
 
@@ -145,7 +145,7 @@ public function bulk_alerts_save($data)
 
  {
 
-   $query = mysql_query("SELECT `lite_user_id` ,`prof_user_id`  FROM `gs_connect` WHERE 	`id`= '$id'");
+   $query = mysql_query("SELECT `lite_user_id` ,`prof_user_id`  FROM `gs_connect` WHERE   `id`= '$id'");
 
    $row = mysql_num_rows($query);
 
@@ -181,23 +181,23 @@ public function updateseennotification($id)
 
 
 
-	$query = mysql_query("UPDATE `gs_alerts` SET `seen` = 1  WHERE `id` = '$id'");
+  $query = mysql_query("UPDATE `gs_alerts` SET `seen` = 1  WHERE `id` = '$id'");
 
-	if($query)
+  if($query)
 
-	{
+  {
 
-		return 1 ;
+    return 1 ;
 
-	}
+  }
 
-	else
+  else
 
-	{
+  {
 
-		return 0;
+    return 0;
 
-	}
+  }
 
  }
 
@@ -1246,7 +1246,7 @@ public function studentschedulelist($userid , $schedule_id)
 }
 
 
-public function view_schedule_assign($userid,$log_id)
+public function view_schedule_assign($userid,$schedule_id)
 {
  $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id`  IN (SELECT `athlete_id` FROM `gs_schedule_assign` WHERE `schedule_id` = '$schedule_id') ");
  $num = mysql_num_rows($query);
@@ -2019,6 +2019,14 @@ public function add_athlete_feedback($data)
   {
     return 0;
   }
+}
+
+public function create_memo($data)
+{
+
+$query = mysql_query("");
+
+
 }
 
 

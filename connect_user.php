@@ -190,11 +190,11 @@ else if($_REQUEST['act'] == 'get_organized_classes')
  $response       =  $request->getClassList($userid);
  if ($response)
  {
- 	if (!empty($student_id))
- 	{
- 		$response       =  $request->getClassJoinStudent($response, $student_id);
- 	}
-	 	$Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
+  if (!empty($student_id))
+  {
+    $response       =  $request->getClassJoinStudent($response, $student_id);
+  }
+    $Result = array('status' => '1','data'=>$response ,'msg'=>'Yes available class ');
         echo json_encode($Result);
  }
 else
@@ -803,8 +803,9 @@ else if($_REQUEST['act'] == 'coach_schedule_student_list')
 
 else if($_REQUEST['act'] == 'view_schedule_assign_list')
 {
-      $data = json_decode($_POST['data']);     
+      $data = json_decode($_REQUEST['data']);     
       $req = new  connect_userservice();
+
       $studentlist = $req->view_schedule_assign($data->userid,$data->schedule_id);
         if($studentlist)
           {
@@ -1457,12 +1458,3 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
 
 
 ?>
-
-
-
-
-
-
-
-
-
