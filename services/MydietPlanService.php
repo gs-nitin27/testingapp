@@ -168,22 +168,13 @@ public function edit_plan($id,$my_diet_plan)
 {
 
   $data        = json_decode($my_diet_plan);
-  $status      = $data->status;
   $start_date  = $data->start_date;
   $end_date    = $data->end_date;
-  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`plan_status`='$status',`start_date`='$start_date',`end_date`='$end_date' `date_updated` = CURDATE() WHERE `id` ='$id' ");
+  $query  = mysql_query("UPDATE `gs_diet_plan` SET `my_diet_plan`='$my_diet_plan',`start_date`='$start_date',`end_date`='$end_date', `date_updated` = CURDATE() WHERE `id` ='$id' ");
   $num = mysql_affected_rows();
   if($num)
   {
-
- // if($status==1)
- //  {
- //    $req    =  new ConfigService();
- //   $res =   $req->log_diet();
- //  }
-
-   return 1;
-
+  return 1;
   }
   else 
   {
