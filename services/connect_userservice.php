@@ -557,14 +557,9 @@ public function get_schedule_Class($userid,$schedule_id)
  
   $count = mysql_num_rows($query);
   $total_assign_schedule = $this->total_assign_schedule($userid,$schedule_id);
-  if($total_assign_schedule)
-  {
-    $total = $total_assign_schedule; 
-  }
-  else
-  {
-    $total = 0;
-  }
+
+    
+
   if($count  > 0)
   {  
 
@@ -572,6 +567,8 @@ public function get_schedule_Class($userid,$schedule_id)
     {
         $row['class_fee'] = json_decode($row['class_fee']);
 
+
+        $total_athlete = $this->total_athlete($row['id'])   
          // if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
          //  {  // echo $row['class_end_date'];
          //  $to = strtotime($row['today']); // or your date as well
@@ -587,8 +584,8 @@ public function get_schedule_Class($userid,$schedule_id)
          // {
 
             
-           $row['total_athlete'] = $count;
-           $row['total_assing'] = $total;
+           $row['total_athlete'] = $total_athlete;
+           $row['total_assing'] =  $total_assign_schedule; 
          // }
            $rows[] = $row; 
         
@@ -605,6 +602,14 @@ public function get_schedule_Class($userid,$schedule_id)
 }
 
 
+public function total_athlete($classid)
+{
+  $query = mysql_query("SELECT `id` FROM `gs_class_data` WHERE `classid` ='$classid'");
+
+  $data = mysql_num_rows($query);
+  return $data;
+
+}
 
 
 public function total_assign_schedule($coach_id,$schedule_id)
