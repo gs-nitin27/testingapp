@@ -19,7 +19,7 @@ if($_REQUEST['act'] == 'connect')
     if ($response)
     {
       $userresponse = array('status' =>0 , 'msg' => 'already connected');
-       echo json_encode($userresponse);
+      echo json_encode($userresponse);
     }
     else
     {
@@ -164,11 +164,8 @@ if($response)
    else
 
    {                     
-
           $Result = array('status' => '0','data'=>$response ,'msg'=>'No User is Connected');
-
           echo json_encode($Result);
-
    } 
 
 }
@@ -206,7 +203,8 @@ else
 
 
 /******************* Display Class Information Created By Coach*************/
-  else if($_REQUEST['act'] == 'get_classes_info')
+
+else if($_REQUEST['act'] == 'get_classes_info')
  {
  $class_id         =  @$_REQUEST['class_id'];
  $student_id       =  $_REQUEST['student_userid'];
@@ -1280,6 +1278,27 @@ else if ($_REQUEST['act'] == 'create_schedule')
         echo json_encode($response);
       }
   }  
+
+/*****************************Unassign Sechedule***************************/
+
+else if($_REQUEST['act'] == 'schedule_unassign')
+{
+  $data               =  json_decode(file_get_contents("php://input"));
+  $req                =  new connect_userservice();
+  $res                =  $req->schedule_unassign($data);
+  if($res=='1')
+  {
+  $status = "1";
+  $message = "Success";
+  }
+  else
+  {
+  $status = "0";  
+  $message = "Failure";  
+  }
+  $response = array('status' => $status,'data'=>$res,'msg'=>$message );
+  echo json_encode($response);
+}
 
 
 

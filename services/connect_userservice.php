@@ -1866,7 +1866,23 @@ $query = mysql_query($string);
 
 
 
+/*****************************Schedule Unassign*****************************/
+
+public function schedule_unassign($data)
+{
+$query   = mysql_query("DELETE FROM `gs_schedule_assign` WHERE `schedule_id`='$data->schedule_id' AND `athlete_id` IN ($data->student_id_list)")  ;
+if($query) 
+{
+   return 1;
+}
+else
+{
+   return 0;
+}
+}
+
 /*****************************Log Unassign*****************************/
+
 
 public function log_unassign($data)
 {
