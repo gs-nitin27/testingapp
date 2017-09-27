@@ -57,25 +57,29 @@ public function assign_log($data)
 
 public function log_diet()
 {
-$select_id = mysql_query("SELECT  `athlete_id` FROM `gs_assign_diet_plan` WHERE `assign_status` = '1' ");
+$select_id = mysql_query("SELECT  `diet_id` FROM `gs_assign_diet_plan` WHERE `assign_status` = '1' ");
 while ($row = mysql_fetch_assoc($select_id)) {
 $data [] = implode(',', $row);
 }
 $total_id  =  implode(',', $data);
-$query  = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `userid` IN ($total_id)");
+
+$query         = mysql_query("SELECT * FROM `gs_diet_plan` WHERE `id` IN ($total_id) AND start_date " );
 $num = mysql_num_rows($query);
 if($num)
 {
-		while($row = mysql_fetch_assoc($query))
+	 while($row = mysql_fetch_assoc($query))
 		{
+
 			$id_diet 	 = $row['id'];
 			$userid  	 = $row['userid'];
-			//$status   	 = $row['status'];
 			$usertype 	 = $row['userType'];
 			$data        = json_decode($row['my_diet_plan']);
 			$start_date  = $data->start_date;
 			$end_date    = $data->end_date;
-			$name        = $data->name;
+			$date        =  date('Y-m-d');
+			if ($start_date <= $date && $date <= $end_date) 
+			{
+  			$name        = $data->name;
 			$date        =  date('Y-m-d');
 			$day         =  strtolower(date("l"));
 			$value       = $data->diet_food->$day;
@@ -86,25 +90,32 @@ if($num)
 			$get_id 	 = $req ->getdeviceid($userid);
 			$device_id   = $get_id['device_id'];
 			$message_data  = json_decode($log_data1);
-
-            mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
-
+           mysql_query("INSERT INTO `gs_diet_log`(`id`,`userid`,`userType`,`id_diet`,`my_diet_plan`,`assign_date`) VALUES('0','$userid','$usertype','$id_diet','$log_data1',CURDATE()) ");
             $log_id = mysql_insert_id();
-
  $message      = array('message'=>array('my_diet_plan'=>$message_data,'id'=>$log_id),'title'=>$name,'indicator'=>8);
 $jsondata      =   json_encode($message);
 $pushnote      =   $pushobj->sendLitePushNotificationToGCM($device_id, $jsondata);
 
-		}
-			return 1;
-		
-		}
-		else
-		{
-			return 0;
-		}
-
+      }
+else
+{
+      return 0;
 }
+  }
+
+	return 1;
+
+  }
+
+  else
+  {
+  	return 0;
+  }
+
+
+
+
+}  // End Function
 
 
 

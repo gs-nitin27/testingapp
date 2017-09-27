@@ -599,7 +599,7 @@ public function total_assign_schedule($coach_id,$schedule_id)
 {
   $query = mysql_query("SELECT `id` FROM `gs_schedule_assign` WHERE `coach_id`='$coach_id' AND `schedule_id`='$schedule_id'");
   
-  $data =  mysql_num_rows($query)
+  $data =  mysql_num_rows($query);
 
 return $data;
 
