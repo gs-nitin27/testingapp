@@ -1886,6 +1886,7 @@ public function add_athlete($data,$student_code)
   $query = mysql_query("INSERT INTO `gs_class_data` (`classid`,`student_name`,`student_code`,`date_added`,`phone`,`email`,`coach_id`,`status`,`demo_code`)VALUES('$data->classid','$data->student_name','$student_code',CURDATE(),'$data->phone','$data->email','$data->coach_id','0','$data->demo_code')");
   if($query)
   { 
+    $this->add_payement_record($data,$student_code);
     return 1;  
   }
   else
@@ -1893,7 +1894,6 @@ public function add_athlete($data,$student_code)
     return 0;
   }
 }
-
 public function checkExistingStudent($item)
 {
   $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `classid` = '$item->classid' AND `student_name` = '$item->student_name' AND (`phone` = '$item->phone' || `email` = '$item->email')");
@@ -2021,13 +2021,25 @@ public function add_athlete_feedback($data)
   }
 }
 
-public function create_memo($data)
+public function add_payement_record($data,$student_code)
 {
-
-$query = mysql_query("");
-
+  $feedata = $data->athlete_info->fee_plan;
+  $keys = split("/", $feedata);
+  $total_fee = $keys[1];
+  $feeamountpaid = $data->athlete_info->fee_amount;
+  $paid = $data->athlete_info->fee_paid; 
+  $query = mysql_query("INSERT INTO `gs_fee_memo`(`class_id`, `athlete_class_id`, `fee_amount`,`fee_amount_paid` ,`coach_id`, `memo_date`, `status`) VALUES ('$data->classid','$student_code','$total_fee','$feeamountpaid','$data->coach_id',CURDATE(),'$paid')");
+  if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
 
 }
+
+
 
 
 } // End Class

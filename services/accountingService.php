@@ -50,20 +50,37 @@ public function getClassFeeList($classid,$student_id)
 
 public function ViewClassData($classid,$student_id)
 {
-  $query = mysql_query("SELECT gs_coach_class.* , gs_class_data.*  FROM `gs_coach_class`  JOIN  gs_class_data ON`gs_class_data`.`classid`=`gs_coach_class`.id  WHERE `student_id` = '$student_id' AND `classid` = '$classid' ");
-  if(mysql_num_rows($query))
+    $query = mysql_query("SELECT gs_coach_class.* , gs_class_data.*  FROM `gs_coach_class`  JOIN  gs_class_data ON`gs_class_data`.`classid`=`gs_coach_class`.id  WHERE `student_id` = '$student_id' AND `classid` = '$classid' ");
+    if(mysql_num_rows($query))
+    {
+    	while( $row = mysql_fetch_assoc($query)) 
+    	{
+    		$data = $row;
+    	}
+    	return $data;
+    }else
+    {
+    	return 0;
+    }
+}
+
+public function getAllMemoRecords($athlete_id)
+{
+
+  $query = mysql_query("SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_id` = '$athlete_id' GROUP BY `athlete_class_id`");
+  if(mysql_num_rows($query)>0)
   {
-  	while( $row = mysql_fetch_assoc($query)) 
-  	{
-  		$data = $row;
-  	}
-  	return $data;
-  }else
+  while($row = mysql_fetch_assoc($query))
   {
-  	return 0;
+    $rows[] = $row;
+  }
+  }
+  else
+  {
+    return 0;
   }
 
-
 }
+
 }
 ?>
