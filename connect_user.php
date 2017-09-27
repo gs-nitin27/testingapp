@@ -516,13 +516,7 @@ Student Id and Result is display all Class Information
 */
 
 
-
 /*************************Get Join Student Information *******************************/
-
-
-
-
-
  else if($_REQUEST['act'] == 'class_info' ) 
 { 
  $student_id           =  $_REQUEST['userid'];
@@ -541,21 +535,12 @@ Student Id and Result is display all Class Information
               $Result = array('status' => '0','data'=>$response ,'msg'=>'No Class Information');
               echo json_encode($Result);
    } 
-
 }
-
-
-
-
-
-
-
 // This Act are used to view all class created By User
 
 
 
 /*********************************************************************/
-
 else if($_REQUEST['act'] == 'get_schedule_Class')
 { 
 $userid           =  $_REQUEST['userid'];
@@ -572,19 +557,15 @@ $response       =  $request->get_schedule_Class($userid,$schedule_id);
           $Result = array('status' => '0','data'=>$response ,'msg'=>'Not any Class');
           echo json_encode($Result);
    } 
-
 }
 
 /*********************************View All Class************************/
 
-
-
 else if($_REQUEST['act'] == 'view_class')
 { 
 $userid           =  $_REQUEST['userid'];
-$schedule_id      =  $_REQUEST['schedule_id']; 
 $request        =  new connect_userservice();
-$response       =  $request->getClass($userid,$schedule_id);
+$response       =  $request->getClass($userid);
   if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Class ');
