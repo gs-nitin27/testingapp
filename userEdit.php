@@ -57,7 +57,7 @@ else if($_REQUEST['act'] == 'getUserProfile')
 $userid         =  @$_REQUEST['userid'];
 $prof_id        =  @$_REQUEST['prof_id'];
 $req            =  new UserProfileService();
-$user_res       = $req->userdata($userid);
+$user_res       =  $req->userdata($userid);
 
 if($user_res==0)
 {
@@ -70,7 +70,6 @@ else
   {
        $req            = new UserProfileService();
        $res            = $req->listuserdata($userid);
-       //print_r($res) ;die();
                if($res == 0)
                {
                     if($prof_id==1) 

@@ -12,12 +12,13 @@
 public function userVarify($where)
 {
 
-//echo "SELECT `userid`, `name`, `prof_id` FROM `user` ".$where;die();
 $query  = $query  = mysql_query("SELECT *FROM `user` $where");
+
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
 {
+  unset($row['password']);
 $data = $row;
 }
 return $data;
@@ -27,6 +28,10 @@ else
 return 0;
 }
 }
+
+
+
+
 
 
 
@@ -222,6 +227,7 @@ $gender             =  $data->gender;
           {
             while($row = mysql_fetch_assoc($query))
             {   
+               unset($row['password']);
                $data1= $row; 
                return $data1;
              }
@@ -326,6 +332,8 @@ if($update)
        {
           while($row = mysql_fetch_assoc($query))
           {
+
+            unset($row['password']);
             $data = $row;
           }
         return $data;
@@ -2160,16 +2168,11 @@ if(mysql_num_rows($query)>0)
 {
 while ($row = mysql_fetch_assoc($query)) 
 { 
-  $row['creations'] = "".$this->get_creations($row['userid'])."";
-  $data[] = $row;
+unset($row['password']);
+$row['creations'] = "".$this->get_creations($row['userid'])."";
+$data[] = $row;
 }
-//print_r($data);
-//if(($item->device_id != $data[0]['device_id']) || $item->device_id !=" ");
-//{
-  // $userid= $data[0]['userid'];
-   //$query = mysql_query("UPDATE `user` SET `device_id`='$item->device_id' WHERE `userid`='$userid'");
-//}
-//die;
+
 return $data;
 }
 else
