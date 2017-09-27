@@ -584,6 +584,8 @@ public function get_schedule_Class($userid,$schedule_id)
     
      $total_assign_schedule = $this->total_assign_schedule($userid,$schedule_id);
 
+     $rows['total_assing'] = $total_assign_schedule;
+
   return $rows;
   }else
   {
