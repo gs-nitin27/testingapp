@@ -554,6 +554,27 @@ Student Id and Result is display all Class Information
 
 
 
+/*********************************************************************/
+
+else if($_REQUEST['act'] == 'get_schedule_Class')
+{ 
+$userid           =  $_REQUEST['userid'];
+$schedule_id      =  $_REQUEST['schedule_id']; 
+$request        =  new connect_userservice();
+$response       =  $request->get_schedule_Class($userid,$schedule_id);
+  if($response)
+   {
+             $Result = array('status' => '1','data'=>$response ,'msg'=>'All Class ');
+             echo json_encode($Result);
+   }
+   else
+   {      $response = [];                
+          $Result = array('status' => '0','data'=>$response ,'msg'=>'Not any Class');
+          echo json_encode($Result);
+   } 
+
+}
+
 /*********************************View All Class************************/
 
 
@@ -561,8 +582,9 @@ Student Id and Result is display all Class Information
 else if($_REQUEST['act'] == 'view_class')
 { 
 $userid           =  $_REQUEST['userid'];
+$schedule_id      =  $_REQUEST['schedule_id']; 
 $request        =  new connect_userservice();
-$response       =  $request->getClass($userid);
+$response       =  $request->getClass($userid,$schedule_id);
   if($response)
    {
              $Result = array('status' => '1','data'=>$response ,'msg'=>'All Class ');
