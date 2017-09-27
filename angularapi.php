@@ -35,8 +35,6 @@ else if($_REQUEST['act']=='AthletedashboardData')
   $req = new angularapi(); 
   $res = $req->AthletedashboardData($userid);
   echo json_encode($res);
-
-
 }
 else if($_REQUEST['act'] == 'mobileVerify')
 {
@@ -62,7 +60,6 @@ else if($_REQUEST['act'] == 'OTPVerify')
 {
   $otpcode = $_REQUEST['otpcode'];
   $userid    = $_REQUEST['userid'];
-
   $req = new angularapi();
   $res = $req->OTPVerify($otpcode,$userid);
   if($res)

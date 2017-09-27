@@ -301,25 +301,26 @@ echo json_encode($user);
 
 else if($_REQUEST['act']=="manage_Login")
 {
+  
 $data1                =  json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
 $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
 $item->device_id      =  $data1->device_id;
 $device_id            =  $item->device_id;  
-$email                = $item->email ;
+$email                =  $item->email ;
 $req                  =  new userdataservice();
 $checkdeviceid        =  $req->checkdeviceid($email,$device_id);
-$req1                 = new userdataservice();
-$req3                 = $req1->manage_Login($item);
+$req1                 =  new userdataservice();
+$req3                 =  $req1->manage_Login($item);
 if($req3 != 0 )
 {
-$user = array('status' => 1, 'data'=> $req3, 'msg'=>'Updated' );
+$user = array('status' => '1' , 'data'=> $req3, 'msg'=>'Updated' );
 echo json_encode($user);
 }
 else
 {
-$user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
+$user = array('status' => '0' , 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
 

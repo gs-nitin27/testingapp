@@ -42,8 +42,20 @@ Funation to activate the diet plan
 */
 public function active_plan($athelete_id,$diet_id,$status)
 {
+
+
+
+
  $assign_id = $athelete_id.$diet_id;
  $query =  mysql_query("INSERT INTO `gs_assign_diet_plan`(`assign_id`,`coach_id`,`athlete_id`,`diet_id`,`assign_date`,`assign_status`) VALUES('$assign_id','0',$athelete_id,'$diet_id',CURDATE(),$status) ON DUPLICATE KEY UPDATE `assign_status` = '$status'");
+
+if($status==1)
+{
+ $req = new configservice();
+ $req->log_diet();
+}
+
+
   if($query) 
   {
     return 1;

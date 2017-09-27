@@ -30,9 +30,9 @@ class connect_userservice
 
      {
 
-     	$data =mysql_insert_id();
+      $data =mysql_insert_id();
 
-     	return $data;
+      return $data;
 
 
 
@@ -43,9 +43,9 @@ class connect_userservice
 
      {
 
-     	
+      
 
-     	  return 0 ;
+        return 0 ;
 
 
 
@@ -71,7 +71,7 @@ class connect_userservice
 
      {
 
-     	return 1;
+      return 1;
 
      }
 
@@ -79,7 +79,7 @@ class connect_userservice
 
      {
 
-     	return 2;
+      return 2;
 
      }
 
@@ -119,11 +119,11 @@ class connect_userservice
 
   if($query)
     {
-  	return 1;
+    return 1;
     }
  else
    {
-  	return 0;
+    return 0;
    }
 }
 
@@ -145,7 +145,7 @@ public function bulk_alerts_save($data)
 
  {
 
-   $query = mysql_query("SELECT `lite_user_id` ,`prof_user_id`  FROM `gs_connect` WHERE 	`id`= '$id'");
+   $query = mysql_query("SELECT `lite_user_id` ,`prof_user_id`  FROM `gs_connect` WHERE   `id`= '$id'");
 
    $row = mysql_num_rows($query);
 
@@ -181,23 +181,23 @@ public function updateseennotification($id)
 
 
 
-	$query = mysql_query("UPDATE `gs_alerts` SET `seen` = 1  WHERE `id` = '$id'");
+  $query = mysql_query("UPDATE `gs_alerts` SET `seen` = 1  WHERE `id` = '$id'");
 
-	if($query)
+  if($query)
 
-	{
+  {
 
-		return 1 ;
+    return 1 ;
 
-	}
+  }
 
-	else
+  else
 
-	{
+  {
 
-		return 0;
+    return 0;
 
-	}
+  }
 
  }
 
@@ -514,8 +514,10 @@ public function getClass($userid)
 {
  //$date = 'CURDATE()';
   
- $query= mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
-  if(mysql_num_rows($query) > 0)
+ $query= mysql_query("SELECT  `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
+ 
+  $count = mysql_num_rows($query);
+  if($count  > 0)
   {
     while ($row = mysql_fetch_assoc($query)) {
         $row['class_fee'] = json_decode($row['class_fee']);
@@ -545,6 +547,81 @@ public function getClass($userid)
   }
 }
 
+
+
+/********************************************************************************************/
+
+public function get_schedule_Class($userid,$schedule_id)
+{
+ $query= mysql_query("SELECT  `id`, IFNull(`userid`,'') AS userid, IFNull(`class_title`,'') AS class_title , IFNull(`classtype`,'') AS classtype ,IFNull(`description`,'') AS description,IFNull(`class_code`,'') AS class_code,IFNull(`class_start_timing`,'') AS class_start_timing,IFNull(`class_end_timing`,'') AS class_end_timing,IFNull(`class_start_date`,'') AS class_start_date,IFNull(`class_end_date`,'') AS class_end_date,IFNull(`class_host`,'') AS class_host,IFNull(`contact_no`,'') AS contact_no,IFNull(`class_fee`,'') AS class_fee,IFNull(`class_strength`,'') AS class_strength,IFNull(`venue`,'') AS venue,IFNull(`location`,'') AS location,IFNull(`date_created`,'') AS date_created,IFNull(`days`,'') AS days,IFNull(`age_group`,'') AS age_group ,IFNull(`duration`,'') AS duration ,IFNull(`class_fee`,'') AS class_fee  , CURDATE() AS today FROM `gs_coach_class` where `userid`='$userid'");
+ 
+  $count = mysql_num_rows($query);
+  $total_assign_schedule = $this->total_assign_schedule($userid,$schedule_id);
+
+    
+
+  if($count  > 0)
+  {  
+
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+        $row['class_fee'] = json_decode($row['class_fee']);
+
+
+        $total_athlete = $this->total_athlete($row['id']); 
+         // if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
+         //  {  // echo $row['class_end_date'];
+         //  $to = strtotime($row['today']); // or your date as well
+         //  $now = strtotime($row['class_end_date']);
+         //  $datediff =  $now-$to;
+         //  $datediff =  floor($datediff / (60 * 60 * 24));//die;
+         //  if($datediff > 0 || $datediff = 0)
+         //  {
+         //   $rows[] = $row; 
+         //  }
+
+         // }else
+         // {
+
+            
+           $row['total_athlete'] = $total_athlete;
+           $row['total_assing'] =  $total_assign_schedule; 
+         // }
+           $rows[] = $row; 
+        
+   }    
+
+
+  return $rows;
+
+  }else
+  {
+
+    return  0;
+  }
+}
+
+
+public function total_athlete($classid)
+{
+  $query = mysql_query("SELECT `id` FROM `gs_class_data` WHERE `classid` ='$classid'");
+
+  $data = mysql_num_rows($query);
+  return $data;
+
+}
+
+
+public function total_assign_schedule($coach_id,$schedule_id)
+{
+  $query = mysql_query("SELECT `id` FROM `gs_schedule_assign` WHERE `coach_id`='$coach_id' AND `schedule_id`='$schedule_id'");
+  
+  $data =  mysql_num_rows($query);
+
+return $data;
+
+
+}
 
 
 
@@ -1246,7 +1323,7 @@ public function studentschedulelist($userid , $schedule_id)
 }
 
 
-public function view_schedule_assign($userid,$log_id)
+public function view_schedule_assign($userid,$schedule_id)
 {
  $query = mysql_query("SELECT `gs_class_data`.* , `gs_coach_class`.`class_title` ,`user`.`user_image` FROM `gs_class_data` JOIN user ON `gs_class_data`.`student_id` = `user`.`userid`  JOIN gs_coach_class ON `gs_class_data`.`classid` = `gs_coach_class`.`id`  WHERE  `gs_coach_class`.`userid` = '$userid'  AND `gs_class_data`.`student_id`  IN (SELECT `athlete_id` FROM `gs_schedule_assign` WHERE `schedule_id` = '$schedule_id') ");
  $num = mysql_num_rows($query);
@@ -1866,7 +1943,23 @@ $query = mysql_query($string);
 
 
 
+/*****************************Schedule Unassign*****************************/
+
+public function schedule_unassign($data)
+{
+$query   = mysql_query("DELETE FROM `gs_schedule_assign` WHERE `schedule_id`='$data->schedule_id' AND `athlete_id` IN ($data->student_id_list)")  ;
+if($query) 
+{
+   return 1;
+}
+else
+{
+   return 0;
+}
+}
+
 /*****************************Log Unassign*****************************/
+
 
 public function log_unassign($data)
 {
