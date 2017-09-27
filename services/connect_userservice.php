@@ -568,7 +568,7 @@ public function get_schedule_Class($userid,$schedule_id)
         $row['class_fee'] = json_decode($row['class_fee']);
 
 
-        $total_athlete = $this->total_athlete($row['id'])   
+        $total_athlete = $this->total_athlete($row['id']); 
          // if($row['class_end_date'] != '' || $row['class_end_date'] != NULL)
          //  {  // echo $row['class_end_date'];
          //  $to = strtotime($row['today']); // or your date as well
