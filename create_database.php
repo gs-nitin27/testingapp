@@ -307,24 +307,29 @@ $item->email          =  $data1->email;
 $item->password       =  md5($data1->password);
 $item->device_id      =  $data1->device_id;
 $device_id            =  $item->device_id;  
-$email                = $item->email ;
+$email                =  $item->email ;
 $req                  =  new userdataservice();
 $checkdeviceid        =  $req->checkdeviceid($email,$device_id);
-$req1                 = new userdataservice();
-$req3                 = $req1->manage_Login($item);
+$req1                 =  new userdataservice();
+$req3                 =  $req1->manage_Login($item);
+$userid               =  $req3[0]['userid'];
+$prof_id              =  $req3[0]['prof_id'];
+$req                  =  new userdataservice();
+$profile_status       =  $req->getProfile_status($userid,$prof_id);
+$req3[0]['profile']   =  $profile_status;
 if($req3 != 0 )
 {
-$user = array('status' => 1, 'data'=> $req3, 'msg'=>'Updated' );
+$user = array('status' => '1' , 'data'=> $req3, 'msg'=>'Updated' );
 echo json_encode($user);
 }
 else
 {
-$user = array('status' => 0, 'data'=> $req3, 'msg'=>'NotUpdated' );
+$user = array('status' => '0' , 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
-
-
 } // End Function
+
+
 
 
 

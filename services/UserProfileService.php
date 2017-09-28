@@ -387,20 +387,6 @@ if($query)
 
 
 
-
-
-
-
-
-
-
-/*********************************************************/
-
-
-
-
-
-
 /************************Get the Value of Profile Status***************************/
 
 public function listuserdata($userid)

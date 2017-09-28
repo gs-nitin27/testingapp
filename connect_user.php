@@ -6,7 +6,7 @@ include('services/manageSchedulingService.php');
 include('services/inventryservice.php');
 include('services/smsOtpService.php');
 include('services/emailService.php');
-
+include('services/accountingService.php');
  
 
 if($_REQUEST['act'] == 'connect')
