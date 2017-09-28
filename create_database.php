@@ -301,7 +301,6 @@ echo json_encode($user);
 
 else if($_REQUEST['act']=="manage_Login")
 {
-  
 $data1                =  json_decode($_POST[ 'data' ]);
 $item                 =  new stdClass();
 $item->email          =  $data1->email;
@@ -313,6 +312,11 @@ $req                  =  new userdataservice();
 $checkdeviceid        =  $req->checkdeviceid($email,$device_id);
 $req1                 =  new userdataservice();
 $req3                 =  $req1->manage_Login($item);
+$userid               =  $req3[0]['userid'];
+$prof_id              =  $req3[0]['prof_id'];
+$req                  =  new userdataservice();
+$profile_status       =  $req->getProfile_status($userid,$prof_id);
+$req3[0]['profile']   =  $profile_status;
 if($req3 != 0 )
 {
 $user = array('status' => '1' , 'data'=> $req3, 'msg'=>'Updated' );
@@ -323,9 +327,9 @@ else
 $user = array('status' => '0' , 'data'=> $req3, 'msg'=>'NotUpdated' );
 echo json_encode($user);
 }
-
-
 } // End Function
+
+
 
 
 

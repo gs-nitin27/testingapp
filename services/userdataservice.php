@@ -2734,6 +2734,120 @@ public function get_creations($id)
 
 
 
+/*************************get the Profile Status************************/
+
+
+public function getProfile_status($userid,$prof_id)
+{
+$req            =  new UserProfileService();
+$user_res       =  $req->userdata($userid);
+if($user_res==0)
+{
+  $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
+  echo json_encode($user);
+  die();
+}
+
+else
+  {
+       $req            = new UserProfileService();
+       $res            = $req->listuserdata($userid);
+
+               if($res == 0)
+               {
+                    if($prof_id==1) 
+                    {
+                      $data = file_get_contents('json/Athletes.json');
+                    }
+                   else if ($prof_id==2) 
+                    {
+                      $data = file_get_contents('json/coach_profile.json');
+                    }
+                   else if ($prof_id == 13) 
+                    {
+                      $data = file_get_contents('json/other_profile.json');
+                    }
+                    else
+                    {
+                      $data = file_get_contents('json/other_profile.json');
+                    }
+               }
+                else
+                {
+                  
+                  $data = $res['user_detail'];
+
+                }
+                  $data = json_decode($data); 
+                  $count = 0;
+                  $count1 = 0; 
+                  if (is_array($data) || is_object($data))
+                  {
+                  foreach ($data as  $value) 
+                  {
+                    if (is_array($value) || is_object($value))
+                     {
+                  
+                        foreach ($value as  $value1)
+                         {
+                         if (is_array($value1) || is_object($value1))
+                         {
+                              foreach ($value1 as $value2) 
+                              {
+                                  
+                                    if (is_array($value2) || is_object($value2))
+                                     {
+
+                                      foreach ($value2 as  $value3) 
+                                      {
+                                            if($value3 != '')
+                                            {
+                                                ++$count;
+                                            }
+                                            else
+                                            {
+                                                ++$count1;
+                                  }
+                              }                          
+                           }
+                            
+                      }
+                  }
+              }
+          }
+      }
+  }
+                     $comp = ($count/($count+$count1+1))*100;
+                     $comp1=round($comp,2);
+                     //$prof_status=$comp1.''.'%';
+                    }
+      
+            $data->user = $user_res; 
+            if (is_array($data->user) || is_object($data->user))
+            {
+                foreach ($data->user as $value) 
+                {
+                  if($value != '')
+                  {
+                     ++$count;
+                   }
+                   else
+                   {
+                   ++$count1;
+                    }
+                 }    
+                    $comp = ($count/($count+$count1+1))*100;
+                     $comp2=round($comp,2);
+                    // $user_status=$comp1.''.'%';
+            }
+
+$Total_profile = ($comp1+$comp2)/200*100;     // Total user and profile Status calculate
+
+return $Total_profile;
+}
+
+
+
 
 
 }//end class
