@@ -167,14 +167,14 @@ else if($_REQUEST['act'] == 'socialLogin')
   $forgot_code   =  mt_rand(1000,10000);
   $password = md5($email);
   $req = new angularapi();
-  $res = $req->angulartest($email, $password);
+  $res = $req->angulartest($email,$password);
   if($res)
   {
     echo json_encode($res);
   }else
   {
-    $res = $req->socialLogin($email,$password,$name,$forgot_code,$image);
-    echo json_encode($res);
+    $result = $req->socialLogin($email,$password,$name,$forgot_code,$image);
+    echo json_encode($result);
   }
  // $res = $req->socialLogin($email,$password,$name);
 }
