@@ -2133,6 +2133,27 @@ public function add_payement_record($data,$student_code)
 }
 
 
+public function  athlete_attendance($data)
+{
+$coach_id       = $data->coach_id;
+$athlete_id     = $data->athlete_id;
+$class_id       = $data->class_id;
+$query   = mysql_query("INSERT INTO `gs_athlete_attendance`(`attendance_id`,`coach_id`,`athlete_id`,`class_id`) VALUES('0','$coach_id','$athlete_id','$class_id') ");
+if($query) 
+{
+return 1;
+}
+else
+{
+  return 0;
+}
+
+}
+
+
+
+
+
 
 
 } // End Class

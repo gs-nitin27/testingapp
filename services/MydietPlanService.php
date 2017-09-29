@@ -249,8 +249,9 @@ public function edit_log($id,$my_diet_log)
 
 public function studnet_list($coach_id,$diet_id)
 {
+$query = mysql_query("SELECT gs_class_data.*,`user`.`user_image` FROM gs_class_data  INNER JOIN  user ON `gs_class_data`.student_id=`user`.userid    WHERE gs_class_data.`coach_id` = $coach_id AND gs_class_data.`status`='2' AND `student_id`  NOT IN (SELECT `athlete_id` FROM `gs_assign_diet_plan` WHERE `diet_id`='$diet_id' )" );
 
-$query = mysql_query("SELECT gs_class_data.*,`user`.`user_image` FROM gs_class_data  INNER JOIN  user ON `gs_class_data`.student_id=`user`.userid    WHERE gs_class_data.`coach_id` = $coach_id AND gs_class_data.`status`='1' AND `student_id`  NOT IN (SELECT `athlete_id` FROM `gs_assign_diet_plan` WHERE `diet_id`='$diet_id' )" );
+
 $num   =  mysql_num_rows($query);
 if($num)
 {
