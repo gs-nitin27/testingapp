@@ -2133,13 +2133,19 @@ public function add_payement_record($data,$student_code)
 }
 
 
-public function  athlete_attendance($data)
+
+
+public function  athlete_attendance($class_id,$data)
 {
-$coach_id       = $data->coach_id;
-$athlete_id     = $data->athlete_id;
-$class_id       = $data->class_id;
-$query   = mysql_query("INSERT INTO `gs_athlete_attendance`(`attendance_id`,`coach_id`,`athlete_id`,`class_id`) VALUES('0','$coach_id','$athlete_id','$class_id') ");
-if($query) 
+$check_class_id  =  $this->check_class_id($class_id);
+if ($check_class_id) {
+  $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$data',`date_updated` = CURDATE() ");
+}
+else
+{
+ $row_sel    = mysql_query("INSERT INTO `gs_athlete_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$class_id','$data',CURDATE()) ");
+}
+if($row_sel) 
 {
 return 1;
 }
@@ -2147,12 +2153,23 @@ else
 {
   return 0;
 }
-
 }
 
 
 
-
+public function check_class_id($class_id)
+{
+$sel_row  =  mysql_query("SELECT `class_id` FROM `gs_athlete_attendance` WHERE  `class_id` = '$class_id' ");
+mysql_num_rows($sel_row);
+if(mysql_num_rows($sel_row))
+{
+return 1;
+}
+else
+{
+  return 0;
+}
+}
 
 
 
