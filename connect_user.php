@@ -352,6 +352,8 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class')
     $req               =  $obj->add_athlete($data,$student_code);
     if($req != 0)
     { 
+    //$obj = new accountingServices();
+    $acc_resp = $obj->add_payement_record($data,$student_code);  
     if ($data->phone != '')
     {
     $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class";
@@ -401,6 +403,7 @@ else if ($_REQUEST['act'] == 'add_joining_code')
  $req  = $Obj->join_class_usingCode($data);
  if($req != 0)
  {
+  $req = validate_athlete_accountinfo($data);
   $resp = array('status'=> $req, 'msg'=>'Success');
   $obj1 =   new userdataservice();
     //echo $data->data[0]->userid;die;
@@ -1477,6 +1480,5 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   }
   echo json_encode($resp);
 }
-
 
 ?>
