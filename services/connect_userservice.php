@@ -2035,9 +2035,9 @@ public function join_class_usingCode($item)
   }
 }
 
-public function validate_athlete_accountinfo($item)
+public function validate_athlete_accountinfo($userid,$usercode)
 {
-$query = mysql_query("UPDATE `gs_fee_memo` SET `userid` = '$data->userid' WHERE `athlete_class_id` = '$item->student_code'");
+  $query = mysql_query("UPDATE `gs_fee_memo` SET `userid` = '$userid' WHERE `athlete_class_id` = '$usercode'");
 
 if(mysql_affected_rows() == 1)
 {
@@ -2054,7 +2054,7 @@ public function create_demo_request($data)
   $query = mysql_query("INSERT INTO `gs_athlete_demo`(`class_id`, `coach_id`, `athlete_id`, `request_date`, `demo_status`, `demo_date`, `demo_timing`, `demo_code`) VALUES ('$data->classid','$data->coach_id','$data->athlete_id',CURDATE(),'0','$data->demo_date','$data->start_time".'-'."$data->end_time', '$demo_code')");
   if($query)
   {
-    $this->add_athlete_for_demo($data);
+    //$this->add_athlete_for_demo($data);
     return 1;
   }
   else

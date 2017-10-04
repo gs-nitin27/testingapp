@@ -401,18 +401,20 @@ else if ($_REQUEST['act'] == 'add_joining_code')
  $data = json_decode(file_get_contents("php://input"));
  $Obj  = new connect_userservice();
  $req  = $Obj->join_class_usingCode($data);
+ $user_info = json_decode($data->user_info);
+ $userid = $user_info->userid;
+ $usercode = $data->student_code;
  if($req != 0)
  {
-  $req = validate_athlete_accountinfo($data);
+  $update_account = $Obj->validate_athlete_accountinfo($userid,$usercode);
   $resp = array('status'=> $req, 'msg'=>'Success');
   $obj1 =   new userdataservice();
-    //echo $data->data[0]->userid;die;
-    $data = json_decode($data->user_info);
-    $userid = $data->userid;
+    // $data = json_decode($data->user_info);
+    // $userid = $data->userid;
     $get_id = $obj1->getdeviceid($userid);
     if($get_id != '')
     {
-  $message = array('title'=> 'New Joinee', 'message'=>$data->data[0]->userName.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
+  $message = array('title'=> 'New Joinee', 'message'=>$user_info->name.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
     $notify = $obj1->sendPushNotificationToGCM();
     }
  }else
@@ -1494,9 +1496,6 @@ else if ($_REQUEST['act'] == 'athlete_attendance')
     $resp = array('status'=>$req,'msg'=>'Failure');
   }
   echo json_encode($resp);
-
-
-
 }
 
 ?>
