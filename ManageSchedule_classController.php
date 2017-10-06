@@ -157,16 +157,11 @@ else if($_REQUEST['act'] == "update_class")
 
 else if($_REQUEST['act'] == "get_studentlist")
  {
-                          //print_r($_POST);die;
-						//$id = urldecode($_POST['classid']);
 						$data  = json_decode($_REQUEST['classid']);
                         $id = $data;
-                        //print_r($id);die;
-						$req = new manageSchedulingService();
+                    	$req = new manageSchedulingService();
 						$res = $req->getstudentlist($id);
-               
-                         // print_r($res);die;
-						if($res != 0)
+               			if($res != 0)
 						{
 						$data= array('status' =>1,'data'=>$res);
 						echo json_encode($data);
@@ -177,6 +172,8 @@ else if($_REQUEST['act'] == "get_studentlist")
 						   echo json_encode($data);
 						}
 }
+
+
 
 else if($_POST['act'] == "add_student")
 {
