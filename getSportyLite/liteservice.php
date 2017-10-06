@@ -864,8 +864,6 @@ switch ($module)
   } 
 
 
-
-
 public function get_Job_Data($where)
 {  
 
@@ -886,14 +884,11 @@ public function get_Job_Data($where)
 
   } 
 
-
-
-
 public function get_Event__tour_Data()
 {  
 
-$event_query = mysql_query("SELECT `id`, `name`,`description`,`image` , `event_links` FROM `gs_eventinfo`  WHERE `publish` = '1' ");
-$tour_query  = mysql_query("SELECT `id`, `name`,`description`,`image`,`tournaments_link` FROM `gs_tournament_info` WHERE `publish` = '1' ");
+$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE `publish` = '1' ");
+$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE `publish` = '1' ");
 
 while($event_row = mysql_fetch_assoc($event_query) )
 { 
