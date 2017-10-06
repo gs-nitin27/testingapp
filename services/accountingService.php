@@ -63,14 +63,16 @@ public function ViewClassData($classid,$student_id)
     	return 0;
     }
 }
-public function create_feeSlip($data,$student_code)
+public function create_feeSlip($data)
 {
-  $feedata = $data->athlete_info->fee_plan;
+  $feedata = $data->payment_plan;
+  $student_code = 
   $keys = split("/", $feedata);
   $total_fee = $keys[1];
-  $feeamountpaid = $data->athlete_info->fee_amount;
-  $paid = $data->athlete_info->fee_paid; 
-  $query = mysql_query("INSERT INTO `gs_fee_memo`(`class_id`, `athlete_class_id`, `fee_amount`,`fee_amount_paid` ,`coach_id`, `memo_date`, `status`) VALUES ('$data->classid','$student_code','$total_fee','$feeamountpaid','$data->coach_id',CURDATE(),'$paid')");
+  $paid = $total_fee;
+  $user_data = json_decode($data->user_info);
+  $userid = $user_data->userid;
+  $query = mysql_query("INSERT INTO `gs_fee_memo`(`class_id`,`userid`,`athlete_class_id`,`fee_amount`,`fee_amount_paid` ,`coach_id`, `memo_date`, `status`) VALUES ('$data->class_id','$userid','$data->student_code','$total_fee','0.00','$data->coach_id',CURDATE(),'0')");
   if($query)
   {
     return 1;

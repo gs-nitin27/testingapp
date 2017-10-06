@@ -1010,7 +1010,7 @@ public function alluserdata($userid)
 
 
 public function ClassInfo($student_id,$phone,$email)
-{
+{ 
   $query = mysql_query("SELECT gs_coach_class.*,`cd`.`classid`,`cd`. `student_id`,`cd`. `student_name`,`cd`.`joining_date`,`cd`. `fees`,`cd`. `paid`,`cd`. `date_added`,`cd`. `mode_of_payment`,`cd`. `transaction_id`,`cd`. `payment_id`,`cd`. `remark`,`cd`. `coach_id`,`cd`. `student_code`,`cd`. `phone`,`cd`. `email`,`cd`. `status`,`cd`. `demo_code`,`cd`. `payment_plan` FROM `gs_class_data` AS `cd` INNER JOIN gs_coach_class ON `cd`.`classid`=`gs_coach_class`.id WHERE (`cd`.`student_id`='$student_id' OR `cd`.`phone`= '$phone' OR `cd`.`email`= '$email') AND `cd`.`status` <> '-2'GROUP BY `cd`.`classid` "); 
   $num=mysql_num_rows($query);
   if ($num!=0) 
@@ -1021,83 +1021,54 @@ public function ClassInfo($student_id,$phone,$email)
       $row['fee_due'] = $this->getAllMemoRecords($row['student_code']);
       $rows[] = $row;
     }
-      $id = implode(',', $class_id);
-      $where = "WHERE `athlete_id` = '$student_id' AND `class_id` NOT IN ($id) AND `demo_status` <> '-2'";
-      //echo $where;die;
-      $demo_data = $this->fetch_demoClassList($where);
-      if($demo_data != 0)
+  }
+      if(isset($class_id))
       {
-      return array_merge($demo_data,$rows);
+      $id = implode(',', $class_id);
+      $id = "`class_id` NOT IN ($id) AND";
+      }
+      else
+      {
+        $id = '';
+      }
+      $where = "WHERE `athlete_id` = '$student_id' AND ".$id." `demo_status` <> '-2'";
+     // echo $where;die;
+      $demo_data = $this->fetch_demoClassList($where);
+      if($demo_data != 0 && $num != 0)
+      {
+        return array_merge($demo_data,$rows);
+      }
+      else if($demo_data != 0 && $num == 0 )
+      {
+        return $demo_data;
+      }
+      else if($demo_data == 0 && $num != 0)
+      {
+        return $rows;
       }else
       {
-      return $rows;
+        return 0;
       }
 
-        //     for ($i=0; $i <$num ; $i++) 
-        //     {
-        //     $row=mysql_fetch_assoc($query);
-        //     $userid       =   $row['userid'];
-        //     $duedate = $this->class_fee_date($student_id,$row['classid']);
-        //     if($duedate == '-100')
-        //     {
-        //       $paydate = $duedate;
-        //     }
-        //     else if($duedate > $row['payment_plan'])
-        //       {
-        //         $paydate = $duedate;
-        //       }
-        //       else
-        //       {
-        //         $paydate = 0;
-        //       }
-        //        $row1        =   $this->userdata($userid); 
-        //        if ($row1 !=0) 
-        //        {
-        //           $row['user_image']       = $row1['user_image'];
-        //           $row['name']             = $row1['name'];
-        //           $row['due_date']         = $paydate;
-        //        }
-        //        else
-        //        {
-        //         $row['user_image']       = "No Image";
-                
-        //        }
-             
-               
-
-        //       $row1           =  $this->rating($userid);
-        //       if ($row1['rating'] !=null)
-        //       {
-        //         $row['rating']       = (float)$row1['rating'];
-        //       }
-        //       else
-        //       {
-        //         $row['rating']   = 0;
-        //       }
-        //       $row['class_fee']   = json_decode($row['class_fee']);
-        //       $data[]   = $row ;
-              
-        //    }
-        // return $data;
-
+ /* if(!empty($rows))
+  {
+  return $rows;     
   }else
   {
     return 0;
-  }
+  }*/
 }
 
 
 
 public function getAllMemoRecords($athlete_class_id)
 {
-
+   /*echo "SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`";*/
   $query = mysql_query("SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`");
   if(mysql_num_rows($query)>0)
   {
-  while($row = mysql_fetch_assoc($query))
-  {
-    $rows[] = $row;
-  }
+    $fee =  mysql_fetch_assoc($query);
+    return $fee['fee_due']; 
   }
   else
   {
@@ -2033,7 +2004,8 @@ public function join_class_usingCode($item)
   {
   $data = $item->user_info;
   }
-  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`= CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 2 WHERE `status` = 0 AND `student_code`='$code'");
+/*  echo "UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`= CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 2 WHERE `status` = 0 AND `student_code`='$code'";die;*/
+  $query = mysql_query("UPDATE `gs_class_data` SET `student_id`='$data->userid',`student_name`='$data->name',`student_dob`='$data->dob',`payment_plan`='$payment_plan',`location`='$data->location',`gender`='$data->gender',`joining_date`= CURDATE(),`phone`='$data->contact_no',`email`='$data->email',`status`= 2 WHERE (`status` = 0 OR `status` = 1 )AND `student_code`='$code'");
   if(mysql_affected_rows() == 1)
   {
     return 1;
@@ -2185,8 +2157,6 @@ public function getAllDues($coach_id)
    {
     return 0;
    }
-
-
 }
 
 

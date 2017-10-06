@@ -421,10 +421,27 @@ else if ($_REQUEST['act'] == 'add_joining_code')
  $user_info = json_decode($data->user_info);
  $userid = $user_info->userid;
  $usercode = $data->student_code;
+  // if(!isset($data->demo))
+  // {echo "no";}else{echo"yes";}die;
+ //print_r($data);
  if($req != 0)
  {
+  if(!isset($data->demo))
+  {
   $update_account = $Obj->validate_athlete_accountinfo($userid,$usercode);
-  $resp = array('status'=> $req, 'msg'=>'Success');
+  }
+  else
+  {
+  $acc_obj = new accountingServices();  
+  $update_account = $acc_obj->create_feeSlip($data,$student_code);
+  }
+  $memo_data = $Obj->getAllMemoRecords($data->student_code);
+  //echo $memo_data;die;
+  if($memo_data == 0)
+  {
+    $memo_data = [];
+  }
+  $resp = array('status'=> $req, 'msg'=>'Success','data'=>$memo_data);
   $obj1 =   new userdataservice();
   $get_id = $obj1->getdeviceid($data->coach_id);
   echo json_encode($resp);
@@ -1485,7 +1502,10 @@ else if($_REQUEST['act'] == 'remove_demo_athlete')
   }
   echo json_encode($resp);
 }
+else if($_REQUEST['act'] == 'accept_coach_class_offer')
+{
 
+}
 else if($_REQUEST['act'] == 'decline_coachclass_offer')
 {
   $data = json_decode(file_get_contents("php://input"));
@@ -1500,10 +1520,11 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   }
   echo json_encode($resp);
 }
+
 else if ($_REQUEST['act'] == 'athlete_attendance')
 {
-  $class_id   =  $_REQUEST['class_id'];
-  $data       =     file_get_contents("php://input");
+  $class_id   = $_REQUEST['class_id'];
+  $data       = file_get_contents("php://input");
   $obj        = new connect_userservice();
   $req        = $obj->athlete_attendance($class_id,$data);
   if($req != 0)
