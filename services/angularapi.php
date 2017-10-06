@@ -29,7 +29,7 @@ public function angulartest($username,$password)
                $data['userType'] = $row['userType'];
                $data['prof_id'] =  $row['prof_id'];
                $data['contact_no']     =  $row['contact_no'];
-               $data['password'] =$row['password'];
+               $data['prof_name'] =$row['prof_name'];
                $data['userId'] = $row['userid'];
                $data['email'] =$row['email'];
                $data['forget_code'] = $row['forget_code'];
@@ -88,7 +88,7 @@ public function OTPVerify($otpcode,$userid)
 
 public function socialLogin($email,$password,$name,$forget_code,$image)
 {   
-  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','$forget_code','$image')");
+  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`prof_name`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','Athletes','$forget_code','$image')");
    if($insert)
    {
 
@@ -97,7 +97,7 @@ public function socialLogin($email,$password,$name,$forget_code,$image)
       $data['prof_id'] =  "1";
       $data['name']     = $name;
       $data['forget_code'] = $forget_code;
-      $data['password'] =$password;
+      $data['prof_name'] = "Athletes";
       $data['userId'] = mysql_insert_id();
       $data['email'] =$email;
       $data['user_image'] =$image; 

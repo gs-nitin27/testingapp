@@ -90,7 +90,7 @@ if($_REQUEST['act'] == 'connect')
    else if($res == 2)
 
    {
-
+ 
     $user = array('status' => 0, 'message'=>'User Not Connected' );
 
    echo json_encode($user);
