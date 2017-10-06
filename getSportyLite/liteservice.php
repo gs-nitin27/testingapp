@@ -887,27 +887,39 @@ public function get_Job_Data($where)
 public function get_Event__tour_Data()
 {  
 
-$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE `publish` = '1' ");
-$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE `publish` = '1' ");
+$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
+$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
 
 while($event_row = mysql_fetch_assoc($event_query) )
 { 
       $event_row['description'] = nl2br($event_row['description']);
       $event_row['Path']  = 'E';
+      $event_row['date_diff'] = $this->finddatediff($event_row['start_date']);
       $event_data[]              = $event_row;
 } 
 
 while($tour_row = mysql_fetch_assoc($tour_query))
 { 
       $tour_row['description'] = nl2br($tour_row['description']);
-      $event_row['Path']  = 'T';
+      $tour_row['Path']  = 'T';
+      $tour_row['date_diff'] = $this->finddatediff($tour_row['start_date']);
       $tour_data[] = $tour_row;
 } 
 
-return array_merge($event_data,$tour_data);
+
+$final_data =  array_merge($event_data,$tour_data);
+
+return  $final_data;
 } 
 
 
+public function finddatediff($date)
+{
+$datetime1 = new DateTime();
+$datetime2 = new DateTime($date);
+$interval = $datetime1->diff($datetime2);
+return $interval->format('%a');   
+}
 
 
 } // End of Class
