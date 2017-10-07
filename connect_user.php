@@ -90,7 +90,7 @@ if($_REQUEST['act'] == 'connect')
    else if($res == 2)
 
    {
-
+ 
     $user = array('status' => 0, 'message'=>'User Not Connected' );
 
    echo json_encode($user);
@@ -266,7 +266,6 @@ else if($_REQUEST['act'] == 'get_class_view_status')
     {
       $status = '0';
     }
-    
   $response[0]['status'] = $status; 
   }
   $resp = array('status' => '1','data'=>$response ,'msg'=>'class Information');
@@ -351,11 +350,19 @@ else if ($_REQUEST['act'] == 'add_athlete_to_class')
     {
     $req               =  $obj->add_athlete($data,$student_code);
     if($req != 0)
-    { 
-    if ($data->phone != '')
+    {
+    $resp = array('status'=>$req,'message'=>'Success');
+    echo json_encode($resp);
+    if ($data->phone != '' && (!isset($data->demo)))
     {
     $msg = "Hi +".$data->student_name."+ , coach + has + added + you + to + his + class,  + Download + our +  App +  From + "."https://goo.gl/8zncfT"." + and + use + code  + ".$student_code." +  to + join + his + class";
     $res = sendWay2SMS(9528454915,8824784642, $data->phone, $msg);
+    }
+    if(isset($data->demo))
+    {set_time_limit(10);
+     $message = array('title'=> 'Invitation to Join', 'message'=>'Coach has invited you to join his class  '.$data->class_name  , 'device_id' => $data->device_id , 'indicator' =>10 , 'id'=> $data->class_id); 
+    $obj1 =   new userdataservice(); 
+    $notify = $obj1->sendLitePushNotificationToGCM($data->device_id,$message);
     }
     if($data->email != '')
     {
@@ -365,13 +372,14 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
     $emailObj = new emailService();
     $send = $emailObj->email_athlete($data,$msg); 
     } 
-    $resp = array('status'=>$req,'message'=>'Success');
     }else
     {
       $resp = array('status'=>$req,'message'=>'Failure');
+      echo json_encode($resp);
     }
-  }else
-  {   ///print_r($varify);die;
+  }
+  else
+   {   
       $resp = array('status'=>'0','message'=>'Athlete '.$varify['student_name'].' Already added to class');
       if ($data->phone != '')
     {
@@ -387,9 +395,20 @@ Please click on the link to download the App.".'<br><br>'."https://play.google.c
     $send = $emailObj->email_athlete($data,$msg); 
     } 
   }
-      echo json_encode($resp);
+      
 }
 /*END OF SECTION */
+
+else if($_REQUEST['act'] == 'response_for_demo')
+{
+
+
+
+
+
+}
+
+
 /*
 Below Section code is for Athlete With code . from Which He could Directly join the class 
 */
@@ -399,24 +418,45 @@ else if ($_REQUEST['act'] == 'add_joining_code')
  $data = json_decode(file_get_contents("php://input"));
  $Obj  = new connect_userservice();
  $req  = $Obj->join_class_usingCode($data);
+ $user_info = json_decode($data->user_info);
+ $userid = $user_info->userid;
+ $usercode = $data->student_code;
+  // if(!isset($data->demo))
+  // {echo "no";}else{echo"yes";}die;
+ //print_r($data);
  if($req != 0)
  {
-  $resp = array('status'=> $req, 'msg'=>'Success');
+  if(!isset($data->demo))
+  {
+  $update_account = $Obj->validate_athlete_accountinfo($userid,$usercode);
+  }
+  else
+  {
+  $acc_obj = new accountingServices();  
+  $update_account = $acc_obj->create_feeSlip($data,$student_code);
+  }
+  $memo_data = $Obj->getAllMemoRecords($data->student_code);
+  //echo $memo_data;die;
+  if($memo_data == 0)
+  {
+    $memo_data = [];
+  }
+  $resp = array('status'=> $req, 'msg'=>'Success','data'=>$memo_data);
   $obj1 =   new userdataservice();
-    //echo $data->data[0]->userid;die;
-    $data = json_decode($data->user_info);
-    $userid = $data->userid;
-    $get_id = $obj1->getdeviceid($userid);
+  $get_id = $obj1->getdeviceid($data->coach_id);
+  echo json_encode($resp);
+  set_time_limit(10);
     if($get_id != '')
     {
-  $message = array('title'=> 'New Joinee', 'message'=>$data->data[0]->userName.' has successfully joined your class'.$data->data[0]->class_title  , 'device_id' => $get_id['device_id'] , 'indicator' =>10);  
-    $notify = $obj1->sendPushNotificationToGCM();
+  $message = array('title'=> 'New Joinee', 'message'=>$user_info->name.' has successfully joined your class'.$data->class_name  , 'device_id' => $get_id['device_id'] , 'indicator' =>10 , 'id'=> $data->class_id);  
+    $notify = $obj1->sendPushNotificationToGCM($get_id['device_id'],$message);
     }
- }else
- {
-  $resp = array('status'=>$req, 'msg'=>'Failure');
- }
- echo json_encode($resp);
+  }
+  else
+   {
+    $resp = array('status'=>$req, 'msg'=>'Failure');
+    echo json_encode($resp);
+   }
  }
 
 /*END OF SECTION */
@@ -1462,7 +1502,10 @@ else if($_REQUEST['act'] == 'remove_demo_athlete')
   }
   echo json_encode($resp);
 }
+else if($_REQUEST['act'] == 'accept_coach_class_offer')
+{
 
+}
 else if($_REQUEST['act'] == 'decline_coachclass_offer')
 {
   $data = json_decode(file_get_contents("php://input"));
@@ -1477,13 +1520,6 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   }
   echo json_encode($resp);
 }
-
-
-
-
-
-
-
 
 
 

@@ -297,17 +297,17 @@ $query  = mysql_query("SELECT `device_id` FROM `user` WHERE `email` = '$email'")
 if(mysql_num_rows($query)>0)
 {
 $row = mysql_fetch_assoc($query);
-$device_stack = explode('|', $row['device_id']);
-if(!in_array($device_id, $device_stack))
-{
-array_push($device_stack, $device_id);
-$device_id = implode('|',$device_stack);
-}
-else
-{
-  $device_id = $row['device_id'];
-}
-$device_id = ltrim($device_id, '|');
+// $device_stack = explode('|', $row['device_id']);
+// if(!in_array($device_id, $device_stack))
+// {
+// array_push($device_stack, $device_id);
+// $device_id = implode('|',$device_stack);
+// }
+// else
+// {
+//   $device_id = $row['device_id'];
+// }
+// $device_id = ltrim($device_id, '|');
 $update = mysql_query("UPDATE `user` SET `device_id` = '$device_id' WHERE `email` = '$email'");
 if($update)
 {
@@ -398,16 +398,13 @@ else
 /*************************New Device id find**********************************/
 public function getdeviceid($id)
 {
-
+  //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die;
   $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
   $row = mysql_num_rows($query);
   if($row == 1)
   {
     $row1  = mysql_fetch_assoc($query);
       return $row1;
-
-    
-       
   }
   else 
   {
@@ -1545,7 +1542,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
 public function sendNotification($registration_ids, $message,$google_api)
 {
-    
+    ignore_user_abort(true);
+    set_time_limit(0);
     $msg = array
   (
     'data1'  => $message
