@@ -1961,7 +1961,8 @@ else
 }  // End Function 
 
 public function add_athlete($data,$student_code)
-{ if(!isset($data->demo))
+{ 
+  if(!isset($data->demo))
   {
     $status = 0;
   }else
@@ -1974,8 +1975,12 @@ public function add_athlete($data,$student_code)
     if($status == 0)
      {
       $this->add_payement_record($data,$student_code);
-     }  
-  return 1;  
+     }
+     else if($status == 1)
+     {
+      $this->update_demo_request($data->demo_code,1);
+     }
+     return 1;  
   }
   else
   {
@@ -2081,7 +2086,7 @@ public function fetch_demoClassList($where)
 
 
 }
-public function remove_demo_request($demo_code)
+public function update_demo_request($demo_code,$status)
 {
   $query = mysql_query("UPDATE `gs_athlete_demo` SET `demo_status` = '-1' WHERE `demo_code` = '$demo_code'");
   if($query)
@@ -2196,6 +2201,20 @@ else
 }
 }
 
+public function get_attendence_data($class_id,$date)
+{
+
+    $query  = mysql_query("SELECT * FROM `gs_athlete_attendence` WHERE `class_id` = '$class_id' AND `date_created` = $date");
+    if(mysql_num_rows($query)!= 0)
+    {
+      return mysql_fetch_assoc($query);
+    }else
+    {
+
+      return 0;
+    }
+
+}
 
 
 } // End Class

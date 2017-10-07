@@ -54,8 +54,7 @@ if($_REQUEST['act'] == 'connect')
 
 
  else if($_REQUEST['act'] == 'request_response')
-
- { 
+{ 
 
    $request_id  = $_REQUEST['id'];
 
@@ -68,7 +67,6 @@ if($_REQUEST['act'] == 'connect')
    $res = $req->connect_user_response($request_id , $req_status);
 
    if($res == 1)
-
    {
 
          $user_id       =  $req->getuserid($request_id);
@@ -86,25 +84,15 @@ if($_REQUEST['act'] == 'connect')
          $user = array('status' => 1, 'message'=>'User Connected' );
          echo json_encode($user);
    }
-
-   else if($res == 2)
-
+  else if($res == 2)
    {
- 
     $user = array('status' => 0, 'message'=>'User Not Connected' );
-
-   echo json_encode($user);
-
+    echo json_encode($user);
    }
-
-   else if($res == 3)
-
+  else if($res == 3)
    {
-
      $user = array('status' => 2,  'message' => 'Request is cancelled');
-
      echo json_encode($user);
-
    }
 
    else
@@ -434,6 +422,8 @@ else if ($_REQUEST['act'] == 'add_joining_code')
   {
   $acc_obj = new accountingServices();  
   $update_account = $acc_obj->create_feeSlip($data,$student_code);
+  $demo_code = $data->class_id.$data->userid;
+  $Obj->update_demo_request($demo_code,2);
   }
   $memo_data = $Obj->getAllMemoRecords($data->student_code);
   //echo $memo_data;die;
@@ -1492,7 +1482,7 @@ else if($_REQUEST['act'] == 'remove_demo_athlete')
 {
   $demo_code = $_REQUEST['demo_code'];
   $obj = new connect_userservice();
-  $req = $obj->remove_demo_request($demo_code);
+  $req = $obj->update_demo_request($demo_code,'-2');
   if($req != 0)
   {
     $resp = array('status' => $req , 'msg'=>'Success' );
@@ -1535,6 +1525,24 @@ else if ($_REQUEST['act'] == 'athlete_attendance')
     $resp = array('status'=>$req,'msg'=>'Failure');
   }
   echo json_encode($resp);
+}
+
+else if($_REQUEST['act'] == "get_attendance")
+{
+$class_id = $_REQUEST['class_id'];
+$date     = $_REQUEST['date'];
+$obj = new connect_userservice();
+$res = $obj->get_attendence_data($class_id,$date);
+
+if($res != 0)
+{ $resp = array('status' =>'1' ,'data'=>$res );
+  echo json_encode($resp);
+}else
+{
+  $resp = array('status' =>'0' ,'data'=>0 );
+  echo json_encode($resp);
+} 
+
 }
 
 ?>
