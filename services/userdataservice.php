@@ -2820,7 +2820,10 @@ else
                      //$prof_status=$comp1.''.'%';
                     }
       
+
+
             $data->user = $user_res; 
+
             if (is_array($data->user) || is_object($data->user))
             {
                 foreach ($data->user as $value) 
@@ -2839,10 +2842,14 @@ else
                     // $user_status=$comp1.''.'%';
             }
 
+        
+
 $Total_profile = ($comp1+$comp2)/200*100;     // Total user and profile Status calculate
 
 return $Total_profile;
 }
+
+
 
 
 

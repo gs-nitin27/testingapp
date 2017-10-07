@@ -751,7 +751,7 @@ if($response)
 
 
 
- else if ($_REQUEST['act'] == 'create_log_assign') 
+else if ($_REQUEST['act'] == 'create_log_assign') 
 {
 
     $data                          =   json_decode($_POST['data']);
@@ -1511,21 +1511,7 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   echo json_encode($resp);
 }
 
-else if ($_REQUEST['act'] == 'athlete_attendance')
-{
-  $class_id   = $_REQUEST['class_id'];
-  $data       = file_get_contents("php://input");
-  $obj        = new connect_userservice();
-  $req        = $obj->athlete_attendance($class_id,$data);
-  if($req != 0)
-  {
-    $resp = array('status' => $req , 'msg'=>'Success' );
-  }else
-  {
-    $resp = array('status'=>$req,'msg'=>'Failure');
-  }
-  echo json_encode($resp);
-}
+
 
 else if($_REQUEST['act'] == "get_attendance")
 {
