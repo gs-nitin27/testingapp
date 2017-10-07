@@ -28,61 +28,24 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`gs_class_dat
 
 
 
-public function  athlete_attendance($data)
+public function  athlete_attendance($data,$classid )
+{
+$row        =  $this->check_class_id($classid);
+if($row) 
 {
 
-$class_id 	= $data->class_id;
-
-echo "$class_id";
-
-
-
-$data 		= json_encode($data->data);
-$row        =  $this->check_class_id($class_id);
-
-if($row['class_id']) 
-{
-
-// $old_row 	= $row['attendance_detail'];
-
-
-// $old_data = json_decode($old_row);
-
-
-
-// $tata = $old_data[0];
-
-// $sum  = array($tata);
-
-// print_r($sum);
-
-// //print_r($tata->'6-10-2017');
-
-
-
-
-// //echo $old_row->'6-10-2017';
-
-
-// //6-10-2017
-
-// die();
-
-
-
+$old_row 	= $row['attendance_detail'];
 $new_row[] 	= $old_row;
 $new_row[] 	= $data;
 $new_data	= implode(",",$new_row);
-  $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$new_data',`date_updated` = CURDATE() WHERE `class_id`= $class_id");
-
-
-
-
+  $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$new_data',`date_updated` = CURDATE() WHERE `class_id`= $classid");
 }
 else
 {
- $row_sel    = mysql_query("INSERT INTO `gs_athlete_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$class_id','$data',CURDATE()) ");
+
+ $row_sel    = mysql_query("INSERT INTO `gs_athlete_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ");
 }
+
 if($row_sel) 
 {
 return 1;
@@ -95,9 +58,15 @@ else
 
 
 
-public function check_class_id($class_id)
+
+
+
+
+
+
+public function check_class_id($classid)
 {
-$sel_row  =  mysql_query("SELECT `class_id`,`attendance_detail` FROM `gs_athlete_attendance` WHERE  `class_id` = '$class_id' ");
+$sel_row  =  mysql_query("SELECT `class_id`,`attendance_detail` FROM `gs_athlete_attendance` WHERE  `class_id` = '$classid' ");
 mysql_num_rows($sel_row);
 if(mysql_num_rows($sel_row))
 {

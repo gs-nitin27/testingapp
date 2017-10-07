@@ -35,11 +35,21 @@ else if ($_REQUEST['act'] == 'athlete_attendance')
 //$data       =    json_decode(file_get_contents("php://input"));
 
 
-$data        = 		json_decode($_POST['data']);
-print_r($data);
+$data        = 		$_POST['data'];
+
+$classid        = 		$_REQUEST['classid'];
+
+//echo $classid;
+
+//print_r($data); die();
+
+
+//print_r($data);
+
+//print_r($data);
 
 $req        =   new attendanceService();
-$req        =   $req->athlete_attendance($data);
+$req        =   $req->athlete_attendance($data,$classid );
 if($req != 0)
 {
   $data = array('status' => '1','data'=>'1' ,'msg'=>'Success');
