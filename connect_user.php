@@ -1515,20 +1515,26 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
 
 else if($_REQUEST['act'] == "get_attendance")
 {
-$class_id = $_REQUEST['class_id'];
-$date     = $_REQUEST['date'];
-$obj = new connect_userservice();
-$res = $obj->get_attendence_data($class_id,$date);
+  $dateclause = '';
+  if(isset($_REQUEST['date']))
+  {
+  $date       = $_REQUEST['date'];  
+  $dateclause = "AND `date_created` = '$date'";
+  }
+  $class_id = $_REQUEST['class_id'];
+  $where = "WHERE `class_id` = '$class_id'".$dateclause;
+  $obj = new connect_userservice();
+  $res = $obj->get_attendence_data($where);
 
-if($res != 0)
-{ $resp = array('status' =>'1' ,'data'=>$res );
-  echo json_encode($resp);
-}else
-{
-  $resp = array('status' =>'0' ,'data'=>0 );
-  echo json_encode($resp);
-} 
-
+  if($res != 0)
+  { $resp = array('status' =>'1' ,'data'=>$res );
+    echo json_encode($resp);
+  }
+  else
+  {
+    $resp = array('status' =>'0' ,'data'=>0 );
+    echo json_encode($resp);
+  } 
 }
 
 ?>

@@ -2167,21 +2167,30 @@ public function getAllDues($coach_id)
 
 
 
-public function get_attendence_data($class_id,$date)
+public function get_attendence_data($where)
 {
-
-    $query  = mysql_query("SELECT * FROM `gs_athlete_attendence` WHERE `class_id` = '$class_id' AND `date_created` = $date");
+  $query  = mysql_query("SELECT * FROM `gs_class_attendence`".$where."");
     if(mysql_num_rows($query)!= 0)
     {
-      return mysql_fetch_assoc($query);
+       $data = mysql_fetch_assoc($query);
+       $attendance = json_decode($data['attendence_data']);
+       foreach ($attendance as $key => $value) {
+         $data1[$key] = $this->get_student_detail($key,$value);
+       }
+      echo json_encode($data1);die;
     }else
     {
-
-      return 0;
+        return 0;
     }
-
 }
 
+public function get_student_detail($id,$value)
+{
+$query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
+$data =  mysql_fetch_assoc($query);
+$data['attendance'] = $value;
+return $data;
+}
 
 } // End Class
 
