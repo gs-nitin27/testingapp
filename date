@@ -2,18 +2,18 @@
 include('config1.php');
 include('services/attendanceService.php');
 include('services/userdataservice.php');
-
-
-
-
 error_reporting(E_ERROR | E_PARSE);
+
+
 
 if($_REQUEST['act'] == "student_list")
 {
 	$classid  = $_REQUEST['classid'];
-	$date     = $_REQUEST['date'];
+
     $req 	  = new attendanceService();
 	$res 	  = $req->student_listing($classid);
+
+	
 	if($res != 0)
 	{
 	$data = array('status' => '1','data'=>$res ,'msg'=>'student listing');
@@ -35,23 +35,9 @@ if($_REQUEST['act'] == "student_list")
 else if ($_REQUEST['act'] == 'athlete_attendance')
 {
 
-
-
 //$data       =    json_decode(file_get_contents("php://input"));
-
-
-$data        = 		$_POST['data'];
-
+$data           = 		$_POST['data'];
 $classid        = 		$_REQUEST['classid'];
-
-//echo $classid;
-
-//print_r($data); die();
-
-
-//print_r($data);
-
-//print_r($data);
 
 $req        =   new attendanceService();
 $req        =   $req->athlete_attendance($data,$classid );
