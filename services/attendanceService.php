@@ -111,7 +111,7 @@ public function  athlete_attendance($data,$classid )
 // else
 // {
 
- $row_sel    = mysql_query("INSERT INTO `gs_class_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ");
+ $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`class_id`,`attendance_detail`,`date_created`,`date_updated`) VALUES('$classid','$data',CURDATE(),CURDATE()) ");
 
 if($row_sel) 
 {
