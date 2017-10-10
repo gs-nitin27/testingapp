@@ -3,7 +3,7 @@
 class attendanceService
 {
 	
-public function student_listing($classid,$date)
+public function student_listing($classid)
 {
 $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`userid` AS student_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid' AND `gs_class_data`.`status`='2' " );
 	$num  = mysql_num_rows($query);
@@ -19,9 +19,14 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`useri
 				$gender 				   = $row['gender'];
   				$age          			   =  $this->ageGropup($dob,$gender);
 
-				$row1 =  array('student_id'=>$student_id,'name'=>$name,'age'=>$age,'gender'=>$gender,'attendance_status'=>'NA');
-				$data[$student_code] = $row1;
+
+
+				$row1 =  array('student_id'=>$student_id,'name'=>$name,'age'=>$age,'gender'=>$gender,'attendance_status'=>'NA','student_code'=>$student_code);
+
+				$data[] = $row1;
 			}
+
+			//$data1[]  = $data;
 		return $data;
 		}
 		else
@@ -43,6 +48,49 @@ public function ageGropup($dob,$gender)
 
 
 
+public function get_attendence_data($where)
+{
+  $query  = mysql_query("SELECT * FROM `gs_class_attendance`".$where."");
+    if(mysql_num_rows($query)!= 0)
+    {
+       $data = mysql_fetch_assoc($query);
+       $attendance = json_decode($data['attendance_detail']);
+       foreach ($attendance as $key => $value) {
+         $data1[$key] = $this->get_student_detail($key,$value);
+       }
+
+       $data2[] = $data1;
+
+     return $data2;//die;
+
+
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+
+public function get_student_detail($id,$value)
+{
+$query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
+$data =  mysql_fetch_assoc($query);
+$data['attendance'] = $value;
+return $data;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
    
@@ -50,21 +98,24 @@ public function ageGropup($dob,$gender)
 
 public function  athlete_attendance($data,$classid )
 {
-$row        =  $this->check_class_id($classid);
-if($row) 
-{
 
-$old_row 	= $row['attendance_detail'];
-$new_row[] 	= $old_row;
-$new_row[] 	= $data;
-$new_data	= implode(",",$new_row);
-  $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$new_data',`date_updated` = CURDATE() WHERE `class_id`= $classid");
-}
-else
-{
+//print_r($data);
 
- $row_sel    = mysql_query("INSERT INTO `gs_athlete_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ");
-}
+//echo "INSERT INTO `gs_class_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ";die();
+// $row        =  $this->check_class_id($classid);
+// if($row) 
+// {
+
+// $old_row 	= $row['attendance_detail'];
+// $new_row[] 	= $old_row;
+// $new_row[] 	= $data;
+// $new_data	= implode(",",$new_row);
+//   $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$new_data',`date_updated` = CURDATE() WHERE `class_id`= $classid");
+// }
+// else
+// {
+
+ $row_sel    = mysql_query("INSERT INTO `gs_class_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ");
 
 if($row_sel) 
 {
