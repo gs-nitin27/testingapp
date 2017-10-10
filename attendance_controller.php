@@ -58,18 +58,11 @@ if($_REQUEST['act'] == "student_list")
 
 else if ($_REQUEST['act'] == 'athlete_attendance')
 {
-
-
-
-$data       =    file_get_contents("php://input");
-
-
-
-
-//$data          	 = 		$_POST['data'];
+$data      		 =    file_get_contents("php://input");
 $classid         = 		$_REQUEST['classid'];
+$date         	 = 		$_REQUEST['date'];
 $req       		 =   new attendanceService();
-$req       		 =   $req->athlete_attendance($data,$classid );
+$req       		 =   $req->athlete_attendance($data,$classid,$date);
 if($req != 0)
 {
   $data = array('status' => '1','data'=>'1' ,'msg'=>'Success');
