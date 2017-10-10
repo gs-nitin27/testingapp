@@ -7,7 +7,7 @@ public function student_listing($classid)
 {
 $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`userid` AS student_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid' AND `gs_class_data`.`status`='2' " );
 	$num  = mysql_num_rows($query);
-		if($num)
+		if($num != 0)
 		{
 			while($row = mysql_fetch_assoc($query))
 			{
@@ -50,24 +50,20 @@ public function ageGropup($dob,$gender)
 
 public function get_attendence_data($where)
 {
-  $query  = mysql_query("SELECT * FROM `gs_class_attendance`".$where."");
-    if(mysql_num_rows($query)!= 0)
+  $query  = mysql_query("SELECT * FROM `gs_class_attendence`".$where."");
+    if(mysql_num_rows($query)> 0)
     {
        $data = mysql_fetch_assoc($query);
-       $attendance = json_decode($data['attendance_detail']);
+       $attendance = json_decode($data['attendence_detail']);
        foreach ($attendance as $key => $value) {
          $data1[$key] = $this->get_student_detail($key,$value);
        }
-
        $data2[] = $data1;
-
-     return $data2;//die;
-
-
-    }
+       return $data2;//die;
+     }
     else
     {
-        return 0;
+        return '0';
     }
 }
 
@@ -77,7 +73,7 @@ public function get_student_detail($id,$value)
 {
 $query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
 $data =  mysql_fetch_assoc($query);
-$data['attendance'] = $value;
+$data['attendence'] = $value;
 return $data;
 }
 

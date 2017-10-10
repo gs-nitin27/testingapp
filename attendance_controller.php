@@ -39,17 +39,16 @@ if($_REQUEST['act'] == "student_list")
   $where = "WHERE `class_id` = '$class_id'".$dateclause;
   $obj = new attendanceService();
   $res = $obj->get_attendence_data($where);
-  if($res != '0')
-  { 
-  	$data = array('status' => '1','data'=>$res ,'msg'=>'attendance view');
-    echo json_encode($data);
+  if($res == '0')
+  { $obj1 = new attendanceService();
+    $resp = $obj1->student_listing($class_id);
+    $data = array('status' => '1','data'=>$resp ,'msg'=>'student listing');
+    echo json_encode($data );
   }
   else
-  {
-    $obj1 = new attendanceService();
-    $resp = $obj1->student_listing($class_id);
-   $data = array('status' => '2','data'=>$resp ,'msg'=>'student listing');
-    echo json_encode($data );
+  { 
+    $data = array('status' => '2','data'=>$res ,'msg'=>'attendance view');
+    echo json_encode($data);
   } 
 }
 
