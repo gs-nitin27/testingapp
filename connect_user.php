@@ -239,9 +239,9 @@ else if($_REQUEST['act'] == 'get_class_view_status')
     $demo_status      = $request->get_class_demo_status($class_id, $student_id);
     if($join_status != 0 )
     {
-      if($join_status['status'] == 1)
+      if($join_status['status'] != 0)
       {
-        $status = '2';
+        $status = $join_status['status'];
       }else
       {
         $status = '0';
