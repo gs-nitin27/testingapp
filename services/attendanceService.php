@@ -2,17 +2,25 @@
 
 class attendanceService
 {
-public function student_listing($classid)
+	
+public function student_listing($classid,$date)
 {
-$query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid'");
-
-		$num  = mysql_num_rows($query);
+$query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`userid` AS student_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid' AND `gs_class_data`.`status`='2' " );
+	$num  = mysql_num_rows($query);
 		if($num)
 		{
 			while($row = mysql_fetch_assoc($query))
 			{
-				$row['attendance_status']  = 'A';
-				$data[] = $row;
+
+				$student_code 			   = $row['student_code'];
+				$student_id 			   = $row['student_id'];
+				$name 					   = $row['name'];
+				$dob 					   = $row['dob'];
+				$gender 				   = $row['gender'];
+  				$age          			   =  $this->ageGropup($dob,$gender);
+
+				$row1 =  array('student_id'=>$student_id,'name'=>$name,'age'=>$age,'gender'=>$gender,'attendance_status'=>'NA');
+				$data[$student_code] = $row1;
 			}
 		return $data;
 		}
@@ -23,9 +31,21 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`gs_class_dat
 }
 
 
+public function ageGropup($dob,$gender)
+	{
+		$date_1 = new DateTime($dob);
+		$date_2 = new DateTime( date( 'd-m-Y' ));
+		$difference = $date_2->diff( $date_1 );
+		$year=(string)$difference->y;
+		return $year;
+	}
 
 
 
+
+
+
+   
 
 
 public function  athlete_attendance($data,$classid )
