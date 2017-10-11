@@ -77,42 +77,15 @@ $data['attendence'] = $value;
 return $data;
 }
 
+  
 
 
-
-
-
-
-
-
-
-
-
-
-   
-
-
-public function  athlete_attendance($data,$classid )
+ public function  athlete_attendance($data,$classid,$date )
 {
 
-//print_r($data);
+//echo "INSERT INTO `gs_class_attendence` (`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('$classid','$data',CURDATE(),CURDATE())";
 
-//echo "INSERT INTO `gs_class_attendance` (`class_id`,`attendance_detail`,`date_created`) VALUES('$classid','$data',CURDATE()) ";die();
-// $row        =  $this->check_class_id($classid);
-// if($row) 
-// {
-
-// $old_row 	= $row['attendance_detail'];
-// $new_row[] 	= $old_row;
-// $new_row[] 	= $data;
-// $new_data	= implode(",",$new_row);
-//   $row_sel    = mysql_query("UPDATE `gs_athlete_attendance` SET `attendance_detail`='$new_data',`date_updated` = CURDATE() WHERE `class_id`= $classid");
-// }
-// else
-// {
-
- $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`class_id`,`attendance_detail`,`date_created`,`date_updated`) VALUES('$classid','$data',CURDATE(),CURDATE()) ");
-
+ $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`id`,`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('0','$classid','$data',CURDATE(),CURDATE()) ");
 if($row_sel) 
 {
 return 1;
@@ -122,8 +95,6 @@ else
   return 0;
 }
 }
-
-
 
 
 
