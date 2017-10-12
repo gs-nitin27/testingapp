@@ -7,6 +7,7 @@ include('services/inventryservice.php');
 include('services/smsOtpService.php');
 include('services/emailService.php');
 include('services/accountingService.php');
+include('services/attendanceService.php');
  
 
 if($_REQUEST['act'] == 'connect')
@@ -239,9 +240,9 @@ else if($_REQUEST['act'] == 'get_class_view_status')
     $demo_status      = $request->get_class_demo_status($class_id, $student_id);
     if($join_status != 0 )
     {
-      if($join_status['status'] == 1)
+      if($join_status['status'] != 0)
       {
-        $status = '2';
+        $status = $join_status['status'];
       }else
       {
         $status = '0';
@@ -1513,28 +1514,29 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
 
 
 
-else if($_REQUEST['act'] == "get_attendance")
-{
-  $dateclause = '';
-  if(isset($_REQUEST['date']))
-  {
-  $date       = $_REQUEST['date'];  
-  $dateclause = "AND `date_created` = '$date'";
-  }
-  $class_id = $_REQUEST['class_id'];
-  $where = "WHERE `class_id` = '$class_id'".$dateclause;
-  $obj = new connect_userservice();
-  $res = $obj->get_attendence_data($where);
-
-  if($res != 0)
-  { $resp = array('status' =>'1' ,'data'=>$res );
-    echo json_encode($resp);
-  }
-  else
-  {
-    $resp = array('status' =>'0' ,'data'=>0 );
-    echo json_encode($resp);
-  } 
-}
+// else if($_REQUEST['act'] == "get_attendance")
+// {
+//   $dateclause = '';
+//   if(isset($_REQUEST['date']))
+//   {
+//   $date       = $_REQUEST['date'];  
+//   $dateclause = "AND `date_created` = '$date'";
+//   }
+//   $class_id = $_REQUEST['class_id'];
+//   $where = "WHERE `class_id` = '$class_id'".$dateclause;
+//   $obj = new connect_userservice();
+//   $res = $obj->get_attendence_data($where);
+//   if($res != '0')
+//   { $resp = array('status' =>'1' ,'data'=>$res );
+//     echo json_encode($resp);
+//   }
+//   else
+//   {
+//     $obj1 = new attendanceService();
+//     $resp = $obj1->student_listing($class_id);
+//     $resp = array('status' =>'2' ,'data'=>$resp );
+//     echo json_encode($resp);
+//   } 
+// }
 
 ?>

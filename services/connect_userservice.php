@@ -2146,6 +2146,7 @@ public function add_payement_record($data,$student_code)
 
 }
 
+
 public function getAllDues($coach_id)
 {
   $query = mysql_query("SELECT * FROM `gs_class_data` WHERE `coach_id` = '$coach_id' AND `status` = '2'");
@@ -2167,30 +2168,33 @@ public function getAllDues($coach_id)
 
 
 
-public function get_attendence_data($where)
-{
-  $query  = mysql_query("SELECT * FROM `gs_class_attendence`".$where."");
-    if(mysql_num_rows($query)!= 0)
-    {
-       $data = mysql_fetch_assoc($query);
-       $attendance = json_decode($data['attendence_data']);
-       foreach ($attendance as $key => $value) {
-         $data1[$key] = $this->get_student_detail($key,$value);
-       }
-      echo json_encode($data1);die;
-    }else
-    {
-        return 0;
-    }
-}
+// public function get_attendence_data($where)
+// {
+//   $query  = mysql_query("SELECT * FROM `gs_class_attendance`".$where."");
+//     if(mysql_num_rows($query)!= 0)
+//     {
+//        $data = mysql_fetch_assoc($query);
+//        $attendance = json_decode($data['attendance_detail']);
+//        foreach ($attendance as $key => $value) {
+//          $data1[$key] = $this->get_student_detail($key,$value);
+//        }
+//      return $data1;//die;
+//     }else
+//     {
+//         return 0;
+//     }
+// }
 
-public function get_student_detail($id,$value)
-{
-$query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
-$data =  mysql_fetch_assoc($query);
-$data['attendance'] = $value;
-return $data;
-}
+// public function get_student_detail($id,$value)
+// {
+// $query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
+// $data =  mysql_fetch_assoc($query);
+// $data['attendance'] = $value;
+// return $data;
+// }
+
+
+
 
 } // End Class
 
