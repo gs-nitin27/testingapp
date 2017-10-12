@@ -149,6 +149,17 @@ else if($_REQUEST['act'] == 'getjoblist')
   echo json_encode($res);
 }
 
+else if($_REQUEST['act'] == 'publishjob')
+{
+  $jobid = $_REQUEST['jobid'];
+  $publish = $_REQUEST['publish'];
+
+  $req = new angularapi();
+  $res = $req->publishjob($jobid,$publish);
+  echo json_encode($res);
+
+}
+
 else if($_REQUEST['act'] == 'getjobdetails')
 {
   $id = $_REQUEST['id'];
@@ -212,7 +223,6 @@ else if($_REQUEST['act'] == 'createevent')
         $item                     =  new stdClass();
         
        
-
         $item->id                        = $data->id;
         $item->userid                    = $data->userid;
         $item->name                      = $data->name;
@@ -435,5 +445,13 @@ else if($_REQUEST['act'] == 'createjob')
     $res = $req->createjob($item);     
     echo json_encode($res);
 }
+
+// else if($_REQUEST['act'] == 'job_apply_userlist')
+// {
+//    $jobid = $_REQUEST['jobid'];
+//    $req = new angularapi();
+//    $res = $req->job_apply_userlist($jobid);
+//    echo json_encode($res);
+// }
 
 ?>
