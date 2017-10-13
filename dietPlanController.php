@@ -219,9 +219,6 @@ else if($_REQUEST['act'] == 'active_diet_plan')
 }
 
 
-
-
-
 else if($_REQUEST['act'] == 'show_diet_plan')
 {
 

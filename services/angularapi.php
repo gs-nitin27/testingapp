@@ -107,10 +107,6 @@ public function socialLogin($email,$password,$name,$forget_code,$image)
    {
     return 0;
    }
-
-        
-
-
 }
 
 public function profiledata($userid)
@@ -129,7 +125,6 @@ public function profiledata($userid)
             {
                return 0;
             } 
-
 }
 
 public function getContent($userid)
@@ -150,7 +145,6 @@ public function getContent($userid)
 public function getuserevent($userid)
 {
   $query = mysql_query("SELECT `id`,`userid`,`name`,`location`,`sport_name` FROM `gs_eventinfo` WHERE `userid` = '$userid'");
-
   $row = mysql_num_rows($query);
   if($row)
   {
@@ -160,7 +154,6 @@ public function getuserevent($userid)
    }
      return $result;
   }
-
 }
 
 public function getuserdashboardevent($userid)
@@ -176,12 +169,11 @@ $query = mysql_query("SELECT * FROM `gs_eventinfo` WHERE `userid` = '$userid' OR
    }
      return $result;
   }
-
 }
 
 public function getjoblist($userid)
 {
-  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link`,`image` FROM `gs_jobinfo` WHERE `userid` = '$userid' ORDER BY id DESC");
+  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link`,`image`,`location` ,`publish` FROM `gs_jobinfo` WHERE `userid` = '$userid' ORDER BY id DESC");
   $row = mysql_num_rows($query);
   if($row)
   {
@@ -194,7 +186,6 @@ public function getjoblist($userid)
   {
     return 0;
   }
-
 }
 
 public function profile_data_update($userid,$prof_id,$profliedata)
@@ -208,7 +199,6 @@ public function profile_data_update($userid,$prof_id,$profliedata)
     return 0;
   }
 }
-
 
 public function createcontent($item)
 {
@@ -381,6 +371,43 @@ $insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`
   }
 
 }
+
+public function publishjob($jobid,$publish)
+{
+  $insert = mysql_query("UPDATE  `gs_jobInfo` SET `publish` = '$publish' WHERE `id` = '$jobid'");
+
+  $tes = mysql_affected_rows();
+
+  if($tes)
+  {
+    return $tes;
+
+  }else{
+    return 0;
+  }
+
+}
+
+// public function job_apply_userlist($jobid)
+// {
+//    $query = mysql_query("SELECT `userid` , `name` , `email` ,`contact_no`,`sport`,`gender`,`user_image` FROM `user` WHERE `userid` IN (SELECT `userid` FROM `user_jobs` WHERE `userjob` = '$jobid') ");
+
+//    if(mysql_num_rows($query))
+//    {
+//     while ($row = mysql_fetch_assoc($query)) 
+//     {
+//       $data[] = $row;
+//     }
+//     return $data;
+//    }
+//    else
+//    {
+//     return 0;
+//    }
+   
+
+// }
+
 }
 
 ?>
