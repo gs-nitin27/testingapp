@@ -775,9 +775,10 @@ public function getClassInfo($class_id)
 
 //End Function 
 
+
+
 public function get_class_Join_status($class_id,$studentid)
 {
-
 $query = mysql_query("SELECT `status` FROM `gs_class_data` WHERE `student_id`='$studentid' AND `classid` = '$class_id'");
 if(mysql_num_rows($query)>0)
 {

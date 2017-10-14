@@ -11,18 +11,13 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`useri
 		{
 			while($row = mysql_fetch_assoc($query))
 			{
-
 				$student_code 			   = $row['student_code'];
 				$student_id 			   = $row['student_id'];
 				$name 					   = $row['name'];
 				$dob 					   = $row['dob'];
 				$gender 				   = $row['gender'];
   				$age          			   =  $this->ageGropup($dob,$gender);
-
-
-
 				$row1 =  array('student_id'=>$student_id,'name'=>$name,'age'=>$age,'gender'=>$gender,'attendance_status'=>'NA','student_code'=>$student_code);
-
 				$data[] = $row1;
 			}
 
@@ -56,10 +51,9 @@ public function get_attendence_data($where)
        $data = mysql_fetch_assoc($query);
        $attendance = json_decode($data['attendence_detail']);
        foreach ($attendance as $key => $value) {
-         $data1[$key] = $this->get_student_detail($key,$value);
+        $data1[] = $this->get_student_detail($key,$value);
        }
-       $data2[] = $data1;
-       return $data2;//die;
+       return $data1; 
      }
     else
     {
@@ -71,9 +65,13 @@ public function get_attendence_data($where)
 
 public function get_student_detail($id,$value)
 {
-$query = mysql_query("SELECT `student_name`,`phone`,`email` FROM `gs_class_data` WHERE `student_code`='$id'");
+
+$query = mysql_query("SELECT `student_name` AS name, `student_dob`,`gender`,`student_code`  FROM `gs_class_data` WHERE `student_code`='$id'");
 $data =  mysql_fetch_assoc($query);
-$data['attendence'] = $value;
+$data['attendance_status'] = $value;
+$dob 					   = $data['student_dob'];
+$data['age']          	   =  $this->ageGropup($dob,$gender);
+unset($data['student_dob']);
 return $data;
 }
 
@@ -82,10 +80,7 @@ return $data;
 
  public function  athlete_attendance($data,$classid,$date )
 {
-
-//echo "INSERT INTO `gs_class_attendence` (`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('$classid','$data',CURDATE(),CURDATE())";
-
- $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`id`,`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('0','$classid','$data',CURDATE(),CURDATE()) ");
+ $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`id`,`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('0','$classid','$data','$date',CURDATE()) ");
 if($row_sel) 
 {
 return 1;
@@ -96,6 +91,64 @@ else
 }
 }
 
+
+
+
+public function check_attendance($data1)
+{
+ $date 			    = $data1->date;
+ $class_id  		= $data1->class_id;
+ $student_userid 	= $data1->student_userid;
+ $search_month 		= date("m",strtotime($date));
+ $student_code  	= $this->get_code($student_userid);
+ $query = mysql_query("SELECT  *FROM `gs_class_attendence` WHERE `class_id` ='$class_id'");
+ while ($row = mysql_fetch_assoc($query))
+ {
+      $attendance 			       = json_decode($row['attendence_detail']);
+      $date_created  				= $row['date_created'];
+      $created_month      = date("m",strtotime($date_created));
+      if ($created_month  ==  $search_month )
+      {
+       $attendance_status 	=  get_object_vars($attendance)[$student_code];
+	   $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
+       $data[] 				=  $attendance_data;
+      }
+}
+
+      
+return $data;
+
+
+
+} // End of Function
+
+
+
+
+public function get_code($student_id)
+{
+	$query = mysql_query("SELECT `student_code` FROM `gs_class_data` WHERE `student_id`=$student_id");
+	$row  = mysql_fetch_row($query);
+	return $row[0];
+}
+
+
+
+
+
+
+
+
+
+public function get_athelte_detail($id,$value)
+{
+$query = mysql_query("SELECT `student_name` FROM `gs_class_data` WHERE `student_code`='$id'");
+$row =  mysql_fetch_assoc($query);
+unset($row['student_name']);
+$row['attendance_status'] = $value;
+
+return $row;
+}
 
 
 
@@ -115,6 +168,9 @@ else
   return 0;
 }
 }
+
+
+
 
 
 
