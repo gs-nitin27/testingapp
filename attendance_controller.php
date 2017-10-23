@@ -70,7 +70,7 @@ if($res != 0)
 }
 else
 {
-  $data = array('status' => '0','data'=>'0' ,'msg'=>'no data');
+  $data = array('status' => '0','data'=>[] ,'msg'=>'no data');
 }
   echo json_encode($data);
 

@@ -96,11 +96,11 @@ else
 
 public function check_attendance($data1)
 {
- $date 			    = $data1->date;
+ $date 			= $data1->date;
  $class_id  		= $data1->class_id;
  $student_userid 	= $data1->student_userid;
  $search_month 		= date("m",strtotime($date));
- $student_code  	= $this->get_code($student_userid);
+ $student_code  	= $this->get_code($student_userid,$class_id);
  $query = mysql_query("SELECT  *FROM `gs_class_attendence` WHERE `class_id` ='$class_id'");
  while ($row = mysql_fetch_assoc($query))
  {
@@ -109,9 +109,16 @@ public function check_attendance($data1)
       $created_month      = date("m",strtotime($date_created));
       if ($created_month  ==  $search_month )
       {
+
        $attendance_status 	=  get_object_vars($attendance)[$student_code];
+
 	   $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
+		
+
+
        $data[] 				=  $attendance_data;
+
+
       }
 }
 
@@ -125,9 +132,9 @@ return $data;
 
 
 
-public function get_code($student_id)
+public function get_code($student_id, $class_id)
 {
-	$query = mysql_query("SELECT `student_code` FROM `gs_class_data` WHERE `student_id`=$student_id");
+	$query = mysql_query("SELECT `student_code` FROM `gs_class_data` WHERE `student_id`=$student_id AND `classid`= $class_id ");
 	$row  = mysql_fetch_row($query);
 	return $row[0];
 }
