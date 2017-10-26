@@ -7,10 +7,8 @@ include('services/connect_userservice.php');
 if($_REQUEST['act'] == 'classlist')
 {
    $userid = $_REQUEST['userid'];
-
    $req = new accountingServices();
    $res = $req->classlist($userid);
-
    if($res)
    {
    	echo json_encode($res);

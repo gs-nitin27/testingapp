@@ -823,7 +823,7 @@ echo json_encode($data);
 
 else if($_REQUEST['act'] == "job_api")
 {
- $where      = " `publish` = '1' ORDER BY `date_created` DESC ";
+$where      = " `publish` = '1' ORDER BY `date_updated` DESC ";
 $req         = new liteservice();
 $res          = $req->get_Job_Data($where);
 if($res != 0)
