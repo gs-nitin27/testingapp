@@ -92,7 +92,7 @@ return $data;
    
 
 
-public function  athlete_attendance($data,$classid )
+public function  athlete_attendance($data,$classid)
 {
 
 //print_r($data);

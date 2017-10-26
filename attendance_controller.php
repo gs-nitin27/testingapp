@@ -8,6 +8,7 @@ include('services/userdataservice.php');
 
 error_reporting(E_ERROR | E_PARSE);
 
+
 // if($_REQUEST['act'] == "student_list1")
 // {
 // 	$classid  = $_REQUEST['classid'];
@@ -57,11 +58,14 @@ if($_REQUEST['act'] == "student_list")
 
 else if ($_REQUEST['act'] == 'athlete_attendance')
 {
-$data      		 =    file_get_contents("php://input");
+
+//$data      		 =    file_get_contents("php://input");
+
+$data            =     json_decode($_POST['attendance']);
 $classid         = 		$_REQUEST['classid'];
 $date         	 = 		$_REQUEST['date'];
-$req       		 =   new attendanceService();
-$req       		 =   $req->athlete_attendance($data,$classid,$date);
+$req       	   	 =   new attendanceService();
+$req       		   =   $req->athlete_attendance($data,$classid,$date);
 if($req != 0)
 {
   $data = array('status' => '1','data'=>'1' ,'msg'=>'Success');
