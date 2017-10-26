@@ -112,7 +112,10 @@ public function  savePerformance($userdata)
 	$athleteid       =  $userdata->athleteid;
 	$data       	 =  $userdata->data;
 	$status       	 =  $userdata->status;
-	$query 			 =	mysql_query("UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`date_created`= CURDATE() WHERE `id`=$id");
+	$avg 			 =  $userdata->avg;
+	$modules_avg	 =  $userdata->modules_avg;
+
+	$query 			 =	mysql_query("UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id");
 	$num=mysql_affected_rows(); 
 	if ($num)
 	{
@@ -299,6 +302,32 @@ public function  view_request_assessment($athlete_id)
 	
 
 }
+
+public function class_show($coach_id)
+{
+  $query = mysql_query("SELECT `student_id`,`student_name` FROM `gs_class_data` WHERE `coach_id` = '$coach_id' AND `status` = '2' ");
+  $num   = mysql_num_rows($query);
+  if($num)
+  {
+     while($row = mysql_fetch_assoc($query))
+     {
+     	$row['last_assessment'] = '';
+     	$row['avg'] 			= '';
+     	$row['total'] 			= '';
+     	$data[]  				= $row;
+     }
+     return $data;
+  }
+  else
+  {
+		return 0;
+  }
+	
+
+}
+
+
+
 
 
 

@@ -79,6 +79,27 @@ else
 
 
 
+else if ($_REQUEST['act'] == 'cancel_class')
+{
+$data          =   json_decode(file_get_contents("php://input"));
+$req           =   new attendanceService();
+$res           =   $req->cancel_class($data);
+if($res != 0)
+{
+  $data = array('status' => '1','data'=>$res ,'msg'=>'class is cancel');
+}
+else
+{
+  $data = array('status' => '0','data'=>[] ,'msg'=>'class is not cancel');
+}
+  echo json_encode($data);
+
+}
+
+
+
+
+
 
 
 

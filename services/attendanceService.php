@@ -78,8 +78,16 @@ return $data;
   
 
 
- public function  athlete_attendance($data,$classid,$date )
+public function  athlete_attendance($data,$classid,$date )
 {
+$check_cancel_data  =  $this->cheak_cancel_date($classid,$date);
+if($check_cancel_data)
+{
+return 0;
+}
+else
+{
+
  $row_sel    = mysql_query("INSERT INTO `gs_class_attendence` (`id`,`class_id`,`attendence_detail`,`date_created`,`date_updated`) VALUES('0','$classid','$data','$date',CURDATE()) ");
 if($row_sel) 
 {
@@ -90,7 +98,25 @@ else
   return 0;
 }
 }
+}
 
+
+
+public function cheak_cancel_date($classid,$date)
+{
+	$query = mysql_query("SELECT  *FROM `gs_class_cancel_data` WHERE `class_id` ='$class_id' AND `date`='$date' ");
+	$num = mysql_num_rows($query);
+	if ($num)
+	{
+	 return 1;
+	}
+	else
+	{
+		return 0;
+	}
+
+
+}
 
 
 
@@ -176,6 +202,32 @@ else
 }
 }
 
+
+
+
+
+public function  cancel_class($data)
+{
+$coach_id  = $data->coach_id;
+$class_id  = $data->class_id;
+$date 	   = $data->date;
+$message   = $data->message;
+
+
+//  $this->cheak_cancel_row($coach_id,$class_id)
+
+
+
+ $row_sel    = mysql_query("INSERT INTO `gs_class_cancel_data` (`id`,`coach_id`,`class_id`,`date`,`message`) VALUES('0','$coach_id','$class_id','$date','$message') ");
+if($row_sel) 
+{
+return 1;
+}
+else
+{
+  return 0;
+}
+}
 
 
 

@@ -41,6 +41,9 @@ else if($_REQUEST['act'] == 'save_performance')
 {
    $data          =  file_get_contents("php://input");
    $userdata      =  json_decode(file_get_contents("php://input"));
+
+   //print_r($userdata);  die();
+   
    $req           =  new UserPerformanceService();
    $res           =  $req->savePerformance($userdata);
 
@@ -146,6 +149,7 @@ else if ($_REQUEST['act'] == 'view_guidelines')
 else if($_REQUEST['act'] == 'save_suggestion') 
 {         $data          =  file_get_contents("php://input");
           $userdata      =  json_decode(file_get_contents("php://input")); 
+
           $req           =  new UserPerformanceService();
           $res           =  $req->suggestion($userdata);
           if($res)
@@ -212,6 +216,32 @@ else if($_REQUEST['act'] == 'view_request_assessment')
      } 
 }
    
+
+
+
+/***********************class_listing******************************/
+
+else if($_REQUEST['act'] == 'coach_class_listing') 
+{
+   $coach_id          = $_REQUEST['coach_id'];
+   $req               =  new UserPerformanceService();
+   $res               =  $req->class_show($coach_id);
+     if($res)
+     {
+       $data = array('status' => 1, 'data'=> $res, 'msg'=>'class list ');
+            echo json_encode($data);
+     }
+     else
+     {
+       $data = array('status' => 0, 'data'=>$res, 'msg'=>'No class');
+           echo json_encode($data);
+     } 
+}
+
+
+
+
+
 
 
 
