@@ -37,28 +37,21 @@ if($_REQUEST['act'] == "student_list")
 
 else if ($_REQUEST['act'] == 'athlete_attendance')
 {
-
-$classid       =    $_REQUEST['classid'];
-$date          =    $_REQUEST['date'];
-$data      		 =    file_get_contents("php://input");
-$req       		 =   new attendanceService();
-$req       		 =   $req->athlete_attendance($data,$classid,$date);
-if($req != 0)
-{
-  $data = array('status' => '1','data'=>'1' ,'msg'=>'Success');
+  $classid       =    $_REQUEST['classid'];
+  $date          =    $_REQUEST['date'];
+  $data      		 =    file_get_contents("php://input");
+  $req       		 =   new attendanceService();
+  $req       		 =   $req->athlete_attendance($data,$classid,$date);
+  if($req != 0)
+    {
+      $data = array('status' => '1','data'=>'1' ,'msg'=>'Success');
+    }
+  else
+    {
+      $data = array('status' => '0','data'=>'0' ,'msg'=>'Failure');
+    }  
+    echo json_encode($data);
 }
-else
-{
-  $data = array('status' => '0','data'=>'0' ,'msg'=>'Failure');
-}
-  echo json_encode($data);
-
-}
-
-
-
-
-
 
 
 else if ($_REQUEST['act'] == 'check_attendance')
@@ -67,13 +60,13 @@ $data          =   json_decode(file_get_contents("php://input"));
 $req           =   new attendanceService();
 $res           =   $req->check_attendance($data);
 if($res != 0)
-{
-  $data = array('status' => '1','data'=>$res ,'msg'=>'check attendance list');
-}
+  {
+    $data = array('status' => '1','data'=>$res ,'msg'=>'check attendance list');
+  }
 else
-{
-  $data = array('status' => '0','data'=>[] ,'msg'=>'no data');
-}
+  {
+    $data = array('status' => '0','data'=>[] ,'msg'=>'no data');
+  }
   echo json_encode($data);
 
 }
@@ -87,15 +80,14 @@ $data          =   json_decode(file_get_contents("php://input"));
 $req           =   new attendanceService();
 $res           =   $req->cancel_class($data);
 if($res != 0)
-{
-  $data = array('status' => '1','data'=>$res ,'msg'=>'class is cancel');
-}
+  {
+    $data = array('status' => '1','data'=>$res ,'msg'=>'class is cancel');
+  }
 else
-{
-  $data = array('status' => '0','data'=>[] ,'msg'=>'class is not cancel');
-}
+  {
+    $data = array('status' => '0','data'=>[] ,'msg'=>'class is not cancel');
+  }
   echo json_encode($data);
-
 }
 
 

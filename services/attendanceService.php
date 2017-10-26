@@ -104,7 +104,7 @@ else
 
 public function cheak_cancel_date($classid,$date)
 {
-	$query = mysql_query("SELECT  *FROM `gs_class_cancel_data` WHERE `class_id` ='$class_id' AND `date`='$date' ");
+	$query = mysql_query("SELECT * FROM `class_reschedule` WHERE `class_id` ='$classid' AND `resc_date`='$date'");
 	$num = mysql_num_rows($query);
 	if ($num)
 	{
@@ -112,7 +112,7 @@ public function cheak_cancel_date($classid,$date)
 	}
 	else
 	{
-		return 0;
+	 return 0;
 	}
 
 
@@ -193,7 +193,7 @@ public function  cancel_class($data)
 	$date 	   = $data->date;
 	$message   = $data->message;
 	//  $this->cheak_cancel_row($coach_id,$class_id)
-	$row_sel    = mysql_query("INSERT INTO `gs_class_cancel_data` (`id`,`coach_id`,`class_id`,`date`,`message`) VALUES('0','$coach_id','$class_id','$date','$message') ");
+	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
 	if($row_sel) 
 		{
 		return 1;
