@@ -304,44 +304,33 @@ public function  view_request_assessment($athlete_id)
 
 }
 
-public function class_show($coach_id,$class_id)
+public function class_show($coach_id)
 {
-if (empty($class_id))
-{
-  $where = 	" WHERE coach_id = '$coach_id' AND `status` = '2' ";
-}
-else
-{
-	$where = 	" WHERE classid = '$class_id' AND `status` = '2' ";
-}
+	$average  		= '';
+	$total    		= '';
+	$date_publish 	= '';
 
-  $query1 = mysql_query("SELECT `student_id`,`student_name` FROM `gs_class_data` $where ");
-  $num   = mysql_num_rows($query1);
-  if($num)
-  {
-     while($row1 = mysql_fetch_assoc($query1))
-     {
-     	$athleteid  = $row1['student_id'];
-$query = mysql_query("SELECT avg(avg) AS average, COUNT(*) AS total, `date_publish` FROM gs_athlit_performance WHERE athlitid = '$athleteid' ORDER BY date_publish DESC");
+
+$num  = $this->cheack_coach_id($coach_id);
+if($num=='1')
+{
+$query = mysql_query("SELECT avg(avg) AS average, COUNT(*) AS total, `date_publish` FROM gs_athlit_performance WHERE coachid=202 ORDER BY date_publish DESC");
 $row 			= mysql_fetch_assoc($query);
 $average  		= $row['average'];
 $total 			= $row['total'];
 $date_publish   = $row['date_publish'];
-if(empty($average)) 
-{
-$average 	   ='0';
-$total    	   ='0';
-$date_publish  ='';	
 }
+  $query = mysql_query("SELECT `student_id`,`student_name` FROM `gs_class_data` WHERE `coach_id` = '$coach_id' AND `status` = '2' ");
 
-
-
-
-
-     	$row1['last_assessment'] = $date_publish;
-     	$row1['avg'] 			= $average;
-     	$row1['total'] 			= $total;
-     	$data[]  				= $row1;
+  $num   = mysql_num_rows($query);
+  if($num)
+  {
+     while($row = mysql_fetch_assoc($query))
+     {
+     	$row['last_assessment'] = $date_publish;
+     	$row['avg'] 			= $average;
+     	$row['total'] 			= $total;
+     	$data[]  				= $row;
      }
      return $data;
   }
