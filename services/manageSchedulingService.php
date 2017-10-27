@@ -262,22 +262,19 @@ public function create_reschedule($item)
 public function get_reschedule($date,$classid,$res)
 {//print_r($res['data']);die;
 
-$query = mysql_query("SELECT `id`,`classid`,`resc_type`,`start_time`, `end_time` FROM `class_reschedule` WHERE `resc_date` = '$date' AND `classid` IN ($classid) ORDER BY `start_time` ASC");
+$query = mysql_query("SELECT `id`,`classid`,`resc_type`,`start_time`, `end_time`,`resc_to` FROM `class_reschedule` WHERE `resc_date` = '$date' AND `classid` IN ($classid) ORDER BY `start_time` ASC");
 if(mysql_num_rows($query)>0)
 {
 while($row = mysql_fetch_assoc($query))
 {
 foreach ($res['data'] as $key => $value) {
   if($value['id'] == $row['classid'])
-  {
-    $rows[] = $key.'|'.$value['id'].'|'.$row['resc_type'].'|'.$row['start_time'].'-'.$row['end_time'];
+  { $row['data_key'] = $key;
+    $rows[] = $row;
   }
 }
-//$rows[] = $row;
 }
-//print_r($rows); 
 return $rows;
-
 }
 else
 {

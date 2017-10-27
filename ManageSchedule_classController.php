@@ -233,13 +233,16 @@ else if($_REQUEST['act'] == "get_classlisting")
 					if($resc1 != 0)
 					{   
 						foreach ($resc1 as $key => $value) {
-							$data = explode('|', $value);
-							$key = $data[0];
-							$id  = $data[1];
-							if($data['2'] == '2')
+							$key = $value['data_key'];//$data[0];
+							$id  = $value['classid'];//$data[1];
+							if($value['resc_type'] == '2')
 							{
-							$res['data'][$key]['reschedule'] = $data['2'];
-							//print_r($res['data'][$key]['id']);die;	
+							$res['data'][$key]['reschedule'] = $value['resc_type'];
+							}else if($value['resc_type'] == '3')
+							{
+                            $res['data']['class_start_timing'] = $value['start_time'];
+                            $res['data']['class_end_timing'] = $value['end_time'];
+                            $res['data'][$key]['reschedule'] = $value['resc_type'];
 							}
 							
 						}
