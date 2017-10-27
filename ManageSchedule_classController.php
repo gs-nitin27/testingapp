@@ -227,17 +227,29 @@ else if($_REQUEST['act'] == "get_classlisting")
 						$req = new manageSchedulingService();
 						$res = $req->getclasslisting($userid, $date);
 					if($res != 0)
-					{   
+					{   //echo json_encode($res['data']);die;
                         $resc  = new manageSchedulingService();
-						$resc1 = $resc->get_reschedule($date,$res['class_id']);
+						$resc1 = $resc->get_reschedule($date,$res['class_id'],$res);
 					if($resc1 != 0)
-					{
-                        if($resc1['resc_type'] == '2')
+					{   
+						foreach ($resc1 as $key => $value) {
+							$data = explode('|', $value);
+							$key = $data[0];
+							$id  = $data[1];
+							if($data['2'] == '2')
+							{
+							$res['data'][$key]['reschedule'] = $data['2'];
+							//print_r($res['data'][$key]['id']);die;	
+							}
+							
+						}
+					    // echo json_encode($resc1);die;
+                        /*if($resc1['resc_type'] == '2')
                         {
                            
 
 
-                        }
+                        }*/
 						/*$size  = sizeof($resc1);
 						$size1 = sizeof($res);
 
@@ -263,7 +275,7 @@ else if($_REQUEST['act'] == "get_classlisting")
 				}
 			 }*/
 
-					}        for($k = 0 ; $k<sizeof($res) ;$k++)
+					}        /*for($k = 0 ; $k<sizeof($res) ;$k++)
 		         	         {
 
 					             if($res[$k]['status'] == "")
@@ -274,9 +286,9 @@ else if($_REQUEST['act'] == "get_classlisting")
 					             }
 
 
-					         }
+					         }*/
 							
-							$data = array('status'=>'1','data'=>$res);
+							$data = array('status'=>'1','data'=>$res['data']);
 							echo json_encode($data);
 					         
 

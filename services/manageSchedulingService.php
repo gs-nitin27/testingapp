@@ -202,13 +202,14 @@ if(mysql_num_rows($query)> 0)
         $datediff =  $now-$to;
         $datediff =  floor($datediff / (60 * 60 * 24));//die;
         if($datediff > 0 || $datediff = 0)
-        {
+        {$row['reschedule'] = '0';
          $rows[] = $row; 
          $classid[] = $row['id'];
         }
      }
      else
      {
+      $row['reschedule'] = '0';
       $rows[] = $row;
       $classid[] = $row['id'];
      }
@@ -258,19 +259,24 @@ public function create_reschedule($item)
   return false;
 }
 
-public function get_reschedule($date,$classid)
-{echo "SELECT * FROM `class_reschedule` WHERE `resc_date` = /*FROM_UNIXTIME(*/'$date'/*)*/ AND `class_id` IN ('$classid') ORDER BY `start_time` ASC";die;
-$query = mysql_query("SELECT * FROM `class_reschedule` WHERE `resc_date` = /*FROM_UNIXTIME(*/'$date'/*)*/ AND `class_id` IN ($classid) ORDER BY `start_time` ASC");
+public function get_reschedule($date,$classid,$res)
+{//print_r($res['data']);die;
+
+$query = mysql_query("SELECT `id`,`classid`,`resc_type`,`start_time`, `end_time` FROM `class_reschedule` WHERE `resc_date` = '$date' AND `classid` IN ($classid) ORDER BY `start_time` ASC");
 if(mysql_num_rows($query)>0)
 {
-$row = mysql_fetch_assoc($query);
-/*while()
+while($row = mysql_fetch_assoc($query))
 {
-//print_r($row);die;
-$data[] = $row;
-
-}*/
-return $row;
+foreach ($res['data'] as $key => $value) {
+  if($value['id'] == $row['classid'])
+  {
+    $rows[] = $key.'|'.$value['id'].'|'.$row['resc_type'].'|'.$row['start_time'].'-'.$row['end_time'];
+  }
+}
+//$rows[] = $row;
+}
+//print_r($rows); 
+return $rows;
 
 }
 else
