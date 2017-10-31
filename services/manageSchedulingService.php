@@ -224,7 +224,6 @@ return 0;
 }
 
 public function varify_existing($item, $data)
-
 {
 	if($data != "")
 	{
@@ -234,7 +233,6 @@ public function varify_existing($item, $data)
 	{
        $classid = $item->classid;
 	}
-//echo "SELECT * FROM `class_reschedule` WHERE `classid` = '$classid' AND `userid` = '$item->userid' AND `resc_date` = FROM_UNIXTIME($item->date)";
 $query  = mysql_query("SELECT * FROM `class_reschedule` WHERE `classid` = '$classid' AND `userid` = '$item->userid' AND `resc_date` = FROM_UNIXTIME($item->date)");
 
 $row = mysql_num_rows($query);

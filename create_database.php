@@ -1873,20 +1873,6 @@ if($res)
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //**********CODE FOR VIDEO UPLOAD**************************//
 
 if($_SERVER['REQUEST_METHOD']=='POST')

@@ -128,24 +128,27 @@ public function check_attendance($data1)
  $search_month 		= date("m",strtotime($date));
  $student_code  	= $this->get_code($student_userid,$class_id);
  $query = mysql_query("SELECT  *FROM `gs_class_attendence` WHERE `class_id` ='$class_id'");
- while ($row = mysql_fetch_assoc($query))
+ if(mysql_num_rows($query)>0)
  {
-      $attendance 			       = json_decode($row['attendence_detail']);
+ while ($row = mysql_fetch_assoc($query))
+ {    $attendance 			       = json_decode($row['attendence_detail']);
       $date_created  				= $row['date_created'];
       $created_month      = date("m",strtotime($date_created));
       if ($created_month  ==  $search_month )
        {
-
+       
        $attendance_status 	=  get_object_vars($attendance)[$student_code];
-
-	   $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
-		
-
-
-       $data[] 				=  $attendance_data;
+       $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
+	   $data[] 				=  $attendance_data;
 
 		} // End of Function
 	}
+   return $data;
+ }
+ else
+ {
+ 	return 0;
+ }
 }
 
 
