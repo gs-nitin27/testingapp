@@ -232,30 +232,29 @@ else if($_REQUEST['act'] == "get_classlisting")
                         $resc  = new manageSchedulingService();
 						$resc1 = $resc->get_reschedule($date,$res['class_id'],$res);
 					if($resc1 != 0)
-					{   
+					{  
 						foreach ($resc1 as $key => $value) {
-							print_r($value);die;
-							$key = $data['data_key'];
-							$id  = $data['classid'];
-							if($data['2'] == '2')
+							$key = $value['data_key'];
+							$id  = $value['classid'];
+							if($value['resc_type'] == '2')
 								{
-								$res['data'][$key]['reschedule'] = $data['2'];
+								$res['data'][$key]['reschedule'] = $value['resc_type'];
 								}
-							else if($data['2'] == '3')
+							else if($value['resc_type'] == '3')
 								{
-                                 $res['data'][$key][$id]['class_start_timing'] = $data['start_time'];
-                                 $res['data'][$key][$id]['class_end_timing'] = $data['end_time'];
-                                 $res['data'][$key]['reschedule'] = $data['2'];
+                                 $res['data'][$key][$id]['class_start_timing'] = $value['start_time'];
+                                 $res['data'][$key][$id]['class_end_timing'] = $value['end_time'];
+                                 $res['data'][$key]['reschedule'] = $value['resc_type'];
 								}
-							else if($data['2'] == '1')	
+							else if($value['resc_type'] == '1')	
 								{
-$exchange_key = $data['exchange_key'];
-$excahnge_id  = $data['resc_to'];
+$exchange_key = $value['exchange_key'];
+$excahnge_id  = $value['resc_to'];
 $res['data'][$exchange_key][$excahnge_id]['class_start_timing'] = $res['data'][$key][$id]['class_start_timing'] ;
 $res['data'][$exchange_key][$excahnge_id]['class_end_timing'] = $res['data'][$key][$id]['class_end_timing'] ;
-$res['data'][$key][$id]['class_start_timing'] = $data['start_time'];
-$res['data'][$key][$id]['class_end_timing'] = $data['end_time'];
-$res['data'][$key]['reschedule'] = $data['2'];
+$res['data'][$key][$id]['class_start_timing'] = $value['start_time'];
+$res['data'][$key][$id]['class_end_timing'] = $value['end_time'];
+$res['data'][$key]['reschedule'] = $value['resc_type'];
 								}
 							
 				}
