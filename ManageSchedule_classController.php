@@ -218,7 +218,8 @@ else if($_POST['act'] == "get_classstudent")
 }
 
 else if($_REQUEST['act'] == "get_classlisting")
-{                       $time = urldecode($_REQUEST['time']);
+{                    //   print_r($_REQUEST);die;
+	                    $time = urldecode($_REQUEST['time']);
 						$time_in_24_hour_format  = date("H:i", strtotime("7 p.m"));
 
 						$userid = urldecode($_REQUEST['userid']);
@@ -233,61 +234,33 @@ else if($_REQUEST['act'] == "get_classlisting")
 					if($resc1 != 0)
 					{   
 						foreach ($resc1 as $key => $value) {
-							$data = explode('|', $value);
-							$key = $data[0];
-							$id  = $data[1];
+							print_r($value);die;
+							$key = $data['data_key'];
+							$id  = $data['classid'];
 							if($data['2'] == '2')
-							{
-							$res['data'][$key]['reschedule'] = $data['2'];
-							//print_r($res['data'][$key]['id']);die;	
-							}
+								{
+								$res['data'][$key]['reschedule'] = $data['2'];
+								}
+							else if($data['2'] == '3')
+								{
+                                 $res['data'][$key][$id]['class_start_timing'] = $data['start_time'];
+                                 $res['data'][$key][$id]['class_end_timing'] = $data['end_time'];
+                                 $res['data'][$key]['reschedule'] = $data['2'];
+								}
+							else if($data['2'] == '1')	
+								{
+$exchange_key = $data['exchange_key'];
+$excahnge_id  = $data['resc_to'];
+$res['data'][$exchange_key][$excahnge_id]['class_start_timing'] = $res['data'][$key][$id]['class_start_timing'] ;
+$res['data'][$exchange_key][$excahnge_id]['class_end_timing'] = $res['data'][$key][$id]['class_end_timing'] ;
+$res['data'][$key][$id]['class_start_timing'] = $data['start_time'];
+$res['data'][$key][$id]['class_end_timing'] = $data['end_time'];
+$res['data'][$key]['reschedule'] = $data['2'];
+								}
 							
-						}
-					    // echo json_encode($resc1);die;
-                        /*if($resc1['resc_type'] == '2')
-                        {
-                           
-
-
-                        }*/
-						/*$size  = sizeof($resc1);
-						$size1 = sizeof($res);
-
-					for ($i=0; $i<$size;$i++)
-					{
-
-
-						 $classid = $resc1[$i]['classid'];
-						 $start   = $resc1[$i]['start_time'];
-						 $end     = $resc1[$i]['end_time'];
-					 
-					for ($j=0; $j<$size1 ; $j++)
-					{
-					    $orig_start = $res[$j]['class_start_timing'];
-					    $orig_end   = $res[$j]['class_end_timing'];
-
-					    if($classid == $res[$j]['id'])
-					{
-					    $res[$j]['class_start_timing'] = $start;
-					    $res[$j]['class_end_timing']   = $end;
-					    $res[$j]['status']             = $resc1[$i]['resc_type'];   
-					}
 				}
-			 }*/
-
-					}        /*for($k = 0 ; $k<sizeof($res) ;$k++)
-		         	         {
-
-					             if($res[$k]['status'] == "")
-					             {
-					    
-					             $res[$k]['status']   = '4';
-
-					             }
-
-
-					         }*/
-							
+					 
+					}      
 							$data = array('status'=>'1','data'=>$res['data']);
 							echo json_encode($data);
 					         
@@ -304,13 +277,10 @@ else if($_REQUEST['act'] == "get_classlisting")
 
 else if($_REQUEST['act'] == "class_resc")
 {
-					$data1 = json_decode($_POST['data']);
+					$data1 = json_decode(file_get_contents("php://input"));
 					$item  = new stdClass();
-                     
-                     // print_r($data1);die;
-
-
-					$item->userid              = $data1->userid;
+					//print_r($data1);die;
+                    $item->userid              = $data1->userid;
 					$item->date                = strtotime($data1->date);
 					$item->start_time          = $data1->start_time;
 					$item->end_time            = $data1->end_time;
@@ -318,15 +288,18 @@ else if($_REQUEST['act'] == "class_resc")
 					$item->type                = $data1->type; 
 					$item->existing_classid    = $data1->existing_classid; 
 					$item->old_start_time      = $data1->old_start_time;
-					$item->old_end_time        = $data1->old_end_time;
+					//$item->resc_to             = $data1->rechedule_with;
+                    /*print_r($data1);
+					print_r($item);die;*/
+/*					$item->old_end_time        = $data1->old_end_time;
 
 					$req = new manageSchedulingService();
 					$res = $req->varify_existing($item,$data);
 
-
+*/	
 					$req1 = new manageSchedulingService();
-					$res1 = $req1->create_reschedule($item);
-					if($item->type == 0)
+				    $res1 = $req1->create_reschedule($item);
+					/*if($item->type == 0)
 					{
 					$data  = '1';
 					$start = $item->old_start_time;
@@ -334,12 +307,17 @@ else if($_REQUEST['act'] == "class_resc")
 					$var   = new manageSchedulingService();
 					$var1  = $var->varify_existing($item, $data);
 					$req2  = new manageSchedulingService();
-					$res2  = $req2->create_reschedulefororig($item , $start, $end);
+					$res2  = $req2->create_reschedulefororig($item , $start, $end);*/
 
-}
-
-echo $res1;
-
+				//}
+				if($res1 != 0)
+				{
+					$resp =  array('status' =>$res1 ,'msg'=>'Success' );
+				}else
+				{
+					$resp = array('status' =>$res1, 'msg'=>'Failure');
+				}
+				echo json_encode($resp);
 }
 
 else if($_POST['act'] == "check_existing")

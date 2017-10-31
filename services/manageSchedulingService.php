@@ -246,15 +246,15 @@ $query1 = mysql_query("DELETE FROM `class_reschedule` WHERE `classid` = '$classi
 }
 
 public function create_reschedule($item)
-{
-  $query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
+{ 
+   $query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
   if($query)
   {
 
-  return true;
+  return 1;
   }
   else 
-  return false;
+  return 0;
 }
 
 public function get_reschedule($date,$classid,$res)
@@ -268,7 +268,12 @@ while($row = mysql_fetch_assoc($query))
 foreach ($res['data'] as $key => $value) {
   if($value['id'] == $row['classid'])
   { $row['data_key'] = $key;
+
     $rows[] = $row;
+  }
+  if($value['id'] == $row['classid'])
+  {
+   $row['exchange_key'] = $key;    
   }
 }
 }
