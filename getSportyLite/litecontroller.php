@@ -861,11 +861,57 @@ else
 echo json_encode($data);
 }
 
+/*********************** Event page Api in getsporty ********************************* ***/
 
+else if($_REQUEST['act'] == 'event_data_api')
+{
+   $req = new liteservice();
 
+   $res = $req->event_data_api();
 
+   if($res)
+   {
+    $data =  array('data' =>$res , 'status' => '1');
+    echo json_encode($data);
+   }
+   else
+   {
+     $data = array('data' =>$res , 'status' => '');
+     echo json_encode($data);
+   }
+}
 
+else if($_REQUEST['act'] == 'job_list_api')
+{
+  
+  $req = new liteservice();
+  $res = $req->job_list_api();
+  if($res)
+  {
+     $data = array('data' =>$res , 'status' => '1' );
+     echo json_encode($data);
+  } 
+  else
+  {
+    $data = array('data' =>$res , 'status' => '' );
+    echo json_encode($data);
+  }
+}
 
+else if($_REQUEST['act'] == 'tournament_list_api')
+{
+  $req = new liteservice();
+  $res = $req->tournament_list_api();
+
+  if($res)
+    {
+      $data = array('data' => $res , 'status' => '1');
+      echo json_encode($data);
+    }else
+    {
+      $data = array('data' => $res, 'status' => '');
+    }
+}
 
 ?>
 
