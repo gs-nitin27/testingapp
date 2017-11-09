@@ -147,7 +147,7 @@ public function check_attendance($data1)
  }
  else
  {
- 	return 0;
+   return 0;
  }
 }
 

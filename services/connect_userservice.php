@@ -775,11 +775,10 @@ public function getClassInfo($class_id)
 
 //End Function 
 
-
-
 public function get_class_Join_status($class_id,$studentid)
 {
-$query = mysql_query("SELECT `status` FROM `gs_class_data` WHERE `student_id`='$studentid' AND `classid` = '$class_id'");
+
+$query = mysql_query("SELECT `status`,`student_code` FROM `gs_class_data` WHERE `student_id`='$studentid' AND `classid` = '$class_id'");
 if(mysql_num_rows($query)>0)
 {
   return mysql_fetch_assoc($query);
@@ -965,28 +964,30 @@ public function class_fee_date($userid,$classid)
 
 
 public function userdata($userid)
-{
-
-   $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
-   if(mysql_num_rows($query)>0)
-   {
-      while($row = mysql_fetch_assoc($query))
-      {
-        $data = $row;
-      }
-    return $data;
-    }
-    else 
     {
-     return 0;
+    
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
+       if(mysql_num_rows($query)>0)
+       {
+          while($row = mysql_fetch_assoc($query))
+          {
+            $data = $row;
+          }
+        return $data;
+        }
+        else 
+        {
+         return 0;
+        }
     }
-}
 
 
 
 public function alluserdata($userid)
 {  
-  $query = mysql_query("SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)");
+    //echo "SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)";die;
+
+     $query = mysql_query("SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)");
      if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -1062,6 +1063,7 @@ public function ClassInfo($student_id,$phone,$email)
 
 public function getAllMemoRecords($athlete_class_id)
 {
+   /*echo "SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`";*/
   $query = mysql_query("SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`");
   if(mysql_num_rows($query)>0)
   {
@@ -1159,16 +1161,29 @@ else
         if ($num!=0) 
 
         {
-          while($row=mysql_fetch_assoc($query))
-           {
-                   $data[]   = $row ;
-           }
-            return $data;
-       }
-        else
-        {
-           return 0;
+
+                   while($row=mysql_fetch_assoc($query))
+
+                   {
+
+                    
+
+                     $data[]   = $row ;
+
+                   }
+
+                   return $data;
+
          }
+
+         else
+
+         {
+
+           return 0;
+
+         }
+
 }
 
 
