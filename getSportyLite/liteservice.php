@@ -912,7 +912,6 @@ $final_data =  array_merge($event_data,$tour_data);
 return  $final_data;
 } 
 
-
 public function finddatediff($date)
 {
 $datetime1 = new DateTime();
@@ -920,6 +919,65 @@ $datetime2 = new DateTime($date);
 $interval = $datetime1->diff($datetime2);
 return $interval->format('%a');   
 }
+
+
+public function event_data_api()
+{
+  $query = mysql_query("SELECT `id`,`type`,`feetype`,`name`,`address_1`,`description`,`organizer_name`,`image`,`email_app_collection` FROM `gs_eventinfo` ORDER BY `id` DESC ");
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      
+      $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
+
+public function job_list_api()
+{
+  $query = mysql_query("SELECT `id`,`location`,`gender`,`title`,`description`,`qualification`,`organisation_name`,`email`,`image`,`date_created`  FROM `gs_jobInfo` ORDER BY `id` DESC ");
+
+  if(mysql_num_rows($query)) 
+  {
+     while ($row = mysql_fetch_assoc($query)) 
+     {
+        $rows[] = $row; 
+     }
+     return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
+
+public function tournament_list_api()
+{
+  $query = mysql_query("SELECT `id`,`name`,`description`,`sport`,`level`,`organiser_name`,`image` FROM `gs_tournament_info` ORDER BY `id` DESC ");
+
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+       $rows[] = $row; 
+
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 
 
 } // End of Class
