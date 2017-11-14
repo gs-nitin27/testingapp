@@ -79,7 +79,7 @@ public function add_Parent($parent_email,$child_id)
                            
               }
               return 1;//$data['userid'];
-        } 
+       } 
         else
         {    
             return 0;

@@ -293,36 +293,19 @@ else if($_REQUEST['act'] == "class_resc")
 					$item->type                = $data1->type; 
 					$item->existing_classid    = $data1->existing_classid; 
 					$item->old_start_time      = $data1->old_start_time;
-					//$item->resc_to             = $data1->rechedule_with;
-                    /*print_r($data1);
-					print_r($item);die;*/
-/*					$item->old_end_time        = $data1->old_end_time;
-
-					$req = new manageSchedulingService();
-					$res = $req->varify_existing($item,$data);
-
-*/	
 					$req1 = new manageSchedulingService();
-				    $res1 = $req1->create_reschedule($item);
-					/*if($item->type == 0)
+				    $res1 = $req1->create_reschedule($item,$data1->date);
+					if($res1 == 1)
 					{
-					$data  = '1';
-					$start = $item->old_start_time;
-					$end   = $item->old_end_time;
-					$var   = new manageSchedulingService();
-					$var1  = $var->varify_existing($item, $data);
-					$req2  = new manageSchedulingService();
-					$res2  = $req2->create_reschedulefororig($item , $start, $end);*/
-
-				//}
-				if($res1 != 0)
-				{
-					$resp =  array('status' =>$res1 ,'msg'=>'Success' );
-				}else
-				{
-					$resp = array('status' =>$res1, 'msg'=>'Failure');
-				}
-				echo json_encode($resp);
+						$resp =  array('status' =>'1' ,'msg'=>'Success' , 'data'=>[]);
+					}else if($res1 != 0 && $res1 != 1)
+					{
+						$resp = array('status' =>'2', 'msg'=>'Failure' , 'data'=>$res1);
+					}else
+					{
+                         $resp = array('status' =>'0', 'msg'=>'Failure' , 'data'=>[]);
+					}
+					echo json_encode($resp);
 }
 
 else if($_POST['act'] == "check_existing")
@@ -440,10 +423,10 @@ else if($_POST['act'] == "send_notification")
 
 					  }
 					else
-								{
+						{
 
-									echo $res1;
-								}
+							echo $res1;
+						}
 
 }
 

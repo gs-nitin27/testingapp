@@ -6,8 +6,8 @@ class attendanceService
 public function student_listing($classid)
 {
 $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`userid` AS student_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid' AND `gs_class_data`.`status`='2' " );
-	$num  = mysql_num_rows($query);
-		if($num != 0)
+  	$num  = mysql_num_rows($query);
+    	if($num != 0)
 		{
 			while($row = mysql_fetch_assoc($query))
 			{
@@ -21,7 +21,7 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`useri
 				$data[] = $row1;
 			}
 
-			//$data1[]  = $data;
+			
 		return $data;
 		}
 		else
@@ -195,8 +195,9 @@ public function  cancel_class($data)
 	$class_id  = $data->class_id;
 	$date 	   = $data->date;
 	$message   = $data->message;
-	//  $this->cheak_cancel_row($coach_id,$class_id)
-	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
+	$day = split('-', $date);
+    $id = $day[0].$day[1].$day[2].$class_id;
+	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`id`,`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$id','$class_id','$coach_id','$date','2',CURDATE(),'$message')ON DUPLICATE KEY UPDATE `resc_date` = '$date', `resc_type` = '2', `resc_made` = CURDATE(),`msg` = '$message' ");
 	if($row_sel) 
 		{
 		return 1;

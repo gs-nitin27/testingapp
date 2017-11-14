@@ -245,9 +245,16 @@ $query1 = mysql_query("DELETE FROM `class_reschedule` WHERE `classid` = '$classi
 
 }
 
-public function create_reschedule($item)
-{  
-   $query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
+public function create_reschedule($item,$date)
+{  $day = split('-', $date);
+   $id = $day[0].$day[1].$day[2].$item->classid;
+
+   $varify = $this->check_forTimeClash($item,$date);
+  // print_r($varify);die;
+   if($varify == 0)
+   {
+   $query = mysql_query("INSERT INTO `class_reschedule`(`id`,`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$id','$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE()) ON DUPLICATE KEY UPDATE `resc_date` = FROM_UNIXTIME($item->date) , `start_time` ='$item->start_time',`end_time` = '$item->end_time', `resc_type` = '$item->type', `resc_to` = '$item->existing_classid' ");
+  
   if($query)
   {
 
@@ -256,6 +263,68 @@ public function create_reschedule($item)
   else 
   return 0;
 }
+else
+  return $varify;
+}
+
+
+public function check_forTimeClash($item,$date)
+{
+   //$date = '2017-11-09'; $userid = '2';
+ $res = $this->getclasslisting($item->userid,$date);
+ $res = $res['data'];//print_r($res['data']);die;
+  foreach ($res as $key => $value) {
+    if($value['id'] != $item->classid){
+  $start_time = date("H:i", strtotime($value['class_start_timing']));
+  $end_time   = date("H:i", strtotime($value['class_end_timing']));
+  $given_start_time = date("H:i", strtotime($item->start_time));
+  $given_end_time = date("H:i", strtotime($item->end_time));
+  if((($given_start_time > $start_time && $given_start_time < $end_time) || ($given_end_time > $start_time && $given_end_time < $end_time))||($given_start_time == $start_time && $given_end_time == $end_time))
+   { 
+
+    $time_clash[] = array('id' =>$value['id'],'userid'=>$value['userid'],'class_title'=>$value['class_title'],'classtype'=>$value['classtype'],'description'=>$value['description'],'class_code'=>$value['class_code'],'class_start_timing'=>$value['class_start_timing'],'class_end_timing'=>$value['class_end_timing'],'class_start_date'=>$value['class_start_date'],'class_end_date'=>$value['class_end_date'] );
+   
+   } 
+   }
+  }
+  if(!empty($time_clash))
+  { 
+    return $time_clash;
+  }
+  else
+  {
+    return 0;
+  }
+}
+  /*while($row = mysql_fetch_assoc($query))
+  {
+  $start_time = date("H:i", strtotime($row['class_start_timing']));
+  $end_time   = date("H:i", strtotime($row['class_end_timing']));
+  $given_start_time = date("H:i", strtotime($item->start_time));
+  $given_end_time = date("H:i", strtotime($item->end_time));
+  $days_array = explode(',', $item->days);
+  $days_array_given = explode(',',$row['days'] );
+  $result=array_intersect($days_array,$days_array_given);
+  if(!empty($result))
+  {
+  $var[] = $row['class_title'].' on '.implode(',', $result).' is in clash';
+  }
+   if((($given_start_time > $start_time && $given_start_time < $end_time) || ($given_end_time > $start_time && $given_end_time < $end_time))||($given_start_time == $start_time && $given_end_time == $end_time))
+   { $time_clash[] = 'timing of class'.$row['class_title'].' is also in clash';
+     $row['class_fee'] = json_decode($row['class_fee']);
+     $data[] = $row;
+   } 
+  }*/
+  //return $data;
+/*}
+else
+{
+  return 0;
+}*/
+
+
+
+
 
 public function get_reschedule($date,$classid,$res)
 {//print_r($res['data']);die;
