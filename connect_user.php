@@ -561,9 +561,16 @@ Student Id and Result is display all Class Information
  $email                =  $_REQUEST['email'];
  $request              =  new connect_userservice();
  $response             =  $request->ClassInfo($student_id,$phone,$email);
-
-   if($response != 0)
-   {
+  
+   if($response != '0')
+   {           $imageObj = new userdataservice(); 
+               
+              foreach ($response as $key => $value) {
+               $where = "WHERE `userid` = ".$value['coach_id'];
+               $getImage = $imageObj->get_user_images($where);
+               if($getImage != 0)
+               $response[$key]['coach_image'] = $getImage['user_image'];
+              }
               $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information');
               echo json_encode($Result);
    }

@@ -210,8 +210,8 @@ public function ActivateChildAccount($child_email,$code)
 <td style="padding-bottom:20px" valign="top">
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Dear Mr. /Ms., <strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' . $user . '</strong></p>
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
-Hi user Your Login code is<br>'.$code.'
-<br><br><br><br><br>Please Login with you current google account with the code and access all your info </p> 
+Hi user your login code is<br>'.$code.'
+<br><br><br><br><br>Please login with your current google account with the code and access all your info </p> 
 
 </td>
 </tr>

@@ -1047,7 +1047,7 @@ public function ClassInfo($student_id,$phone,$email)
         return $rows;
       }else
       {
-        return 0;
+        return '0';
       }
 
  /* if(!empty($rows))
@@ -1072,7 +1072,7 @@ public function getAllMemoRecords($athlete_class_id)
   }
   else
   {
-    return 0;
+    return '0';
   }
 
 }
@@ -2074,14 +2074,14 @@ public function fetch_demoClassList($where)
   {
   while ($row = mysql_fetch_assoc($query)) {
     $row['class_fee'] = json_decode($row['class_fee']); 
-    $row['status']= 0;
+    $row['status']= '0';
     $rows[] = $row;
   }
   return $rows;
   }
   else
   {
-    return 0;
+    return '0';
   }
 
 

@@ -1561,7 +1561,7 @@ else if($_REQUEST['act'] == "professional")
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
   $userType        =   '103';
-  $where[]         =   '1 =1 ';
+  $where[]         =   ' 1=1 ';
   $arr = array();
    if($userType != '')
    {
@@ -1581,7 +1581,7 @@ else if($_REQUEST['act'] == "professional")
   }
   if($location != '')
   {
-       $where[] = "`location` = '$location' ";
+       $where[] = "`location` LIKE '%".$location."%' ";
        $arr['location'] = $location;
   }
   if($prof_id != '')

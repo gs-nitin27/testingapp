@@ -11,31 +11,23 @@
      */ 
 public function userVarify($where)
 {
+//echo "SELECT *FROM `user` $where";die;
+  $query  = $query  = mysql_query("SELECT *FROM `user` $where");
 
-$query  = $query  = mysql_query("SELECT *FROM `user` $where");
-
-if(mysql_num_rows($query)>0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-  unset($row['password']);
-$data = $row;
+  if(mysql_num_rows($query)>0)
+  {
+  while($row = mysql_fetch_assoc($query))
+  {
+    unset($row['password']);
+  $data = $row;
+  }
+  return $data;
+  }
+  else 
+  {
+  return 0;
 }
-return $data;
 }
-else 
-{
-return 0;
-}
-}
-
-
-
-
-
-
-
-
 /*****************Cheack The Profile Status***********************/
 
 
@@ -2667,7 +2659,7 @@ public function Experience($userid)
 
 public function user_Info($whereclause)
 {
-      $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
+      $query = mysql_query("SELECT  `userid`, `userType`, `status`, `name`,  `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`,`m_device_id`, `link`, `age_group_coached`, `languages_known` FROM `user` WHERE $whereclause ");
       if(mysql_num_rows($query) > 0)
       {
       while($row = mysql_fetch_assoc($query))
@@ -2866,8 +2858,19 @@ return $Total_profile;
 }
 
 
-
-
+public function get_user_images($where)
+{ 
+  $query = mysql_query("SELECT `user_image` FROM `user` $where");
+  if(mysql_num_rows($query)>0)
+  {
+    $row = mysql_fetch_assoc($query);
+    return $row;
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 
 

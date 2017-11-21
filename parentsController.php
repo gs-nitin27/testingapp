@@ -11,15 +11,17 @@ switch($_REQUEST['act'])
 	case 'view_parent_child':
 		$parent_id       =  $_REQUEST['parent_id'];
 		$request         =  new parentsUserService();
-		$response 		 =  $request->get_parent_child($parent_id);
-	if($response)
-	 {
+		$response['child_data'] =  $request->get_parent_child($parent_id);
+	if($response['child_data'] != 0)
+	 {          
+                 $response['split_age'] = '12';
+                 $response['payment_age'] = '15';
 	             $Result = array('status' => '1','data'=>$response ,'msg'=>'view Child');
 	             echo json_encode($Result);
 	 }
 	 else
 	 {                     
-	            $Result = array('status' => '0','data'=>$nodata ,'msg'=>'No  Child');
+	            $Result = array('status' => '0','data'=>(object)[] ,'msg'=>'No  Child');
 	            echo json_encode($Result);
 	 }
 
@@ -28,29 +30,60 @@ switch($_REQUEST['act'])
 	case 'add_child':
 	 $data                     =  file_get_contents("php://input");
 	 $decode_data        	   =  json_decode(file_get_contents("php://input"));
-     $request           	   =  new parentsUserService();
-     $where = '`name`= '.$decode_data->name.' AND `dob`= '.$decode_data->dob.'';
-     $already_child            =  $request->varify_child($where);
-     if ($already_child != 0) 
+     $request           	   =  new userdataservice();
+     $age                      =  date_diff(date_create($decode_data->dob), date_create('today'))->y;
+     if($age > 12 || $age == 12)
      {
-    	 $Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists');
-	             echo json_encode($Result);
+     $where = "WHERE `email` ='".$decode_data->email."'";
+     $status = '1';
+     //echo  $where;die;
      }
      else
-     {
-     $response                 =  $request->add_child($decode_data);
+     {//echo 'no';die;
+      $where = "WHERE `name`= '".$decode_data->name."' AND `dob`= '".$decode_data->dob."'";
+      $status = '0';
+     }
+     $already_child            =  $request->userVarify($where);
+     if($already_child != 0) 
+     {  
+     	$getcodeObj = new parentsUserService();
+        $email_req  = new emailService();
+        $getcode = $getcodeObj->get_association_data($decode_data->userid,$already_child['userid']);
+        if($getcode == 0)
+        {
+        $unique_code = rand();
+        $create_assoc = $getcodeObj->insert_association($decode_data->userid,$already_child['userid'],$unique_code,$status);
+        $getcode = $getcodeObj->get_association_data($decode_data->userid,$already_child['userid']);
+        $send_email = $email_req->ActivateChildAccount($decode_data->email,$getcode['unique_code']);
+        }
+        else
+        {
+          $send_email = $email_req->ActivateChildAccount($decode_data->email,$getcode['unique_code']);
+        }
+         //$status = "1";
+         if($create_assoc == 1)
+         {
+         	$Result = array('status' => '1','data'=>'already added'/*$already_child*/ ,'msg'=>'Child is Already exists as user');
+	     }else
+	     {
+	     	$Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists, unable to add');
+	     }
+	     echo json_encode($Result);
+     }
+     else
+     {//echo "test2";die;
+     $request1                 = new parentsUserService();
+     $response                 =  $request1->add_child($decode_data,$status);
 	 if($response)
 	 {
-	             $Result = array('status' => '1','data'=>$response ,'msg'=>'Add Child');
+	             $Result = array('status' => '1','data'=>'child added' ,'msg'=>'Child added');
 	             echo json_encode($Result);
 	 }
 	 else
 	 {                     
-	            $Result = array('status' => '0','data'=>$nodata ,'msg'=>'Not Add Child');
-
-	            echo json_encode($Result);
-
-	 }
+	            $Result = array('status' => '0','data'=>"no data" ,'msg'=>'Child not added');
+                echo json_encode($Result);
+     }
 
 	}
 
@@ -65,14 +98,10 @@ switch($_REQUEST['act'])
 		  $child_email		= $_REQUEST['child_email'];
 
 		  $parent_mobile 	= $_REQUEST['mobile_no'];
+          //$location 	 	= $_REQUEST['location'];
+          $req       		= new parentsUserService();
 
-		  $location 	 	= $_REQUEST['location'];
-
-
-
-		  $req       		= new parentsUserService();
-
-		  $activated = $req->activateAccount($parent_id,$child_id,$child_email,$parent_mobile,$location);
+		  $activated = $req->activateAccount($parent_id,$child_id,$child_email,$parent_mobile/*$location*/);
 
 		  if($activated != 0)
 
@@ -102,11 +131,11 @@ switch($_REQUEST['act'])
 
 			  $code  = $_REQUEST['code'];
 
-			  $email = $_REQUEST['email'];
+			  //$email = $_REQUEST['email'];
 
 			  $req = new parentsUserService();
 
-			  $res = $req->child_account_verify($code,$email);
+			  $res = $req->child_account_verify($code/*,$email*/);
 
 			  if($res != 0)
 
@@ -134,39 +163,61 @@ switch($_REQUEST['act'])
 
 			  $parent_email 	= $_REQUEST['parent_email'];
 
+              $mobile           = $_REQUEST['mobile_no'];
+ 
 			  $req       		= new userdataservice();
 
-			  $where            = "WHERE `email` =".$parent_email." ";
+			  $where            = "WHERE `email` ='".$parent_email."'";//  Check if user is registered as parent
 
 			  $Verified         = $req->userVarify($where);
+              if($Verified == 0)
 
-			  if($activated == 0)
+			  { 
 
-			  { $Obj  = new parentsUserService();
+			  	$Obj  = new parentsUserService();
 
 			  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
 
-			  	$status = $create_account;
+			  	$status = "1";
 
 			  	$msg = 'success';
-
+                $email_req  = new emailService();
+                $send_email = $email_req->ActivateChildAccount($parent_email,$create_account); 
 			  }
 
 			  else
 
 			  {
-
+			    if($Verified['prof_name'] == 'Parent')
+			    {  // print_r($Verified);
+                    $getcodeObj = new parentsUserService();
+                    $email_req  = new emailService();
+	                $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id);
+                    if($getcode == 0)
+                    {
+                    $unique_code = rand();
+                    $create_assoc = $getcodeObj->insert_association($Verified['userid'],$child_id,$unique_code,'-1');
+                    $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id);
+                    $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code']);
+                    }else
+                    {
+                      $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code']);
+                    }
+                $status = "1";
+                $msg = 'Account already exist as parent, connection request sent';
+                }else
+                {
 			    $status = "0";
-
-			  	$msg = 'failure';
+                $msg = 'Account already exist as '.$Verified['prof_name'];
+                }/*$getcodeObj = new parentsUserService();
+                $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id)*/
+               /* $email_req  = new emailService();
+                ;*/
 
 			  }
-
-			  $response = array('status'=>$getcode,'data'=>$getcode,'message'=>$msg);
-
-			        echo json_encode($response); 
-
-		break;
+              $response = array('status'=>$status,/*'data'=>$getcode,*/'message'=>$msg);
+              echo json_encode($response); 
+              break;
 
 /*
 
@@ -239,39 +290,35 @@ switch($_REQUEST['act'])
 				 {
 
 				            $Result = array('status' => '1','data'=>$response ,'msg'=>'apply success');
-
-				             echo json_encode($Result);
+                            echo json_encode($Result);
 
 				 }
 
 				 else
-
 				 {                     
-
 				            $Result = array('status' => '0','data'=>$response ,'msg'=>'Not apply');
-
 				            echo json_encode($Result);
-
 				 }
-
-
-
-		break;
-
-
-
-
-
-
-
-	default:
-
-
-
-		$Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');
+        break;
+                case 'get_parent_info':
+           $child_id = $_REQUEST['child_id'];
+           $request  = new parentsUserService($child_id);
+           $response = $request->getParentInfo($child_id);
+           {
+           	if(!empty($response))
+           	{
+           		$data = array('status' =>'1' ,'data'=>$response );
+           	}else
+           	{
+           		$data = array('status' =>'0' ,'data'=>$response );
+           	}
+           echo json_encode($data);
+           }
+         break;
+        default:
+        $Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');
 
 	            echo json_encode($Result);
-
-		break;
+        break;
 }
 ?>

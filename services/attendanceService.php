@@ -26,7 +26,7 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`useri
 		}
 		else
 		{
-			return 0;
+			return [];
 		}
 }
 
