@@ -193,7 +193,7 @@ function sendWay2SMS($uid, $pwd, $phone, $msg)
 {
 $varUserName='t1ntnagarwalsms';
 $varPWD='44824769';
-$varSenderID='GSCORT';  
+$varSenderID='GSPROF';  
 $varPhNo=$phone;
 $varMSG= $msg;//"message to send";
 $url="http://nimbusit.co.in/api/swsendSingle.asp";

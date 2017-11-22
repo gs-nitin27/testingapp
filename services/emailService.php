@@ -446,7 +446,32 @@ public function email_athlete($data,$msg)
 } 
 
 
-
+public function contact_coach($data)
+{
+        require('class.phpmailer.php');
+         $to             =  $data->coach_email;
+         $from           =  "info@darkhorsesports.in";
+         $from_name      =  "Getsporty";
+         $subject        =  "Join your coach class";
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->SetFrom($from, $from_name);
+         $mail->Subject = $data->athlete_name." wants to join your class";
+         $mail->Body = "hello ".$data->coach_name."<br><br>"." an aspiring athlete has sent you a message:"."<br><br>".$data->message."<br><br>"."Thanks"."<br>"."Team Getsporty"; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+               
+               //return $mail->Send();
+}
 
 
 

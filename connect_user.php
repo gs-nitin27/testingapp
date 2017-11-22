@@ -1470,28 +1470,40 @@ else if($_REQUEST['act'] == 'log_unassign')
 
 
 
-else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
+else if ($_REQUEST['act'] == 'contact_coach') 
+{
     $data              = json_decode(file_get_contents("php://input"));
     $athlete_name      = $data->athlete_name;
     $coach_sport       = $data->coach_sport;
     $athlete_no        =  $data->athlete_no;
     $coach_contact_no  =  $data->coach_contact_no;
     $athlete_email     = $data->athlete_email;
+    $obj               = new connect_userservice();
+    $savemsg           = $obj->save_message($data);
+    if($savemsg != 0)
+    {
+      $resp = array('status'=>$savemsg,'message'=>'Success');
+    }else
+    {
+     $resp = array('status'=>$savemsg,'message'=>'Failure'); 
+    }
     if($coach_contact_no != '')
     {
     $msg = "You +have +received +connection+ request +from +".$athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$athlete_no."+ or+ ".$athlete_email.""; 
     $res = sendWay2SMS(9528454915,8824784642, $coach_contact_no, $msg);
-    $resp = array('status'=>1,'message'=>'Success');
-      echo json_encode($resp);
+    /*$resp = array('status'=>1,'message'=>'Success');
+      echo json_encode($resp);*/
     }
-    else
+    if($data->coach_email != '')
     {
-      $resp = array('status'=>0,'message'=>'Failure');
-      echo json_encode($resp);
-
+      $emailObj = new emailService();
+      $response = $emailObj->contact_coach($data);
     }
-    
+    echo json_encode($resp);
+ 
 }
+
+
 else if($_REQUEST['act'] == 'remove_demo_athlete')
 {
   $demo_code = $_REQUEST['demo_code'];
@@ -1527,7 +1539,22 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   echo json_encode($resp);
 }
 
-
+/*else if($_REQUEST['act'] == 'contact_coach')
+{$resp = array('status' => '1' , 'msg'=>'Success' );
+ echo json_encode($resp);die;
+$data = json_decode(file_get_contents("php://input"));
+*/  
+  /*$obj = new connect_userservice();
+  $req = $obj->decline_joinclass_offer($data);
+  if($req != 0)
+  {
+    
+  }else
+  {
+    $resp = array('status'=>$req,'msg'=>'Failure');
+  }*/
+ 
+//}
 
 // else if($_REQUEST['act'] == "get_attendance")
 // {

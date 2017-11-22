@@ -20,38 +20,17 @@ class connect_userservice
  
 
  public function connect_user_request($lite_user_id,$prof_user_id)
-
- {
-
+{
    $query=mysql_query("INSERT INTO `gs_connect`(`lite_user_id`,`prof_user_id`,`req_status`,`date_created`) VALUES('$lite_user_id','$prof_user_id','0',CURDATE())");
-
-     
-
      if($query)
-
      {
-
       $data =mysql_insert_id();
-
       return $data;
-
-
-
-
      }
-
      else 
-
      {
-
-      
-
         return 0 ;
-
-
-
      }
-
  }
 
 
@@ -2165,7 +2144,17 @@ public function getAllDues($coach_id)
    }
 }
 
-
+public function save_message($data)
+{ $userdata = json_encode($data);
+  $query = mysql_query("INSERT INTO `gs_message`(`sender_id`, `reciever_id`, `message`, `date_created`,`data`) VALUES ('$data->userid','$data->coach_id','$data->message',CURDATE(), '$userdata')");
+if($query)
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
+}
 
 
 // public function get_attendence_data($where)
