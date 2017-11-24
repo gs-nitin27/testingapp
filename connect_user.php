@@ -51,7 +51,13 @@ if($_REQUEST['act'] == 'connect')
   }
 }
 
-
+else if($_REQUEST['act'] == 'test_notofication')
+{ $userdata = new userdataservice();
+   $array_data = array('connection_id' => '1' ,'title'=> 'TEST NOTIFICATION', 'message'=> 'test user'.' wants to connect with you' , 'device_id' => 'fdm6Za9u-ro:APA91bFnC59XtcKwBtB9fkeqWOcKWtF0fxJo4pu134kU8Fyi8ARltPI1bmg9kIucohTvFDyvN9LNR9bicXXCTq6cAnqF_DLqFAa1J3bBfW5RKfwXby8F_qNmobn6feh64jajKYvdLWOb' , 'indicator' => 1);
+   $device_id = 'fdm6Za9u-ro:APA91bFnC59XtcKwBtB9fkeqWOcKWtF0fxJo4pu134kU8Fyi8ARltPI1bmg9kIucohTvFDyvN9LNR9bicXXCTq6cAnqF_DLqFAa1J3bBfW5RKfwXby8F_qNmobn6feh64jajKYvdLWOb';
+  $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
+  print_r($notification);
+}
 
 
  else if($_REQUEST['act'] == 'request_response')
@@ -555,9 +561,16 @@ Student Id and Result is display all Class Information
  $email                =  $_REQUEST['email'];
  $request              =  new connect_userservice();
  $response             =  $request->ClassInfo($student_id,$phone,$email);
-
-   if($response != 0)
-   {
+  
+   if($response != '0')
+   {           $imageObj = new userdataservice(); 
+               
+              foreach ($response as $key => $value) {
+               $where = "WHERE `userid` = ".$value['coach_id'];
+               $getImage = $imageObj->get_user_images($where);
+               if($getImage != 0)
+               $response[$key]['coach_image'] = $getImage['user_image'];
+              }
               $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information');
               echo json_encode($Result);
    }

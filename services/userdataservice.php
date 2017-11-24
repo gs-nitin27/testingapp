@@ -11,31 +11,23 @@
      */ 
 public function userVarify($where)
 {
+//echo "SELECT *FROM `user` $where";die;
+  $query  = $query  = mysql_query("SELECT *FROM `user` $where");
 
-$query  = $query  = mysql_query("SELECT *FROM `user` $where");
-
-if(mysql_num_rows($query)>0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-  unset($row['password']);
-$data = $row;
+  if(mysql_num_rows($query)>0)
+  {
+  while($row = mysql_fetch_assoc($query))
+  {
+    unset($row['password']);
+  $data = $row;
+  }
+  return $data;
+  }
+  else 
+  {
+  return 0;
 }
-return $data;
 }
-else 
-{
-return 0;
-}
-}
-
-
-
-
-
-
-
-
 /*****************Cheack The Profile Status***********************/
 
 
@@ -222,11 +214,11 @@ $gender             =  $data->gender;
 
   public function gsSignIn($email,$password1)
     {
-      $query = mysql_query("SELECT  *FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+      $query = mysql_query("SELECT  */*`userid`, `userType`, `status`, `name`, `password`, `forget_code`, `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`, `date_updated`, `m_device_id`, `link`, `age_group_coached`, `languages_known`, `unique_code` */FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
           if($query)
           {
             while($row = mysql_fetch_assoc($query))
-            {   
+            {  //print_r($row);  
                unset($row['password']);
                $data1= $row; 
                return $data1;
@@ -239,11 +231,23 @@ $gender             =  $data->gender;
     } // end function
 
 
-
+public function connected_class($student_id)
+{
+$query = mysql_query("SELECT COUNT(`classid`) AS class FROM `gs_class_data` WHERE `student_id` = '$student_id' AND `status` = '2'");
+if(mysql_num_rows($query)> 0)
+  {
+    $row = mysql_fetch_assoc($query);
+    return $row['class'];
+  }
+else
+  {
+    return 0;
+  }
+}
 /**************************************Logut Function*******************************/
 public function  deleteDeviceId($userid,$device_id )
 {
-$query = mysql_query("SELECT  `device_id`FROM `user` WHERE `userid` = '$userid' ");
+$query = mysql_query("SELECT `device_id`FROM `user` WHERE `userid` = '$userid' ");
 if(mysql_num_rows($query)>0)
 {
 $row = mysql_fetch_assoc($query);
@@ -332,9 +336,12 @@ if($update)
        {
           while($row = mysql_fetch_assoc($query))
           {
-
-            unset($row['password']);
-            $data = $row;
+          unset($row['password']);
+          $data = $row;
+          if($row['prof_name'] == 'Athletes')
+            {
+              $data['class'] = $this->connected_class($id);
+            }
           }
         return $data;
         }
@@ -2669,7 +2676,7 @@ public function Experience($userid)
 
 public function user_Info($whereclause)
 {
-      $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
+      $query = mysql_query("SELECT  `userid`, `userType`, `status`, `name`,  `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`,`m_device_id`, `link`, `age_group_coached`, `languages_known` FROM `user` WHERE $whereclause ");
       if(mysql_num_rows($query) > 0)
       {
       while($row = mysql_fetch_assoc($query))
@@ -2725,6 +2732,7 @@ public function searchEvent($where)
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
+              $row['image'] = EVENT_IMAGE_URL.$row['image'];
               $data[]   = $row ;
             }
         return $data;
@@ -2867,8 +2875,19 @@ return $Total_profile;
 }
 
 
-
-
+public function get_user_images($where)
+{ 
+  $query = mysql_query("SELECT `user_image` FROM `user` $where");
+  if(mysql_num_rows($query)>0)
+  {
+    $row = mysql_fetch_assoc($query);
+    return $row;
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 
 

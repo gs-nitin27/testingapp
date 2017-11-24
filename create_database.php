@@ -89,7 +89,10 @@ switch ($logintype)
                       $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
                       $req                       =  new userdataservice();
                       $checkdeviceid             =  $req->checkdeviceid($email,$device_id);
-
+                      if($res['prof_name'] == 'Athletes')
+                          {
+                            $res['classes'] = $req->connected_class($userid); 
+                          }
                     //  $upd          = $obj->updatedevice($device_id ,$email);
 
                       //$multiple = "1";
@@ -133,6 +136,11 @@ switch ($logintype)
                         $userid                       =  $res['userid'] ;
                         $profle                       =  $req->checkprofile($userid);
                         $res['profile']=$profle ;
+                        //echo $res['prof_name'];die;
+                            if($res['prof_name'] == 'Athletes')
+                          {
+                            $res['classes'] = $req->connected_class($userid); 
+                          }
                         $data = array('status' => 1,'data'=>$res ,'msg'=>'User already registered');
                         echo json_encode($data);
                  }
@@ -156,6 +164,10 @@ switch ($logintype)
                           
                             $req                          =  new userdataservice();
                             $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
+                            if($res2['prof_name'] == 'Athletes')
+                            {
+                              $res2['classes'] = $req->connected_class($userid); 
+                            }
                           //  $obj = new userdataservice();
                            // $upd = $obj->updatedevice($device_id ,$email);
                             //$multiple = "1";
@@ -1585,7 +1597,7 @@ else if($_REQUEST['act'] == "professional")
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
   $userType        =   '103';
-  $where[]         =   '1 =1 ';
+  $where[]         =   ' 1=1 ';
   $arr = array();
    if($userType != '')
    {
@@ -1605,7 +1617,7 @@ else if($_REQUEST['act'] == "professional")
   }
   if($location != '')
   {
-       $where[] = "`location` = '$location' ";
+       $where[] = "`location` LIKE '%".$location."%' ";
        $arr['location'] = $location;
   }
   if($prof_id != '')

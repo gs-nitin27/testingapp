@@ -52,7 +52,7 @@ public function cheackPerformance($age,$sport,$gender)
 
 public function  save($coachid,$athleteid)
 {
-    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0',CURRENT_DATE )");
+    $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`avg`,`modules_avg`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0','0','0',CURRENT_DATE )");
 	if ($query)
 	{
 	 $last_id = mysql_insert_id();
@@ -195,6 +195,7 @@ $query= mysql_query("SELECT `user`.`name` , `gs_athlit_performance`.* FROM user 
 	$numberDays 		= intval($numberDays);
 	$row['next_assessment']=$numberDays;
 	$row['data'] 		= json_decode($row['data']);
+	$row['modules_avg'] = json_decode($row['modules_avg']);
 	$data[]=$row;
 	}
 	return $data;
@@ -303,18 +304,44 @@ public function  view_request_assessment($athlete_id)
 
 }
 
-public function class_show($coach_id)
+public function class_show($coach_id,$class_id)
 {
-  $query = mysql_query("SELECT `student_id`,`student_name` FROM `gs_class_data` WHERE `coach_id` = '$coach_id' AND `status` = '2' ");
-  $num   = mysql_num_rows($query);
+if (empty($class_id))
+{
+  $where = 	" WHERE coach_id = '$coach_id' AND `status` = '2' ";
+}
+else
+{
+	$where = 	" WHERE classid = '$class_id' AND `status` = '2' ";
+}
+
+  $query1 = mysql_query("SELECT `student_id`,`student_name` FROM `gs_class_data` $where ");
+  $num   = mysql_num_rows($query1);
   if($num)
   {
-     while($row = mysql_fetch_assoc($query))
+     while($row1 = mysql_fetch_assoc($query1))
      {
-     	$row['last_assessment'] = '';
-     	$row['avg'] 			= '';
-     	$row['total'] 			= '';
-     	$data[]  				= $row;
+     	$athleteid  = $row1['student_id'];
+$query = mysql_query("SELECT avg(avg) AS average, COUNT(*) AS total, `date_publish` FROM gs_athlit_performance WHERE athlitid = '$athleteid' ORDER BY date_publish DESC");
+$row 			= mysql_fetch_assoc($query);
+$average  		= $row['average'];
+$total 			= $row['total'];
+$date_publish   = $row['date_publish'];
+if(empty($average)) 
+{
+$average 	   ='0';
+$total    	   ='0';
+$date_publish  ='';	
+}
+
+
+
+
+
+     	$row1['last_assessment'] = $date_publish;
+     	$row1['avg'] 			= $average;
+     	$row1['total'] 			= $total;
+     	$data[]  				= $row1;
      }
      return $data;
   }
@@ -328,7 +355,19 @@ public function class_show($coach_id)
 
 
 
-
+public function cheack_coach_id($coach_id)
+{
+	$query  = mysql_query("SELECT *FROM `gs_athlit_performance` WHERE `coachid`= $coach_id ");
+	$num = mysql_num_rows($query);
+	if($num)
+	{
+	 return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
 
 
 
