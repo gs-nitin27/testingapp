@@ -330,6 +330,42 @@ echo json_encode($user);
 } // End Function
 
 
+else if($_REQUEST['act']=="registration")
+{
+$data1 = json_decode(file_get_contents("php://input"));
+
+
+$item                 =  new stdClass();
+$forgot_code          =  mt_rand(1000,10000);
+$item->name           =  $data1->Name;
+$item->email          =  $data1->email;
+$item->phone_no       =  $data1->contact_no;
+$item->proffession    =  $data1->profession;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$item->userType       =  103;
+$item->forget_code    =  $forgot_code;
+$item->prof_id        =  "2";
+$item->access_module  = "1,2,3";
+$req1= new userdataservice();
+$req3 = $req1->registration($item);
+if($req3 == 0)
+{
+$user = array('status' => 0);
+echo json_encode($user);
+}
+else if($req3 == 1)
+{
+$user = array('status' => 1);
+echo json_encode($user);
+}
+else
+{
+  $user = array('status' => 2);
+  echo json_encode($user);
+}
+}
 
 
 
