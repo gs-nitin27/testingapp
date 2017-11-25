@@ -2185,7 +2185,29 @@ return 0;
 }
 }
 
+public function registration($item)
+{
+  $query  = mysql_query("SELECT `userid`,`prof_name` FROM `user`  WHERE `email`='$item->email'");
+  if(mysql_num_rows($query)>0)
+  {
+       return 0;
+  }else
+  {
+  $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`, `forget_code`,`access_module`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->forget_code','$item->access_module')");
+if($query)
+{
+ $last_id = mysql_insert_id();
+  return 1;
 
+ $this->sendEmail_for_password_reset($item->email);
+ 
+}
+else
+{
+    return 2;
+}
+}
+}
 
 public  function create_manage_user_exits($item)
 {
@@ -2249,11 +2271,6 @@ else
 
  
 $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`,`device_id`, `forget_code`,`access_module`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code','$item->access_module')");
-
-
-// $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`Gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`,`device_id`, `forget_code`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code')");
-
-
 if($query)
 {
   
@@ -2467,12 +2484,7 @@ case '3':
       }
 }//End Function
 
-
-
-
 //###################### welcome email send to user ##############################################
-
-       
  
 public function sendEmail_for_password_reset($email)
 {

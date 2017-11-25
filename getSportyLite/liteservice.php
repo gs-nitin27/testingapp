@@ -886,9 +886,9 @@ public function get_Job_Data($where)
 
 public function get_Event__tour_Data()
 {  
+$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC");
 
-$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
-$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
+$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC");
 
 while($event_row = mysql_fetch_assoc($event_query) )
 { 
@@ -978,23 +978,28 @@ public function tournament_list_api()
   }
 }
 
+public function resource_list()
+{
+  $query = mysql_query("SELECT * FROM `gs_resources` WHERE `token` = '2' AND `status` = '1'  ORDER BY `id` DESC");
+
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query))
+    {
+        $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
 
 
 } // End of Class
  
-
-
-
-
-
-
-
-
-
-
-
-
-
 
    
   
