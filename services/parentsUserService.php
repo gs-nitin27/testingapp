@@ -298,7 +298,7 @@ else
 
 public function getParentInfo($child_id)
  {
-   $query = mysql_query("SELECT `userid` AS parent_id, `name`,`email`, `contact_no`, `sport`, `gender`, `prof_id`, `prof_name`, `user_image`,`device_id`, `about_me` FROM `user` WHERE `userid` IN (SELECT `parent_id` FROM `gs_association1` WHERE `child_activate` = '1' )");
+   $query = mysql_query("SELECT `userid` AS parent_id, `name`,`email`, `contact_no`, `sport`, `gender`, `prof_id`, `prof_name`, `user_image`,`device_id`, `about_me` FROM `user` WHERE `userid` IN (SELECT `parent_id` FROM `gs_association1` WHERE `child_activate` = '1' AND `child_id` = '$child_id' )");
 
    if(mysql_num_rows($query)>0)
    {

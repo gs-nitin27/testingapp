@@ -64,12 +64,16 @@ switch($_REQUEST['act'])
          if($create_assoc == 1)
          {
          	$Result = array('status' => '1','data'=>'already added'/*$already_child*/ ,'msg'=>'Child is Already exists as user');
+	        $message = array('title'=> "your guardian ".$decode_data->parent_name." has sent you a connection request", 'message'=>'they can review your performance and daily activities','parentId'=>$already_child['userid'],'parent_image'=>$decode_data->parent_image,'parentName'=>$decode_data->parent_name,'device_id' => $already_child['device_id'] , 'indicator' =>12); 
+			    $obj1 =   new userdataservice(); 
+			    $notify = $obj1->sendLitePushNotificationToGCM($already_child['device_id'],$message);
 	     }else
 	     {
 	     	$Result = array('status' => '0','data'=>'0' ,'msg'=>'Child is Already exists, unable to add');
 	     }
 	     echo json_encode($Result);
-     }
+	    
+	 }
      else
      {//echo "test2";die;
      $request1                 = new parentsUserService();
@@ -173,23 +177,19 @@ switch($_REQUEST['act'])
               if($Verified == 0)
 
 			  { 
-
-			  	$Obj  = new parentsUserService();
-
-			  	$create_account = $Obj->add_Parent($parent_email,$child_id); 
-
-			  	$status = "1";
-
-			  	$msg = 'success';
+                $Obj  = new parentsUserService();
+                $create_account = $Obj->add_Parent($parent_email,$child_id); 
+                $status = "1";
+                $msg = 'success';
                 $email_req  = new emailService();
-                $send_email = $email_req->ActivateChildAccount($parent_email,$create_account); 
-			  }
+                $send_email = $email_req->ActivateChildAccount($parent_email,$create_account);
+              }
 
 			  else
 
 			  {
 			    if($Verified['prof_name'] == 'Parent')
-			    {  // print_r($Verified);
+			    {  
                     $getcodeObj = new parentsUserService();
                     $email_req  = new emailService();
 	                $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id);
@@ -205,6 +205,9 @@ switch($_REQUEST['act'])
                     }
                 $status = "1";
                 $msg = 'Account already exist as parent, connection request sent';
+                $message = array('title'=> "your child ".$_REQUEST['child_name']." has sent you a connection request", 'message'=>'get daily updates and review his performance and activities daily on app','parentId'=>$Verified['userid'],'user_image'=>$Verified['user_image'],'parentName'=>$Verified['name'], 'device_id' => $Verified['device_id'] , 'indicator' =>11); 
+			    $obj1 =   new userdataservice(); 
+			    $notify = $obj1->sendLitePushNotificationToGCM($Verified['device_id'],$message);
                 }else
                 {
 			    $status = "0";

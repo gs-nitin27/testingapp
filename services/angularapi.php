@@ -17,7 +17,7 @@ public function getContentInfo()
 
 
 public function angulartest($username,$password)
-{
+{  //echo "SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'";die;
   $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
        
         if($query)

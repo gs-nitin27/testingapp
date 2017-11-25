@@ -1473,24 +1473,33 @@ else if($_REQUEST['act'] == 'log_unassign')
 else if ($_REQUEST['act'] == 'contact_coach') 
 {
     $data              = json_decode(file_get_contents("php://input"));
-    $athlete_name      = $data->athlete_name;
-    $coach_sport       = $data->coach_sport;
-    $athlete_no        =  $data->athlete_no;
-    $coach_contact_no  =  $data->coach_contact_no;
-    $athlete_email     = $data->athlete_email;
-    $obj               = new connect_userservice();
-    $savemsg           = $obj->save_message($data);
-    if($savemsg != 0)
+    $item              = new stdClass();
+    $item->userid            = $data->userid;
+    $item->athlete_name      = $data->athlete_name;
+    $item->coach_sport       = $data->coach_sport;
+    $item->athlete_no        = $data->athlete_no;
+    $item->coach_contact_no  = $data->coach_contact_no;
+    $item->athlete_email     = $data->athlete_email;
+    $item->coach_id          = $data->coach_id;
+    $item->coach_contact_no  = $data->coach_contact_no;
+    $item->profileImage      = $data->profileImage;
+    $item->message           = str_replace(array('\'', '"'), "", $data->message);
+    $item->coach_email       = $data->coach_email;
+    $item->coach_name        = $data->coach_name;
+    $obj                     = new connect_userservice();
+    // print_r($item);
+    $savemsg           = $obj->save_message($item);
+    if($savemsg != '0')
     {
       $resp = array('status'=>$savemsg,'message'=>'Success');
     }else
     {
      $resp = array('status'=>$savemsg,'message'=>'Failure'); 
     }
-    if($coach_contact_no != '')
+    if($item->coach_contact_no != '')
     {
-    $msg = "You +have +received +connection+ request +from +".$athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$athlete_no."+ or+ ".$athlete_email.""; 
-    $res = sendWay2SMS(9528454915,8824784642, $coach_contact_no, $msg);
+    $msg = "You +have +received +connection+ request +from +".$item->athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$item->coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$item->athlete_no."+ or+ ".$item->athlete_email.""; 
+    $res = sendWay2SMS(9528454915,8824784642, $item->coach_contact_no, $msg);
     /*$resp = array('status'=>1,'message'=>'Success');
       echo json_encode($resp);*/
     }

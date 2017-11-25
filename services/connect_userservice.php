@@ -2146,13 +2146,14 @@ public function getAllDues($coach_id)
 
 public function save_message($data)
 { $userdata = json_encode($data);
-  $query = mysql_query("INSERT INTO `gs_message`(`sender_id`, `reciever_id`, `message`, `date_created`,`data`) VALUES ('$data->userid','$data->coach_id','$data->message',CURDATE(), '$userdata')");
+  $message = mysql_real_escape_string($data->message);
+  $query = mysql_query("INSERT INTO `gs_message`(`sender_id`, `reciever_id`, `message`, `date_created`,`data`) VALUES ('$data->userid','$data->coach_id','$message',CURDATE(), '$userdata')");
 if($query)
   {
-    return 1;
+    return '1';
   }else
   {
-    return 0;
+    return '0';
   }
 }
 
