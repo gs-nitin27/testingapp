@@ -978,23 +978,28 @@ public function tournament_list_api()
   }
 }
 
+public function resource_list()
+{
+  $query = mysql_query("SELECT * FROM `gs_resources` WHERE `token` = '2' AND `status` = '1'  ORDER BY `id` DESC");
+
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query))
+    {
+        $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
 
 
 } // End of Class
  
-
-
-
-
-
-
-
-
-
-
-
-
-
 
    
   

@@ -2484,12 +2484,7 @@ case '3':
       }
 }//End Function
 
-
-
-
 //###################### welcome email send to user ##############################################
-
-       
  
 public function sendEmail_for_password_reset($email)
 {

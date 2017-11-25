@@ -913,6 +913,22 @@ else if($_REQUEST['act'] == 'tournament_list_api')
     }
 }
 
+else if($_REQUEST['act'] == "resource_list")
+{
+  $req = new liteservice();
+  $res = $req->resource_list();
+  if($res)
+  {
+    $data = array('data' =>$res ,'status' => '1');
+    echo json_encode($data);
+  }else
+  {
+    $data = array('data' => $res , 'status' => '');
+    echo json_encode($data);
+  }
+
+}
+
 ?>
 
 
