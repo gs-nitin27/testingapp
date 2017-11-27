@@ -1597,7 +1597,7 @@ else if($_REQUEST['act'] == "professional")
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
   $userType        =   '103';
-  $where[]         =   ' 1=1 ';
+  $where[]         =   '`activeuser` = 1 ';
   $arr = array();
    if($userType != '')
    {
