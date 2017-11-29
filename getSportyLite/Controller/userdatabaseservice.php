@@ -71,11 +71,11 @@ $query = mysql_query("SELECT `name`, `email` FROM `gs_signup` WHERE `email` = '$
           }
       
 }
-/*********Listing Resources GetSporty [Function]************/
+/****************************Listing Resources GetSporty [Function]*************************/
 
 public function getList()
 {
-$query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` DESC");
+$query = mysql_query("SELECT * FROM `gs_resources` ORDER by `date_created` ");
   $row  = mysql_num_rows($query);
   if($row)
   {
