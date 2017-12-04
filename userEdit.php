@@ -80,7 +80,7 @@ else
                     {
                       $data = file_get_contents('json/Athletes.json');
                     }
-                   else if ($prof_id==2) 
+                   else if ($prof_id==2 || $prof_id==8) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
                     }
