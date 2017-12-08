@@ -34,6 +34,15 @@ public function angulartest($username,$password)
                $data['email'] =$row['email'];
                $data['forget_code'] = $row['forget_code'];
                $data['user_image'] =$row['user_image']; 
+               if($row['prof_id'])
+               {
+                $data['first'] = '0';
+               }
+               else
+               {
+                $data['first'] = '1';
+               }
+               
                return $data;
              }
            }
@@ -41,6 +50,23 @@ public function angulartest($username,$password)
             {
                return 0;
             } 
+}
+
+public function getEmailid($userid)
+{
+  $query = mysql_query("SELECT `email` FROM `user` WHERE `userid` = '$userid' ");
+  if($query)
+  {
+    while($row = mysql_fetch_assoc($query))
+    {
+      $data = $row;
+    }
+    return $data;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 public function AthletedashboardData($userid)
@@ -86,21 +112,21 @@ public function OTPVerify($otpcode,$userid)
   }
 }
 
-public function socialLogin($email,$password,$name,$forget_code,$image)
+public function socialLogin($email,$password,$name,$forget_code,$image,$userType,$prof_id,$prof_name)
 {   
-  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`prof_name`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','Athletes','$forget_code','$image')");
+  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`prof_name`,`forget_code`,`user_image`) VALUES('$email','$password','$name','$userType','$prof_id','$prof_name','$forget_code','$image')");
    if($insert)
    {
-
       $data['Name'] = $name;
-      $data['userType'] = "104";
-      $data['prof_id'] =  "1";
+      $data['userType'] = $userType;
+      $data['prof_id'] =  $prof_id;
       $data['name']     = $name;
       $data['forget_code'] = $forget_code;
-      $data['prof_name'] = "Athletes";
+      $data['prof_name'] = $prof_name;
       $data['userId'] = mysql_insert_id();
       $data['email'] =$email;
       $data['user_image'] =$image; 
+      $data['first'] = '1';
       return $data;
    } 
    else
@@ -187,6 +213,8 @@ public function getjoblist($userid)
     return 0;
   }
 }
+
+
 
 public function profile_data_update($userid,$prof_id,$profliedata)
 {
@@ -386,6 +414,19 @@ public function publishjob($jobid,$publish)
     return 0;
   }
 
+}
+
+public function registration($item)
+{
+$query= mysql_query("UPDATE  `user` SET `name` ='$item->name',`contact_no`='$item->phone_no',`gender`='$item->gender',`prof_id`='$item->prof_id',`prof_name`='$item->prof_name',`dob`='$item->dob',`sport`='$item->sport',`userType`='$item->userType', `forget_code`='$item->forget_code',`access_module`='$item->access_module' WHERE `userid`='$item->userid'");
+$tes = mysql_affected_rows();
+if($tes)
+  {
+    return $item->prof_id;
+
+  }else{
+    return 0;
+  }
 }
 
 // public function job_apply_userlist($jobid)
