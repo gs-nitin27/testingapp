@@ -24,7 +24,7 @@ if($_REQUEST['act'] == 'editUserData')
 
    if(is_null($userid))
    {
-        $user = array('status' => 0, 'data'=> 'User Id is Empty ' , 'msg'=>'No User Id' );
+        $user = array('status' => 0, 'data'=> 'User Id is Empty' , 'msg'=>'No User Id' );
         echo json_encode($user);
    }
   if(is_null($userdata))
