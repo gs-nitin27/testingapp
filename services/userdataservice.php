@@ -214,7 +214,7 @@ $gender             =  $data->gender;
 
   public function gsSignIn($email,$password1)
     {
-      $query = mysql_query("SELECT  */*`userid`, `userType`, `status`, `name`, `password`, `forget_code`, `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`, `date_updated`, `m_device_id`, `link`, `age_group_coached`, `languages_known`, `unique_code` */FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+      $query = mysql_query("SELECT  `userid`, `userType`, `status`, `name`, `password`, `forget_code`, `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`, `date_updated`, `m_device_id`, `link`, `age_group_coached`, `languages_known`, `unique_code` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
           if($query)
           {
             while($row = mysql_fetch_assoc($query))
@@ -330,7 +330,7 @@ if($update)
 /***************************************************************************/
 
     public function userdata($id)
-    {
+    {  //echo "SELECT *FROM `user` where `userid` = '$id'";die;
        $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
@@ -891,6 +891,7 @@ if(mysql_num_rows($query1) > 0)
 while($row = mysql_fetch_assoc($query1))
 {
 $row['fav']='0';
+$row['description'] = strip_tags($row['description']);
 $rows[] = $row;
 }
   return $rows;
