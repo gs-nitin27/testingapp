@@ -69,6 +69,23 @@ public function getEmailid($userid)
   }
 }
 
+public function getorgdetails($userid)
+{ 
+
+   $query = mysql_query("SELECT * FROM `gs_org` WHERE `userid` = '$userid'");
+   if($query)
+   {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data = $row;
+    }
+    return $data;
+   }
+   else
+   {
+    return 0;
+   }
+}
 public function AthletedashboardData($userid)
 {
   $query = mysql_query("SELECT * FROM `user` WHERE `userid` = '$userid'");
@@ -428,6 +445,21 @@ if($tes)
     return 0;
   }
 }
+
+public function addOrg($item)
+{
+  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email')");
+  if($query)
+  {
+    return 1;
+
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 
 // public function job_apply_userlist($jobid)
 // {

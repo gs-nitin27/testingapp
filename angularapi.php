@@ -482,6 +482,14 @@ else if($_REQUEST['act'] == 'getEmailid')
 
 }
 
+else if($_REQUEST['act'] == 'getorgdetails')
+{
+  $userid  = $_REQUEST['userid'];
+  $req = new angularapi();
+  $res = $req->getorgdetails($userid);
+  echo json_encode($res);
+}
+
 else if($_REQUEST['act']=="registration")
 {
 $data1 = json_decode(file_get_contents("php://input"));
@@ -519,7 +527,27 @@ else
   echo json_encode($user);
 }
 }
+else if($_REQUEST['act'] == 'addOrg')
+{
+$data = json_decode(file_get_contents("php://input"));
 
+$item                 =  new stdClass();
+$item->userid       =  $data->userid;
+$item->org_name     =  $data->org_name;
+$item->about        =  $data->about;
+$item->address1     =  $data->address1 ;
+$item->address2     =  $data->address2;
+$item->city         =  $data->city;
+$item->state        =  $data->state;
+$item->pin          =  $data->pin ;
+$item->mobile       =  $data->mobile; 
+$item->email        =  $data->email;
+
+$req = new angularapi();
+
+$res = $req->addOrg($item);
+echo json_encode($res);
+}
 // else if($_REQUEST['act'] == 'job_apply_userlist')
 // {
 //    $jobid = $_REQUEST['jobid'];
