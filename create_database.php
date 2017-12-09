@@ -346,7 +346,6 @@ else if($_REQUEST['act']=="registration")
 {
 $data1 = json_decode(file_get_contents("php://input"));
 
-
 $item                 =  new stdClass();
 $forgot_code          =  mt_rand(1000,10000);
 $item->name           =  $data1->Name;
