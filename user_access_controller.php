@@ -4,8 +4,8 @@ include('services/user_access_service.php');
 
 if($_REQUEST['act'] == 'gs_login')
 {
-$data = json_decode($_REQUEST['data']);
-$email = $data->email;
+$data = file_get_contents("php://input");//json_decode($_REQUEST['data']);
+$data = json_decode($data);
 $login_type  = $data->loginType;                     // Login Via Facebook Or Google
 
 $obj = new User_access_service();
