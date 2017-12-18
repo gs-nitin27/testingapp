@@ -20,7 +20,7 @@ public function angulartest($username,$password)
 {  //echo "SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'";die;
   $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
        
-        if($query)
+        if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -55,7 +55,7 @@ public function angulartest($username,$password)
 public function getEmailid($userid)
 {
   $query = mysql_query("SELECT `email` FROM `user` WHERE `userid` = '$userid' ");
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while($row = mysql_fetch_assoc($query))
     {
@@ -73,7 +73,7 @@ public function getorgdetails($userid)
 { 
 
    $query = mysql_query("SELECT * FROM `gs_org` WHERE `userid` = '$userid'");
-   if($query)
+   if(mysql_num_rows($query)>0)
    {
     while ($row = mysql_fetch_assoc($query)) 
     {
@@ -89,7 +89,7 @@ public function getorgdetails($userid)
 public function AthletedashboardData($userid)
 {
   $query = mysql_query("SELECT * FROM `user` WHERE `userid` = '$userid'");
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while ($row = mysql_fetch_assoc($query)) 
     {
@@ -155,7 +155,7 @@ public function socialLogin($email,$password,$name,$forget_code,$image,$userType
 public function profiledata($userid)
 {
   $query = mysql_query("SELECT  * FROM `user` WHERE `userid` = '$userid'");
-          if($query)
+          if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -452,7 +452,6 @@ public function addOrg($item)
   if($query)
   {
     return 1;
-
   }
   else
   {
