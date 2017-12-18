@@ -20,7 +20,7 @@ public function angulartest($username,$password)
 {  //echo "SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'";die;
   $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
        
-        if($query)
+        if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -55,7 +55,7 @@ public function angulartest($username,$password)
 public function getEmailid($userid)
 {
   $query = mysql_query("SELECT `email` FROM `user` WHERE `userid` = '$userid' ");
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while($row = mysql_fetch_assoc($query))
     {
@@ -69,10 +69,27 @@ public function getEmailid($userid)
   }
 }
 
+public function getorgdetails($userid)
+{ 
+
+   $query = mysql_query("SELECT * FROM `gs_org` WHERE `userid` = '$userid'");
+   if(mysql_num_rows($query)>0)
+   {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data = $row;
+    }
+    return $data;
+   }
+   else
+   {
+    return 0;
+   }
+}
 public function AthletedashboardData($userid)
 {
   $query = mysql_query("SELECT * FROM `user` WHERE `userid` = '$userid'");
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while ($row = mysql_fetch_assoc($query)) 
     {
@@ -138,7 +155,7 @@ public function socialLogin($email,$password,$name,$forget_code,$image,$userType
 public function profiledata($userid)
 {
   $query = mysql_query("SELECT  * FROM `user` WHERE `userid` = '$userid'");
-          if($query)
+          if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -428,6 +445,20 @@ if($tes)
     return 0;
   }
 }
+
+public function addOrg($item)
+{
+  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email')");
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 
 // public function job_apply_userlist($jobid)
 // {
