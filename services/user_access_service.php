@@ -1,6 +1,6 @@
 <?php
 
-Class User_access_service
+Class User_access_service 
 {
 
 public function find_user_data($where)
