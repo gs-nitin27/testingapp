@@ -61,6 +61,7 @@ $obj = new User_access_service();
    $google_id = $data->data->id;	
    $where = "`email` = '".$data->email."'";
    $obj_var = $obj->find_user_data($where);
+   //print_r($obj_var);die;
    if($obj_var != 0)
     {
     if($obj_var['google_id'] == '')
@@ -68,14 +69,17 @@ $obj = new User_access_service();
 	     $update_clause  = "`google_id` = '".$data->data->id."'";// google id updation on successfull login from google
 	     $where = "`userid` = '".$obj_var['userid']."'";
 	     $updt_obj = $obj->update_user_data($update_clause,$where); 
-	     $resp = array('status' =>'1' ,'data'=>$obj_var , 'msg'=>'Successfully logged In'); // To get email id from user verify and update
-	    }else
-	    {
-	  $resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed');  //to get details from user validate email id and create a new record;
+	      // To get email id from user verify and update
+	     }
+	     $resp = array('status' =>'1' ,'data'=>$obj_var , 'msg'=>'Successfully logged In');
+	}
+	else
+    {
+     $resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed');  //to get details from user validate email id and create a new record;
 
-	    }
-   
     }
+   
+    
    }
   echo json_encode($resp);
  }
