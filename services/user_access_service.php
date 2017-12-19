@@ -89,7 +89,7 @@ public function create_new_user($data)
       $password = md5($data->data->email);
       
 
-      $query = "INSERT INTO `user`(`userType`, `name`, `password`,`email`,`user_image`, `date_created`,".$fb_id.") VALUES ('$data->userType','$data->data->name','$password','$data->data->email','$data->data->user_image',CURDATE(),'$app_id')";
+      $query = "INSERT INTO `user`(`userType`, `name`, `password`,`email`,`user_image`, `date_created`,".$app_id_column.") VALUES ('$data->userType','$data->data->name','$password','$email','$data->data->user_image',CURDATE(),'$app_id')";
      $sql    = mysql_query($query);
      $log_id = mysql_insert_id();
      if($sql)
