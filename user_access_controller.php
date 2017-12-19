@@ -56,7 +56,7 @@ $obj = new User_access_service();
          $create_obj = 	$obj->create_user($data);
          if($create_obj != 0)
          {
-         $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'please sign up to proceed');
+         $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'record created');
          }
 	     else
 	     {
@@ -88,7 +88,7 @@ $obj = new User_access_service();
      $create_obj = 	$obj->create_user($data);
      if($create_obj != 0)
      {
-     $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'please sign up to proceed');
+     $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'record created');
      }
      else
      {

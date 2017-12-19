@@ -67,29 +67,37 @@ public function create_new_user($data)
    }
 }
   public function create_user($data)
-  {
+  {   $item = new stdClass();
+      $item->userType = $data->userType;
+      $item->name     = $data->data->name;
+      $item->passwsord = md5($data->data->email);
+      $item->email     = $data->data->email;
+      $item->image    = $data->data->image;
+
       if(isset($data->data->email))
       {
-        $email = $data->data->email;
+        $item->email = $data->data->email;
       }else
       {
-        $email = '';
+        $item->email = '';
       }
 
 
       if($data->loginType == '2')
       {
-        $app_id_column = "`google_id`";
-        $app_id        = $data->data->id; 
+        $app_id_column = "google_id";
+        $column = $app_id_column;
+        $item->app_id        = $data->data->id; 
       }else
       {
-        $app_id_column = "`".$data->app."_fb_id`";
-        $app_id        = $data->data->id;
-      }
-      $password = md5($data->data->email);
-      
+        $app_id_column = $data->app."_fb_id";
+        $column  = $app_id_column;
+        $item->app_id        = $data->data->id;
 
-      $query = "INSERT INTO `user`(`userType`, `name`, `password`,`email`,`user_image`, `date_created`,".$app_id_column.") VALUES ('$data->userType','$data->data->name','$password','$email','$data->data->user_image',CURDATE(),'$app_id')";
+      }
+      //echo $app_id;die;
+      $password = md5($data->data->email);
+      $query = "INSERT INTO `user`(`userType`, `name`, `password`,`email`,`user_image`, `date_created`,`".$app_id_column."`) VALUES ('$item->userType','$item->name','$password','$item->email','$item->image',CURDATE(),'$item->app_id')";
      $sql    = mysql_query($query);
      $log_id = mysql_insert_id();
      if($sql)
