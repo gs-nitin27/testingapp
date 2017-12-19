@@ -66,7 +66,44 @@ public function create_new_user($data)
    	return 0;
    }
 }
+  public function create_user($data)
+  {
+      if(isset($data->data->email))
+      {
+        $email = $data->data->email;
+      }else
+      {
+        $email = '';
+      }
 
+
+      if($data->loginType == '2')
+      {
+        $app_id_column = "`google_id`";
+        $app_id        = $data->data->id; 
+      }else
+      {
+        $app_id_column = "`".$data->app."_fb_id`";
+        $app_id        = $data->data->id;
+      }
+      $password = md5($data->data->email);
+      
+
+      $query = "INSERT INTO `user`(`userType`, `name`, `password`,`email`,`user_image`, `date_created`,".$fb_id.") VALUES ('$data->userType','$data->data->name','$password','$data->data->email','$data->data->user_image',CURDATE(),'$app_id')";
+     $sql    = mysql_query($query);
+     $log_id = mysql_insert_id();
+     if($sql)
+     {
+
+      $where = "`userid` = '".$log_id."'";
+      return $this->find_user_data($where);
+     }
+     else
+     {
+      return 0;
+     }
+
+  }
 
 }
 

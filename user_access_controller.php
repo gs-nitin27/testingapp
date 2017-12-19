@@ -53,11 +53,21 @@ $obj = new User_access_service();
 	   else
 	  {
 	  
-	   $resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed');  //to get details from user validate email id and create a new record;
+         $create_obj = 	$obj->create_user($data);
+         if($create_obj != 0)
+         {
+         $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'please sign up to proceed');
+         }
+	     else
+	     {
+	     $resp = array('status' =>'4' ,'data'=>[] , 'msg'=>'unable to create record');
+	     }
+
+	   //$resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed');  //to get details from user validate email id and create a new record;
 	  }  
     } 
   }
-  else if($login_type == 2)  {                             // Login From Google
+   else if($login_type == 2)  {                             // Login From Google
    $google_id = $data->data->id;	
    $where = "`email` = '".$data->email."'";
    $obj_var = $obj->find_user_data($where);
@@ -75,12 +85,18 @@ $obj = new User_access_service();
 	}
 	else
     {
-     $resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed');  //to get details from user validate email id and create a new record;
-
+     $create_obj = 	$obj->create_user($data);
+     if($create_obj != 0)
+     {
+     $resp = array('status' =>'3' ,'data'=>$create_obj , 'msg'=>'please sign up to proceed');
+     }
+     else
+     {
+     $resp = array('status' =>'4' ,'data'=>[] , 'msg'=>'unable to create record');
+     }
+       //to get details from user validate email id and create a new record;
     }
-   
-    
-   }
+  }
   echo json_encode($resp);
  }
 else if($_REQUEST['act'] = 'gs_signup')
