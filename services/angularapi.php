@@ -431,7 +431,7 @@ public function publishjob($jobid,$publish)
     return 0;
   }
 
-}
+} 
 
 public function registration($item)
 {
@@ -439,7 +439,14 @@ $query= mysql_query("UPDATE  `user` SET `name` ='$item->name',`contact_no`='$ite
 $tes = mysql_affected_rows();
 if($tes)
   {
-    return $item->prof_id;
+  $sel = "SELECT `userid`, `userType`, `status`, `name`, `email`, `contact_no`, `sport`, `gender`, `dob`, `prof_id`, `prof_name`, `user_image`, `location`, `device_id`, `date_created`, `date_updated`, `m_device_id`, `M_fb_id`, `L_fb_id`,`google_id` FROM `user` WHERE `userid`='$item->userid'";
+  //echo $query;die;
+  $sql = mysql_query($sel);
+  if(mysql_num_rows($sql)>0)
+  {
+    return mysql_fetch_assoc($sql);
+  }
+  //  return $item->prof_id;
 
   }else{
     return 0;
