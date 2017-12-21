@@ -4,12 +4,13 @@ include('services/user_access_service.php');
 include('services/userdataservice.php');
 include('services/UserProfileService.php');
 
-
+$req = new userdataservice();
 if($_REQUEST['act'] == 'gs_login')
 {
 $data = file_get_contents("php://input");           //json_decode($_REQUEST['data']);
 $data = json_decode($data);
 $login_type  = $data->loginType;                    // Login Via Facebook Or Google
+$device_id_column = $data->app."_device_id";
 if(isset($data->data->email))
 {
 	$email = $data->data->email;
@@ -19,9 +20,9 @@ else
 	$email = '';
 }
 $obj = new User_access_service();
-$req = new userdataservice();
   if($login_type == '1'){                            // Login From Facebook
   $app_type = $data->app;                            // L=liteapp , M=manageapp 
+  
   $fb_id = $data->data->id;
   if($email != '')
   {
@@ -31,7 +32,7 @@ $req = new userdataservice();
 	  {
 	  	if($obj_var[$app_type.'_fb_id'] == '' || $obj_var[$app_type.'_fb_id'] == 0)
 		{
-		$update = "`".$app_type."_fb_id` = '".$fb_id."'";
+		$update = "`".$app_type."_fb_id` = '".$fb_id."' , `".$device_id_column."` = '".$data->device_id."'";
 		$where  = "`userid`= '".$obj_var['userid']."'"; 
 		$updt_obj = $obj->update_user_data($update,$where); //update Facebook Id for the particular email for a app
 		}
@@ -105,7 +106,7 @@ $req = new userdataservice();
     {
     if($obj_var['google_id'] == '')
 		{
-	     $update_clause  = "`google_id` = '".$data->data->id."'";// google id updation on successfull login from google
+	     $update_clause  = "`google_id` = '".$data->data->id."' , `".$device_id_column."` = '".$data->device_id."'";// google id updation on successfull login from google
 	     $where = "`userid` = '".$obj_var['userid']."'";
 	     $updt_obj = $obj->update_user_data($update_clause,$where); 
 	      // To get email id from user verify and update
@@ -143,6 +144,7 @@ else if($_REQUEST['act'] = 'gs_signup')
 $data1 = json_decode(file_get_contents("php://input"));
 $item                 =  new stdClass();
 $item->app            =  $data1->app;
+$item->userid         =  $data1->userid;
 $item->loginType      =  $data1->loginType;
 $item->id             =  $data1->data->id;
 $item->name           =  $data1->data->name;
@@ -154,11 +156,12 @@ $item->sport          =  $data1->sport;
 $item->login_status   =  $data1->login_status;
 $item->gender         =  $data1->gender;
 $item->dob            =  $data1->dob;
-$item->userType       =  103;
+$item->userType       =  $data1->userType; 
 $item->location       =  $data1->location;
 //$item->forget_code    =  $forgot_code;
 $item->prof_id        =  $data1->prof_id;
 $item->device_id      =  $data1->device_id;
+$device_id_column     =  $item->app."_device_id";
 $obj_var = new User_access_service();
 $where = "`email` = '".$item->email."'";
 $resp = $obj_var->find_user_data($where);
@@ -177,9 +180,15 @@ else
 if($resp[$column] == $item->id && $resp['status'] == '1')
 {
 
-  	$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`device_id` = '".$item->device_id."'";
-	$where  = "`email` = '".$item->email."'";
+  	$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+	$where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);
+	if($resp['prof_name'] == 'Athletes')
+	      {
+	        $resp['classes'] = $req->connected_class($resp['userid']);  // To get connected classes
+	      }
+	        $resp['profile'] = $req->checkprofile($resp['userid']);  // To get 
+
 	$resp = array('status' =>'1' ,'data'=>$resp , 'msg'=>'user info successfully updated');
 
 
@@ -192,9 +201,15 @@ else
 }
 else
 {
-$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`device_id` = '".$item->device_id."'";
-	$where  = "`".$item->app."_fb_id` = '".$item->id."'";
+$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+	//$where  = "`".$item->app."_fb_id` = '".$item->id."'";
+    $where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);
+	if($resp['prof_name'] == 'Athletes')
+	      {
+	        $resp['classes'] = $req->connected_class($resp['userid']);  // To get connected classes
+	      }
+	        $resp['profile'] = $req->checkprofile($resp['userid']);  // To get 
 	$resp = array('status' =>'1' ,'data'=>$resp , 'msg'=>'user info successfully updated');
 }
 
