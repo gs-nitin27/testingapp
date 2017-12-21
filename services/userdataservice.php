@@ -12,7 +12,7 @@
 public function userVarify($where)
 {
 //echo "SELECT *FROM `user` $where";die;
-  $query  = $query  = mysql_query("SELECT *FROM `user` $where");
+  $query  = $query  = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`userType`,'') AS userType, IFNull(`status`,'') AS status,IFNull(`name`,'') AS name,IFNull(`forget_code`,'') AS forget_code ,IFNull(`email`,'') AS email, IFNull(`contact_no`,'') AS contact_no,IFNull(`sport`,'') AS sport, IFNull(`gender`,'') AS gender,IFNull(`dob`,'') AS dob, IFNull(`prof_id`, '') AS prof_id,IFNull(`prof_name`,'') AS prof_name , IFNull(`user_image`,'') AS user_image ,IFNull(`profile_status`,'') AS profile_status , IFNull(`location`,'') AS location , IFNull(`prof_language`,'') AS prof_language, IFNull(`other_skill_name`,'') AS other_skill_name, IFNull(`age_catered`,'') AS age_catered, IFNull(`device_id`,'') AS device_id ,IFNull(`about_me`,'') AS about_me ,IFNull(`access_module`,'') AS access_module,IFNull(`activeuser`,'') AS activeuser ,IFNull(`date_created`,'') AS date_created, IFNull(`date_updated`,'') AS date_updated ,IFNull(`m_device_id`,'') AS m_device_id ,IFNull(`link`,'') AS link ,IFNull(`age_group_coached`,'') AS age_group_coached ,IFNull(`languages_known`,'') AS languages_known ,IFNull(`unique_code`,'') AS unique_code FROM `user` $where");
 
   if(mysql_num_rows($query)>0)
   {
@@ -35,6 +35,7 @@ public function checkprofile($userid)
 {
 $user_res       = $this->userdata($userid);
 $Total_profile  =0;
+$prof_id = $user_res['prof_id'];
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
@@ -42,7 +43,7 @@ if($user_res==0)
   die();
 }
 else
-  {
+  {    
        $req            = new UserProfileService();
        $res            = $req->listuserdata($userid);
                if($res == 0)
@@ -51,9 +52,13 @@ else
                     {
                       $data = file_get_contents('json/Athletes.json');
                     }
-                    if ($prof_id==2) 
+                    else if ($prof_id==2 || $prof_id==8) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
+                    }
+                    else
+                    {
+                      $data = file_get_contents('json/other_profile.json');
                     }
                }
                 else
@@ -103,7 +108,7 @@ else
                      $comp1=round($comp,2);
                      //$prof_status=$comp1.''.'%';
                     }
-      
+            $data =  new stdClass();
             $data->user = $user_res; 
             if (is_array($data->user) || is_object($data->user))
             {
