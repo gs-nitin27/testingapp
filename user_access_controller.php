@@ -153,7 +153,9 @@ $item->image          =  $data1->data->image;
 $item->phone_no       =  $data1->phone_no;
 $item->prof_name      =  $data1->prof_name;
 $item->sport          =  $data1->sport;
-$item->login_status   =  $data1->login_status;
+if(isset($data1->login_status)){
+$item->login_status   =  $data1->login_status;	
+}
 $item->gender         =  $data1->gender;
 $item->dob            =  $data1->dob;
 $item->userType       =  $data1->userType; 
