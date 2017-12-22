@@ -66,6 +66,7 @@ public function create_new_user($data)
       $item->email     = $data->data->email;
       $item->image    = $data->data->image;
       $device_id_column = $data->app."_device_id";
+      $item->device_id   = $data->device_id;
 
       if(isset($data->data->email))
       {
