@@ -1251,7 +1251,6 @@ public function job_status($id,$userid)
           $row = mysql_fetch_assoc($query);
           return $row['status'];
     }
-
     else
     {
       return '0';
@@ -2376,11 +2375,11 @@ function generate_random_code($length) {
 
 
 public function apply($userid , $id ,$status,$module,$user_name,$email)
-{
+{//echo $module;die;
 switch ($module)
  {
    case 1:
-     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
+       $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
      
    case 2:

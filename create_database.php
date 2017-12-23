@@ -1443,7 +1443,7 @@ else if($_REQUEST['act'] == "gs_searching")
                             for ($i=0; $i <count($response) ; $i++)
                             { 
                                $job_status      = $request->job_status($response[$i]['id'],$userid);
-                               $response[$i]['job_status'] =$job_status;
+                               $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
                          if ($module=='2')
