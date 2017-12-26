@@ -541,6 +541,17 @@ $item->email        =  $data->email;
 
 $req = new angularapi();
 $res = $req->addOrg($item);
+if(isset($data->app))
+{ 
+  if($res != 0)
+  {
+   $res = array('status' => $res ,'msg' => 'Success');
+  }
+  else
+  {
+   $res = array('status' => $res ,'msg' => 'Failure');
+  }
+}
 echo json_encode($res);
 }
 // else if($_REQUEST['act'] == 'job_apply_userlist')

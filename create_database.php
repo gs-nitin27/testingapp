@@ -269,35 +269,39 @@ $item->mobile_no          =  $data1->mobile_no;
 $item->otp                =  $data1->otp;
 $item->dob                =  $data1->dob;
 $item->gender             =  $data1->gender;
+$item->languagesKnown     =  $data1->languagesKnown;
+$item->ageGroupCoached    =  $data1->ageGroupCoached;
+$item->link               =  $data1->link;
+//print_r($data1);
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
  // {
  // $req2     = new emailService();
- // $res2     = $req2->emailVarification($item->email);
+ // $res2     = $req2->emailVarificatilanguagesKnownon($item->email);
  // }
 if($res==1)
 {
 $req1                 = new userdataservice();
 $req2                 = $req1->getuserdata($item->userid);
-$msg                  = "Hello + athlete + your + otp + varification + code + is +".$item->otp;
-$sms = sendWay2SMS(9528454915,8824784642, $item->mobile_no, $msg);
-if($sms != 1)
-{
-$message = 'Contact Number not verified';
-}
-else
-{
-$req2['otp'] = $item->otp;  
-$message = 'Successfully updated';
-}
+// $msg                  = "Hello + athlete + your + otp + varification + code + is +".$item->otp;
+// $sms = sendWay2SMS(9528454915,8824784642, $item->mobile_no, $msg);
+// if($sms != 1)
+// {
+// $message = 'Contact Number not verified';
+// }
+// else
+// {
+// $req2['otp'] = $item->otp;  
+// $message = 'Successfully updated';
+// }
 
 $user = array('status' => 1, 'data'=> $req2, 'msg'=>$message );
 echo json_encode($user);
 }
 else
 {
-$user = array('status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+$user = array('status' => 0, 'data'=> $req2, 'msg'=>'Not updated' );
 echo json_encode($user);
 }
 }
@@ -1443,7 +1447,7 @@ else if($_REQUEST['act'] == "gs_searching")
                             for ($i=0; $i <count($response) ; $i++)
                             { 
                                $job_status      = $request->job_status($response[$i]['id'],$userid);
-                               $response[$i]['job_status'] =$job_status;
+                               $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
                          if ($module=='2')
