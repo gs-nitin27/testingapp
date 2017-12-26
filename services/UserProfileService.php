@@ -328,7 +328,7 @@ $dob                     = $userdata->dob;
 $gender                  = $userdata->gender;
 $languagesKnown          = $userdata->languagesKnown;
 $ageGroupCoached         = $userdata->ageGroupCoached;
-$link                    = $userdata1->link;
+$link                    = $userdata->link;
 $query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' , `dob`='$dob' , `gender` = '$gender', `age_group_coached` = '$ageGroupCoached',`languages_known` = '$languagesKnown', `link` = '$link' WHERE `userid`='$userid'");
 if($query)
 {
