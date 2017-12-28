@@ -6,6 +6,7 @@ include('services/userdataservice.php');
 include('services/generate_code.php');
 error_reporting(E_ERROR | E_PARSE);
 $nodata = [];
+//print_r($_REQUEST);die;
 switch($_REQUEST['act']) 
 {
 	case 'view_parent_child':
@@ -162,7 +163,7 @@ switch($_REQUEST['act'])
 		break;
 
 	    case 'add_parent':  // Api for Adding Parent account by child
-
+               print_r($_REQUEST);
 			  $child_id 	    = $_REQUEST['child_id'];
 
 			  $parent_email 	= $_REQUEST['parent_email'];
@@ -218,7 +219,7 @@ switch($_REQUEST['act'])
                 ;*/
 
 			  }
-              $response = array('status'=>$status,/*'data'=>$getcode,*/'message'=>$msg);
+              $response = array('status'=>$status,/*'data'=>$getcode,*/'msg'=>$msg);
               echo json_encode($response); 
               break;
 
