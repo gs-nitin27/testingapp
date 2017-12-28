@@ -554,6 +554,21 @@ if(isset($data->app))
 }
 echo json_encode($res);
 }
+
+
+else if($_REQUEST['act'] == 'callforshortlist')
+{
+
+  $userid = $_REQUEST['userid'];
+  $jobid  = $_REQUEST['jobid'];
+  $req = new angularapi();
+
+  $res = $req->callforshortlist($userid,$jobid);
+
+  echo json_encode($res);
+
+
+}
 // else if($_REQUEST['act'] == 'job_apply_userlist')
 // {
 //    $jobid = $_REQUEST['jobid'];

@@ -1800,6 +1800,7 @@ else if($_REQUEST['act'] == "shortlist")
 
 else if($_REQUEST['act'] == "interview_schedule")
 {
+
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
   $employer_id       =  $userdata->employer_id;
@@ -1812,6 +1813,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
   $module            =  '1';    // for Job
+  
   //$date1             =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $con               =  new connect_userservice();
