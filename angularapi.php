@@ -11,7 +11,6 @@ if($_REQUEST['act'] == 'contentangular')
   $res= $req->getContentInfo();
     echo json_encode($res); 
 }
-
 else if($_REQUEST['act'] == 'angulartest')
 {       
         $username       =  $_REQUEST['email'];
@@ -299,7 +298,6 @@ $userid         =  @$_REQUEST['userid'];
 $prof_id        =  @$_REQUEST['prof_id'];
 $req            =  new angularapi();
 $user_res       = $req->userdata($userid);
-
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');

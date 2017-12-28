@@ -387,7 +387,7 @@ public function participantList($event_id)
 
 public function jobapplyUser($jobid)
 {
- $query = mysql_query("SELECT `userid`,`prof_id`,`name`,`email`,`location`,`gender`,`contact_no`,`dob`,  `user_image`,`prof_name` FROM `user` WHERE `userid` IN ( SELECT `userid` FROM `user_jobs` WHERE `userjob` = '$jobid' )");
+ $query = mysql_query("SELECT `user`.`userid`,`user`.`prof_id`,`user`.`name`,`user`.`email`,`user`.`location`,`user`.`gender`,`user`.`contact_no`,`user`.`dob`, `user`.`user_image`,`user`.`prof_name` , `user_jobs`.`id`, `user_jobs`.`status` FROM `user` JOIN `user_jobs` ON `user`.`userid` = `user_jobs`.`userid` AND `user`.`userid` IN (SELECT `userid` FROM `user_jobs` WHERE `userjob` = '181')");
   if(mysql_num_rows($query)>0)
   {
    while ($row = mysql_fetch_assoc($query)) {
