@@ -32,7 +32,7 @@ $obj = new User_access_service();
 	  {
 	  	if($obj_var[$app_type.'_fb_id'] == '' || $obj_var[$app_type.'_fb_id'] == 0)
 		{
-		$update = "`".$app_type."_fb_id` = '".$fb_id."' , `".$device_id_column."` = '".$data->device_id."'";
+		$update = "`".$app_type."_fb_id` = '".$fb_id."'";
 		$where  = "`userid`= '".$obj_var['userid']."'"; 
 		$updt_obj = $obj->update_user_data($update,$where); //update Facebook Id for the particular email for a app
 		}
@@ -41,6 +41,10 @@ $obj = new User_access_service();
 	        $obj_var['classes'] = $req->connected_class($obj_var['userid']);  // To get connected classes
 	      }
 	        $obj_var['profile'] = $req->checkprofile($obj_var['userid']);  // To get profile completion percentage
+	    
+        $update = "`".$device_id_column."` = '".$data->device_id."'";
+		$where  = "`userid`= '".$obj_var['userid']."'"; 
+		$updt_obj = $obj->update_user_data($update,$where); //update 
 	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull'); //
 	  }
 	  else  // No Record found from email value
@@ -106,7 +110,7 @@ $obj = new User_access_service();
     {
     if($obj_var['google_id'] == '')
 		{
-	     $update_clause  = "`google_id` = '".$data->data->id."' , `".$device_id_column."` = '".$data->device_id."'";// google id updation on successfull login from google
+	     $update_clause  = "`google_id` = '".$data->data->id."'";// google id updation on successfull login from google
 	     $where = "`userid` = '".$obj_var['userid']."'";
 	     $updt_obj = $obj->update_user_data($update_clause,$where); 
 	      // To get email id from user verify and update
@@ -116,12 +120,15 @@ $obj = new User_access_service();
 	        $obj_var['classes'] = $req->connected_class($obj_var['userid']);   // to get connected classes 
 	      }
 	     $obj_var['profile'] = $req->checkprofile($obj_var['userid']);      // to get profile completion percentage 
+	    $update = "`".$device_id_column."` = '".$data->device_id."'";
+		$where  = "`userid`= '".$obj_var['userid']."'"; 
+		$updt_obj = $obj->update_user_data($update,$where); //update 
+
 	     $resp = array('status' =>'1' ,'data'=>$obj_var , 'msg'=>'Successfully logged In');
 	}
 	else
     {
 
-   // $resp = array('status' =>'3' ,'data'=>[] , 'msg'=>'please sign up to proceed'); 
      $create_obj = 	$obj->create_user($data);
      if($create_obj != 0)
      {

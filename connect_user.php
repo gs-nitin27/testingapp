@@ -1486,17 +1486,20 @@ else if ($_REQUEST['act'] == 'contact_coach')
     $item->message           = str_replace(array('\'', '"'), "", $data->message);
     $item->coach_email       = $data->coach_email;
     $item->coach_name        = $data->coach_name;
+    $item->prof_id           = $data->prof_id;
+    $item->prof_name         = $data->prof_name;
     $obj                     = new connect_userservice();
     // print_r($item);
     $savemsg           = $obj->save_message($item);
     if($savemsg != '0')
     {
       $resp = array('status'=>$savemsg,'message'=>'Success');
-    }else
+    }
+    else
     {
      $resp = array('status'=>$savemsg,'message'=>'Failure'); 
     }
-    if($item->coach_contact_no != '')
+    if($item->coach_contact_no != '' && $item->prof_id == '1')
     {
     $msg = "You +have +received +connection+ request +from +".$item->athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$item->coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$item->athlete_no."+ or+ ".$item->athlete_email.""; 
     $res = sendWay2SMS(9528454915,8824784642, $item->coach_contact_no, $msg);
