@@ -94,7 +94,7 @@ public function add_Parent($parent_email,$child_id)
 {  
    $unique_code = rand();
    define(UNIQUE, $unique_code);
-   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`date_created`,`unique_code`) VALUES('$parent_email','104','6','Parent','CURDATE()',UNIQUE)");
+   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`date_created`,`unique_code`) VALUES('$parent_email','104','6','Parent','CURDATE()','".UNIQUE."')");
        if($query)
        {
              $parent_id = mysql_insert_id();
@@ -128,11 +128,10 @@ public function get_child_data($child_id)
 	 }
 
 } // End Function
-
+ 
 public function insert_association($parent_id,$child_id,$unique_code,$status)
-{
-	$query = mysql_query("INSERT INTO `gs_association1`(`unique_code`,`parent_id`,`child_id`,`child_activate`,`date_created`,`date_updated`) VALUES('$unique_code','$parent_id','$child_id','$status',CURDATE(),CURDATE())");
-	 if ($query)
+{   $query = mysql_query("INSERT INTO `gs_association1`(`unique_code`,`parent_id`,`child_id`,`child_activate`,`date_created`,`date_updated`) VALUES('$unique_code','$parent_id','$child_id','$status',CURDATE(),CURDATE())");
+		 if ($query)
 	 {
 		return 1;
 	 }

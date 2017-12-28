@@ -163,7 +163,7 @@ switch($_REQUEST['act'])
 		break;
 
 	    case 'add_parent':  // Api for Adding Parent account by child
-               print_r($_REQUEST);
+//               print_r($_REQUEST);
 			  $child_id 	    = $_REQUEST['child_id'];
 
 			  $parent_email 	= $_REQUEST['parent_email'];
