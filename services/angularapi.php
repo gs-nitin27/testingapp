@@ -387,7 +387,7 @@ public function participantList($event_id)
 
 public function jobapplyUser($jobid)
 {
- $query = mysql_query("SELECT `user`.`userid`,`user`.`prof_id`,`user`.`name`,`user`.`email`,`user`.`location`,`user`.`gender`,`user`.`contact_no`,`user`.`dob`, `user`.`user_image`,`user`.`prof_name` , `user_jobs`.`id`, `user_jobs`.`status` FROM `user` JOIN `user_jobs` ON `user`.`userid` = `user_jobs`.`userid` AND `user`.`userid` IN (SELECT `userid` FROM `user_jobs` WHERE `userjob` = '181')");
+ $query = mysql_query("SELECT `user`.`userid`,`user`.`prof_id`,`user`.`name`,`user`.`email`,`user`.`location`,`user`.`gender`,`user`.`contact_no`,`user`.`dob`, `user`.`user_image`,`user`.`prof_name` , `user_jobs`.`id`, `user_jobs`.`status`,`user_jobs`.`interview_date` FROM `user` JOIN `user_jobs` ON `user`.`userid` = `user_jobs`.`userid` AND `user_jobs`.`id` IN (SELECT `id` FROM `user_jobs` WHERE `userjob` = '$jobid')");
   if(mysql_num_rows($query)>0)
   {
    while ($row = mysql_fetch_assoc($query)) {
@@ -466,6 +466,22 @@ public function addOrg($item)
   }
 }
 
+public function callforshortlist($userid,$jobid)
+{
+
+  $query = mysql_query("UPDATE `user_jobs` SET `status` = '2' WHERE `userid` = '$userid' AND `userjob` = '$jobid'");
+  $num = mysql_affected_rows();
+  if($num)
+  {
+     return 1;
+  }
+  else
+  {
+    return 0 ;
+  }
+
+
+}
 
 // public function job_apply_userlist($jobid)
 // {
