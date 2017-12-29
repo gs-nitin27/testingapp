@@ -1280,7 +1280,7 @@ else if($_REQUEST['act']=="send_offer")
   $salary            =  $userdata->salary;
   $joining_date      =  $userdata->joining_date;
   $status            =  '5';                      // Status 5 for Offer
-  $user_app          =  'L' ;
+  $user_app          =  'L';
   $date              =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $res               =  $req->jobStatus($applicant_id,$job_id,$status,$salary,$joining_date);
