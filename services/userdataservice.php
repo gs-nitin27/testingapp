@@ -772,6 +772,7 @@ while($row = mysql_fetch_assoc($query))
 
 $row['eligibility'] = json_decode($row['eligibility']);
 $row['terms_cond']  = json_decode($row['terms_cond']);
+//$row['description'] = strip_tags($row['description']);
 $row['fav']='0';
 $row['job']='0';
 $data[] = $row;

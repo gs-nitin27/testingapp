@@ -464,12 +464,22 @@ public function contact_coach($data)
          $mail->Password = "2016Darkhorse";
          $mail->SetFrom($from, $from_name);
          if($data->prof_id == '1')
-         {$mail->Subject = $data->athlete_name." wants to join your class";}
+         {
+          $mail->Subject = $data->athlete_name." wants to join your class";
+         }
          else
          {
           $mail->Subject = $data->prof_name.'  '.$data->athlete_name." has sent you a message";
          }
-         $mail->Body = "hello ".$data->coach_name."<br><br>"." a ".$data->prof_name." has sent you a message:"."<br><br>".$data->message."<br>You can view his profile , clicking on the view profile link:<br><a href='http://getsporty.in/profile/index.php?userid=".$data->userid."&prof_id=1'>View Profile</a><br><br>"."Thanks"."<br>"."Team Getsporty"; 
+         if($data->prof_id == '1')
+         {
+          $msg = $mail->Body = "hello ".$data->coach_name."<br><br>"." a ".$data->prof_name." has sent you a message:"."<br><br>".$data->message."<br>You can view his profile , clicking on the view profile link:<br><a href='http://getsporty.in/profile/index.php?userid=".$data->userid."&prof_id=1'>View Profile</a><br><br>"."Thanks"."<br>"."Team Getsporty";
+         }
+         else
+         {
+          $msg = "hello ".$data->coach_name."<br><br>"." a ".$data->prof_name." has sent you a message:"."<br><br>".$data->message."<br>"."Thanks"."<br>"."Team Getsporty";
+         }
+               $mail->Body = $msg;
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
