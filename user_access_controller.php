@@ -189,7 +189,7 @@ else
 if($resp[$column] == $item->id && $resp['status'] == '1')
 {
 
-  	$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+  	$update = "`userType` = '".$item->userType."' ,  `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
 	$where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);
 	if($resp['prof_name'] == 'Athletes')
@@ -210,7 +210,7 @@ else
 }
 else
 {
-$update = "`email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+$update = "`userType` = '".$item->userType."' , `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
 	//$where  = "`".$item->app."_fb_id` = '".$item->id."'";
     $where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);

@@ -93,7 +93,7 @@ public function create_new_user($data)
       }
       //echo $app_id;die;
       $password = md5($data->data->email);
-      $query = "INSERT INTO `user`(`userType`, `name`, `status`,`password`,`email`,`user_image`, `date_created`,`".$app_id_column."`,`".$device_id_column."`) VALUES ('$item->userType','$item->name','$status','$password','$item->email','$item->image',CURDATE(),'$item->app_id','$item->device_id')";
+      $query = "INSERT INTO `user`(`name`, `status`,`password`,`email`,`user_image`, `date_created`,`".$app_id_column."`,`".$device_id_column."`) VALUES ('$item->name','$status','$password','$item->email','$item->image',CURDATE(),'$item->app_id','$item->device_id')";
      $sql    = mysql_query($query);
      $log_id = mysql_insert_id();
      if($sql)
