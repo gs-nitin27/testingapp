@@ -1800,7 +1800,6 @@ else if($_REQUEST['act'] == "shortlist")
 
 else if($_REQUEST['act'] == "interview_schedule")
 {
-
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
   $employer_id       =  $userdata->employer_id;
