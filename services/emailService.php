@@ -104,7 +104,7 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
          $pushnote       = $pushobj->sendPushNotificationToGCM($row1['device_id'], $message);
          $from           = "info@darkhorsesports.in";
          $from_name      = $employer_name;
-         $subject        = "Regarding Interview ";
+         $subject        = "Regarding Interview at ".$organisation_name;
          //global $error;
          $mail = new PHPMailer();  // create a new object
          $mail->IsSMTP(); // enable SMTP
