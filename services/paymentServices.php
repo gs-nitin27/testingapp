@@ -22,8 +22,7 @@ public function paymentPlan()
 
 public function payment($paymentdata)
 {
-
-	$query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`) VALUES('$paymentdata->userid','$paymentdata->invoice_id','$paymentdata->user_item','$paymentdata->module','$paymentdata->amount','CURDATE()','1','$paymentdata->transaction_id','CURDATE()','CURDATE()') ");
+	$query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`) VALUES('$paymentdata->userid','$paymentdata->invoice_id','$paymentdata->user_item','$paymentdata->module','$paymentdata->amount',CURDATE(),'1','$paymentdata->transaction_id',CURDATE(),CURDATE()) ");
 	if($query)
 	{
 		return 1;

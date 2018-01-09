@@ -25,16 +25,15 @@ else if($_REQUEST['act'] == 'creatHash')
 {
    $posted = json_decode(file_get_contents("php://input"));
    //print_r($posted->txnid);die;
-   $SALT = "GQs7yium";
-  $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-  print_r($txnid);die;
-$hash = '';
+   $SALT = "eCwWELxi";
+   $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+  //print_r($txnid);die;
+   $hash = '';
 // Hash Sequence
 $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
 if(empty($posted->hash) && sizeof($posted) > 0) {
   if(
        empty($posted->key)
-          || empty($posted->txnid)
           || empty($posted->amount)
           || empty($posted->firstname)
           || empty($posted->email)
@@ -56,11 +55,10 @@ if(empty($posted->hash) && sizeof($posted) > 0) {
       $hash_string .= isset($posted->hash_var) ? $posted->hash_var : '';
       $hash_string .= '|';
     }
-
     $hash_string .= $SALT;
-
-
     $hash = strtolower(hash('sha512', $hash_string));
+    $data = array('hashkey' => $hash,'taxid' => $txnid);
+    echo json_encode($data);
 
 
 
@@ -68,4 +66,10 @@ if(empty($posted->hash) && sizeof($posted) > 0) {
 }
 }
 
+
+
+else if($_REQUEST['act'] == "test")
+{
+	print_r("expression");
+}
 ?>
