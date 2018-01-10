@@ -896,6 +896,242 @@ public function email_varify($confirm)
   }
 
 
+public function invoicemail($email)
+{
+      $msg = '<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>A simple, clean, and responsive HTML invoice template</title>
+    
+<style>
+.title h1 {
+        font-size: 50px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 3px 1px 9px #666;
+    letter-spacing: -5px;
+}
+
+    .title p strong{
+        font-size: 28px;
+        color: #555;
+    }
+    strong{
+        font-size: 16px;
+    }
+    .billy p,.title p{
+        margin: 5px 0;
+    }
+    .invoice-box{
+        max-width:1000px;
+        margin:auto;
+        padding:20px;
+        border:1px solid #eee;
+        font-size:15px;
+        line-height:18px;
+        font-family:"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        color:#555;
+    }
+    
+    .invoice-box table{
+        width:100%;
+        line-height:inherit;
+        text-align:left;
+    }
+    
+    .invoice-box table td{
+        padding:5px;
+        vertical-align:top;
+    }
+    
+    td.billy-lft {
+        width: 54.6%;
+    }
+    
+    .invoice-box table tr.top table td{
+       /* padding-bottom:20px;*/
+    }
+    
+    .invoice-box table tr.top table td.title{
+        font-size:28px!important;
+        color:#555;
+    }
+    
+    .invoice-box table tr.information table td{
+        /*padding-bottom:40px;*/
+    }
+    
+    .invoice-box table tr.heading td{
+        background:#eee;
+        border-bottom:1px solid #ddd;
+        font-weight:bold;
+    }
+    
+    .invoice-box table tr.details td{
+        padding-bottom:20px;
+    }
+    
+    .invoice-box table tr.item td{
+        border-bottom:1px solid #eee;
+    }
+    
+    .invoice-box table tr.item.last td{
+        border-bottom:none;
+    }
+    
+    .invoice-box table tr.total td:nth-child(2){
+        border-top:2px solid #eee;
+        font-weight:bold;
+    }
+    td.billy-lft {
+    min-width: 180px;
+    }
+    tr.heading td,tr.details td {
+    padding-left: 12px;
+}
+    
+    @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td{
+            width:100%;
+            display:block;
+            text-align:center;
+        }
+        
+        .invoice-box table tr.information table td{
+            width:100%;
+            display:block;
+            text-align:center;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <h1>getsporty</h1>
+                                <p><strong>Invoice</strong></p>
+                            </td>
+                            
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <strong>Invoice Number:</strong> <span>DHS/00D/001</span>
+                            </td>
+                            
+                            <td>
+                                <strong>Invoice Date:</strong> <span>3 April 2017</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+              <tr class="billy">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="billy-lft">
+                                <strong>Bill From:</strong>
+                                <p>Nitin Agarwal</p>
+                                <p>Football Coach</p>
+                                <p>A-29 Sector-7</p>
+                                <p>Noida</p>
+                                <p>pin- 201003</p>
+                            </td>
+                            
+                            <td class="billy-rht">
+                                <strong>Bill To:</strong>
+                                <p>Sandeep</p>
+                                <p>8897676655</p>
+                            <p>sandeep@darksports.in</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr class="heading">
+                <td>
+                    Mode Of Payment
+                </td>
+                
+                <td>
+                    Online
+                </td>
+            </tr>
+            
+            <tr class="details">
+                <td>
+                    Transaction Id
+                </td>
+                
+                <td>
+                    0D034569918
+                </td>
+            </tr>
+
+        </table>
+
+
+        <table>
+<tr class="heading">
+<td>Description</td>
+<td>Ammount</td>
+<td>Total</td>
+</tr>
+<tr class="details">
+<td>Football Class</td>
+<td>1000</td>
+<td>1000</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>';
+
+
+        require('class.phpmailer.php');
+         $to             =  $email;
+         $from           =  "info@darkhorsesports.in";
+         $from_name      =  "Getsporty";
+         $subject        =  "Invoice"; 
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->SetFrom($from, $from_name);
+         $mail->Subject = $subject;
+         $mail->Body = $msg; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+               
+               //return $mail->Send();
+}
+
+
 
 
 

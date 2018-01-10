@@ -1,5 +1,6 @@
 <?php
 include('config1.php');
+include('services/emailService.php');
 include('services/paymentServices.php');
 
 if($_REQUEST['act'] == "paymentPlan")
@@ -12,12 +13,20 @@ if($_REQUEST['act'] == "paymentPlan")
 
 else if($_REQUEST['act'] == "payment")
 {
-
 	$paymentdata  =  json_decode(file_get_contents("php://input"));
-
 	$req = new paymentServices();
+	$ino = new emailService();
 	$res = $req->payment($paymentdata);
-	echo json_encode($res);
+	if($res == '1')
+	{
+		echo json_encode($res);
+        $email = $req->findemail($paymentdata->userid);
+        $mail = $ino->invoicemail($email['email']);
+	}else
+	{
+         echo json_encode($res);
+	}
+	
 
 }
 
