@@ -462,11 +462,11 @@ else if($_REQUEST['act']=="gs_sub")
    {
         $topic = 'Jobs';
    }
-   else if($module = '2')
+   else if($module == '2')
    {
     $topic = 'Events';
    }
-   else if($module = '3')
+   else if($module == '3')
    {
     $topic = 'Tournaments';
    }else
@@ -553,9 +553,7 @@ else if($_REQUEST['act']=="gs_sub")
    $sub_id       =  urldecode($_REQUEST['id']) ;
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
-   $location     =  urldecode($_REQUEST ['location']);
-   $topic        =  urldecode($_REQUEST ['topic_of_artical']);
-   //$module       = '6';
+   $module       =  urldecode($_REQUEST ['module']);//'6';
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
@@ -569,16 +567,16 @@ else if($_REQUEST['act']=="gs_sub")
      $arr['sport'] = $sports;
      }
    
-   if($location != '')
-   {
-     $where[] = " `location` = '$location' ";
-     $arr['location'] = $location;
-   }
-   else
-   {
-     //$where[] = " `location` LIKE '%$location%' ";
-     $arr['location'] = $location;
-   }
+   // if($location != '')
+   // {
+   //   $where[] = " `location` = '$location' ";
+   //   $arr['location'] = $location;
+   // }
+   // else
+   // {
+   //   //$where[] = " `location` LIKE '%$location%' ";
+   //   $arr['location'] = $location;
+   // }
   /*  if($topic != '')
    {
      $where[] = " `topic_of_artical` = '$topic' "; 
@@ -599,20 +597,37 @@ else if($_REQUEST['act']=="gs_sub")
     // $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
-    if($topic == 'Jobs')
+   //  if($topic == 'Jobs')
+   // {
+   //   $module = '1';   
+   // }else if($topic == 'Events')
+   // {
+   //  $module = '2';
+   // }else if($topic == 'Tournaments')
+   // {
+   //  $module = '3';
+   // }else
+   // {
+   //  $module = '6';
+   // }
+    if($module == '1')
    {
-     $module = '1';   
-   }else if($topic == 'Events')
+        $topic = 'Jobs';
+   }
+   else if($module == '2')
    {
-    $module = '2';
-   }else if($topic == 'Tournaments')
+    $topic = 'Events';
+   }
+   else if($module == '3')
    {
-    $module = '3';
+    $topic = 'Tournaments';
    }else
    {
-    $module = '6';
+    $topic = 'Resources';
+    //$module = '6';
    }
    $whereclause = implode('AND', $where);
+   //echo $whereclause;die;
    $arr['topic_of_artical'] = $topic;
    $req = new liteservice();
    $res = $req->modify($user_id ,$sub_id ,mysql_real_escape_string($whereclause),json_encode($arr),$module); 
