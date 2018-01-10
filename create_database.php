@@ -1642,13 +1642,10 @@ if($response)
            echo json_encode($Result);
 }
 else
-
 {       $response = [];              
         $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
         echo json_encode($Result);
-} 
-                     
-
+}
  }   // End Function
 
 
@@ -1792,7 +1789,6 @@ else if($_REQUEST['act'] == "shortlist")
   }
 
 } // End Function
-
 
 
 

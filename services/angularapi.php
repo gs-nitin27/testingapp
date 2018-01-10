@@ -420,7 +420,6 @@ $insert = mysql_query("INSERT INTO `gs_jobInfo`(`id`,`userid`,`title`,`location`
 public function publishjob($jobid,$publish)
 {
   $insert = mysql_query("UPDATE  `gs_jobInfo` SET `publish` = '$publish' WHERE `id` = '$jobid'");
-
   $tes = mysql_affected_rows();
 
   if($tes)
