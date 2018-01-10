@@ -896,9 +896,11 @@ public function email_varify($confirm)
   }
 
 
-public function invoicemail($email)
+public function invoicemail($data,$paymentdata)
 {
-      $msg = '<!doctype html>
+  
+    $email = $data['email'];
+    $msg = '<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -1031,11 +1033,11 @@ public function invoicemail($email)
                     <table>
                         <tr>
                             <td>
-                                <strong>Invoice Number:</strong> <span>DHS/00D/001</span>
+                                <strong>Invoice Number:</strong> <span>'.$paymentdata->invoice_id.'</span>
                             </td>
                             
                             <td>
-                                <strong>Invoice Date:</strong> <span>3 April 2017</span>
+                                <strong>Invoice Date:</strong> <span>'.$paymentdata->date.'</span>
                             </td>
                         </tr>
                     </table>
@@ -1048,18 +1050,18 @@ public function invoicemail($email)
                         <tr>
                             <td class="billy-lft">
                                 <strong>Bill From:</strong>
-                                <p>Nitin Agarwal</p>
-                                <p>Football Coach</p>
-                                <p>A-29 Sector-7</p>
+                                <p>Getsporty</p>
+                                <p>Darkhorsesports PVT.LTD.</p>
+                                <p>A-20 Sector-35</p>
                                 <p>Noida</p>
                                 <p>pin- 201003</p>
                             </td>
                             
                             <td class="billy-rht">
-                                <strong>Bill To:</strong>
-                                <p>Sandeep</p>
-                                <p>8897676655</p>
-                            <p>sandeep@darksports.in</p>
+                              <strong>Bill To:</strong>
+                              <p>'.$data["name"].'</p>
+                              <p>'.$data["contact_no"].'</p>
+                              <p>'.$data["email"].'</p>
                             </td>
                         </tr>
                     </table>
@@ -1097,8 +1099,8 @@ public function invoicemail($email)
 </tr>
 <tr class="details">
 <td>Football Class</td>
-<td>1000</td>
-<td>1000</td>
+<td>'.$paymentdata->amount.'</td>
+<td>'.$paymentdata->amount.'</td>
             </tr>
         </table>
     </div>

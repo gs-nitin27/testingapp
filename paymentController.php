@@ -17,17 +17,16 @@ else if($_REQUEST['act'] == "payment")
 	$req = new paymentServices();
 	$ino = new emailService();
 	$res = $req->payment($paymentdata);
+
 	if($res == '1')
 	{
-		echo json_encode($res);
+	     	echo json_encode($res);
         $email = $req->findemail($paymentdata->userid);
-        $mail = $ino->invoicemail($email['email']);
+        $mail = $ino->invoicemail($email,$paymentdata);
 	}else
 	{
          echo json_encode($res);
 	}
-	
-
 }
 
 else if($_REQUEST['act'] == 'creatHash')

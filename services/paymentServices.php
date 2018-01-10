@@ -22,6 +22,8 @@ public function paymentPlan()
 
 public function payment($paymentdata)
 {
+   
+
 	$query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`) VALUES('$paymentdata->userid','$paymentdata->invoice_id','$paymentdata->user_item','$paymentdata->module','$paymentdata->amount',CURDATE(),'1','$paymentdata->transaction_id',CURDATE(),CURDATE()) ");
 	if($query)
 	{
@@ -34,9 +36,10 @@ public function payment($paymentdata)
 }
 
 
-public function findemail($userid)
+public function findemail($userid) 
 {
-	$query = mysql_query("SELECT `email` FROM `user` WHERE `userid` = '$userid'");
+
+	$query = mysql_query("SELECT `email`,`name`,`contact_no` FROM `user` WHERE `userid` = '$userid'");
 	if(mysql_num_rows($query))
 	{
 		while ($row = mysql_fetch_assoc($query)) 
