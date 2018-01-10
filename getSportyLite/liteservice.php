@@ -584,8 +584,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
      /**************Modify The Subscribe and Alert [Function]*******************/
 
      public function modify($user_id ,$sub_id,$where, $textjson,$module)
-    {
-       $query = mysql_query("UPDATE `gs_subscribed` SET `userid`='$user_id', `id`='$sub_id',`search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' , `count` = '0' WHERE `id` = '$sub_id'");
+    { $query = mysql_query("UPDATE `gs_subscribed` SET `userid`='$user_id', `id`='$sub_id',`search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' , `count` = '0' WHERE `id` = '$sub_id'");
         if($query)
         {
         return 1;
