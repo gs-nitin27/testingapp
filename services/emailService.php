@@ -1094,11 +1094,13 @@ public function invoicemail($data,$paymentdata)
         <table>
 <tr class="heading">
 <td>Description</td>
+<td>Duration</td>
 <td>Ammount</td>
 <td>Total</td>
 </tr>
 <tr class="details">
-<td>Football Class</td>
+<td>'.$paymentdata->title.'</td>
+<td>'.$paymentdata->duration.'</td>
 <td>'.$paymentdata->amount.'</td>
 <td>'.$paymentdata->amount.'</td>
             </tr>
