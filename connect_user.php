@@ -558,7 +558,7 @@ Student Id and Result is display all Class Information
 
    if($response != 0)
    {
-              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information ');
+              $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information');
               echo json_encode($Result);
    }
    else
@@ -1493,10 +1493,12 @@ else if($_REQUEST['act'] == 'remove_demo_athlete')
   }
   echo json_encode($resp);
 }
+
 else if($_REQUEST['act'] == 'accept_coach_class_offer')
 {
 
 }
+
 else if($_REQUEST['act'] == 'decline_coachclass_offer')
 {
   $data = json_decode(file_get_contents("php://input"));

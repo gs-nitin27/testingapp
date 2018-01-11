@@ -204,17 +204,19 @@ if(mysql_num_rows($query)> 0)
         if($datediff > 0 || $datediff = 0)
         {
          $rows[] = $row; 
+         $classid[] = $row['id'];
         }
      }
      else
      {
       $rows[] = $row;
+      $classid[] = $row['id'];
      }
    }
  }
     //print_r($rows);;
-
-return $rows;
+$data = array('data' =>$rows ,'class_id' =>implode(',',$classid));
+return $data;
 }else
 return 0;
 
@@ -246,41 +248,34 @@ $query1 = mysql_query("DELETE FROM `class_reschedule` WHERE `classid` = '$classi
 
 public function create_reschedule($item)
 {
-$query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
-if($query)
-{
+  $query = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `start_time`, `end_time`, `resc_type`,`resc_to`, `resc_made`) VALUES ('$item->classid','$item->userid',FROM_UNIXTIME($item->date),'$item->start_time','$item->end_time','$item->type','$item->existing_classid',CURDATE())");
+  if($query)
+  {
 
-return true;
-}
-else 
-return false;
-
-
-
-
+  return true;
+  }
+  else 
+  return false;
 }
 
-public function get_reschedule($date)
-{
-$query = mysql_query("SELECT * FROM `class_reschedule` WHERE `resc_date` = FROM_UNIXTIME($date) ORDER BY `start_time` ASC");
+public function get_reschedule($date,$classid)
+{echo "SELECT * FROM `class_reschedule` WHERE `resc_date` = /*FROM_UNIXTIME(*/'$date'/*)*/ AND `class_id` IN ('$classid') ORDER BY `start_time` ASC";die;
+$query = mysql_query("SELECT * FROM `class_reschedule` WHERE `resc_date` = /*FROM_UNIXTIME(*/'$date'/*)*/ AND `class_id` IN ($classid) ORDER BY `start_time` ASC");
 if(mysql_num_rows($query)>0)
 {
-
-while($row = mysql_fetch_assoc($query))
+$row = mysql_fetch_assoc($query);
+/*while()
 {
-
+//print_r($row);die;
 $data[] = $row;
 
-}
-return $data;
+}*/
+return $row;
 
 }
 else
 {
-
-
 return 0;
-
 }
 
 
@@ -408,11 +403,9 @@ if($query)
 
 if($query1)
    return true;
-
-
-  }
+}
     else
-{
+  {
 
    return false;
 

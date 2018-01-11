@@ -104,7 +104,7 @@ else
 
 public function cheak_cancel_date($classid,$date)
 {
-	$query = mysql_query("SELECT  *FROM `gs_class_cancel_data` WHERE `class_id` ='$class_id' AND `date`='$date' ");
+	$query = mysql_query("SELECT * FROM `class_reschedule` WHERE `class_id` ='$classid' AND `resc_date`='$date'");
 	$num = mysql_num_rows($query);
 	if ($num)
 	{
@@ -112,7 +112,7 @@ public function cheak_cancel_date($classid,$date)
 	}
 	else
 	{
-		return 0;
+	 return 0;
 	}
 
 
@@ -134,7 +134,7 @@ public function check_attendance($data1)
       $date_created  				= $row['date_created'];
       $created_month      = date("m",strtotime($date_created));
       if ($created_month  ==  $search_month )
-      {
+       {
 
        $attendance_status 	=  get_object_vars($attendance)[$student_code];
 
@@ -144,17 +144,9 @@ public function check_attendance($data1)
 
        $data[] 				=  $attendance_data;
 
-
-      }
+		} // End of Function
+	}
 }
-
-      
-return $data;
-
-
-
-} // End of Function
-
 
 
 
@@ -166,20 +158,12 @@ public function get_code($student_id, $class_id)
 }
 
 
-
-
-
-
-
-
-
 public function get_athelte_detail($id,$value)
 {
 $query = mysql_query("SELECT `student_name` FROM `gs_class_data` WHERE `student_code`='$id'");
 $row =  mysql_fetch_assoc($query);
 unset($row['student_name']);
 $row['attendance_status'] = $value;
-
 return $row;
 }
 
@@ -193,40 +177,31 @@ public function check_class_id($classid)
 $sel_row  =  mysql_query("SELECT `class_id`,`attendance_detail` FROM `gs_athlete_attendance` WHERE  `class_id` = '$classid' ");
 mysql_num_rows($sel_row);
 if(mysql_num_rows($sel_row))
-{
-return mysql_fetch_assoc($sel_row);
-}
+	{
+	return mysql_fetch_assoc($sel_row);
+	}
 else
-{
-  return 0;
+	{
+	  return 0;
+	}
 }
-}
-
-
-
-
 
 public function  cancel_class($data)
 {
-$coach_id  = $data->coach_id;
-$class_id  = $data->class_id;
-$date 	   = $data->date;
-$message   = $data->message;
-
-
-//  $this->cheak_cancel_row($coach_id,$class_id)
-
-
-
- $row_sel    = mysql_query("INSERT INTO `gs_class_cancel_data` (`id`,`coach_id`,`class_id`,`date`,`message`) VALUES('0','$coach_id','$class_id','$date','$message') ");
-if($row_sel) 
-{
-return 1;
-}
-else
-{
-  return 0;
-}
+	$coach_id  = $data->coach_id;
+	$class_id  = $data->class_id;
+	$date 	   = $data->date;
+	$message   = $data->message;
+	//  $this->cheak_cancel_row($coach_id,$class_id)
+	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
+	if($row_sel) 
+		{
+		return 1;
+		}
+	else
+		{
+		  return 0;
+		}
 }
 
 

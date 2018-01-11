@@ -227,14 +227,18 @@ else if($_REQUEST['act'] == "get_classlisting")
 						$req = new manageSchedulingService();
 						$res = $req->getclasslisting($userid, $date);
 					if($res != 0)
-					{
-
-						$resc  = new manageSchedulingService();
-						$resc1 = $resc->get_reschedule($date);
+					{   
+                        $resc  = new manageSchedulingService();
+						$resc1 = $resc->get_reschedule($date,$res['class_id']);
 					if($resc1 != 0)
 					{
+                        if($resc1['resc_type'] == '2')
+                        {
+                           
 
-						$size  = sizeof($resc1);
+
+                        }
+						/*$size  = sizeof($resc1);
 						$size1 = sizeof($res);
 
 					for ($i=0; $i<$size;$i++)
@@ -257,7 +261,7 @@ else if($_REQUEST['act'] == "get_classlisting")
 					    $res[$j]['status']             = $resc1[$i]['resc_type'];   
 					}
 				}
-			 }
+			 }*/
 
 					}        for($k = 0 ; $k<sizeof($res) ;$k++)
 		         	         {
