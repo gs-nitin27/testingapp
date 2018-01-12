@@ -6,8 +6,8 @@ class attendanceService
 public function student_listing($classid)
 {
 $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`userid` AS student_id ,`gs_class_data`.`student_name` AS name, `gs_class_data`.`status`,`gs_class_data`.`student_id` AS userid,`gs_class_data`.`joining_date`,`gs_class_data`.`student_dob` AS dob,`gs_class_data`.`email` AS email,`gs_class_data`.`student_code`,`gs_class_data`.`phone` AS contact_no, `user`.`sport` AS sport , `user`.`user_image` , `user`.`prof_id`, `user`.`gender`, `gs_class_data`.`fees` ,`gs_class_data`.`paid` ,`gs_class_data`.`mode_of_payment` FROM user RIGHT JOIN gs_class_data ON `gs_class_data`.`student_id`=`user`.userid WHERE `classid` = '$classid' AND `gs_class_data`.`status`='2' " );
-	$num  = mysql_num_rows($query);
-		if($num != 0)
+  	$num  = mysql_num_rows($query);
+    	if($num != 0)
 		{
 			while($row = mysql_fetch_assoc($query))
 			{
@@ -21,12 +21,12 @@ $query= mysql_query("SELECT `gs_class_data`.`id` AS class_join_id ,`user`.`useri
 				$data[] = $row1;
 			}
 
-			//$data1[]  = $data;
+			
 		return $data;
 		}
 		else
 		{
-			return 0;
+			return [];
 		}
 }
 
@@ -128,24 +128,27 @@ public function check_attendance($data1)
  $search_month 		= date("m",strtotime($date));
  $student_code  	= $this->get_code($student_userid,$class_id);
  $query = mysql_query("SELECT  *FROM `gs_class_attendence` WHERE `class_id` ='$class_id'");
- while ($row = mysql_fetch_assoc($query))
+ if(mysql_num_rows($query)>0)
  {
-      $attendance 			       = json_decode($row['attendence_detail']);
+ while ($row = mysql_fetch_assoc($query))
+ {    $attendance 			       = json_decode($row['attendence_detail']);
       $date_created  				= $row['date_created'];
       $created_month      = date("m",strtotime($date_created));
       if ($created_month  ==  $search_month )
        {
-
        $attendance_status 	=  get_object_vars($attendance)[$student_code];
+       $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
+	   $data[] 				=  $attendance_data;
 
-	   $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
-		
-
-
-       $data[] 				=  $attendance_data;
 
 		} // End of Function
 	}
+   return $data;
+ }
+ else
+ {
+   return 0;
+ }
 }
 
 
@@ -192,8 +195,14 @@ public function  cancel_class($data)
 	$class_id  = $data->class_id;
 	$date 	   = $data->date;
 	$message   = $data->message;
+<<<<<<< HEAD
 	//  $this->cheak_cancel_row($coach_id,$class_id)
 	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
+=======
+	$day = split('-', $date);
+    $id = $day[0].$day[1].$day[2].$class_id;
+	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`id`,`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$id','$class_id','$coach_id','$date','2',CURDATE(),'$message')ON DUPLICATE KEY UPDATE `resc_date` = '$date', `resc_type` = '2', `resc_made` = CURDATE(),`msg` = '$message' ");
+>>>>>>> b4cce78b7d87630386b2c366cd478ea87e256385
 	if($row_sel) 
 		{
 		return 1;

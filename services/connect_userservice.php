@@ -20,38 +20,17 @@ class connect_userservice
  
 
  public function connect_user_request($lite_user_id,$prof_user_id)
-
- {
-
+{
    $query=mysql_query("INSERT INTO `gs_connect`(`lite_user_id`,`prof_user_id`,`req_status`,`date_created`) VALUES('$lite_user_id','$prof_user_id','0',CURDATE())");
-
-     
-
      if($query)
-
      {
-
       $data =mysql_insert_id();
-
       return $data;
-
-
-
-
      }
-
      else 
-
      {
-
-      
-
         return 0 ;
-
-
-
      }
-
  }
 
 
@@ -775,11 +754,10 @@ public function getClassInfo($class_id)
 
 //End Function 
 
-
-
 public function get_class_Join_status($class_id,$studentid)
 {
-$query = mysql_query("SELECT `status` FROM `gs_class_data` WHERE `student_id`='$studentid' AND `classid` = '$class_id'");
+
+$query = mysql_query("SELECT `status`,`student_code` FROM `gs_class_data` WHERE `student_id`='$studentid' AND `classid` = '$class_id'");
 if(mysql_num_rows($query)>0)
 {
   return mysql_fetch_assoc($query);
@@ -1046,7 +1024,7 @@ public function ClassInfo($student_id,$phone,$email)
         return $rows;
       }else
       {
-        return 0;
+        return '0';
       }
 
  /* if(!empty($rows))
@@ -1070,7 +1048,7 @@ public function getAllMemoRecords($athlete_class_id)
   }
   else
   {
-    return 0;
+    return '0';
   }
 
 }
@@ -2059,14 +2037,14 @@ public function fetch_demoClassList($where)
   {
   while ($row = mysql_fetch_assoc($query)) {
     $row['class_fee'] = json_decode($row['class_fee']); 
-    $row['status']= 0;
+    $row['status']= '0';
     $rows[] = $row;
   }
   return $rows;
   }
   else
   {
-    return 0;
+    return '0';
   }
 
 
@@ -2150,7 +2128,18 @@ public function getAllDues($coach_id)
    }
 }
 
-
+public function save_message($data)
+{ $userdata = json_encode($data);
+  $message = mysql_real_escape_string($data->message);
+  $query = mysql_query("INSERT INTO `gs_message`(`sender_id`, `reciever_id`, `message`, `date_created`,`data`) VALUES ('$data->userid','$data->coach_id','$message',CURDATE(), '$userdata')");
+if($query)
+  {
+    return '1';
+  }else
+  {
+    return '0';
+  }
+}
 
 
 // public function get_attendence_data($where)

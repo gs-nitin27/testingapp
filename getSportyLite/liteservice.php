@@ -12,7 +12,8 @@
 
     public function  userExits($where)
     {
-     $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
+     //echo "SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` $where"; die();
+       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`, `email` FROM `user` ".$where);
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -203,11 +204,11 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
   } // end function
 
-    /*******************Listing Resources GetSporty [Function]****************/
+    /****************************Listing Resources GetSporty [Function]*************************/
 
     public function getList()
     { 
-      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `date_created` desc ");
+      $query = mysql_query("SELECT * FROM `gs_resources` WHERE `status` = '1' ORDER by `id` desc ");
       $row  = mysql_num_rows($query);
        if($row > 0)
         {
@@ -237,7 +238,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
    public function Get_Sports()
    {
-      $query = mysql_query("SELECT `sports` FROM `gs_sports` where 1  ");
+      $query = mysql_query("SELECT `sports` FROM `gs_sports` where '1=1' ORDER BY `sports` ASC  ");
       $row  = mysql_num_rows($query);
       if($row)
       {
@@ -498,7 +499,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
      /************* Subscribed The Application by User [Function]************************/
 
-     public function getsubscribed($userid,$textjson)
+   public function getsubscribed($userid,$textjson,$module)
     {
      $query = mysql_query("SELECT  *FROM `gs_subscribed` WHERE `userid` = '$userid' AND `Moudule` = '6' AND `para_json`='$textjson'");
       if(mysql_num_rows($query)>0)
@@ -514,20 +515,19 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
       }
     }
 
- 
+
 
      /***************Save the Subscribe query [Function]*******************/
 
-    public function saveSubscribe($module,$userid , $where, $textjson)
+    public function saveSubscribe($userid , $where, $textjson,$module)
     { 
-
-      if($this->getsubscribed($userid,$textjson) == 0)
+      if($this->getsubscribed($userid,$textjson,$module) == 0)
       {
-       $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('0','$userid','$where',$module,'0','1',CURDATE(),'$textjson')");
+       $query = mysql_query("INSERT INTO `gs_subscribed`(`id`, `userid`, `search_para`, `Moudule`, `count`, `subscribe`, `date`,`para_json`) VALUES ('0','$userid','$where','$module','0','1',CURDATE(),'$textjson')");
       }
       else
       {
-        $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = $module AND `para_json`='$textjson' ");
+        $query = mysql_query("UPDATE `gs_subscribed` SET `search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$userid' AND `Moudule` = '$module' AND `para_json`='$textjson' ");
       }
       if($query)
       {
@@ -540,11 +540,12 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     }
 
 
+
      /******************Get  the All Subscribe Alert [Function]*************************/
 
-    public function getSubs($userid)
+    public function getSubs($userid,$module)
     {
-      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' ";
+      $query = "SELECT * FROM `gs_subscribed` WHERE `userid` = '$userid' /*AND `Moudule` = '$module'*/";
       $exec = mysql_query($query);
       if(mysql_num_rows($exec) > 0)
       {
@@ -565,9 +566,9 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
 
    /*************Function for Delete The Subscribe and Alert*************************/
 
-    public function delSubs($userid,$sub_id,$module)
+    public function delSubs($userid,$sub_id)
     {
-     $query = mysql_query("DELETE FROM `gs_subscribed` WHERE `userid` = '$userid' AND `id`='$sub_id' AND `Moudule` ='$module'");
+     $query = mysql_query("DELETE FROM `gs_subscribed` WHERE `userid` = '$userid' AND `id`='$sub_id'");
       if($query)
       {
         return 1;
@@ -583,8 +584,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
      /**************Modify The Subscribe and Alert [Function]*******************/
 
      public function modify($user_id ,$sub_id,$where, $textjson,$module)
-    {
-       $query = mysql_query("UPDATE `gs_subscribed` SET `userid`='$user_id', `id`='$sub_id',`search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' WHERE `userid` = '$user_id' AND `id` = '$sub_id' AND `Moudule`='$module'");
+    { $query = mysql_query("UPDATE `gs_subscribed` SET `userid`='$user_id', `id`='$sub_id',`search_para` = '$where',`subscribe`  = '1' ,`para_json` = '$textjson' , `count` = '0' WHERE `id` = '$sub_id'");
         if($query)
         {
         return 1;
@@ -732,27 +732,27 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     
       public function getCreate($data)
       {
-	      $title             = $data->title;
-	      $summary           = $data->summary; 
-	      $url               = $data->link;
-	      $image             = $data->photo;
-	      $topic_artical     = $data->topic_artical; 
-	      $sports            = $data->sports;
-	      $location          = $data->location;
-	      $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
-	      if($query)
-	      { 
-	        $id = mysql_insert_id();
-	        if($id!=NULL && $image!=NULL)
-	        {
-	         $image = $this->imageupload($image,$id);
-	        }
-	      return 1;
-	      }
-	      else
-	        {
-	          return 0;
-	        }
+        $title             = $data->title;
+        $summary           = $data->summary; 
+        $url               = $data->link;
+        $image             = $data->photo;
+        $topic_artical     = $data->topic_artical; 
+        $sports            = $data->sports;
+        $location          = $data->location;
+        $query  = mysql_query("INSERT INTO `gs_resources`(`id`,`title`,`summary`,`url`,`topic_of_artical`,`sport`,`location`,`date_created`) VALUES ('','$title ','$summary','$url','$topic_artical ','$sports',' $location ',CURRENT_DATE)");
+        if($query)
+        { 
+          $id = mysql_insert_id();
+          if($id!=NULL && $image!=NULL)
+          {
+           $image = $this->imageupload($image,$id);
+          }
+        return 1;
+        }
+        else
+          {
+            return 0;
+          }
         }
 
 
@@ -764,7 +764,7 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     {
        $now = new DateTime();
        $time=$now->getTimestamp(); 
-	    $img = $image;
+      $img = $image;
       $img = str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
@@ -839,11 +839,6 @@ switch ($module)
   }//End of Switch
 }//End of Function
 
-
-
-/*******************This API for www. getsporty.in **********************************/
-
-
  public function getBlogData($where)
   {  
     $query = mysql_query("SELECT * FROM `gs_resources`".$where."");
@@ -851,44 +846,26 @@ switch ($module)
     {
     while ($row = mysql_fetch_assoc($query))
     { 
-      $row['description'] = nl2br($row['description']);
+      //$row['description'] = nl2br(htmlentities($row['description'], ENT_QUOTES, 'UTF-8'));
+      $row['description'] = /*nl2br(*/$row['description']/*)*/;
       $rows[] = $row;
     } 
       return $rows;
     }
      else
      {
-      return 0;
+      return $row;
      }
 
   } 
 
 
-public function get_Job_Data($where)
+
+  public function get_Event__tour_Data()
 {  
 
-    $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE $where ");
-    if(mysql_num_rows($query)>0)
-    {
-    while ($row = mysql_fetch_assoc($query))
-    { 
-      $row['description'] = nl2br($row['description']);
-      $rows[] = $row;
-    } 
-      return $rows;
-    }
-     else
-     {
-      return 0;
-     }
-
-  } 
-
-public function get_Event__tour_Data()
-{  
-
-$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
-$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ");
+$event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC ");
+$tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC");
 
 while($event_row = mysql_fetch_assoc($event_query) )
 { 
@@ -913,6 +890,28 @@ return  $final_data;
 } 
 
 
+
+
+public function get_Job_Data($where)
+{  
+    $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE $where ");
+    if(mysql_num_rows($query)>0)
+    {
+    while ($row = mysql_fetch_assoc($query))
+    { 
+      $row['description'] = nl2br($row['description']);
+      $rows[] = $row;
+    } 
+      return $rows;
+    }
+     else
+     {
+      return 0;
+     }
+
+  } 
+
+
 public function finddatediff($date)
 {
 $datetime1 = new DateTime();
@@ -922,25 +921,87 @@ return $interval->format('%a');
 }
 
 
+/*FUNCTION FOR LISTING OF ITEMS ON PORTAL*/
+
+public function event_data_api()
+{
+  $query = mysql_query("SELECT `id`,`type`,`feetype`,`name`,`address_1`,`description`,`organizer_name`,`image`,`email_app_collection` FROM `gs_eventinfo` ORDER BY `id` DESC ");
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      
+      $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
+
+public function job_list_api()
+{
+  $query = mysql_query("SELECT `id`,`location`,`gender`,`title`,`description`,`qualification`,`organisation_name`,`email`,`image`,`date_created`  FROM `gs_jobInfo` ORDER BY `id` DESC ");
+
+  if(mysql_num_rows($query)) 
+  {
+     while ($row = mysql_fetch_assoc($query)) 
+     {
+        $rows[] = $row; 
+     }
+     return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
+
+public function tournament_list_api()
+{
+  $query = mysql_query("SELECT `id`,`name`,`description`,`sport`,`level`,`organiser_name`,`image` FROM `gs_tournament_info` ORDER BY `id` DESC ");
+
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+       $rows[] = $row; 
+
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+public function resource_list()
+{
+  $query = mysql_query("SELECT * FROM `gs_resources` WHERE `token` = '2' AND `status` = '1'  ORDER BY `id` DESC");
+
+  if(mysql_num_rows($query))
+  {
+    while ($row = mysql_fetch_assoc($query))
+    {
+        $rows[] = $row;
+    }
+    return $rows;
+  }
+  else
+  {
+    return 0;
+  }
+
+}
+
+  
 } // End of Class
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-  
-
 
 ?>
 

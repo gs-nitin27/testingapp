@@ -17,10 +17,10 @@ public function getContentInfo()
 
 
 public function angulartest($username,$password)
-{
+{  //echo "SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'";die;
   $query = mysql_query("SELECT  * FROM `user` WHERE `email` = '$username' AND `password` = '$password'");
        
-        if($query)
+        if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -34,6 +34,15 @@ public function angulartest($username,$password)
                $data['email'] =$row['email'];
                $data['forget_code'] = $row['forget_code'];
                $data['user_image'] =$row['user_image']; 
+               if($row['prof_id'])
+               {
+                $data['first'] = '0';
+               }
+               else
+               {
+                $data['first'] = '1';
+               }
+               
                return $data;
              }
            }
@@ -43,10 +52,44 @@ public function angulartest($username,$password)
             } 
 }
 
+public function getEmailid($userid)
+{
+  $query = mysql_query("SELECT `email` FROM `user` WHERE `userid` = '$userid' ");
+  if(mysql_num_rows($query)>0)
+  {
+    while($row = mysql_fetch_assoc($query))
+    {
+      $data = $row;
+    }
+    return $data;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+public function getorgdetails($userid)
+{ 
+
+   $query = mysql_query("SELECT * FROM `gs_org` WHERE `userid` = '$userid'");
+   if(mysql_num_rows($query)>0)
+   {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data = $row;
+    }
+    return $data;
+   }
+   else
+   {
+    return 0;
+   }
+}
 public function AthletedashboardData($userid)
 {
   $query = mysql_query("SELECT * FROM `user` WHERE `userid` = '$userid'");
-  if($query)
+  if(mysql_num_rows($query)>0)
   {
     while ($row = mysql_fetch_assoc($query)) 
     {
@@ -86,21 +129,21 @@ public function OTPVerify($otpcode,$userid)
   }
 }
 
-public function socialLogin($email,$password,$name,$forget_code,$image)
+public function socialLogin($email,$password,$name,$forget_code,$image,$userType,$prof_id,$prof_name)
 {   
-  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`prof_name`,`forget_code`,`user_image`) VALUES('$email','$password','$name','104','1','Athletes','$forget_code','$image')");
+  $insert = mysql_query("INSERT INTO `user`(`email`,`password`,`name`,`userType`,`prof_id`,`prof_name`,`forget_code`,`user_image`) VALUES('$email','$password','$name','$userType','$prof_id','$prof_name','$forget_code','$image')");
    if($insert)
    {
-
       $data['Name'] = $name;
-      $data['userType'] = "104";
-      $data['prof_id'] =  "1";
+      $data['userType'] = $userType;
+      $data['prof_id'] =  $prof_id;
       $data['name']     = $name;
       $data['forget_code'] = $forget_code;
-      $data['prof_name'] = "Athletes";
+      $data['prof_name'] = $prof_name;
       $data['userId'] = mysql_insert_id();
       $data['email'] =$email;
       $data['user_image'] =$image; 
+      $data['first'] = '1';
       return $data;
    } 
    else
@@ -112,7 +155,7 @@ public function socialLogin($email,$password,$name,$forget_code,$image)
 public function profiledata($userid)
 {
   $query = mysql_query("SELECT  * FROM `user` WHERE `userid` = '$userid'");
-          if($query)
+          if(mysql_num_rows($query)>0)
           {
             while($row = mysql_fetch_assoc($query))
             {   
@@ -173,7 +216,7 @@ $query = mysql_query("SELECT * FROM `gs_eventinfo` WHERE `userid` = '$userid' OR
 
 public function getjoblist($userid)
 {
-  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link`,`image`,`location` ,`publish` FROM `gs_jobinfo` WHERE `userid` = '$userid' ORDER BY id DESC");
+  $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link`,`image`,`location` ,`publish` FROM `gs_jobInfo` WHERE `userid` = '$userid' ORDER BY id DESC");
   $row = mysql_num_rows($query);
   if($row)
   {
@@ -187,6 +230,8 @@ public function getjoblist($userid)
     return 0;
   }
 }
+
+
 
 public function profile_data_update($userid,$prof_id,$profliedata)
 {
@@ -287,7 +332,7 @@ public function userdata($id)
 
 public function getjobdetails($id)
 {
-  $query = mysql_query("SELECT * FROM `gs_jobinfo` WHERE `id` = '$id'");
+  $query = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` = '$id'");
   if(mysql_num_rows($query))
   {
    while( $row = mysql_fetch_assoc($query))
@@ -342,7 +387,7 @@ public function participantList($event_id)
 
 public function jobapplyUser($jobid)
 {
- $query = mysql_query("SELECT `userid`,`prof_id`,`name`,`email`,`location`,`gender`,`contact_no`,`dob`,  `user_image`,`prof_name` FROM `user` WHERE `userid` IN ( SELECT `userid` FROM `user_jobs` WHERE `userjob` = '$jobid' )");
+ $query = mysql_query("SELECT `user`.`userid`,`user`.`prof_id`,`user`.`name`,`user`.`email`,`user`.`location`,`user`.`gender`,`user`.`contact_no`,`user`.`dob`, `user`.`user_image`,`user`.`prof_name` , `user_jobs`.`id`, `user_jobs`.`status`,`user_jobs`.`interview_date` FROM `user` JOIN `user_jobs` ON `user`.`userid` = `user_jobs`.`userid` AND `user_jobs`.`id` IN (SELECT `id` FROM `user_jobs` WHERE `userjob` = '$jobid')");
   if(mysql_num_rows($query)>0)
   {
    while ($row = mysql_fetch_assoc($query)) {
@@ -359,7 +404,7 @@ public function jobapplyUser($jobid)
 public function createjob($item)
 {
 
-$insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`,`gender`,`sport`,`type`,`job_link`,`work_experience`,`description`,`key_requirement`,`org_address1`,`org_address2`,`org_city`,`org_state`,`org_pin`,`organisation_name`,`qualification`,`address1`,`address2`,`state`,`pin`,`contact`,`email`,`image`,`about`,`desired_skills`,`date_created`)  VALUES ('$item->id','$item->userid','$item->title','$item->location','$item->gender','$item->sport','$item->type','$item->job_link','$item->work_experience','$item->description','$item->key_requirement','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->organisation_name','$item->qualification','$item->address1','$item->address2','$item->state','$item->pin','$item->contact','$item->email','$item->image','$item->about','$item->desired_skills',CURDATE()) ON DUPLICATE KEY UPDATE `title` = '$item->title' , `location` = '$item->location' , `gender` = '$item->gender',`sport` = '$item->sport' , `type` = '$item->type',`job_link` = '$item->job_link' , `work_experience` = '$item->work_experience' , `description` = '$item->description' , `key_requirement` = '$item->key_requirement' , `org_address1` = '$item->org_address1' , `org_address2` = '$item->org_address2' , `org_city` = '$item->org_city' , `org_state` = '$item->org_state' , `org_pin` = '$item->org_pin' , `organisation_name` = '$item->organisation_name' , `qualification` = '$item->qualification' ,`address1` = '$item->address1' , `address2` = '$item->address2' , `state` = '$item->state', `pin` = '$item->pin' , `contact` = '$item->contact' , `email` = '$item->email',`image` = '$item->image',`about` = '$item->about',`desired_skills` = '$item->desired_skills'");
+$insert = mysql_query("INSERT INTO `gs_jobInfo`(`id`,`userid`,`title`,`location`,`gender`,`sport`,`type`,`job_link`,`work_experience`,`description`,`key_requirement`,`org_address1`,`org_address2`,`org_city`,`org_state`,`org_pin`,`organisation_name`,`qualification`,`address1`,`address2`,`state`,`pin`,`contact`,`email`,`image`,`about`,`desired_skills`,`date_created`)  VALUES ('$item->id','$item->userid','$item->title','$item->location','$item->gender','$item->sport','$item->type','$item->job_link','$item->work_experience','$item->description','$item->key_requirement','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->organisation_name','$item->qualification','$item->address1','$item->address2','$item->state','$item->pin','$item->contact','$item->email','$item->image','$item->about','$item->desired_skills',CURDATE()) ON DUPLICATE KEY UPDATE `title` = '$item->title' , `location` = '$item->location' , `gender` = '$item->gender',`sport` = '$item->sport' , `type` = '$item->type',`job_link` = '$item->job_link' , `work_experience` = '$item->work_experience' , `description` = '$item->description' , `key_requirement` = '$item->key_requirement' , `org_address1` = '$item->org_address1' , `org_address2` = '$item->org_address2' , `org_city` = '$item->org_city' , `org_state` = '$item->org_state' , `org_pin` = '$item->org_pin' , `organisation_name` = '$item->organisation_name' , `qualification` = '$item->qualification' ,`address1` = '$item->address1' , `address2` = '$item->address2' , `state` = '$item->state', `pin` = '$item->pin' , `contact` = '$item->contact' , `email` = '$item->email',`image` = '$item->image',`about` = '$item->about',`desired_skills` = '$item->desired_skills'");
 
   if($insert)
   {
@@ -375,7 +420,6 @@ $insert = mysql_query("INSERT INTO `gs_jobinfo`(`id`,`userid`,`title`,`location`
 public function publishjob($jobid,$publish)
 {
   $insert = mysql_query("UPDATE  `gs_jobInfo` SET `publish` = '$publish' WHERE `id` = '$jobid'");
-
   $tes = mysql_affected_rows();
 
   if($tes)
@@ -385,6 +429,56 @@ public function publishjob($jobid,$publish)
   }else{
     return 0;
   }
+
+} 
+
+public function registration($item)
+{
+$query= mysql_query("UPDATE  `user` SET `name` ='$item->name',`contact_no`='$item->phone_no',`gender`='$item->gender',`prof_id`='$item->prof_id',`prof_name`='$item->prof_name',`dob`='$item->dob',`sport`='$item->sport',`userType`='$item->userType', `forget_code`='$item->forget_code',`access_module`='$item->access_module' WHERE `userid`='$item->userid'");
+$tes = mysql_affected_rows();
+if($tes)
+  {
+  $sel = "SELECT `userid`, `userType`, `status`, `name`, `email`, `contact_no`, `sport`, `gender`, `dob`, `prof_id`, `prof_name`, `user_image`, `location`, `device_id`, `date_created`, `date_updated`, `m_device_id`, `M_fb_id`, `L_fb_id`,`google_id` FROM `user` WHERE `userid`='$item->userid'";
+  //echo $query;die;
+  $sql = mysql_query($sel);
+  if(mysql_num_rows($sql)>0)
+  {
+    return mysql_fetch_assoc($sql);
+  }
+  //  return $item->prof_id;
+
+  }else{
+    return 0;
+  }
+}
+
+public function addOrg($item)
+{
+  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email')");
+  if($query)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+public function callforshortlist($userid,$jobid)
+{
+
+  $query = mysql_query("UPDATE `user_jobs` SET `status` = '2' WHERE `userid` = '$userid' AND `userjob` = '$jobid'");
+  $num = mysql_affected_rows();
+  if($num)
+  {
+     return 1;
+  }
+  else
+  {
+    return 0 ;
+  }
+
 
 }
 

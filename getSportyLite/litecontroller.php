@@ -419,47 +419,34 @@ else if($_REQUEST['act']=="gs_sub")
 {
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
-   $module       =  urldecode($_REQUEST ['module']);
+   //$location     =  urldecode($_REQUEST ['location']);
+   //$topic        =  urldecode($_REQUEST ['topic']);
    $user_id      =  urldecode($_REQUEST ['user_id']);
-   if($module=='1')
-   {
-       $table = "gs_jobInfo" ;
-   }
-   if($module=='2')
-   {
-    $table = "gs_eventinfo" ;
-   }
-   if($module=='3')
-   {
-     $table = "gs_tournament_info" ;
-   }
-   if($module=='6')
-   {
-     $table = "gs_resources" ;
-   }
+   $module       =  urldecode($_REQUEST ['module']);
 
-   $where[]      = "$table WHERE 1=1 ";
+
+   $where[]      = ' 1=1 ';
    $arr = array();
-
-   
-   if($module != '')
-   {
-       $arr['module'] = $module;    
-   }
-   else
-   {
-        $arr['module'] = $module;  
-   }
-  if($sports != '')
+   if($sports != '')
    {
      $where[] = " `sport` = '$sports' ";
      $arr['sport'] = $sports;
    }
    else
    {
-     $where[] = " `sport` LIKE '%$sports%' ";
+     //$where[] = " `sport` LIKE '%$sports%' ";
      $arr['sport'] = $sports;
    }
+   // if($location != '')
+   // {
+   //   $where[] = " `location` = '$location' ";
+   //   $arr['location'] = $location;
+   // }
+   // else
+   // {
+   //  // $where[] = " `location` LIKE '%$location%' ";
+   //   $arr['location'] = $location;
+   // }
    if($key != '')
    {
      $where[] = " `description` LIKE '%$key%' ";
@@ -467,12 +454,35 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
    {
-     $where[] = " `description` LIKE '%$key%' ";
+     //$where[] = " `description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
+   
+    if($module == '1')
+   {
+        $topic = 'Jobs';
+   }
+   else if($module == '2')
+   {
+    $topic = 'Events';
+   }
+   else if($module == '3')
+   {
+    $topic = 'Tournaments';
+   }else
+   {
+    $topic = 'Resources';
+    //$module = '6';
+   }
+
+  
    $whereclause = implode('AND', $where);
+   //echo $whereclause;die;
+   $arr['topic_of_artical'] = $topic;
    $req = new liteservice();
-   $res = $req->saveSubscribe($module,$user_id , mysql_real_escape_string($whereclause),json_encode($arr)); 
+
+
+   $res = $req->saveSubscribe($user_id , mysql_real_escape_string($whereclause),json_encode($arr),$module); 
 
    if($res != 0)
    {
@@ -494,6 +504,7 @@ else if($_REQUEST['act']=="gs_sub")
   else if($_REQUEST['act'] == 'get_subs')
   {
     $userid    = $_REQUEST['user_id'];
+   // $module    = '6';
     $req       = new liteservice();
     $res       = $req->getSubs($userid);
         if($res != 0)
@@ -515,9 +526,9 @@ else if($_REQUEST['act']=="gs_sub")
   {
    $userid        = $_REQUEST['user_id'];
    $sub_id        = $_REQUEST['id'];
-   $module        = '6';
+   //$module        = '6';
    $req           = new liteservice();
-   $res           = $req->delSubs($userid ,$sub_id,$module); 
+   $res           = $req->delSubs($userid ,$sub_id); 
         if($res != 0)
         {
         $data = array('status'=> $res , 'data'=>'Record is Deleted'); 
@@ -542,9 +553,7 @@ else if($_REQUEST['act']=="gs_sub")
    $sub_id       =  urldecode($_REQUEST['id']) ;
    $key          =  urldecode($_REQUEST ['key']);
    $sports       =  urldecode($_REQUEST ['sports']);
-   $location     =  urldecode($_REQUEST ['location']);
-   $topic        =  urldecode($_REQUEST ['topic_of_artical']);
-   $module       = '6';
+   $module       =  urldecode($_REQUEST ['module']);//'6';
    $where[]      = ' 1=1 ';
    $arr = array();
    if($sports != '')
@@ -554,21 +563,21 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
      {
-     $where[] = " `sport` LIKE '%$sports%' ";
+    // $where[] = " `sport` LIKE '%$sports%' ";
      $arr['sport'] = $sports;
      }
    
-   if($location != '')
-   {
-     $where[] = " `location` = '$location' ";
-     $arr['location'] = $location;
-   }
-   else
-   {
-     $where[] = " `location` LIKE '%$location%' ";
-     $arr['location'] = $location;
-   }
-    if($topic != '')
+   // if($location != '')
+   // {
+   //   $where[] = " `location` = '$location' ";
+   //   $arr['location'] = $location;
+   // }
+   // else
+   // {
+   //   //$where[] = " `location` LIKE '%$location%' ";
+   //   $arr['location'] = $location;
+   // }
+  /*  if($topic != '')
    {
      $where[] = " `topic_of_artical` = '$topic' "; 
      $arr['topic_of_artical'] = $topic;    
@@ -577,7 +586,7 @@ else if($_REQUEST['act']=="gs_sub")
     {
       $where[] = " `topic_of_artical` LIKE '%$topic%' "; 
       $arr['topic_of_artical'] = $topic; 
-    }
+    }*/
    if($key != '')
    {
      $where[] = " `Description` LIKE '%$key%' ";
@@ -585,10 +594,41 @@ else if($_REQUEST['act']=="gs_sub")
    }
    else
    {
-     $where[] = " `Description` LIKE '%$key%' ";
+    // $where[] = " `Description` LIKE '%$key%' ";
      $arr['key'] = $key;  
    }
+   //  if($topic == 'Jobs')
+   // {
+   //   $module = '1';   
+   // }else if($topic == 'Events')
+   // {
+   //  $module = '2';
+   // }else if($topic == 'Tournaments')
+   // {
+   //  $module = '3';
+   // }else
+   // {
+   //  $module = '6';
+   // }
+    if($module == '1')
+   {
+        $topic = 'Jobs';
+   }
+   else if($module == '2')
+   {
+    $topic = 'Events';
+   }
+   else if($module == '3')
+   {
+    $topic = 'Tournaments';
+   }else
+   {
+    $topic = 'Resources';
+    //$module = '6';
+   }
    $whereclause = implode('AND', $where);
+   //echo $whereclause;die;
+   $arr['topic_of_artical'] = $topic;
    $req = new liteservice();
    $res = $req->modify($user_id ,$sub_id ,mysql_real_escape_string($whereclause),json_encode($arr),$module); 
    if($res != 0)
@@ -673,19 +713,19 @@ else if($_REQUEST['act']=='change_pass')
 
 else if($_REQUEST['act'] == "gs_create")
 {
-	  $data = json_decode($_REQUEST['data']);
-	   $req = new liteservice();
-	  $res = $req->getCreate($data);
-	  if($res != 0)
-	  {
-	  $resp = array('status'=>$res ,  'message'=>'Resource has been created');
-	  echo json_encode($resp);
-	  }
-	  else
-	  {
-	   $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
-	  echo json_encode($resp);
-	  }
+    $data = json_decode($_REQUEST['data']);
+     $req = new liteservice();
+    $res = $req->getCreate($data);
+    if($res != 0)
+    {
+    $resp = array('status'=>$res ,  'message'=>'Resource has been created');
+    echo json_encode($resp);
+    }
+    else
+    {
+     $resp = array('status'=>$res ,  'message'=>'Resource has not been created'); 
+    echo json_encode($resp);
+    }
 }
 
 
@@ -786,12 +826,6 @@ else if($_REQUEST['act'] == "gs_searching")
     }
 }
   
-
-
-
-
-/*******************This API Get the DAta for www. getsporty.in **********************************/
-
 else if($_REQUEST['act'] == "blog_api")
 {
 
@@ -799,7 +833,7 @@ $id     = $_REQUEST['id'];
 $token  = $_REQUEST['token'];
 if(!isset($id))
 {
-  $where = 'WHERE `token` IN ('.$token.') AND `status` = 1 ORDER BY `date_created` DESC';
+  $where = 'WHERE `token` IN ('.$token.') AND `status` = 1 ORDER BY `id` DESC LIMIT 0,7';
 }else
 { 
   $where = "WHERE `id` = '$id' ";
@@ -816,30 +850,6 @@ if($res != 0)
 }
 echo json_encode($data);
 }
-
-
-
-/*****************************Get Data From Job Table******************************************/
-
-else if($_REQUEST['act'] == "job_api")
-{
-$where      = " `publish` = '1' ORDER BY `date_updated` DESC ";
-$req         = new liteservice();
-$res          = $req->get_Job_Data($where);
-if($res != 0)
-{
- $data = array('data'=>$res,'status'=>'1');
- 
-}
-else
-{
-  $data = array('data'=>$res,'status'=>'');
-}
-echo json_encode($data);
-}
-
-
-
 
 /*****************************Get Data Event Table******************************************/
 
@@ -863,8 +873,90 @@ echo json_encode($data);
 
 
 
+else if($_REQUEST['act'] == "job_api")
+{
+$where      = " `publish` = '1' ORDER BY `date_updated` DESC LIMIT 0,8";
+$req         = new liteservice();
+$res          = $req->get_Job_Data($where);
+if($res != 0)
+{
+ $data = array('data'=>$res,'status'=>'1');
+ 
+}
+else
+{
+  $data = array('data'=>$res,'status'=>'');
+}
+echo json_encode($data);
+}
 
+/*********************** Event page Api in getsporty ********************************* ***/
 
+else if($_REQUEST['act'] == 'event_data_api')
+{
+   $req = new liteservice();
+
+   $res = $req->event_data_api();
+
+   if($res)
+   {
+    $data =  array('data' =>$res , 'status' => '1');
+    echo json_encode($data);
+   }
+   else
+   {
+     $data = array('data' =>$res , 'status' => '');
+     echo json_encode($data);
+   }
+}
+
+else if($_REQUEST['act'] == 'job_list_api')
+{
+  
+  $req = new liteservice();
+  $res = $req->job_list_api();
+  if($res)
+  {
+     $data = array('data' =>$res , 'status' => '1' );
+     echo json_encode($data);
+  } 
+  else
+  {
+    $data = array('data' =>$res , 'status' => '' );
+    echo json_encode($data);
+  }
+}
+
+else if($_REQUEST['act'] == 'tournament_list_api')
+{
+  $req = new liteservice();
+  $res = $req->tournament_list_api();
+
+  if($res)
+    {
+      $data = array('data' => $res , 'status' => '1');
+      echo json_encode($data);
+    }else
+    {
+      $data = array('data' => $res, 'status' => '');
+    }
+}
+
+else if($_REQUEST['act'] == "resource_list")
+{
+  $req = new liteservice();
+  $res = $req->resource_list();
+  if($res)
+  {
+    $data = array('data' =>$res ,'status' => '1');
+    echo json_encode($data);
+  }else
+  {
+    $data = array('data' => $res , 'status' => '');
+    echo json_encode($data);
+  }
+
+}
 
 
 ?>

@@ -51,7 +51,13 @@ if($_REQUEST['act'] == 'connect')
   }
 }
 
-
+else if($_REQUEST['act'] == 'test_notofication')
+{ $userdata = new userdataservice();
+   $array_data = array('connection_id' => '1' ,'title'=> 'TEST NOTIFICATION', 'message'=> 'test user'.' wants to connect with you' , 'device_id' => 'fdm6Za9u-ro:APA91bFnC59XtcKwBtB9fkeqWOcKWtF0fxJo4pu134kU8Fyi8ARltPI1bmg9kIucohTvFDyvN9LNR9bicXXCTq6cAnqF_DLqFAa1J3bBfW5RKfwXby8F_qNmobn6feh64jajKYvdLWOb' , 'indicator' => 1);
+   $device_id = 'fdm6Za9u-ro:APA91bFnC59XtcKwBtB9fkeqWOcKWtF0fxJo4pu134kU8Fyi8ARltPI1bmg9kIucohTvFDyvN9LNR9bicXXCTq6cAnqF_DLqFAa1J3bBfW5RKfwXby8F_qNmobn6feh64jajKYvdLWOb';
+  $notification = $userdata->sendPushNotificationToGCM($device_id,$array_data);
+  print_r($notification);
+}
 
 
  else if($_REQUEST['act'] == 'request_response')
@@ -556,8 +562,16 @@ Student Id and Result is display all Class Information
  $request              =  new connect_userservice();
  $response             =  $request->ClassInfo($student_id,$phone,$email);
 
-   if($response != 0)
-   {
+  
+   if($response != '0')
+   {           $imageObj = new userdataservice(); 
+               
+              foreach ($response as $key => $value) {
+               $where = "WHERE `userid` = ".$value['coach_id'];
+               $getImage = $imageObj->get_user_images($where);
+               if($getImage != 0)
+               $response[$key]['coach_image'] = $getImage['user_image'];
+              }
               $Result = array('status' => '1','data'=>$response ,'msg'=>'all Class Information');
               echo json_encode($Result);
    }
@@ -1457,28 +1471,52 @@ else if($_REQUEST['act'] == 'log_unassign')
 
 
 
-else if ($_REQUEST['act'] == 'send_sms_to_athelete') {
+else if ($_REQUEST['act'] == 'contact_coach') 
+{
     $data              = json_decode(file_get_contents("php://input"));
-    $athlete_name      = $data->athlete_name;
-    $coach_sport       = $data->coach_sport;
-    $athlete_no        =  $data->athlete_no;
-    $coach_contact_no  =  $data->coach_contact_no;
-    $athlete_email     = $data->athlete_email;
-    if($coach_contact_no != '')
+    $item              = new stdClass();
+    $item->userid            = $data->userid;
+    $item->athlete_name      = $data->athlete_name;
+    $item->coach_sport       = $data->coach_sport;
+    $item->athlete_no        = $data->athlete_no;
+    $item->coach_contact_no  = $data->coach_contact_no;
+    $item->athlete_email     = $data->athlete_email;
+    $item->coach_id          = $data->coach_id;
+    $item->coach_contact_no  = $data->coach_contact_no;
+    $item->profileImage      = $data->profileImage;
+    $item->message           = str_replace(array('\'', '"'), "", $data->message);
+    $item->coach_email       = $data->coach_email;
+    $item->coach_name        = $data->coach_name;
+    $item->prof_id           = $data->prof_id;
+    $item->prof_name         = $data->prof_name;
+    $obj                     = new connect_userservice();
+    // print_r($item);
+    $savemsg           = $obj->save_message($item);
+    if($savemsg != '0')
     {
-    $msg = "You +have +received +connection+ request +from +".$athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$athlete_no."+ or+ ".$athlete_email.""; 
-    $res = sendWay2SMS(9528454915,8824784642, $coach_contact_no, $msg);
-    $resp = array('status'=>1,'message'=>'Success');
-      echo json_encode($resp);
+      $resp = array('status'=>$savemsg,'message'=>'Success');
     }
     else
     {
-      $resp = array('status'=>0,'message'=>'Failure');
-      echo json_encode($resp);
-
+     $resp = array('status'=>$savemsg,'message'=>'Failure'); 
     }
-    
+    if($item->coach_contact_no != '' && $item->prof_id == '1')
+    {
+    $msg = "You +have +received +connection+ request +from +".$item->athlete_name." +on+ Getsporty+.+ He+ is+ looking +for+ a +".$item->coach_sport." +Coach+.+You+ can+ reach+ him +on+ ".$item->athlete_no."+ or+ ".$item->athlete_email.""; 
+    $res = sendWay2SMS(9528454915,8824784642, $item->coach_contact_no, $msg);
+    /*$resp = array('status'=>1,'message'=>'Success');
+      echo json_encode($resp);*/
+    }
+    if($data->coach_email != '')
+    {
+      $emailObj = new emailService();
+      $response = $emailObj->contact_coach($data);
+    }
+    echo json_encode($resp);
+ 
 }
+
+
 else if($_REQUEST['act'] == 'remove_demo_athlete')
 {
   $demo_code = $_REQUEST['demo_code'];
@@ -1514,7 +1552,22 @@ else if($_REQUEST['act'] == 'decline_coachclass_offer')
   echo json_encode($resp);
 }
 
-
+/*else if($_REQUEST['act'] == 'contact_coach')
+{$resp = array('status' => '1' , 'msg'=>'Success' );
+ echo json_encode($resp);die;
+$data = json_decode(file_get_contents("php://input"));
+*/  
+  /*$obj = new connect_userservice();
+  $req = $obj->decline_joinclass_offer($data);
+  if($req != 0)
+  {
+    
+  }else
+  {
+    $resp = array('status'=>$req,'msg'=>'Failure');
+  }*/
+ 
+//}
 
 // else if($_REQUEST['act'] == "get_attendance")
 // {

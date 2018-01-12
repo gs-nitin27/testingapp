@@ -11,9 +11,8 @@ if($_REQUEST['act'] == 'contentangular')
   $res= $req->getContentInfo();
     echo json_encode($res); 
 }
-
 else if($_REQUEST['act'] == 'angulartest')
-{
+{       
         $username       =  $_REQUEST['email'];
         $password       =  md5($_REQUEST['password']);
         $req    =   new angularapi();
@@ -175,6 +174,9 @@ else if($_REQUEST['act'] == 'socialLogin')
   $email  = $data->email;
   $name   = $data->name;
   $image  = $data->image;
+  $userType = '104';
+  $prof_id = '1';
+  $prof_name ='Athlete';
   $forgot_code   =  mt_rand(1000,10000);
   $password = md5($email);
   $req = new angularapi();
@@ -184,7 +186,7 @@ else if($_REQUEST['act'] == 'socialLogin')
     echo json_encode($res);
   }else
   {
-    $result = $req->socialLogin($email,$password,$name,$forgot_code,$image);
+    $result = $req->socialLogin($email,$password,$name,$forgot_code,$image,$userType,$prof_id,$prof_name);
     echo json_encode($result);
   }
  // $res = $req->socialLogin($email,$password,$name);
@@ -296,7 +298,6 @@ $userid         =  @$_REQUEST['userid'];
 $prof_id        =  @$_REQUEST['prof_id'];
 $req            =  new angularapi();
 $user_res       = $req->userdata($userid);
-
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
@@ -373,11 +374,10 @@ else
 }
 }
 }
-                     $comp = ($count/($count+$count1+1))*100;
-                     $comp1=round($comp,2);
+            $comp = ($count/($count+$count1+1))*100;
+            $comp1=round($comp,2);
                      //$prof_status=$comp1.''.'%';
                     }
-      
             $data->user = $user_res; 
             if (is_array($data->user) || is_object($data->user))
             {
@@ -396,21 +396,17 @@ else
                      $comp2=round($comp,2);
                     // $user_status=$comp1.''.'%';
             }
-
 $Total_profile = ($comp1+$comp2)/200*100;     // Total user and profile Status calculate
 $prof_status=$Total_profile;
 $data->profile = (int)$Total_profile;
 $res  = json_encode($data);//json_encode($data); 
 $user = array('status' => 1, 'data'=> json_decode($res), 'msg'=>'Success');
 echo json_encode($user);
-
 }
-
 
 else if($_REQUEST['act'] == 'createjob')
 {
    $data = json_decode(file_get_contents("php://input"));
-   
    $item = new stdClass();
 
     $item->id                        = $data->id;
@@ -439,13 +435,140 @@ else if($_REQUEST['act'] == 'createjob')
     $item->pin                       = $data->pin;
     $item->contact                   = $data->contact;
     $item->email                     = $data->email;
-    $item->image                     = $data->image; 
-
+    $item->image                     = $data->image;
     $req    =   new angularapi();
     $res = $req->createjob($item);     
     echo json_encode($res);
 }
 
+else if($_REQUEST['act'] == 'manageLogin')
+{
+  $data = json_decode(file_get_contents("php://input"));
+  $email  = $data->email;
+  $name   = $data->name;
+  $image  = $data->image;
+  $userType = '103';
+  $prof_id = '';
+  $prof_name ='';
+  $forgot_code   =  mt_rand(1000,10000);
+  $password = md5($email);
+  $req = new angularapi();
+  $res = $req->angulartest($email,$password);
+  if($res)
+  {
+    echo json_encode($res);
+  }else
+  {
+    $result = $req->socialLogin($email,$password,$name,$forgot_code,$image,$userType,$prof_id,$prof_name);
+    echo json_encode($result);
+  }
+}
+
+else if($_REQUEST['act'] == 'getEmailid')
+{
+  $userid = $_REQUEST['userid'];
+  $req = new angularapi();
+  $res = $req->getEmailid($userid);
+  echo json_encode($res);
+}
+
+else if($_REQUEST['act'] == 'getorgdetails')
+{
+  $userid  = $_REQUEST['userid'];
+  $req = new angularapi();
+  $res = $req->getorgdetails($userid);
+  echo json_encode($res);
+}
+
+else if($_REQUEST['act']=="registration")
+{
+$data1 = json_decode(file_get_contents("php://input"));
+$item                 =  new stdClass();
+$forgot_code          =  mt_rand(1000,10000);
+$item->userid         =  $data1->userid; 
+$item->name           =  $data1->Name;
+$item->email          =  $data1->email;
+$item->phone_no       =  $data1->contact_no;
+$item->prof_id        =  $data1->prof_id;
+$item->prof_name      =  $data1->prof_name;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$item->userType       =  103;
+$item->forget_code    =  "";
+$item->access_module  = "";
+$req1= new angularapi();
+
+$res = $req1->getEmailid($data1->userid);
+$req3 = $req1->registration($item);
+if(!$req3)
+{
+//$user = array('status' => 0);
+$user =  array('status' =>0 ,'data'=>[]);
+echo json_encode($user);
+}
+// else if($req3 == 1)
+// {
+// $user = array('status' => 1);
+// echo json_encode($user);
+// }
+else
+{
+  //$user = array('status' =>$req3);
+  $user =  array('status' =>1 ,'data'=>$req3);
+  echo json_encode($user);
+  if(!$res)
+  {
+
+          
+  }
+}
+}
+else if($_REQUEST['act'] == 'addOrg')
+{
+$data = json_decode(file_get_contents("php://input"));
+$item                 =  new stdClass();
+$item->userid       =  $data->userid;
+$item->org_name     =  $data->org_name;
+$item->about        =  $data->about;
+$item->address1     =  $data->address1 ;
+$item->address2     =  $data->address2;
+$item->city         =  $data->city;
+$item->state        =  $data->state;
+$item->pin          =  $data->pin ;
+$item->mobile       =  $data->mobile; 
+$item->email        =  $data->email;
+
+$req = new angularapi();
+$res = $req->addOrg($item);
+if(isset($data->app))
+{ 
+  if($res != 0)
+  {
+   $res = array('status' => $res ,'msg' => 'Success');
+  }
+  else
+  {
+   $res = array('status' => $res ,'msg' => 'Failure');
+  }
+}
+echo json_encode($res);
+}
+
+
+else if($_REQUEST['act'] == 'callforshortlist')
+{
+
+  $userid = $_REQUEST['userid'];
+  $jobid  = $_REQUEST['jobid'];
+  $req = new angularapi();
+
+  $res = $req->callforshortlist($userid,$jobid);
+
+  echo json_encode($res);
+
+
+}
 // else if($_REQUEST['act'] == 'job_apply_userlist')
 // {
 //    $jobid = $_REQUEST['jobid'];

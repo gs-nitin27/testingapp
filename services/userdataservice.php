@@ -11,31 +11,23 @@
      */ 
 public function userVarify($where)
 {
+//echo "SELECT *FROM `user` $where";die;
+  $query  = $query  = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`userType`,'') AS userType, IFNull(`status`,'') AS status,IFNull(`name`,'') AS name,IFNull(`forget_code`,'') AS forget_code ,IFNull(`email`,'') AS email, IFNull(`contact_no`,'') AS contact_no,IFNull(`sport`,'') AS sport, IFNull(`gender`,'') AS gender,IFNull(`dob`,'') AS dob, IFNull(`prof_id`, '') AS prof_id,IFNull(`prof_name`,'') AS prof_name , IFNull(`user_image`,'') AS user_image ,IFNull(`profile_status`,'') AS profile_status , IFNull(`location`,'') AS location , IFNull(`prof_language`,'') AS prof_language, IFNull(`other_skill_name`,'') AS other_skill_name, IFNull(`age_catered`,'') AS age_catered, IFNull(`device_id`,'') AS device_id ,IFNull(`about_me`,'') AS about_me ,IFNull(`access_module`,'') AS access_module,IFNull(`activeuser`,'') AS activeuser ,IFNull(`date_created`,'') AS date_created, IFNull(`date_updated`,'') AS date_updated ,IFNull(`m_device_id`,'') AS m_device_id ,IFNull(`link`,'') AS link ,IFNull(`age_group_coached`,'') AS age_group_coached ,IFNull(`languages_known`,'') AS languages_known ,IFNull(`unique_code`,'') AS unique_code FROM `user` $where");
 
-$query  = $query  = mysql_query("SELECT *FROM `user` $where");
-
-if(mysql_num_rows($query)>0)
-{
-while($row = mysql_fetch_assoc($query))
-{
-  unset($row['password']);
-$data = $row;
+  if(mysql_num_rows($query)>0)
+  {
+  while($row = mysql_fetch_assoc($query))
+  {
+    unset($row['password']);
+  $data = $row;
+  }
+  return $data;
+  }
+  else 
+  {
+  return 0;
 }
-return $data;
 }
-else 
-{
-return 0;
-}
-}
-
-
-
-
-
-
-
-
 /*****************Cheack The Profile Status***********************/
 
 
@@ -43,6 +35,7 @@ public function checkprofile($userid)
 {
 $user_res       = $this->userdata($userid);
 $Total_profile  =0;
+$prof_id = $user_res['prof_id'];
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
@@ -50,7 +43,7 @@ if($user_res==0)
   die();
 }
 else
-  {
+  {    
        $req            = new UserProfileService();
        $res            = $req->listuserdata($userid);
                if($res == 0)
@@ -59,9 +52,13 @@ else
                     {
                       $data = file_get_contents('json/Athletes.json');
                     }
-                    if ($prof_id==2) 
+                    else if ($prof_id==2 || $prof_id==8) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
+                    }
+                    else
+                    {
+                      $data = file_get_contents('json/other_profile.json');
                     }
                }
                 else
@@ -111,7 +108,7 @@ else
                      $comp1=round($comp,2);
                      //$prof_status=$comp1.''.'%';
                     }
-      
+            $data =  new stdClass();
             $data->user = $user_res; 
             if (is_array($data->user) || is_object($data->user))
             {
@@ -222,11 +219,11 @@ $gender             =  $data->gender;
 
   public function gsSignIn($email,$password1)
     {
-      $query = mysql_query("SELECT  *FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
+      $query = mysql_query("SELECT  `userid`, `userType`, `status`, `name`, `password`, `forget_code`, `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`, `date_updated`, `m_device_id`, `link`, `age_group_coached`, `languages_known`, `unique_code` FROM `user` WHERE `email` = '$email' AND `password` = '$password1'");
           if($query)
           {
             while($row = mysql_fetch_assoc($query))
-            {   
+            {  //print_r($row);  
                unset($row['password']);
                $data1= $row; 
                return $data1;
@@ -239,11 +236,23 @@ $gender             =  $data->gender;
     } // end function
 
 
-
+public function connected_class($student_id)
+{
+$query = mysql_query("SELECT COUNT(`classid`) AS class FROM `gs_class_data` WHERE `student_id` = '$student_id' AND `status` = '2'");
+if(mysql_num_rows($query)> 0)
+  {
+    $row = mysql_fetch_assoc($query);
+    return $row['class'];
+  }
+else
+  {
+    return 0;
+  }
+}
 /**************************************Logut Function*******************************/
 public function  deleteDeviceId($userid,$device_id )
 {
-$query = mysql_query("SELECT  `device_id`FROM `user` WHERE `userid` = '$userid' ");
+$query = mysql_query("SELECT `device_id`FROM `user` WHERE `userid` = '$userid' ");
 if(mysql_num_rows($query)>0)
 {
 $row = mysql_fetch_assoc($query);
@@ -326,15 +335,18 @@ if($update)
 /***************************************************************************/
 
     public function userdata($id)
-    {
+    {  //echo "SELECT *FROM `user` where `userid` = '$id'";die;
        $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
           {
-
-            unset($row['password']);
-            $data = $row;
+          unset($row['password']);
+          $data = $row;
+          if($row['prof_name'] == 'Athletes')
+            {
+              $data['class'] = $this->connected_class($id);
+            }
           }
         return $data;
         }
@@ -760,6 +772,7 @@ while($row = mysql_fetch_assoc($query))
 
 $row['eligibility'] = json_decode($row['eligibility']);
 $row['terms_cond']  = json_decode($row['terms_cond']);
+//$row['description'] = strip_tags($row['description']);
 $row['fav']='0';
 $row['job']='0';
 $data[] = $row;
@@ -884,6 +897,7 @@ if(mysql_num_rows($query1) > 0)
 while($row = mysql_fetch_assoc($query1))
 {
 $row['fav']='0';
+$row['description'] = strip_tags($row['description']);
 $rows[] = $row;
 }
   return $rows;
@@ -1238,7 +1252,6 @@ public function job_status($id,$userid)
           $row = mysql_fetch_assoc($query);
           return $row['status'];
     }
-
     else
     {
       return '0';
@@ -2178,7 +2191,29 @@ return 0;
 }
 }
 
+public function registration($item)
+{
+  $query  = mysql_query("SELECT `userid`,`prof_name` FROM `user`  WHERE `email`='$item->email'");
+  if(mysql_num_rows($query)>0)
+  {
+       return 0;
+  }else
+  {
+  $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`, `forget_code`,`access_module`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->forget_code','$item->access_module')");
+if($query)
+{
+ $last_id = mysql_insert_id();
+  return 1;
 
+ $this->sendEmail_for_password_reset($item->email);
+ 
+}
+else
+{
+    return 2;
+}
+}
+}
 
 public  function create_manage_user_exits($item)
 {
@@ -2242,11 +2277,6 @@ else
 
  
 $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`,`device_id`, `forget_code`,`access_module`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code','$item->access_module')");
-
-
-// $query= mysql_query("INSERT into `user`(`name`,`email`,`contact_no`,`Gender`,`prof_id`,`prof_name`,`dob`,`sport`,`userType`,`device_id`, `forget_code`) values('$item->name','$item->email','$item->phone_no','$item->gender','$item->prof_id','$item->proffession','$item->dob','$item->sport','$item->userType','$item->device_id','$item->forget_code')");
-
-
 if($query)
 {
   
@@ -2346,11 +2376,11 @@ function generate_random_code($length) {
 
 
 public function apply($userid , $id ,$status,$module,$user_name,$email)
-{
+{//echo $module;die;
 switch ($module)
  {
    case 1:
-     $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
+       $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
      break;
      
    case 2:
@@ -2460,12 +2490,7 @@ case '3':
       }
 }//End Function
 
-
-
-
 //###################### welcome email send to user ##############################################
-
-       
  
 public function sendEmail_for_password_reset($email)
 {
@@ -2652,7 +2677,7 @@ public function Experience($userid)
 
 public function user_Info($whereclause)
 {
-      $query = mysql_query("SELECT  *FROM `user` WHERE $whereclause ");
+      $query = mysql_query("SELECT  `userid`, `userType`, `status`, `name`,  `email`, `contact_no`, `sport`, `gender`, `address1`, `address2`, `address3`, `dob`, `prof_id`, `prof_name`, `user_image`, `profile_status`, `location`, `prof_language`, `other_skill_name`, `other_skill_detail`, `age_catered`, `device_id`, `about_me`, `access_module`, `activeuser`, `date_created`,`m_device_id`, `link`, `age_group_coached`, `languages_known` FROM `user` WHERE $whereclause ");
       if(mysql_num_rows($query) > 0)
       {
       while($row = mysql_fetch_assoc($query))
@@ -2708,6 +2733,7 @@ public function searchEvent($where)
             for ($i=0; $i <$num ; $i++) 
             {
               $row=mysql_fetch_assoc($query);
+              $row['image'] = EVENT_IMAGE_URL.$row['image'];
               $data[]   = $row ;
             }
         return $data;
@@ -2850,8 +2876,19 @@ return $Total_profile;
 }
 
 
-
-
+public function get_user_images($where)
+{ 
+  $query = mysql_query("SELECT `user_image` FROM `user` $where");
+  if(mysql_num_rows($query)>0)
+  {
+    $row = mysql_fetch_assoc($query);
+    return $row;
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 
 

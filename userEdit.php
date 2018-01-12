@@ -24,7 +24,7 @@ if($_REQUEST['act'] == 'editUserData')
 
    if(is_null($userid))
    {
-        $user = array('status' => 0, 'data'=> 'User Id is Empty ' , 'msg'=>'No User Id' );
+        $user = array('status' => 0, 'data'=> 'User Id is Empty' , 'msg'=>'No User Id' );
         echo json_encode($user);
    }
   if(is_null($userdata))
@@ -80,7 +80,7 @@ else
                     {
                       $data = file_get_contents('json/Athletes.json');
                     }
-                   else if ($prof_id==2) 
+                   else if ($prof_id==2 || $prof_id==8) 
                     {
                       $data = file_get_contents('json/coach_profile.json');
                     }

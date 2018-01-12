@@ -94,7 +94,10 @@ switch ($logintype)
                       $pushnote     = $pushobj ->sendPushNotificationToGCM($row1['device_id'], $message);
                       $req                       =  new userdataservice();
                       $checkdeviceid             =  $req->checkdeviceid($email,$device_id);
-
+                      if($res['prof_name'] == 'Athletes')
+                          {
+                            $res['classes'] = $req->connected_class($userid); 
+                          }
                     //  $upd          = $obj->updatedevice($device_id ,$email);
 
                       //$multiple = "1";
@@ -138,6 +141,11 @@ switch ($logintype)
                         $userid                       =  $res['userid'] ;
                         $profle                       =  $req->checkprofile($userid);
                         $res['profile']=$profle ;
+                        //echo $res['prof_name'];die;
+                            if($res['prof_name'] == 'Athletes')
+                          {
+                            $res['classes'] = $req->connected_class($userid); 
+                          }
                         $data = array('status' => 1,'data'=>$res ,'msg'=>'User already registered');
                         echo json_encode($data);
                  }
@@ -161,6 +169,10 @@ switch ($logintype)
                           
                             $req                          =  new userdataservice();
                             $checkdeviceid                =  $req->checkdeviceid($email,$device_id);
+                            if($res2['prof_name'] == 'Athletes')
+                            {
+                              $res2['classes'] = $req->connected_class($userid); 
+                            }
                           //  $obj = new userdataservice();
                            // $upd = $obj->updatedevice($device_id ,$email);
                             //$multiple = "1";
@@ -262,35 +274,27 @@ $item->mobile_no          =  $data1->mobile_no;
 $item->otp                =  $data1->otp;
 $item->dob                =  $data1->dob;
 $item->gender             =  $data1->gender;
+$item->languagesKnown     =  $data1->languagesKnown;
+$item->ageGroupCoached    =  $data1->ageGroupCoached;
+$item->link               =  $data1->link;
+//print_r($data1);
 $req                      =  new UserProfileService();
 $res                      =  $req->editProfile($item);
  // if ($item->status==0) 
  // {
  // $req2     = new emailService();
- // $res2     = $req2->emailVarification($item->email);
+ // $res2     = $req2->emailVarificatilanguagesKnownon($item->email);
  // }
 if($res==1)
 {
 $req1                 = new userdataservice();
 $req2                 = $req1->getuserdata($item->userid);
-$msg                  = "Hello + athlete + your + otp + varification + code + is +".$item->otp;
-$sms          = sendWay2SMS(9528454915,8824784642, $item->mobile_no, $msg);
-if($sms != 1)
-{
-$message = 'Contact Number not verified';
-}
-else
-{
-$req2['otp'] = $item->otp;  
-$message = 'Successfully updated';
-}
-
 $user = array('status' => 1, 'data'=> $req2, 'msg'=>$message );
 echo json_encode($user);
 }
 else
 {
-$user = array('status' => 0, 'data'=> $req2, 'msg'=>'Notupdated' );
+$user = array('status' => 0, 'data'=> $req2, 'msg'=>'Not updated' );
 echo json_encode($user);
 }
 }
@@ -335,6 +339,41 @@ echo json_encode($user);
 } // End Function
 
 
+else if($_REQUEST['act']=="registration")
+{
+$data1 = json_decode(file_get_contents("php://input"));
+
+$item                 =  new stdClass();
+$forgot_code          =  mt_rand(1000,10000);
+$item->name           =  $data1->Name;
+$item->email          =  $data1->email;
+$item->phone_no       =  $data1->contact_no;
+$item->proffession    =  $data1->profession;
+$item->sport          =  $data1->sport;
+$item->gender         =  $data1->gender;
+$item->dob            =  $data1->dob;
+$item->userType       =  103;
+$item->forget_code    =  $forgot_code;
+$item->prof_id        =  "2";
+$item->access_module  = "1,2,3";
+$req1= new userdataservice();
+$req3 = $req1->registration($item);
+if($req3 == 0)
+{
+$user = array('status' => 0);
+echo json_encode($user);
+}
+else if($req3 == 1)
+{
+$user = array('status' => 1);
+echo json_encode($user);
+}
+else
+{
+  $user = array('status' => 2);
+  echo json_encode($user);
+}
+}
 
 
 
@@ -1234,7 +1273,7 @@ else if($_REQUEST['act']=="send_offer")
   $salary            =  $userdata->salary;
   $joining_date      =  $userdata->joining_date;
   $status            =  '5';                      // Status 5 for Offer
-  $user_app          =  'L' ;
+  $user_app          =  'L';
   $date              =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $res               =  $req->jobStatus($applicant_id,$job_id,$status,$salary,$joining_date);
@@ -1401,7 +1440,7 @@ else if($_REQUEST['act'] == "gs_searching")
                             for ($i=0; $i <count($response) ; $i++)
                             { 
                                $job_status      = $request->job_status($response[$i]['id'],$userid);
-                               $response[$i]['job_status'] =$job_status;
+                               $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
                          if ($module=='2')
@@ -1554,7 +1593,7 @@ else if($_REQUEST['act'] == "professional")
   $location        =   urldecode($_REQUEST ['location']); 
   $request         =   new userdataservice();
   $userType        =   '103';
-  $where[]         =   '1 =1 ';
+  $where[]         =   '`activeuser` = 1 ';
   $arr = array();
    if($userType != '')
    {
@@ -1574,7 +1613,7 @@ else if($_REQUEST['act'] == "professional")
   }
   if($location != '')
   {
-       $where[] = "`location` = '$location' ";
+       $where[] = "`location` LIKE '%".$location."%' ";
        $arr['location'] = $location;
   }
   if($prof_id != '')
@@ -1596,13 +1635,10 @@ if($response)
            echo json_encode($Result);
 }
 else
-
 {       $response = [];              
         $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
         echo json_encode($Result);
-} 
-                     
-
+}
  }   // End Function
 
 
@@ -1749,7 +1785,6 @@ else if($_REQUEST['act'] == "shortlist")
 
 
 
-
 /***********************************Interview*****************************/
 
 else if($_REQUEST['act'] == "interview_schedule")
@@ -1766,6 +1801,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
   $module            =  '1';    // for Job
+  
   //$date1             =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $con               =  new connect_userservice();
@@ -1877,20 +1913,6 @@ if($res)
        echo json_encode($output);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //**********CODE FOR VIDEO UPLOAD**************************//
 

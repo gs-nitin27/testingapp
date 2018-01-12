@@ -326,15 +326,18 @@ $sport                   = $userdata->sport;
 $contact_no              = $userdata->mobile_no;
 $dob                     = $userdata->dob;
 $gender                  = $userdata->gender;
-$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' , `dob`='$dob' , `gender` = '$gender' WHERE `userid`='$userid'");
+$languagesKnown          = $userdata->languagesKnown;
+$ageGroupCoached         = $userdata->ageGroupCoached;
+$link                    = $userdata->link;
+$query = mysql_query("UPDATE `user` SET `prof_id`='$prof_id',`prof_name`='$proffession',`sport`='$sport' , `contact_no` = '$contact_no' , `dob`='$dob' , `gender` = '$gender', `age_group_coached` = '$ageGroupCoached',`languages_known` = '$languagesKnown', `link` = '$link' WHERE `userid`='$userid'");
 if($query)
 {
   return 1;   
 }
  else
- {    
-    return 0;
- } 
+{    
+  return 0;
+} 
 
 
 }// End of Function
@@ -381,7 +384,7 @@ if($query)
         {
          return $data;
         }
-    }
+  }
 
 
 
