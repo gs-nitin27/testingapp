@@ -33,7 +33,7 @@ else if($_REQUEST['act'] == 'creatHash')
 {
    $posted = json_decode(file_get_contents("php://input"));
    //print_r($posted->txnid);die;
-   $SALT = "eCwWELxi";
+   $SALT = "AwGMsoxe";
    $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
   //print_r($txnid);die;
    $hash = '';
