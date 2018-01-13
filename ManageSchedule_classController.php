@@ -228,6 +228,7 @@ else if($_REQUEST['act'] == "get_classlisting")
 						$req = new manageSchedulingService();
 						$res = $req->getclasslisting($userid, $date);
 					if($res != 0)
+
 					{   //echo json_encode($res['data']);die;
                         $resc  = new manageSchedulingService();
 						$resc1 = $resc->get_reschedule($date,$res['class_id'],$res);
@@ -252,16 +253,6 @@ else if($_REQUEST['act'] == "get_classlisting")
                                  $res['data'][$key]/*[$id]*/['class_end_timing'] = $value['end_time'];
                                  $res['data'][$key]['reschedule'] = $value['resc_type'];
 								}
-							/*else if($value['resc_type'] == '3')	
-								{
-$exchange_key = $value['exchange_key'];
-$excahnge_id  = $value['resc_to'];
-$res['data'][$exchange_key][$excahnge_id]['class_start_timing'] = $res['data'][$key]['class_start_timing'] ;
-$res['data'][$exchange_key][$excahnge_id]['class_end_timing'] = $res['data'][$key]['class_end_timing'] ;
-$res['data'][$key]['class_start_timing'] = $value['start_time'];
-$res['data'][$key]['class_end_timing'] = $value['end_time'];
-$res['data'][$key]['reschedule'] = $value['resc_type'];
-								}*/
 							
 				}
 					 

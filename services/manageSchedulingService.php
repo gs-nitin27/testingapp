@@ -245,6 +245,7 @@ $query1 = mysql_query("DELETE FROM `class_reschedule` WHERE `classid` = '$classi
 
 }
 
+
 public function create_reschedule($item,$date)
 {  $day = split('-', $date);
    $id = $day[0].$day[1].$day[2].$item->classid;

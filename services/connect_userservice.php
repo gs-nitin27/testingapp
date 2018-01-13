@@ -943,30 +943,28 @@ public function class_fee_date($userid,$classid)
 
 
 public function userdata($userid)
-    {
-    
-       $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
-       if(mysql_num_rows($query)>0)
-       {
-          while($row = mysql_fetch_assoc($query))
-          {
-            $data = $row;
-          }
-        return $data;
-        }
-        else 
-        {
-         return 0;
-        }
+{
+
+   $query  = mysql_query("SELECT `userid`,`userType`,`status`,`name`,`email`,`contact_no`,`sport`,`gender`,`dob`,`prof_name`,`user_image`,`location`,`link`,`age_group_coached`,`languages_known`,`device_id` FROM `user` where `userid` = '$userid'");
+   if(mysql_num_rows($query)>0)
+   {
+      while($row = mysql_fetch_assoc($query))
+      {
+        $data = $row;
+      }
+    return $data;
     }
+    else 
+    {
+     return 0;
+    }
+}
 
 
 
 public function alluserdata($userid)
 {  
-    //echo "SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)";die;
-
-     $query = mysql_query("SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)");
+  $query = mysql_query("SELECT `device_id` FROM `user` WHERE `userid` IN ($userid)");
      if(mysql_num_rows($query)>0)
        {
           while($row = mysql_fetch_assoc($query))
@@ -1042,7 +1040,6 @@ public function ClassInfo($student_id,$phone,$email)
 
 public function getAllMemoRecords($athlete_class_id)
 {
-   /*echo "SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`";*/
   $query = mysql_query("SELECT (SUM(`fee_amount`) - SUM(`fee_amount_paid`)) AS fee_due FROM `gs_fee_memo` WHERE `athlete_class_id` = '$athlete_class_id' GROUP BY `athlete_class_id`");
   if(mysql_num_rows($query)>0)
   {
@@ -1140,29 +1137,16 @@ else
         if ($num!=0) 
 
         {
-
-                   while($row=mysql_fetch_assoc($query))
-
-                   {
-
-                    
-
-                     $data[]   = $row ;
-
-                   }
-
-                   return $data;
-
-         }
-
-         else
-
-         {
-
+          while($row=mysql_fetch_assoc($query))
+           {
+                   $data[]   = $row ;
+           }
+            return $data;
+       }
+        else
+        {
            return 0;
-
          }
-
 }
 
 

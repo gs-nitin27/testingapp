@@ -59,7 +59,12 @@ if($_REQUEST['act'] == 'gs_signup')
 //********************Code for User Login************/
 else if($_REQUEST['act']=="gs_login")
 {
+
+echo "dev"; die();
+
 $data1                        =  json_decode($_POST['data']);
+
+
 $email                        =  $data1->email;
 $password                     =  $data1->password;
 $password1                    =  md5($password);
@@ -284,18 +289,6 @@ if($res==1)
 {
 $req1                 = new userdataservice();
 $req2                 = $req1->getuserdata($item->userid);
-// $msg                  = "Hello + athlete + your + otp + varification + code + is +".$item->otp;
-// $sms = sendWay2SMS(9528454915,8824784642, $item->mobile_no, $msg);
-// if($sms != 1)
-// {
-// $message = 'Contact Number not verified';
-// }
-// else
-// {
-// $req2['otp'] = $item->otp;  
-// $message = 'Successfully updated';
-// }
-
 $user = array('status' => 1, 'data'=> $req2, 'msg'=>$message );
 echo json_encode($user);
 }

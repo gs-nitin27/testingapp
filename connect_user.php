@@ -561,6 +561,7 @@ Student Id and Result is display all Class Information
  $email                =  $_REQUEST['email'];
  $request              =  new connect_userservice();
  $response             =  $request->ClassInfo($student_id,$phone,$email);
+
   
    if($response != '0')
    {           $imageObj = new userdataservice(); 

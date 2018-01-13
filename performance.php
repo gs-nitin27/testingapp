@@ -224,8 +224,9 @@ else if($_REQUEST['act'] == 'view_request_assessment')
 else if($_REQUEST['act'] == 'coach_class_listing') 
 {
    $coach_id          = $_REQUEST['coach_id'];
+   $class_id          = $_REQUEST['class_id'];
    $req               =  new UserPerformanceService();
-   $res               =  $req->class_show($coach_id);
+   $res               =  $req->class_show($coach_id,$class_id);
      if($res)
      {
        $data = array('status' => 1, 'data'=> $res, 'msg'=>'class list ');
