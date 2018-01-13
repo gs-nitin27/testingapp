@@ -37,7 +37,9 @@ else if($_REQUEST['act'] == 'creatHash')
  $resp = $obj->create_hash(json_decode($data));
  echo json_encode($resp);
 
+
 }
+
 
 
 
