@@ -31,11 +31,18 @@ else if($_REQUEST['act'] == "payment")
 
 else if($_REQUEST['act'] == 'creatHash')
 {
+
  $data = (file_get_contents("php://input"));
  $obj  = new paymentServices();
  $resp = $obj->create_hash(json_decode($data));
  echo json_encode($resp);
+
+
 }
+
+
+
+
 
 else if($_REQUEST['act'] == "test")
 {

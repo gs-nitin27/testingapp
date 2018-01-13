@@ -72,7 +72,7 @@ public function create_hash($data)
       }
     $hash_string .= $SALT;
     $hash = strtolower(hash('sha512', $hash_string));
-	$resp = array('hashkey' => $hash,'taxid'=>$txnid);
+	$resp = array('hashkey' => $hash,'taxid'=>$txnid,'hash_seq' => $hash_string);
 	return $resp;
 }
 
