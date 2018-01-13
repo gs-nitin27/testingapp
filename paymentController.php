@@ -37,11 +37,6 @@ else if($_REQUEST['act'] == 'creatHash')
  echo json_encode($resp);
 }
 
-}
-}
-
-
-
 else if($_REQUEST['act'] == "test")
 {
 	print_r("expression");
