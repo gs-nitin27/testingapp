@@ -1941,6 +1941,29 @@ if($res)
   }
 }
 
+
+else if($_REQUEST['act'] == "update_deviceid") 
+{
+  $data     =   (file_get_contents("php://input"));
+  $req      =   new userdataservice();
+  $res      =   $req->edit_device_id($data);
+  if($res) 
+  {
+       $output = array('status' => '1','data'=>'update success' 'msg'=>'update success');
+       echo json_encode($output);
+  }
+  else
+  {
+      $output = array('status' => '0','data'=>'not updated' 'msg'=>'not updated');
+       echo json_encode($output);
+  }
+}
+
+
+
+
+
+
 //**********CODE FOR VIDEO UPLOAD**************************//
 
 if($_SERVER['REQUEST_METHOD']=='POST')
