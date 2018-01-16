@@ -5,7 +5,6 @@ include('services/paymentServices.php');
 
 if($_REQUEST['act'] == "paymentPlan")
 {
-
 	$req = new paymentServices();
 	$res = $req->paymentPlan();
 	echo json_encode($res);
@@ -17,7 +16,6 @@ else if($_REQUEST['act'] == "payment")
 	$req = new paymentServices();
 	$ino = new emailService();
 	$res = $req->payment($paymentdata);
-
 	if($res == '1')
 	{
 	     	echo json_encode($res);
@@ -36,12 +34,18 @@ else if($_REQUEST['act'] == 'creatHash')
  $obj  = new paymentServices();
  $resp = $obj->create_hash(json_decode($data));
  echo json_encode($resp);
-
-
 }
 
 
+else if($_REQUEST['act'] == "useremaildata")
+{
+  $userid = $_REQUEST['userid'];
+   $obj  = new paymentServices();
+  $res = $obj->useremaildata($userid);
+  echo json_encode($res);
 
+
+}
 
 
 else if($_REQUEST['act'] == "test")

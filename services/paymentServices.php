@@ -35,6 +35,23 @@ public function payment($paymentdata)
 	}
 }
 
+public function useremaildata($userid)
+{
+	$query = mysql_query("SELECT `email` , `contact_no`,`name` FROM `user` WHERE `userid` = '$userid'");
+	if(mysql_num_rows($query))
+	{
+		 while ($row = mysql_fetch_assoc($query)) 
+		 {
+		 	$rows = $row;
+		 }
+		 return $rows;
+	}else
+	{
+		return 0;
+	}
+
+}
+
 
 public function findemail($userid) 
 {

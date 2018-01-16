@@ -85,7 +85,6 @@ public function emailVarification($email)
           
 /**************************************Send Email for Interview*************************/  
 
-
 public function email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue)
 {
       $query  = mysql_query("SELECT `email`,`name`,`device_id` FROM `user` WHERE `userid` IN ($applicant_id) ");
