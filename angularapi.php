@@ -416,11 +416,11 @@ else if($_REQUEST['act'] == 'createjob')
     $item->gender                    = $data->gender;
     $item->sport                     = $data->sport;
     $item->type                      = $data->type;
-    $item->job_link                  = $data->job_link;
+    $item->job_link                  = '';
     $item->work_experience           = mysql_real_escape_string($data->work_experience);
     $item->description               = mysql_real_escape_string($data->description);
     $item->about                     = mysql_real_escape_string($data->about);
-    $item->key_requirement           = mysql_real_escape_string($data->key_requirement);
+    $item->key_requirement           = '';
     $item->org_address1              = mysql_real_escape_string($data->org_address1);
     $item->org_address2              = mysql_real_escape_string($data->org_address2);
     $item->org_city                  = $data->org_city;
