@@ -247,7 +247,6 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
                     <br>'.$msg.'
                     <br><b>Date of interview:</b>  '.$date.'
                     </p>
-                    <b>Venue:</b>  '.$venue.'
                 </td>
             </tr>
             <tr>
