@@ -1830,33 +1830,49 @@ else if($_REQUEST['act'] == "interview_schedule")
   $module            =  '1';    // for Job
   
   //$date1             =  date("F j, Y, g:i a");
+
   $req               =  new userdataservice();
+  $pushobj           =  new userdataservice();
+
   $con               =  new connect_userservice();
 
   $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
+
+
   $json_data         = json_encode($message);
   $alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
-  $response          =  $req->FindDeviceId($id,$module);
-  $L_device_id       = $response['L_device_id'];
-  print_r($L_device_id); 
 
-  $pushnote          = $pushobj ->sendLitePushNotificationToGCM($L_device_id, $message);
+  $applicant_id      =  implode(",",$applicant_id);
+  $response          =  $req->FindLiteDevice($applicant_id);
+
+  //$response1 = implode("|", $response);
+
+
+  //print_r($response1); 
+
+
+
+  $pushnote          = $pushobj ->sendLitePushNotificationToGCM($response, $message);
   
   //$response          =  $request->FindDeviceId($id,$module);
 
 
-  $applicant_id      =  implode(",",$applicant_id);
+  
   $request           =  new userdataservice();
   $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date);  // This code for Interview 
   $email_res         =  new emailService();
   $request           =  new userdataservice();
   $userdata          =  $request->userdata($employer_id);
+
   $employer_name     =  $userdata['name']; 
   $fwhere            =  "`id`= $job_id"; 
   $job_user          =  $request->jobsearch_user($fwhere);
   $title             =  $job_user[0]['title']; 
   $organisation_name =  $job_user[0]['organisation_name'];  
+
   $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue);
+
+
   if ($emailnote) 
   {
        $Result = array('status' => 1,'data'=>'1' ,'msg'=>'Interview is schedule');
@@ -1864,7 +1880,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   }
   else
   {
-      $Result = array('status' => 0,'data'=>'0' ,'msg'=>'Interview is Not schedule');
+      $Result = array('status' =>  0,'data'=>'0' ,'msg'=>'Interview is Not schedule');
        echo json_encode($Result);
   }
 

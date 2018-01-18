@@ -1632,8 +1632,10 @@ public function sendNotification($registration_ids, $message,$google_api)
 
 public function sendLitePushNotificationToGCM($device, $message) 
 {
-    //$device=(explode("|",$registatoin_ids));
+   // $device=(explode("|",$registatoin_ids));
 
+   // print_r($registatoin_ids);
+  
 
   foreach ($device as $key => $value) {
     $registration_ids = $value;
@@ -2925,12 +2927,20 @@ public function edit_device_id($data)
 public function FindLiteDevice($applicant_id)
 {
 
-  $query = mysql_query("SELECT `L_device_id` FROM user WHERE userid IN ($applicant_id) ");
-  foreach($row = mysql_fetch_assoc($query))
+
+  $query = mysql_query("SELECT `L_device_id`, `M_device_id` FROM user WHERE userid IN ($applicant_id) ");
+  if(mysql_num_rows($query) > 0)
   {
-  $data[] = $row['L_device_id'];
+      while($row = mysql_fetch_assoc($query))
+      {
+      $rows[] = $row['L_device_id']; 
+      }
+      return $rows;
+ } 
+ else
+ {
+     return 0;
   }
-  return $data;
 }
 
 
