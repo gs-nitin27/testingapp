@@ -39,7 +39,7 @@ If (isset($_POST["additionalCharges"])) {
                 $dateObj   = DateTime::createFromFormat('!m', $monthNum);
                 $monthName = $dateObj->format('F');
                 $year = date("y");
-                $invoiceid = "GSJ/1/".$_POST["productinfo"]."/".$date1[2].$date1[1].$year;
+                $invoiceid = "GSJ/1/".$year.$date1[1].$date1[2]."/".$_POST["productinfo"];
                 $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
                  
                 $item = new stdClass();
