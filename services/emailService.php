@@ -87,7 +87,7 @@ public function emailVarification($email)
 
 public function email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue)
 {
-      $query  = mysql_query("SELECT `email`,`name`,`device_id` FROM `user` WHERE `userid` IN ($applicant_id) ");
+      $query  = mysql_query("SELECT `email`,`name`,`L_device_id` FROM `user` WHERE `userid` IN ($applicant_id) ");
       $num    = mysql_num_rows($query);
       if($num) 
       {
@@ -96,11 +96,15 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
         {
          $to             = $row['email'];
          $user           = $row['name'];
-         $device_id      = $row['device_id'];
-         $message        = array('date' =>$date ,'summary'=>$msg);
-         $jsondata       = json_encode($message);
-         $pushobj        = new userdataservice();
-         $pushnote       = $pushobj->sendPushNotificationToGCM($row1['device_id'], $message);
+
+         //$device_id      = $row['device_id'];
+
+        // $message        = array('date' =>$date ,'summary'=>$msg);
+        // $jsondata       = json_encode($message);
+
+         //$pushobj        = new userdataservice();
+         //$pushnote       = $pushobj->sendPushNotificationToGCM($row1['device_id'], $message);
+         
          $from           = "info@darkhorsesports.in";
          $from_name      = $employer_name;
          $subject        = "Regarding Interview at ".$organisation_name;

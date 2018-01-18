@@ -1832,12 +1832,19 @@ else if($_REQUEST['act'] == "interview_schedule")
   //$date1             =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $con               =  new connect_userservice();
-  //$message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
-  //$json_data         = json_encode($message);
-  //$alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
-  //$response          =  $req->FindDeviceId($id,$module);
-  //$pushnote          = $pushobj ->sendLitePushNotificationToGCM($response['device_id'], $message);
+
+  $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
+  $json_data         = json_encode($message);
+  $alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
+  $response          =  $req->FindDeviceId($id,$module);
+  $L_device_id       = $response['L_device_id'];
+  print_r($L_device_id); 
+
+  $pushnote          = $pushobj ->sendLitePushNotificationToGCM($L_device_id, $message);
+  
   //$response          =  $request->FindDeviceId($id,$module);
+
+
   $applicant_id      =  implode(",",$applicant_id);
   $request           =  new userdataservice();
   $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date);  // This code for Interview 
@@ -1862,6 +1869,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   }
 
 } // End Function
+
 
 
 
@@ -1949,12 +1957,12 @@ else if($_REQUEST['act'] == "update_deviceid")
   $res      =   $req->edit_device_id($data);
   if($res) 
   {
-       $output = array('status' => '1','data'=>'update success' 'msg'=>'update success');
+       $output = array('status' => '1','data'=>'update success', 'msg'=>'update success');
        echo json_encode($output);
   }
   else
   {
-      $output = array('status' => '0','data'=>'not updated' 'msg'=>'not updated');
+      $output = array('status' => '0','data'=>'not updated', 'msg'=>'not updated');
        echo json_encode($output);
   }
 }
