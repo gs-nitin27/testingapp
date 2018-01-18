@@ -44,7 +44,6 @@ else if($_REQUEST['act'] == "useremaildata")
   $res = $obj->useremaildata($userid);
   echo json_encode($res);
 
-
 }
 
 

@@ -1859,12 +1859,12 @@ else if($_REQUEST['act'] == "interview_schedule")
   $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue);
   if ($emailnote) 
   {
-       $Result = array('status' => '1','data'=>'1' ,'msg'=>'Interview is schedule');
+       $Result = array('status' => 1,'data'=>'1' ,'msg'=>'Interview is schedule');
        echo json_encode($Result);
   }
   else
   {
-      $Result = array('status' => '0','data'=>'0' ,'msg'=>'Interview is Not schedule');
+      $Result = array('status' => 0,'data'=>'0' ,'msg'=>'Interview is Not schedule');
        echo json_encode($Result);
   }
 
