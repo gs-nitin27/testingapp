@@ -538,6 +538,7 @@ $item->state        =  $data->state;
 $item->pin          =  $data->pin ;
 $item->mobile       =  $data->mobile; 
 $item->email        =  $data->email;
+$item->gstin        =  $data->gstin;
 
 $req = new angularapi();
 $res = $req->addOrg($item);
