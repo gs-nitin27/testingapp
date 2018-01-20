@@ -13,7 +13,7 @@ $email=$_POST["email"];
 $salt="e5iIg1jwi8";
 
 
-
+//print_r(json_encode($_POST));die;
 
 If (isset($_POST["additionalCharges"])) {
        $additionalCharges=$_POST["additionalCharges"];
@@ -54,6 +54,7 @@ If (isset($_POST["additionalCharges"])) {
                 $item->salt = "e5iIg1jwi8";
                 $item->invoiceid = $invoiceid;
                 $item->date = $paymentdate;
+                $item->transaction_data = json_encode($_POST);
                 
                // print_r($jobtitle['title']);
                 $getuserid = $req->getuserid($item->email);
@@ -62,6 +63,7 @@ If (isset($_POST["additionalCharges"])) {
                 $jobtitle = $req->getjobtitle($item->jobid);  
                 $item->title = $jobtitle['title'];
                 $publish = $req->publishjob($item->jobid);
+
                // $mail = $req->invoicemail($item->email,$item);     
          
 
