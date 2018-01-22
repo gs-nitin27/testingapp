@@ -8,6 +8,7 @@ include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/generate_code.php');
 include('services/smsOtpService.php');
+include('email/emailtemplateService.php');
 
 error_reporting(E_ERROR | E_PARSE);
 
@@ -60,7 +61,7 @@ if($_REQUEST['act'] == 'gs_signup')
 else if($_REQUEST['act']=="gs_login")
 {
 
-echo "dev"; die();
+
 
 $data1                        =  json_decode($_POST['data']);
 
@@ -1725,6 +1726,7 @@ $req1        = new emailService();
 
 $response    =  $request->apply($userid,$job_id,$type,$module,$user_name,$email);
 
+
 $date        = date("F j, Y, g:i a");
 $user_app    = 'M';
     if($response)
@@ -1738,14 +1740,23 @@ $user_app    = 'M';
         $userid_Emp                =  $response['userid'];
         $device_id_Emp             =  $response['M_device_id'];
         $email_id_Emp              =  $response['email'];
-        $res1                      = $req1->email_job_apply($email_id_Emp);
 
-        if($device_id_Emp)
-        {
+        //$res1                      = $req1->email_job_apply($email_id_Emp);
+
+      //  if($device_id_Emp)
+        //{
+
           $response     = $request->userdata($userid);
           $username     = $response['name'];
           $email        = $response['email'];
-          
+          $prof_id      = $response['prof_id'];
+          $prof_name    = $response['prof_name'];
+          $contact_no   = $response['contact_no'];
+          $user_image   = $response['user_image'];
+
+       // $res1                      = $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username);
+
+$res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
 
            if ($module=='1')
            {
@@ -1767,7 +1778,7 @@ $user_app    = 'M';
              $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>'send notification');
              echo json_encode($Result);
           }
-     }
+    // }
       
              // $res2     = $req1->emailForApply($email_id_Emp,$email,$module);
    
