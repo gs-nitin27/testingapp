@@ -756,12 +756,10 @@ $query = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,
 
 , IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`state`,'') AS state
 , IFNull(`pin`,'') AS pin, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull
-(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_cond , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility
-, IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
+(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_cond , IFNull(`category`,'') AS category, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile, IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
 , IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'')AS org_city , IFNull(`org_pin`,'')
  AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(`start_date`, '') AS start_date, IFNull(`end_date`, '') AS end_date, IFNull(`event_entry_date`, '') AS event_entry_date, IFNull(`event_end_date`,'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(`date_created`, '') AS date_created  , IFNull(`publish`,'') AS publish   FROM `gs_tournament_info`  WHERE ".$where."  ORDER BY `date_created` ASC");
-
-
+// IFNull(`eligibility1`, '') AS eligibility,
 }
 else if($type == '4')
 {
