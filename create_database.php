@@ -1756,6 +1756,12 @@ $user_app    = 'M';
 
        // $res1                      = $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username);
 
+if(empty($user_image)) 
+{
+$user_image = "http://getsporty.in/staging/uploads/profile/demo.png";
+}
+
+
 $res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
 
            if ($module=='1')

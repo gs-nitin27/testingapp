@@ -66,7 +66,7 @@ button:hover, a:hover {
 
 </div>';
 
-return $this->main_template($job_template);
+ return $this->main_template($job_template);
 
 }
 
