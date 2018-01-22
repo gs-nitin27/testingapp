@@ -8,6 +8,7 @@ include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/generate_code.php');
 include('services/smsOtpService.php');
+include('email/emailtemplateService.php');
 
 error_reporting(E_ERROR | E_PARSE);
 
@@ -1725,6 +1726,7 @@ $req1        = new emailService();
 
 $response    =  $request->apply($userid,$job_id,$type,$module,$user_name,$email);
 
+
 $date        = date("F j, Y, g:i a");
 $user_app    = 'M';
     if($response)
@@ -1753,6 +1755,12 @@ $user_app    = 'M';
           $user_image   = $response['user_image'];
 
        // $res1                      = $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username);
+
+if(empty($user_image)) 
+{
+$user_image = "http://getsporty.in/staging/uploads/profile/demo.png";
+}
+
 
 $res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
 
