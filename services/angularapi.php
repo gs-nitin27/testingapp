@@ -454,7 +454,7 @@ if($tes)
 
 public function addOrg($item)
 {
-  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email')");
+  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')");
   if($query)
   {
     return 1;

@@ -13,7 +13,7 @@ $email=$_POST["email"];
 $salt="e5iIg1jwi8";
 
 
-
+//print_r(json_encode($_POST));die;
 
 If (isset($_POST["additionalCharges"])) {
        $additionalCharges=$_POST["additionalCharges"];
@@ -39,7 +39,7 @@ If (isset($_POST["additionalCharges"])) {
                 $dateObj   = DateTime::createFromFormat('!m', $monthNum);
                 $monthName = $dateObj->format('F');
                 $year = date("y");
-                $invoiceid = "GSJ/1/".$_POST["productinfo"]."/".$date1[2].$date1[1].$year;
+                $invoiceid = "GSJ/1/".$year.$date1[1].$date1[2]."/".$_POST["productinfo"];
                 $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
                  
                 $item = new stdClass();
@@ -54,6 +54,7 @@ If (isset($_POST["additionalCharges"])) {
                 $item->salt = "e5iIg1jwi8";
                 $item->invoiceid = $invoiceid;
                 $item->date = $paymentdate;
+                $item->transaction_data = json_encode($_POST);
                 
                // print_r($jobtitle['title']);
                 $getuserid = $req->getuserid($item->email);
@@ -62,6 +63,7 @@ If (isset($_POST["additionalCharges"])) {
                 $jobtitle = $req->getjobtitle($item->jobid);  
                 $item->title = $jobtitle['title'];
                 $publish = $req->publishjob($item->jobid);
+
                // $mail = $req->invoicemail($item->email,$item);     
          
 

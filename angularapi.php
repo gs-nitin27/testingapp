@@ -477,7 +477,17 @@ else if($_REQUEST['act'] == 'getorgdetails')
   $userid  = $_REQUEST['userid'];
   $req = new angularapi();
   $res = $req->getorgdetails($userid);
-  echo json_encode($res);
+
+  if($res == 0)
+  {
+    $data  = array('data' =>$res, 'status' => '0');
+     echo json_encode($data);
+  }
+  else
+  {
+     $data =  array('data' => $res , 'status' => '1');
+      echo json_encode($data);
+  }
 }
 
 else if($_REQUEST['act']=="registration")
@@ -538,6 +548,7 @@ $item->state        =  $data->state;
 $item->pin          =  $data->pin ;
 $item->mobile       =  $data->mobile; 
 $item->email        =  $data->email;
+$item->gstin        =  $data->gstin;
 
 $req = new angularapi();
 $res = $req->addOrg($item);
@@ -562,12 +573,8 @@ else if($_REQUEST['act'] == 'callforshortlist')
   $userid = $_REQUEST['userid'];
   $jobid  = $_REQUEST['jobid'];
   $req = new angularapi();
-
   $res = $req->callforshortlist($userid,$jobid);
-
   echo json_encode($res);
-
-
 }
 // else if($_REQUEST['act'] == 'job_apply_userlist')
 // {
