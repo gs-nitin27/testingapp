@@ -28,7 +28,9 @@ public function get_tournament_sports()
 	if(mysql_num_rows($query)>0)
 	{
 		  while ($row = mysql_fetch_assoc($query)) {
+		    	    $row['events_category'] = json_decode($row['events_category']);
 		    	    $rows[] = $row;
+
 	    	}
 		  return $rows;
 	}

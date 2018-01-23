@@ -36,10 +36,10 @@ else if($_REQUEST['act'] == "tournament_sports")
     $res = $obj->get_tournament_sports();
     if($res != 0)
     {
-      $resp = array('status' =>'1' ,'data'=>$res);
+      $resp = array('status' =>'1' ,'data'=>$res,'msg'=>'Success');
     }else
     {
-      $resp = array('status' =>'0' , 'data'=>[]);
+      $resp = array('status' =>'0' , 'data'=>[],'msg'=>'Failure');
     }
 echo json_encode($resp);
 
