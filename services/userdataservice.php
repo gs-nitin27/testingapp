@@ -2387,7 +2387,15 @@ public function apply($userid , $id ,$status,$module,$user_name,$email)
 switch ($module)
  {
    case 1:
+       $query = mysql_query("SELECT `userid` FROM `user_jobs` WHERE `userjob`='$id' AND `userid` = '$userid'");
+       if(mysql_num_rows($query)>0)
+       {
+        return 0;die;
+       }
+       else
+      {
        $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
+       }
      break;
      
    case 2:
