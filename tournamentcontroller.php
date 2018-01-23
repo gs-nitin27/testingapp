@@ -29,7 +29,21 @@ if($_REQUEST['act'] == "tournament_participants_list")
     	echo json_encode($data);
    }
 }
+else if($_REQUEST['act'] == "tournament_sports")
+{
 
+    $obj = new tournament_service();
+    $res = $obj->get_tournament_sports();
+    if($res != 0)
+    {
+      $resp = array('status' =>'1' ,'data'=>$res);
+    }else
+    {
+      $resp = array('status' =>'0' , 'data'=>[]);
+    }
+echo json_encode($resp);
+
+}
 
 
 
