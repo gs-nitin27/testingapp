@@ -1821,7 +1821,7 @@ else if($_REQUEST['act'] == "shortlist")
   }
   else
   {
-      $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
+   $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
        echo json_encode($Result);
   }
 
