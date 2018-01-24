@@ -1,0 +1,122 @@
+{
+  "Badminton": {
+    "category": {
+      "Male": [
+        "singles",
+        "Doubles"
+      ],
+      "Female": [
+        "singles",
+        "Doubles"
+      ],
+      "Both": [
+        "Doubles"
+      ]
+    }
+  },
+  "Lawn-Tennis": {
+    "category": {
+      "Male": [
+        "singles",
+        "Doubles"
+      ],
+      "Female": [
+        "singles",
+        "Doubles"
+      ],
+      "Both": [
+        "Doubles"
+      ]
+    }
+  },
+  "Table-tennis": {
+    "category": {
+      "Male": [
+        "singles",
+        "Doubles"
+      ],
+      "Female": [
+        "singles",
+        "Doubles"
+      ],
+      "Both": [
+        "Doubles"
+      ]
+    }
+  },
+  "Swimming": {
+  "category": {
+    "Male":[
+          "50 metre backstroke",
+          "100 metre backstroke",
+          "200 metre backstroke",
+          "50 metre breaststroke",
+          "100 metre breaststroke",
+          "200 metre breaststroke",
+          "50 metre butterfly",
+          "100 metre butterfly",
+          "200 metre butterfly",
+          "50 metre freestyle",
+          "100 metre freestyle",
+          "200 metre freestyle",
+          "400 metre freestyle",
+          "800 metre freestyle",
+          "1500 metre freestyle",
+          "4 × 100 metre freestyle relay",
+          "4 × 200 metre freestyle relay",
+          "100 metre individual medley",
+          "200 metre individual medley",
+          "400 metre individual medley",
+          "4 × 100 metre medley relay",
+           "4 × 100 metre freestyle relay",
+          "4 × 100 metre medley relay",
+          "4 × 200 metre freestyle relay"
+        ]
+    ,
+    "Female": [
+          "50 metre backstroke",
+          "100 metre backstroke",
+          "200 metre backstroke",
+          "50 metre breaststroke",
+          "100 metre breaststroke",
+          "200 metre breaststroke",
+          "50 metre butterfly",
+          "100 metre butterfly",
+          "200 metre butterfly",
+          "50 metre freestyle",
+          "100 metre freestyle",
+          "200 metre freestyle",
+          "400 metre freestyle",
+          "800 metre freestyle",
+          "1500 metre freestyle",
+          "4 × 100 metre freestyle relay",
+          "4 × 200 metre freestyle relay",
+          "100 metre individual medley",
+          "200 metre individual medley",
+          "400 metre individual medley",
+          "4 × 100 metre medley relay",
+           "4 × 100 metre freestyle relay",
+          "4 × 100 metre medley relay",
+          "4 × 200 metre freestyle relay"
+        ]
+  }
+},
+  "Football": {
+    "Category": {
+      "Male": [],
+      "Female": []
+    }
+  },
+  "Cricket": {
+    "Category": {
+      "Male": [],
+      "Female": []
+    }
+  },
+  "Basketball": {
+    "Category": {
+      "Male": [],
+      "Female": []
+    }
+  }
+}

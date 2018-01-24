@@ -22,7 +22,23 @@ class tournament_service
 			else
 			return 0;
  }
+public function get_tournament_sports()
+{
+	$query = mysql_query("SELECT * FROM `gs_sports` WHERE `status_filter` = '1'");
+	if(mysql_num_rows($query)>0)
+	{
+		  while ($row = mysql_fetch_assoc($query)) {
+		    	    $row['events_category'] = json_decode($row['events_category']);
+		    	    $rows[] = $row;
 
+	    	}
+		  return $rows;
+	}
+	else
+	{
+		return 0;
+	}
+}
 
 } // End Class
 
