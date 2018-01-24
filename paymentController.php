@@ -47,8 +47,22 @@ else if($_REQUEST['act'] == "useremaildata")
 }
 
 
-else if($_REQUEST['act'] == "test")
+else if($_REQUEST['act'] == "getTransactionList")
 {
-	print_r("expression");
+	$userid = $_REQUEST['userid'];
+
+	$req = new paymentServices();
+	$res = $req->getTransactionList($userid);
+
+    echo json_encode($res);
+}
+
+else if($_REQUEST['act'] == "getInvoiceData")
+{
+	$invoiceid = $_REQUEST['invoiceid'];
+
+	$req = new paymentServices();
+	$res = $req->getInvoiceData($invoiceid);
+	echo json_encode($res);
 }
 ?>

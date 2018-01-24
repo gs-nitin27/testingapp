@@ -17,7 +17,7 @@ Class payment
 
 public function getjobtitle($jobid)
 {
- $query = mysql_query("SELECT `title` FROM `gs_jobinfo` WHERE `id` = '$jobid'");
+ $query = mysql_query("SELECT `title` FROM `gs_jobInfo` WHERE `id` = '$jobid'");
  if(mysql_num_rows($query))
  {
     while ($row = mysql_fetch_assoc($query)) 
