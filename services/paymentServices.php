@@ -52,6 +52,24 @@ public function useremaildata($userid)
 
 }
 
+public function getTransactionList($userid)
+{
+	$query = mysql_query("SELECT `invoice_id` FROM `gs_billing` WHERE `userid`='$userid'");
+
+	if(mysql_num_rows($query))
+	{
+		while ($row = mysql_fetch_assoc($query)) 
+		{
+			$rows[] = $row;
+		}
+		return $rows;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 public function findemail($userid) 
 {
@@ -64,6 +82,23 @@ public function findemail($userid)
 			$rows = $row;
 		}
 		return $rows;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+public function getInvoiceData($invoice_id)
+{
+	$query = mysql_query("SELECT * FROM `gs_billing` WHERE `invoice_id`='$invoice_id'");
+	if(mysql_num_rows($query))
+	{
+		while ($row = mysql_fetch_assoc($query)) 
+		{
+			$rows = $row; 
+		}
+	 return $rows;
 	}
 	else
 	{
