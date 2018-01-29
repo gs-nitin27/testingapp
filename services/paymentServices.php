@@ -54,7 +54,7 @@ public function useremaildata($userid)
 
 public function getTransactionList($userid)
 {
-	$query = mysql_query("SELECT `invoice_id` FROM `gs_billing` WHERE `userid`='$userid'");
+	$query = mysql_query("SELECT `invoice_id`,`date`,`amount` FROM `gs_billing` WHERE `userid`='$userid' ORDER BY  `date` DESC ");
 
 	if(mysql_num_rows($query))
 	{
@@ -90,8 +90,10 @@ public function findemail($userid)
 }
 
 public function getInvoiceData($invoice_id)
-{
-	$query = mysql_query("SELECT * FROM `gs_billing` WHERE `invoice_id`='$invoice_id'");
+{  
+
+  $query = mysql_query("SELECT gs_billing.* , `gs_jobInfo`.`title` FROM gs_billing INNER JOIN gs_jobInfo ON `gs_billing`.`user_item`=`gs_jobInfo`.id WHERE `gs_billing`.`invoice_id`='$invoice_id'");
+	//$query = mysql_query("SELECT * FROM `gs_billing` WHERE `invoice_id`='$invoice_id'");
 	if(mysql_num_rows($query))
 	{
 		while ($row = mysql_fetch_assoc($query)) 
