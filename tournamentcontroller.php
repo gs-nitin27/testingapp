@@ -46,7 +46,6 @@ echo json_encode($resp);
 else if($_REQUEST['act'] == 'tournament_apply')
 {
   $applydata = '[{"applicant_id":"234","tournament_id":"231","fee_amount":"23444","organiser_id":"32","event_schedule":"2018-01-23","category_code":"BL1"},{"applicant_id":"234","tournament_id":"231","fee_amount":"23444","organiser_id":"32","event_schedule":"2018-01-23","category_code":"BL2"}]';
-//$applydata  = json_decode(file_get_contents("php://input"));
 $cat_data = json_decode($applydata);
 $obj = new tournament_service();
 $res = $obj->apply_tournament($cat_data);
@@ -61,7 +60,63 @@ echo json_encode($response);
 
 
 }
+else if($_REQUEST['act'] == 'get_tour_events')
+{
+$userid  = $_REQUEST['userid'];
+$gender  = $_REQUEST['gender'];
+$dob     = $_REQUEST['dob']
+$age_obj = new connect_userservice();
+$age = $age_obj->getage($dob);
+$events = '{"category": [
+    {
+      "age": "12",
+      "date": "",
+      "event": "50 metre backstroke",
+      "eventId": "SW1",
+      "fee": "100",
+      "gender": "M",
+      "groupId": "12M0",
+      "time": ""
+    },
+    {
+      "age": "12",
+      "date": "",
+      "event": "100 metre backstroke",
+      "eventId": "SW2",
+      "fee": "100",
+      "gender": "M",
+      "groupId": "12M0",
+      "time": ""
+    },
+    {
+      "age": "14",
+      "date": "",
+      "event": "200 metre backstroke",
+      "eventId": "SW3",
+      "fee": "300",
+      "gender": "F",
+      "groupId": "14F1",
+      "time": ""
+    },
+    {
+      "age": "14",
+      "date": "",
+      "event": "50 metre breaststroke",
+      "eventId": "SW4",
+      "fee": "300",
+      "gender": "F",
+      "groupId": "14F1",
+      "time": ""
+    }
+  ]
+}';
+$events = json_decode($events);
 
+
+
+
+
+}
 
 
 ?>

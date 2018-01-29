@@ -43,12 +43,6 @@ public function get_tournament_sports()
 	}
 }
 
-/*[applicant_id] => 234
-    [tournament_id] => 231
-    [fee_amount] => 23444
-    [organiser_id] => 32
-    [event_schedule] => 2018-01-23
-    [category_code] => BL1 */
 public function apply_tournament($applydata)
  {
    foreach($applydata as $key => $value) {
