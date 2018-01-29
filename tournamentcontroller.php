@@ -64,7 +64,7 @@ else if($_REQUEST['act'] == 'get_tour_events')
 {
 $userid  = $_REQUEST['userid'];
 $gender  = $_REQUEST['gender'];
-$dob     = $_REQUEST['dob']
+$dob     = $_REQUEST['dob'];
 $age_obj = new connect_userservice();
 $age = $age_obj->getage($dob);
 $events = '{"category": [
