@@ -10,6 +10,7 @@ include('services/generate_code.php');
 include('services/smsOtpService.php');
 include('email/emailtemplateService.php');
 
+
 error_reporting(E_ERROR | E_PARSE);
 
 // SignUp The New User  using the GetsportyLite 
@@ -872,15 +873,7 @@ else if($_REQUEST['act'] == "getsearchview")
     $res   = $req->getCreation($where , $type);
     if($res != 0)
     {
-      if($type == '2' || $type == '3')
-        { 
-          $eligibility = $res[0]['eligibility1'];
-          $eligibility = explode("|",$eligibility);
-          $res[0]['eligibility'] = $eligibility;
-          $terms_cond = $res[0]['terms_cond1'];
-          $terms_cond = explode("|",$terms_cond);
-          $res[0]['terms_cond'] = $terms_cond;
-        }
+      
   $req           =  new liteservice();
   $res2          =  $req->getfav($user_id,$type);
                if($res2 != 0 && $res2['userfav'] != '')
@@ -899,9 +892,6 @@ else if($_REQUEST['act'] == "getsearchview")
 
                 }
               } 
-       foreach ($res[0] as $key => $value) {
-         $res[0][$key] = utf8_encode($value);    // FOR ENCODING SPECIAL CHARACTERS IN DATA 
-        }
        if ($type=='1')
          {  
             for ($i=0; $i <count($res) ; $i++)
@@ -1821,7 +1811,7 @@ else if($_REQUEST['act'] == "shortlist")
   }
   else
   {
-   $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
+      $Result = array('status' => '0','data'=>'0' ,'msg'=>'user is not shortlisted');
        echo json_encode($Result);
   }
 

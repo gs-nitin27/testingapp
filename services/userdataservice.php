@@ -768,19 +768,26 @@ if(mysql_num_rows($query) > 0)
 {
 while($row = mysql_fetch_assoc($query))
 {
-
 $row['eligibility'] = json_decode($row['eligibility']);
 $row['terms_cond']  = json_decode($row['terms_cond']);
-//$row['description'] = strip_tags($row['description']);
 $row['fav']='0';
 $row['job']='0';
+
 if($type == '3')
 {
+  if($row['category'] == null)
+  {
+  $row['category'] = []; 
+  }
+  else
+  {
   $row['category'] = json_decode($row['category']);
-}
-$data[] = $row;
+  }
 }
 
+$data[] = $row;
+}
+//print_r($data);
 return $data;
 }
 else 
