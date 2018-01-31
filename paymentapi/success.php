@@ -31,7 +31,7 @@ If (isset($_POST["additionalCharges"])) {
 	       echo "Invalid Transaction. Please try again";
 	}
 	else { 
-                 $req = new payment();
+                $req = new payment();
 
                 $date = date("Y-m-d");
                 $date1 = explode('-', $date);
@@ -39,24 +39,27 @@ If (isset($_POST["additionalCharges"])) {
                 $dateObj   = DateTime::createFromFormat('!m', $monthNum);
                 $monthName = $dateObj->format('F');
                 $year = date("y");
-                $invoiceid = "GSJ/1/".$year.$date1[1].$date1[2]."/".$_POST["productinfo"];
+                $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$_POST["productinfo"];
                 $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
                  
-                $item = new stdClass();
-                $item->status = $_POST["status"];
-                $item->name = $_POST["firstname"];
-                $item->amount = $_POST["amount"];
-                $item->txnid = $_POST["txnid"];
-                $item->hash = $_POST["hash"];
-                $item->key = $_POST["key"];
-                $item->jobid = $_POST["productinfo"];
-                $item->email = $_POST["email"];
-                $item->salt = "e5iIg1jwi8";
-                $item->invoiceid = $invoiceid;
-                $item->date = $paymentdate;
-                $item->transaction_data = json_encode($_POST);
+                $item                    = new stdClass();
+                $item->status            = $_POST["status"];
+                $item->name              = $_POST["firstname"];
+                $item->amount            = $_POST["amount"];
+                $item->txnid             = $_POST["txnid"];
+                $item->hash              = $_POST["hash"];
+                $item->key               = $_POST["key"];
+                $item->jobid             = $_POST["productinfo"];
+                $item->email             = $_POST["email"];
+                $item->salt              = "e5iIg1jwi8";
+                $item->invoiceid         = $invoiceid;
+                $item->date              = $paymentdate;
+                $item->transaction_data  = json_encode($_POST);
                 
+
                // print_r($jobtitle['title']);
+
+
                 $getuserid = $req->getuserid($item->email);
                 $item->userid = $getuserid['userid'];
                 $res = $req->paymentservice($item);
