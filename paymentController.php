@@ -7,7 +7,17 @@ if($_REQUEST['act'] == "paymentPlan")
 {
 	$req = new paymentServices();
 	$res = $req->paymentPlan();
-	echo json_encode($res);
+
+	if($res)
+	{
+		$data = array('data' => $res, 'status' => '1');
+	    echo json_encode($data);
+    }else
+    {
+        $data = array('data' => [], 'status' => '0');
+	    echo json_encode($data);
+    }
+    
 }
 
 else if($_REQUEST['act'] == "payment")
