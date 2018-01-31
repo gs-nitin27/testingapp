@@ -43,12 +43,6 @@ public function get_tournament_sports()
 	}
 }
 
-/*[applicant_id] => 234
-    [tournament_id] => 231
-    [fee_amount] => 23444
-    [organiser_id] => 32
-    [event_schedule] => 2018-01-23
-    [category_code] => BL1 */
 public function apply_tournament($applydata)
  {
    foreach($applydata as $key => $value) {
@@ -67,10 +61,29 @@ if($query)
 {
 	return 0;
 }
+}
+
+public function get_participant_list($where)
+{   
+	$query = mysql_query("SELECT a.`id`, a.`applicant_id`, a.`tournament_id`, a.`date_applied`, a.`fee_amount`, `organiser_id`, a.`category_code` ,b.`userid`, b.`name`, b.`user_image` ,b.`gender`,b.`dob` FROM `gs_tournament_application` AS a RIGHT JOIN `user` AS b ON b.`userid` = a.`applicant_id`".$where."");
+
+	if(mysql_num_rows($query)>0)
+	{
+    while ($row = mysql_fetch_assoc($query)) {
+		$age_obj    = new connect_userservice();
+        $age        = $age_obj->getage($row['dob']);
+		$row['age'] = $age;
+		$rows[]     = $row;
+	}
+    return $rows;
+    }
+    else
+    {
+    return 0;
+    }
+}
 
 
-
- }
 } // End Class
 
 
