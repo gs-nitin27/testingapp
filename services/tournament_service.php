@@ -44,26 +44,47 @@ public function get_tournament_sports()
 }
 
 public function apply_tournament($applydata)
- {
-   foreach($applydata as $key => $value) {
-   	   $id = $value->tournament_id.$value->category_code.$value->applicant_id;
+ {     foreach($applydata as $key => $value) {
+   	    $id = $value->tournament_id.$value->category_code.$value->applicant_id;
+        $tournament_id = $value->tournament_id;
+        $applicant_id = $value->applicant_id;
         $data = json_encode($applydata);
-       $query_data[] =  "('$id','$value->applicant_id','$value->tournament_id',CURDATE(),'$value->fee_amount','$data','$value->organiser_id','$value->category_code')";           
-        //echo $query_data;
-   }
+        $query_data[] =  "('$id','$value->applicant_id','$value->tournament_id',CURDATE(),'$value->fee_amount','$data','$value->organiser_id','$value->category_code')";           
+           }
 $query_data = implode(',', $query_data);
 $fields = "INSERT INTO `gs_tournament_application`(`id`, `applicant_id`, `tournament_id`, `date_applied`, `fee_amount`, `application_data`, `organiser_id`, `category_code`) VALUES".$query_data;
 $query = mysql_query($fields);
 if($query)
-{
+{   
 	return 1;
-}else
+}
+else
 {
 	return 0;
 }
 }
 
 public function get_participant_list($where)
+{   
+	$query = mysql_query("SELECT a.`id`, a.`applicant_id`, a.`tournament_id`, a.`date_applied`, a.`fee_amount`, `organiser_id`, a.`category_code` ,b.`userid`, b.`name`, b.`user_image` ,b.`gender`,b.`dob` FROM `gs_tournament_application` AS a RIGHT JOIN `user` AS b ON b.`userid` = a.`applicant_id`".$where."");
+
+	if(mysql_num_rows($query)>0)
+	{
+    while ($row = mysql_fetch_assoc($query)) {
+		$age_obj    = new connect_userservice();
+        $age        = $age_obj->getage($row['dob']);
+		$row['age'] = $age;
+		$rows[]     = $row;
+	}
+    return $rows;
+    }
+    else
+    {
+    return 0;
+    }
+}
+
+public function get_participant_info($where)
 {   
 	$query = mysql_query("SELECT a.`id`, a.`applicant_id`, a.`tournament_id`, a.`date_applied`, a.`fee_amount`, `organiser_id`, a.`category_code` ,b.`userid`, b.`name`, b.`user_image` ,b.`gender`,b.`dob` FROM `gs_tournament_application` AS a RIGHT JOIN `user` AS b ON b.`userid` = a.`applicant_id`".$where."");
 
