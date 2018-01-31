@@ -861,8 +861,10 @@ switch ($module)
 
 
 
-  public function get_Event__tour_Data()
+public function get_Event__tour_Data()
 {  
+$event_data = [];
+$tour_data = [];
 
 $event_query = mysql_query("SELECT * FROM `gs_eventinfo`  WHERE   `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC ");
 $tour_query  = mysql_query("SELECT * FROM `gs_tournament_info` WHERE  `publish` = '1' AND (`start_date` > CURDATE() || `start_date` = CURDATE()) ORDER BY `start_date` ASC");

@@ -17,7 +17,6 @@ if($_REQUEST['act'] == "paymentPlan")
         $data = array('data' => [], 'status' => '0');
 	    echo json_encode($data);
     }
-    
 }
 
 else if($_REQUEST['act'] == "payment")
@@ -46,14 +45,12 @@ else if($_REQUEST['act'] == 'creatHash')
  echo json_encode($resp);
 }
 
-
 else if($_REQUEST['act'] == "useremaildata")
 {
   $userid = $_REQUEST['userid'];
    $obj  = new paymentServices();
   $res = $obj->useremaildata($userid);
   echo json_encode($res);
-
 }
 
 
