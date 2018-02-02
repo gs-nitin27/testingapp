@@ -2,12 +2,14 @@
 include('config1.php');
 include('success_submit.php');
 
-
-
-if($_REQUEST['act'] == "mobilePaymentSuccess")
+if($_REQUEST['act'] == 'mobilePaymentSuccess')
 {   
 
-        $paymentdata  =  json_decode(file_get_contents("php://input"));
+        $fulldata  =  json_decode(file_get_contents("php://input"));
+
+        $paymentdata1 =  json_decode($fulldata->payuData);  
+        $paymentdata = $paymentdata1->result;
+        
       
         $req = new payment();
 
@@ -35,17 +37,20 @@ if($_REQUEST['act'] == "mobilePaymentSuccess")
         $item->invoiceid = $invoiceid;
         $item->date = $paymentdate;
         $item->transaction_data = json_encode($paymentdata);
-                
-	    $getuserid = $req->getuserid($item->email);
-	    $item->userid = $getuserid['userid'];
-	    $res = $req->paymentservice($item);
-	    $jobtitle = $req->getjobtitle($item->jobid);  
-	    $item->title = $jobtitle['title'];
-	    $publish = $req->publishjob($item->jobid);
 
+                
+	// $getuserid = $req->getuserid($item->email);
+	// $item->userid = $getuserid['userid'];
+        $item->userid = $fulldata->userid;
+	$res = $req->paymentservice($item);
+	//$jobtitle = $req->getjobtitle($item->jobid);  
+	//$item->title = $jobtitle['title'];
+        $item->title = $fulldata->jobTitle;
+	$publish = $req->publishjob($item->jobid);
+        $mail = $req->invoicemail($item->email,$item);     
 
         $data = array('status' => "1", "data" => []);
-	    echo json_encode($data);
+	echo json_encode($data);
 
 
 }

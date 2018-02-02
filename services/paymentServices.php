@@ -116,6 +116,7 @@ public function create_hash($data)
 	$SALT = 'e5iIg1jwi8';
     $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
 
+    
 	
      $hashVarsSeq = explode('|', $hashSequence);
      $hash_string = '';	
@@ -125,11 +126,26 @@ public function create_hash($data)
       $hash_string .= '|';
       }
     $hash_string .= $SALT;
+
     $hash = strtolower(hash('sha512', $hash_string));
 	$resp = array('hashkey' => $hash,'taxid'=>$txnid,'hash_seq' => $hash_string);
 	return $resp;
 }
 
+
+public function billing_data_save($item)
+{
+
+ $query = mysql_query("INSERT INTO `gs_participant_billing`(`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`userid`,`date_created`,`date_updated`,`transaction_data`) VALUES('$item->invoice_id','$item->productinfo','3','$item->amount','$item->date','1','$item->txnid','$item->userid',CURDATE(),CURDATE(),'$item->transaction_data')");
+ if($query)
+ {
+ 	return 1;
+ }else
+ {
+ 	return 0;
+ }
+
+}
 
 }
 ?>

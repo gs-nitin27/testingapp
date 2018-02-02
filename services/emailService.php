@@ -1163,10 +1163,10 @@ public function invoicemail($data,$paymentdata)
          $mail->SetFrom($from, $from_name);
          $mail->Subject = $subject;
          $mail->Body = $msg; 
-               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
-               $mail->AltBody = $txt; 
-               $mail->AddAddress($to);
-               $mail->Send();
+         $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+         $mail->AltBody = $txt; 
+         $mail->AddAddress($to);
+         $mail->Send();
                
                //return $mail->Send();
 }
@@ -1215,6 +1215,38 @@ public function email_send($email,$body,$subject)
           return 1;
    
 }
+
+
+// public function tournament_apply_email($cat_data, $billingdata)
+// {
+
+//     $msg ='<html> <head> <title></title> </head> <body> <div style="width:auto;height:auto;background:none repeat scroll 0 0 #ffffff;float:left" id=""> <table width="100%" style="height:70px;border-bottom:1px solid #ccc"> <tbody><tr> <td align="left" colspan="2" style="padding-left:10px"> <img src="https://getsporty.in/img/logo.png" alt="TMM" height="95" class="CToWUd"><img src="https://getsporty.in/portal/uploads/tournament/tournament_1498471430.jpg" alt="TMM" height="95" class="CToWUd"> </td> </tr> </tbody></table> <div style="padding:10px;font-weight:bold"> <label style="text-align:left;width:100%;color:#d39a12">Welcome Anirudh Singh,</label></div><p style="padding:10px">Thank you. We have received your entry for the TOURNAMENT TITLE.</p> <p style="padding:10px">Your online entry transaction number is <b>13532ADHM172583211956</b>. Please note this is NOT YOUR RUNNING NUMBER. Your participation in the Event is subject to entry confirmation and rules &amp; guidelines. You are required to check your application status online at <a href="">adhm.procamrunning.in</a> post 15 working days of closure of registration.</p> <div style="padding:10px;background:none repeat scroll 0 0 #ffffff"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Transaction Details</label> <table width="100%" style="border:1px solid #ccc"> <tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Transaction Date </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>17 Sep, 2017 10:12 AM</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gender </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Male</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Date of Birth </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>16-07-1977</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Nationality </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Indian</label></td></tr></tbody></table><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Details</label> <table width="100%" style="border:1px solid #ccc;border-collapse:collapse"> <tbody><tr align="left"> <th style="border:1px solid #ccc">Attendee ID</th> <th style="border:1px solid #ccc">Name</th> <th style="border:1px solid #ccc">Email ID</th> </tr><tr align="left"> <td style="border:1px solid #ccc">PRCM013532</td> <td style="border:1px solid #ccc">Anirudh Singh</td> <td style="border:1px solid #ccc"><a href="mailto:anirudhsingh16@gmail.com" target="_blank">anirudhsingh16@gmail.com</a></td> </tr></tbody></table></div><p style="padding-top:10px"><b>Registration for Airtel Delhi Half Marathon 2017 Half Marathon (21.097 KM)</b></p><div style="background:none repeat scroll 0 0 #ffffff"><label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Charges for Agenda Items and Other Fees</label> <table width="100%" style="border:1px solid #ccc;border-collapse:collapse"> <tbody><tr align="left"> <th style="border:1px solid #ccc">Item</th> <th style="border:1px solid #ccc;text-align:right">Rate (INR)</th> <th style="border:1px solid #ccc">Quantity</th> <th style="border:1px solid #ccc;text-align:right">Amount (INR)</th> </tr><tr align="left"> <td style="border:1px solid #ccc">Registration for Airtel Delhi Half Marathon 2017 Half Marathon (21.097 KM)</td><td style="border:1px solid #ccc;text-align:right">Rs.1,800.00</td> <td style="border:1px solid #ccc">1</td> <td style="border:1px solid #ccc;text-align:right">Rs.1,800.00</td></tr><tr align="left"> <td colspan="3" style="border:1px solid #ccc;text-align:right"><b>Total</b></td> <td style="border:1px solid #ccc;text-align:right">Rs.1,800.00</td> </tr></tbody></table></div><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Billing Contact Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Name </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>Anirudh Singh</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>102, SPA-5, Spa Court, Jaypee Greens, Greater Noida</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Email Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label><a href="mailto:anirudhsingh16@gmail.com" target="_blank">anirudhsingh16@gmail.com</a> <small>(All communications would be sent to this address)</small></label></td></tr></tbody></table></div><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Payment Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gross Total Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.1,800.00</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> &nbsp;&nbsp;&nbsp;&nbsp;Basic Taxable Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.1,525.42</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold">&nbsp;&nbsp;&nbsp;&nbsp; IGST  (18.00%)</label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.274.58</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Amount Paid </label> </td> <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>(-) Rs.1,800.00</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Balance Due </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.0.00</label></td></tr></tbody></table></div><p style="padding-top:10px"><b>Please Note:</b> The charges will be billed to your credit or debit card as <a href="">www.getsporty.in</a></p><p style="padding-top:10px">ON YOUR MARK, 20% OFF, GO! "Enjoy a 20% discount on Running and Training Products at select PUMA Stores from <span class="aBn" data-term="goog_22569913" tabindex="0"><span class="aQJ">13th Sept to 17th Nov</span></span> and also at <a href="#">Click here</a> to read about how to redeem this coupon.</p><p style="padding-top:10px">For event related query, you can contact us by e-mail at <b><a href="mailto:info@darkhorsesports.in" target="_blank">info@darkhorsesports.in</a></b>. Kindly include your transaction number, e-mail address, name and dates of the event in all future correspondence.</p><p style="padding-top:10px">For further information about TOURNAMENT TITLE, Call us at<a href="#">http://adhm.procamrunning.in/</a></p><p style="padding-top:10px">Thank you for registering for <b>TournamentTitle</b>. We hope you have a wonderful time. </p><p style="padding-top:10px">Best Regards,<br><b>Team Getsporty</b><br>Event helpline: +91 96500 33333 (<span class="aBn" data-term="goog_22569914" tabindex="0"><span class="aQJ">Monday</span></span> to <span class="aBn" data-term="goog_22569915" tabindex="0"><span class="aQJ">Saturday</span></span>, <span class="aBn" data-term="goog_22569916" tabindex="0"><span class="aQJ">10 am to 7 pm</span></span>)</p></div></div></body> </html>';
+
+
+//      require('class.phpmailer.php');
+//      $to             =  $email;
+//      $from           =  "info@darkhorsesports.in";
+//      $from_name      =  "Getsporty";
+//      $subject        =  "Invoice"; 
+//      $mail = new PHPMailer();  // create a new object
+//      $mail->IsSMTP(); // enable SMTP
+//      $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+//      $mail->SMTPAuth = true;  // authentication enabled
+//      $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+//      $mail->Host = 'smtp.gmail.com';
+//      $mail->Port = 465; 
+//      $mail->Username =$from;  
+//      $mail->Password = "2016Darkhorse";
+//      $mail->SetFrom($from, $from_name);
+//      $mail->Subject = $subject;
+//      $mail->Body = $msg; 
+//      $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+//      $mail->AltBody = $txt; 
+//      $mail->AddAddress($to);
+//      $mail->Send();
+
+
+// }
 
 // public function email_invoice_to_participant($applydata);
 // {

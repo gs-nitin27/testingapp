@@ -1,7 +1,6 @@
 <?php
 class tournament_service
 {
-
  public function tournament_participants_list($tournament_id)
  {
 
@@ -44,7 +43,9 @@ public function get_tournament_sports()
 }
 
 public function apply_tournament($applydata)
- {     foreach($applydata as $key => $value) {
+ {     
+
+ 	foreach($applydata as $key => $value) {
    	    $id = $value->tournament_id.$value->category_code.$value->applicant_id;
         $tournament_id = $value->tournament_id;
         $applicant_id = $value->applicant_id;

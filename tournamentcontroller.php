@@ -7,9 +7,10 @@ include('services/emailService.php');
 include('services/event_service.php');
 include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
+include('services/paymentServices.php');
 include('services/tournament_service.php');
 
-
+ 
 error_reporting(E_ERROR | E_PARSE);
 
 if($_REQUEST['act'] == "tournament_participants_list")
@@ -46,12 +47,54 @@ echo json_encode($resp);
 else if($_REQUEST['act'] == 'tournament_apply')
 {
   $applydata = json_decode(file_get_contents("php://input"));
-  $cat_data = $applydata;
+
+  $cat_data = $applydata->ApplyTournament;
+  $billingdata = json_decode($applydata->response_data);
+  $savebillingdata =  $billingdata->result; 
+
+
+
+
+  
+
+  $date = date("Y-m-d");
+  $date1 = explode('-', $date);
+  $monthNum  = $date1[1];
+  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+  $monthName = $dateObj->format('F');
+  $year = date("y");
+  $invoiceid = "GSTN/1/".$year.$date1[1].$date1[2]."/".$savebillingdata->productinfo;
+ // $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
+
+  $savebillingdata->invoice_id =  $invoiceid;
+  $savebillingdata->transaction_data = $applydata->response_data;
+  $savebillingdata->userid = $cat_data[0]->applicant_id;
+  $savebillingdata->date = $paymentdate;
+
+
   $obj = new tournament_service();
   $res = $obj->apply_tournament($cat_data);
+
+  $res = 1;
+
   if($res != 0)
   { 
     $response = array('status' =>$res ,'data'=>[],'msg'=>'successfully applied');
+    
+    $req = new paymentServices();
+
+   $billing_status = $req->billing_data_save($savebillingdata);
+    if($billing_status)
+    {
+     $emailres = new emailService();
+    // $eres = $emailres-tournament_apply_email($cat_data, $savebillingdata);
+
+     return 1;
+    }
+    else
+    {
+      return 0;
+    }
   }
   else
   {
