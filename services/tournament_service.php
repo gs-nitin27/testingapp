@@ -105,6 +105,25 @@ public function get_participant_info($where)
     }
 }
 
+public function tournament_apply_catogery($tournament_id,$userid)
+{
+	$query = mysql_query("SELECT `id`,`application_data` FROM `gs_tournament_application` WHERE `applicant_id` = '$userid' AND `tournament_id` = '$tournament_id'");
+
+	if(mysql_num_rows($query))
+	{
+		while($row = mysql_fetch_assoc($query)) {
+			     $application_data =  json_decode($row['application_data']);
+			     $row['application_data']  = $application_data;
+			     $rows [] = $row;
+		}
+		return $rows;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 } // End Class
 

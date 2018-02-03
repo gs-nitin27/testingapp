@@ -51,10 +51,7 @@ else if($_REQUEST['act'] == 'tournament_apply')
   $cat_data = $applydata->ApplyTournament;
   $billingdata = json_decode($applydata->response_data);
   $savebillingdata =  $billingdata->result; 
-
-
-
-
+  $userdata  = $applydata->userdata;
   
 
   $date = date("Y-m-d");
@@ -64,7 +61,7 @@ else if($_REQUEST['act'] == 'tournament_apply')
   $monthName = $dateObj->format('F');
   $year = date("y");
   $invoiceid = "GSTN/1/".$year.$date1[1].$date1[2]."/".$savebillingdata->productinfo;
- // $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
+  $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
 
   $savebillingdata->invoice_id =  $invoiceid;
   $savebillingdata->transaction_data = $applydata->response_data;
@@ -75,26 +72,15 @@ else if($_REQUEST['act'] == 'tournament_apply')
   $obj = new tournament_service();
   $res = $obj->apply_tournament($cat_data);
 
-  $res = 1;
+  //$res = 1;
 
   if($res != 0)
   { 
-    $response = array('status' =>$res ,'data'=>[],'msg'=>'successfully applied');
-    
     $req = new paymentServices();
-
-   $billing_status = $req->billing_data_save($savebillingdata);
-    if($billing_status)
-    {
-     $emailres = new emailService();
-    // $eres = $emailres-tournament_apply_email($cat_data, $savebillingdata);
-
-     return 1;
-    }
-    else
-    {
-      return 0;
-    }
+    $billing_status = $req->billing_data_save($savebillingdata);
+    $response = array('status' =>$res ,'data'=>[],'msg'=>'successfully applied');
+    $emailres = new emailService();
+    $eres = $emailres->tournament_apply_email($cat_data, $savebillingdata,$userdata);
   }
   else
   {
@@ -120,6 +106,32 @@ if($resp != 0)
   }
 echo json_encode($result);
 }
+
+
+
+else if($_REQUEST['act'] == "tournament_appy_catogery")
+{
+   $tournament_id = $_REQUEST['tournament_id'];
+   $userid = $_REQUEST['userid'];
+
+   $req = new tournament_service();
+
+
+   $res = $req->tournament_apply_catogery($tournament_id,$userid);
+
+
+   if($res)
+   {
+      $data = array('status' => '1','data' =>$res ,'msg'=>'Success');
+     
+   }
+   else
+   {
+    $data = array('status' => '0','data' =>[] ,'msg'=>'failure');
+   }
+    echo json_encode($data);
+}
+
 // else if($_REQUEST['act'] == 'get_tour_events')
 // {
 // $userid  = $_REQUEST['userid'];
