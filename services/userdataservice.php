@@ -2011,7 +2011,10 @@ public function createResources($data)
 
  public function imageupload($image,$userid,$table)
 {
-
+echo "$image";
+echo "$userid";
+echo "$table";
+die();
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
@@ -2035,9 +2038,6 @@ public function createResources($data)
       {
         $file   = UPLOAD_DIR_EVENT.$img_name.'.png';
       }
-
-    
-
 
       $success = file_put_contents($file, $data);
       $img_name = $img_name. '.png';
