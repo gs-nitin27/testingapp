@@ -47,7 +47,7 @@ else if($_REQUEST['act'] == "ViewClassData")
 else if($_REQUEST['act'] == "getStudent_due")
 {
     $coach_id = $_REQUEST['coach_id'];
-    $obj1 = new connect_userservice();
+    $obj1 = new connect_userservice(); 
     $get_due = $obj1->getAllDues($coach_id);
     if($get_due != 0)
     {

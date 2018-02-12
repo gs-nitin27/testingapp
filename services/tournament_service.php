@@ -1,7 +1,6 @@
 <?php
 class tournament_service
 {
-
  public function tournament_participants_list($tournament_id)
  {
 
@@ -30,10 +29,8 @@ public function get_tournament_sports()
 		  while ($row = mysql_fetch_assoc($query)) {
 		    	    $category = json_decode($row['events_category']);
 		    	    $category = $category->category;
-                    //json_encode($category); 
 		    	    $row['events_category'] =$category;
 		    	    $rows[] = $row;
-
 	    	}
 		  return $rows;
 	}
@@ -44,7 +41,9 @@ public function get_tournament_sports()
 }
 
 public function apply_tournament($applydata)
- {     foreach($applydata as $key => $value) {
+ {     
+
+ 	foreach($applydata as $key => $value) {
    	    $id = $value->tournament_id.$value->category_code.$value->applicant_id;
         $tournament_id = $value->tournament_id;
         $applicant_id = $value->applicant_id;
@@ -104,7 +103,24 @@ public function get_participant_info($where)
     }
 }
 
+public function tournament_apply_catogery($tournament_id,$userid)
+{
+	$query = mysql_query("SELECT `id`,`application_data` FROM `gs_tournament_application` WHERE `applicant_id` = '$userid' AND `tournament_id` = '$tournament_id'");
 
+	if(mysql_num_rows($query))
+	{
+		while($row = mysql_fetch_assoc($query)) {
+			     $application_data =  json_decode($row['application_data']);
+			     $row['application_data']  = $application_data;
+			     $rows [] = $row;
+		}
+		return $rows;
+	}
+	else
+	{
+		return 0;
+	}
+}
 } // End Class
 
 

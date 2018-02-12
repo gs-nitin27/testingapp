@@ -66,8 +66,7 @@ If (isset($_POST["additionalCharges"])) {
                 $jobtitle = $req->getjobtitle($item->jobid);  
                 $item->title = $jobtitle['title'];
                 $publish = $req->publishjob($item->jobid);
-
-               // $mail = $req->invoicemail($item->email,$item);     
+                $mail = $req->invoicemail($item->email,$item);     
          
 
                 echo "<h3>Thank You. Your order status is ". $status .".</h3>";
