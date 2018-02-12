@@ -1581,6 +1581,8 @@ public function sendPushNotificationToGCM($registatoin_ids, $message)
 
 public function sendNotification($registration_ids, $message,$google_api)
 {
+
+  // print_r($registration_ids);
     ignore_user_abort(true);
     set_time_limit(0);
     $msg = array
@@ -1610,6 +1612,8 @@ public function sendNotification($registration_ids, $message,$google_api)
     $result = curl_exec($ch );
     curl_close( $ch );
     $response = json_decode($result);
+
+
     if($response->success == 1)
     {
       return 1;
@@ -1660,16 +1664,16 @@ public function sendLitePushNotificationToGCM($device, $message)
 {
    // $device=(explode("|",$registatoin_ids));
 
-   // print_r($registatoin_ids);
+   // print_r($device);
   
 
-  foreach ($device as $key => $value) {
-    //$registration_ids = $value;
-    $registration_ids = "flYpx31I3ZI:APA91bHCQ0Kdcs6Saz5FJreJSTIUr5w6WIrb2EZ-ol5ULAh7_DddSHMcTB2_Y-qzkJqEbePRbHiHLSrKyZn2z72XRIXQPv07hx7tmWFibv1kv3Z34SSUsP9zpHGQ6IGfYRsHQAg4Xqhq";
+  // foreach ($device as $key => $value) {
+  //   //$registration_ids = $value;
+  //   $registration_ids = "flYpx31I3ZI:APA91bHCQ0Kdcs6Saz5FJreJSTIUr5w6WIrb2EZ-ol5ULAh7_DddSHMcTB2_Y-qzkJqEbePRbHiHLSrKyZn2z72XRIXQPv07hx7tmWFibv1kv3Z34SSUsP9zpHGQ6IGfYRsHQAg4Xqhq";
     $google_api = "AAAAMqxmg1k:APA91bFQf3rioyM-A4FecC7fCStzzyYyOc-yQIv23Lt3NnNlxGDvpFgv7jxFb0iNvwSROLI3_r0dNUFqbiPOFtvfh41vVzhNRFJ6NUDK2nY7H6Ch5Aqnc8WiRsFVn1juRBu60w9XPNZ7OQHQAvSL97S-5MWYAt8sGQ";
-   $this->sendNotification($registration_ids, $message,$google_api);
+   $this->sendNotification($device, $message,$google_api);
   //  return $Notification;
-  }
+  //}
 
 }
 

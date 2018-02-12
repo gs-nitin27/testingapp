@@ -1280,19 +1280,23 @@ else if($_REQUEST['act']=="send_offer")
   $emp_name          =  $pushobj->getdeviceid($emp_id,"M");
   $name              =  $emp_name['name'];
   $getid             =  $pushobj->getdeviceid($applicant_id,"L");
-  $device_id_apply   =  $getid['device_id'];
+  $device_id_apply   =  $getid['L_device_id'];
   $applicant_email   =  $getid['email'];
   // $name              =  $emp_name['name'];
 
 
   $req1              =  new connect_userservice();
   $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
+
+  // print_r($message);die;
    $jsondata        =  json_encode($message);
    $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
     $emailsent = new emailService();
     $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id);
    $pushobj         =  new userdataservice();
    $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
+
+  // die;
   if ($res) 
   {
    $Result = array('status' => '1','data'=>1 ,'msg'=>'Send Offer to Applicant');
