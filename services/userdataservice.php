@@ -411,7 +411,7 @@ else
 public function getdeviceid($id)
 {
   //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die;
-  $query = mysql_query("SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ");
+  $query = mysql_query("SELECT `name`,`device_id`,`email` FROM `user` WHERE `userid` = '$id' ");
   $row = mysql_num_rows($query);
   if($row == 1)
   {
