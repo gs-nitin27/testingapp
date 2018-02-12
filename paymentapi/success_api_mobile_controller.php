@@ -46,7 +46,6 @@ if($_REQUEST['act'] == "mobilePaymentSuccess")
 
         $data = array('status' => "1", "data" => []);
 	    echo json_encode($data);
-
-
 }
+
 ?>
