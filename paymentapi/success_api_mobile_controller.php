@@ -9,10 +9,8 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
 
         $paymentdata1 =  json_decode($fulldata->payuData);  
         $paymentdata = $paymentdata1->result;
-        
-      
+              
         $req = new payment();
-
         $date = date("Y-m-d");
         $date1 = explode('-', $date);
         $monthNum  = $date1[1];
@@ -21,7 +19,6 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $year = date("y");
         $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;
         $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
-
          
         $item = new stdClass();
 
@@ -51,7 +48,6 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
 
         $data = array('status' => "1", "data" => []);
 	echo json_encode($data);
-
 
 }
 ?>
