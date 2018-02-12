@@ -1256,7 +1256,7 @@ public function tournament_apply_email($cat_data, $billingdata,$userdata)
 
 public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_id)
 {
-    $query  = mysql_query("SELECT `title`,`organisation_name` FROM `gs_jobInfo` WHERE `id`= '$job_id')");
+    $query  = mysql_query("SELECT `title`,`organisation_name` FROM `gs_jobInfo` WHERE `id`= '$job_id'");
       $num    = mysql_num_rows($query);
       if($num) 
       {
@@ -1280,7 +1280,7 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
          $mail->Port = 465; 
          $mail->Username =$from;  
          $mail->Password = "2016Darkhorse";
-         $mail->SetFrom($from, $from_name);
+         $mail->SetFrom($from);
          $mail->Subject = $subject;
          $mail->Body = '<head>
   <meta charset="utf-8"> 
@@ -1408,9 +1408,9 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
             </tr>
             <tr>
                 <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-                    <p style="margin: 0;">You got offer  for the post of '.$title.' at '.$organisation_name.'
-                    <br>'.$msg.'
-                    <br><b>Date of interview:</b>  '.$date.'
+                    <p style="margin: 0;">You got offer  for the post of <b>'.$title.'</b> at <b>'.$organisation_name.'</b>
+                     <br><b>Salary:</b>  '.$salary.'
+                    <br><b>Date of Joining:</b>  '.$joining_date.'
                     </p>
                 </td>
             </tr>
@@ -1474,6 +1474,7 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
     </center>
 </body>
 '; 
+
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);

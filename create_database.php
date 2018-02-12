@@ -1261,8 +1261,13 @@ else if($_REQUEST['act']=="send_offer")
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
 
+  
+
   $emp_id            =  $userdata->emp_id;
   $applicant_id      =  $userdata->applicant_id;
+
+  // print_r(  $applicant_id);
+
   $job_id            =  $userdata->job_id;
   $salary            =  $userdata->salary;
   $joining_date      =  $userdata->joining_date;
@@ -1272,27 +1277,27 @@ else if($_REQUEST['act']=="send_offer")
   $req               =  new userdataservice();
   $res               =  $req->jobStatus($applicant_id,$job_id,$status,$salary,$joining_date);
   $pushobj           =  new userdataservice();
-  $emp_name          =  $pushobj->getdeviceid($emp_id);
+  $emp_name          =  $pushobj->getdeviceid($emp_id,"M");
   $name              =  $emp_name['name'];
-  $getid             =  $pushobj->getdeviceid($applicant_id);
+  $getid             =  $pushobj->getdeviceid($applicant_id,"L");
   $device_id_apply   =  $getid['device_id'];
   $applicant_email   =  $getid['email'];
   // $name              =  $emp_name['name'];
 
-  // print_r($applicant_email);
 
   $req1              =  new connect_userservice();
   $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
    $jsondata        =  json_encode($message);
    $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
+    $emailsent = new emailService();
+    $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id);
    $pushobj         =  new userdataservice();
    $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
   if ($res) 
   {
    $Result = array('status' => '1','data'=>1 ,'msg'=>'Send Offer to Applicant');
              echo json_encode($Result);
-    $emailsent = new emailService();
-    $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id);         
+            
   }
   else
   {

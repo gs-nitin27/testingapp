@@ -408,10 +408,16 @@ else
      */ 
 
 /*************************New Device id find**********************************/
-public function getdeviceid($id)
+public function getdeviceid($id,$user)
 {
   //echo "SELECT `name`,`device_id` FROM `user` WHERE `userid` = '$id' ";die;
-  $query = mysql_query("SELECT `name`,`device_id`,`email` FROM `user` WHERE `userid` = '$id' ");
+  if($user =="M")
+  {
+  $query = mysql_query("SELECT `name`,`M_device_id`,`email` FROM `user` WHERE `userid` = '$id' ");
+  }else
+  {
+  $query = mysql_query("SELECT `name`,`L_device_id`,`email` FROM `user` WHERE `userid` = '$id' ");
+  }
   $row = mysql_num_rows($query);
   if($row == 1)
   {
@@ -1658,7 +1664,8 @@ public function sendLitePushNotificationToGCM($device, $message)
   
 
   foreach ($device as $key => $value) {
-    $registration_ids = $value;
+    //$registration_ids = $value;
+    $registration_ids = "flYpx31I3ZI:APA91bHCQ0Kdcs6Saz5FJreJSTIUr5w6WIrb2EZ-ol5ULAh7_DddSHMcTB2_Y-qzkJqEbePRbHiHLSrKyZn2z72XRIXQPv07hx7tmWFibv1kv3Z34SSUsP9zpHGQ6IGfYRsHQAg4Xqhq";
     $google_api = "AAAAMqxmg1k:APA91bFQf3rioyM-A4FecC7fCStzzyYyOc-yQIv23Lt3NnNlxGDvpFgv7jxFb0iNvwSROLI3_r0dNUFqbiPOFtvfh41vVzhNRFJ6NUDK2nY7H6Ch5Aqnc8WiRsFVn1juRBu60w9XPNZ7OQHQAvSL97S-5MWYAt8sGQ";
    $this->sendNotification($registration_ids, $message,$google_api);
   //  return $Notification;
