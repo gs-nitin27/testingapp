@@ -29,10 +29,8 @@ public function get_tournament_sports()
 		  while ($row = mysql_fetch_assoc($query)) {
 		    	    $category = json_decode($row['events_category']);
 		    	    $category = $category->category;
-                    //json_encode($category); 
 		    	    $row['events_category'] =$category;
 		    	    $rows[] = $row;
-
 	    	}
 		  return $rows;
 	}
@@ -123,8 +121,6 @@ public function tournament_apply_catogery($tournament_id,$userid)
 		return 0;
 	}
 }
-
-
 } // End Class
 
 
