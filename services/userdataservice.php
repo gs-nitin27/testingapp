@@ -2990,6 +2990,20 @@ return array_search($date[1], $month).'-'.$date[0].'-'.$date[2];
 }
 
 
+public function offerAccept_reject($userid,$jobid)
+{
+  $query =mysql_query("UPDATE `user_jobs` SET `status` = '5' WHERE `userid` ='$userid' AND `userjob` = '$jobid'");
+  $num = mysql_affected_rows();
+  if($num)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 }//end class
 
 ?>

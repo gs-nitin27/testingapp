@@ -1312,7 +1312,30 @@ else if($_REQUEST['act']=="send_offer")
 } // End Function
 
 
+/********************Job Offers Accept/Reject***********************************/
 
+else if($_REQUEST['act'] == 'offerAccept_reject')
+{
+   $userid = $_REQUEST['userid'];
+   $jobid  = $_REQUEST['jobid'];
+   
+   $req = new userdataservice();
+
+   $res = $req->offerAccept_reject($userid,$jobid);
+
+   if($res)
+   {
+      $Result = array('status' => '1','data'=>1 ,'msg'=>'Offer Accept ');
+             echo json_encode($Result);
+   }else
+   {
+     $Result = array('status' => '0','data'=>0 ,'msg'=>'Offer Reject');
+             echo json_encode($Result);
+   }
+
+  
+
+}
 
 
 /********************Job OffersList***********************************/
