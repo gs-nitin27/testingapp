@@ -64,19 +64,22 @@ else if($_REQUEST['act'] == 'tournament_apply')
   $savebillingdata->userid = $cat_data[0]->applicant_id;
   $savebillingdata->date = $paymentdate;
 
+
+
   $emailtemp = '<div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Details</label> <table width="100%" style="border:1px solid #ccc;border-collapse:collapse"> <tbody><tr align="left"> <th style="border:1px solid #ccc">Attendee ID</th> <th style="border:1px solid #ccc">Name</th> <th style="border:1px solid #ccc">Email ID</th> </tr>'; 
 
     foreach($cat_data as $key => $value) {
         $id = $value->tournament_id.$value->category_code.$value->applicant_id;
         $tournament_id = $value->tournament_id;
         $applicant_id = $value->applicant_id;
-        $data = json_encode($applydata);
+        $data = json_encode($cat_data);
         $query_data[] =  "('$id','$value->applicant_id','$value->tournament_id',CURDATE(),'$value->fee_amount','$data','$value->organiser_id','$value->category_code')";           
         
         $emailtemp .= '<tr align="left"> <td style="border:1px solid #ccc">'.$id.'</td> <td style="border:1px solid #ccc">'.$userdata->name.'</td> <td style="border:1px solid #ccc"><a href="mailto:'.$savebillingdata->email.'" target="_blank">'.$savebillingdata->email.'</a></td> </tr>';     
         }
         $emailtemp .= '</tbody></table></div>';
-        
+
+
   $obj = new tournament_service();
   $res = $obj->apply_tournament($query_data);
 
