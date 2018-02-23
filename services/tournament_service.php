@@ -43,14 +43,8 @@ public function get_tournament_sports()
 public function apply_tournament($applydata)
  {     
 
- 	foreach($applydata as $key => $value) {
-   	    $id = $value->tournament_id.$value->category_code.$value->applicant_id;
-        $tournament_id = $value->tournament_id;
-        $applicant_id = $value->applicant_id;
-        $data = json_encode($applydata);
-        $query_data[] =  "('$id','$value->applicant_id','$value->tournament_id',CURDATE(),'$value->fee_amount','$data','$value->organiser_id','$value->category_code')";           
-           }
-$query_data = implode(',', $query_data);
+
+$query_data = implode(',', $applydata);
 $fields = "INSERT INTO `gs_tournament_application`(`id`, `applicant_id`, `tournament_id`, `date_applied`, `fee_amount`, `application_data`, `organiser_id`, `category_code`) VALUES".$query_data;
 $query = mysql_query($fields);
 if($query)

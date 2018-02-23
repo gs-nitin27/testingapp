@@ -1279,6 +1279,7 @@ else if($_REQUEST['act']=="send_offer")
   $pushobj           =  new userdataservice();
   $emp_name          =  $pushobj->getdeviceid($emp_id,"M");
   $name              =  $emp_name['name'];
+  $emp_email         =  $emp_name['email'];
   $getid             =  $pushobj->getdeviceid($applicant_id,"L");
   $device_id_apply   =  $getid['L_device_id'];
   $applicant_email   =  $getid['email'];
@@ -1289,14 +1290,13 @@ else if($_REQUEST['act']=="send_offer")
   $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
 
   // print_r($message);die;
-   $jsondata        =  json_encode($message);
-   $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
-    $emailsent = new emailService();
-    $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id);
-   $pushobj         =  new userdataservice();
-   $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
+  $jsondata        =  json_encode($message);
+  $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
+  $emailsent = new emailService();
+  $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id,$emp_email,$name);
+  $pushobj         =  new userdataservice();
+  $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
 
-  // die;
   if ($res) 
   {
    $Result = array('status' => '1','data'=>1 ,'msg'=>'Send Offer to Applicant');
@@ -1912,12 +1912,13 @@ else if($_REQUEST['act'] == "interview_schedule")
   $userdata          =  $request->userdata($employer_id);
 
   $employer_name     =  $userdata['name']; 
+  $employer_email    =  $userdata['email'];
   $fwhere            =  "`id`= $job_id"; 
   $job_user          =  $request->jobsearch_user($fwhere);
   $title             =  $job_user[0]['title']; 
   $organisation_name =  $job_user[0]['organisation_name'];  
 
-  $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue);
+  $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue,$employer_email);
 
 
   if ($emailnote) 
