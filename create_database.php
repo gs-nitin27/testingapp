@@ -2035,13 +2035,18 @@ else if($_REQUEST['act'] == 'user_activities')
 {
   $userid = $_REQUEST['userid'];
   $module = $_REQUEST['module'];
-  //print_r($_REQUEST);die;
   $obj    = new userdataservice();
+
+  if($module == "1")
+  {
   $resp   = $obj->get_user_activities($userid,$module);
-
-
-
-
+  }
+  else if($module == "3")
+  {
+   $resp   = $obj->get_user_activities_tournament($userid,$module);  
+  }
+  
+  echo json_encode($resp);
 
 
 }

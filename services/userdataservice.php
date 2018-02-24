@@ -3006,10 +3006,10 @@ public function offerAccept_reject($userid,$jobid)
 
 public function get_user_activities($userid,$module)
 {
-$bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
+  $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
 if($module == '1')
 { 
-$j_applicant = mysql_query("SELECT `userjob`, `status` FROM `user_jobs` WHERE `userid` = '$userid'");
+  $j_applicant = mysql_query("SELECT `userjob`, `status` FROM `user_jobs` WHERE `userid` = '$userid'");
 if(mysql_num_rows($bookmark)>0)
   { 
     $row = mysql_fetch_assoc($bookmark); 
@@ -3017,44 +3017,96 @@ if(mysql_num_rows($bookmark)>0)
     $favarray = split(",",$ent_id);
     $job_id = $ent_id.",";
   } 
+
+
 if(mysql_num_rows($j_applicant)>0)
-    {
-      while ($rowdata = mysql_fetch_assoc($j_applicant)) {
-      $data1[] = $rowdata['userjob'];
-      $apply_array[$rowdata['userjob']] = $rowdata['status']; 
-    }
-   //print_r($apply_array);die;
+  {
+    while ($rowdata = mysql_fetch_assoc($j_applicant)) {
+    $data1[] = $rowdata['userjob'];
+    $apply_array[$rowdata['userjob']] = $rowdata['status']; 
+  }
     $data   = implode(',',$data1);
-    } 
-      $data   = $job_id.$data;
-      $query  = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` IN ($data)");
+  }
+    $data   = $job_id.$data;
+   
+     
+  $query  = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` IN ($data)");
   if(mysql_num_rows($query)>0)
   {
-    while ($data_block = mysql_fetch_assoc($query)) {
-           $favkey = array_search($data_block['id'], $favarray);
-           if($favkey != null)
-           {
-            $data_block['fav']='1';
-           }else
-           {
-            $data_block['fav']='0';
-           }
+    while ($data_block = mysql_fetch_assoc($query)) 
+    {
+          $favkey = array_search($data_block['id'], $favarray);
+          if($favkey != null)
+          {
+           $data_block['fav']='1';
+          }else
+          {
+           $data_block['fav']='0';
+          }
            $applystatuskey = array_search($data_block['id'], $data1);
-           if($applystatuskey != "")
-           { echo "bbbb--";//die;
+          if($applystatuskey != "")
+           { 
             $data_block['job_status']=$apply_array[$data_block['id']];
            }else
-           {echo "asaasa--111==";
+           {
             $data_block['job_status']='0';
            }
            unset($favarray[$favkey]);
            $datalist[] = $data_block;
     }
-           print_r($datalist);
+           return $datalist;
    }
   }
 }
 
+
+public  function get_user_activities_tournament($userid,$module)
+{
+$bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'"); 
+ if(mysql_num_rows($bookmark)>0)
+  { 
+    $row = mysql_fetch_assoc($bookmark); 
+    $tournamentid = $row['userfav']; 
+    $favarray = split(",",$tournamentid);
+    $tournament_id = $tournamentid.",";
+  } 
+   $tournament_apply = mysql_query("SELECT `usertournament`,`status` FROM `user_tournaments` WHERE `userid` = '$userid'");
+ if(mysql_num_rows($tournament_apply))
+ {
+  while ($t_data = mysql_fetch_assoc($tournament_apply))
+  {
+    $tournament_apply_id[] = $t_data['usertournament'];
+  }
+ }
+ $tournament_apply_ids   = implode(',',$tournament_apply_id);
+ $tour_id_data = $tournament_id.$tournament_apply_ids;
+ $tournament_data =mysql_query("SELECT * FROM `gs_tournament_info` WHERE `id` IN ($tour_id_data)");
+ if(mysql_num_rows($tournament_data))
+ {
+  while ($trows = mysql_fetch_assoc($tournament_data))
+  { 
+    $tfav = in_array($trows['id'], $favarray); 
+    if($tfav !=0)
+    {
+       $trows['fav']='1';
+    }
+    else
+    {
+      $trows['fav']='0'; 
+    }
+    $tapply = in_array($trows['id'], $tournament_apply_id);
+    if($tapply !=0)
+    {
+     $trows['tournament_status']='1'; 
+    }else
+    {
+      $trows['tournament_status']='0'; 
+    }
+    $tdata[] = $trows;
+  }
+}
+  return $tdata;
+}
 
 }//end class
 
