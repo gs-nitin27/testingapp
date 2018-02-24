@@ -9,7 +9,6 @@ include('getSportyLite/liteservice.php');
 include('services/connect_userservice.php');
 include('services/paymentServices.php');
 include('services/tournament_service.php');
-
  
 error_reporting(E_ERROR | E_PARSE);
 
@@ -41,9 +40,10 @@ else if($_REQUEST['act'] == "tournament_sports")
     {
       $resp = array('status' =>'0' , 'data'=>[],'msg'=>'Failure');
     }
-echo json_encode($resp);
-
+  echo json_encode($resp);
 }
+
+
 else if($_REQUEST['act'] == 'tournament_apply')
 {
   $applydata = json_decode(file_get_contents("php://input"));
@@ -64,8 +64,6 @@ else if($_REQUEST['act'] == 'tournament_apply')
   $savebillingdata->userid = $cat_data[0]->applicant_id;
   $savebillingdata->date = $paymentdate;
 
-
-
   $emailtemp = '<div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Details</label> <table width="100%" style="border:1px solid #ccc;border-collapse:collapse"> <tbody><tr align="left"> <th style="border:1px solid #ccc">Attendee ID</th> <th style="border:1px solid #ccc">Name</th> <th style="border:1px solid #ccc">Email ID</th> </tr>'; 
 
     foreach($cat_data as $key => $value) {
@@ -79,11 +77,8 @@ else if($_REQUEST['act'] == 'tournament_apply')
         }
         $emailtemp .= '</tbody></table></div>';
 
-
   $obj = new tournament_service();
   $res = $obj->apply_tournament($query_data);
-
-  //$res = 1;
 
   if($res != 0)
   { 
@@ -100,25 +95,22 @@ else if($_REQUEST['act'] == 'tournament_apply')
   echo json_encode($response);
 }
 
-
 else if($_REQUEST['act'] == 'participant_list')
 {
 $tournament_id = $_REQUEST['id'];
 $where  = "WHERE `tournament_id` = '$tournament_id'";
 $obj    = new tournament_service();
 $resp   = $obj->get_participant_list($where);
-if($resp != 0)
+if($resp != 0) 
   {
   $result = array('status' =>'1','data'=>$resp , 'msg'=>'Success');
   }
-  else
-  {
+  else 
+  {  
   $result = array('status' =>'0','data'=>$resp , 'msg'=>'failure');  
   }
 echo json_encode($result);
 }
-
-
 
 else if($_REQUEST['act'] == "tournament_appy_catogery")
 {
@@ -126,7 +118,6 @@ else if($_REQUEST['act'] == "tournament_appy_catogery")
    $userid = $_REQUEST['userid'];
 
    $req = new tournament_service();
-
 
    $res = $req->tournament_apply_catogery($tournament_id,$userid);
 
@@ -194,9 +185,6 @@ else if($_REQUEST['act'] == "tournament_appy_catogery")
 //   ]
 // }';
 // $events = json_decode($events);
-
-
-
 
 
 // }

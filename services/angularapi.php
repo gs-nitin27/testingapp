@@ -214,6 +214,7 @@ $query = mysql_query("SELECT * FROM `gs_eventinfo` WHERE `userid` = '$userid' OR
   }
 }
 
+
 public function getjoblist($userid)
 {
   $query = mysql_query("SELECT `id`,`userid`,`title`,`description`,`sport`,`job_link`,`image`,`location` ,`publish` FROM `gs_jobInfo` WHERE `userid` = '$userid' ORDER BY id DESC");

@@ -140,7 +140,6 @@ public function check_attendance($data1)
        $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
 	   $data[] 				=  $attendance_data;
 
-
 		} // End of Function
 	}
    return $data;
