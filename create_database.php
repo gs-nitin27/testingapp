@@ -2031,7 +2031,20 @@ else if($_REQUEST['act'] == "update_deviceid")
   }
 }
 
+else if($_REQUEST['act'] == 'user_activities')
+{
+  $userid = $_REQUEST['userid'];
+  $module = $_REQUEST['module'];
+  //print_r($_REQUEST);die;
+  $obj    = new userdataservice();
+  $resp   = $obj->get_user_activities($userid,$module);
 
+
+
+
+
+
+}
 
 
 

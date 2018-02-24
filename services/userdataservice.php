@@ -3004,6 +3004,58 @@ public function offerAccept_reject($userid,$jobid)
   }
 }
 
+public function get_user_activities($userid,$module)
+{
+$bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
+if($module == '1')
+{ 
+$j_applicant = mysql_query("SELECT `userjob`, `status` FROM `user_jobs` WHERE `userid` = '$userid'");
+if(mysql_num_rows($bookmark)>0)
+  { 
+    $row = mysql_fetch_assoc($bookmark); 
+    $ent_id = $row['userfav']; 
+    $favarray = split(",",$ent_id);
+    $job_id = $ent_id.",";
+  } 
+if(mysql_num_rows($j_applicant)>0)
+    {
+      while ($rowdata = mysql_fetch_assoc($j_applicant)) {
+      $data1[] = $rowdata['userjob'];
+      $apply_array[$rowdata['userjob']] = $rowdata['status']; 
+    }
+   //print_r($apply_array);die;
+    $data   = implode(',',$data1);
+    } 
+      $data   = $job_id.$data;
+      $query  = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` IN ($data)");
+  if(mysql_num_rows($query)>0)
+  {
+    while ($data_block = mysql_fetch_assoc($query)) {
+           $favkey = array_search($data_block['id'], $favarray);
+           if($favkey != null)
+           {
+            $data_block['fav']='1';
+           }else
+           {
+            $data_block['fav']='0';
+           }
+           $applystatuskey = array_search($data_block['id'], $data1);
+           if($applystatuskey != "")
+           { echo "bbbb--";//die;
+            $data_block['job_status']=$apply_array[$data_block['id']];
+           }else
+           {echo "asaasa--111==";
+            $data_block['job_status']='0';
+           }
+           unset($favarray[$favkey]);
+           $datalist[] = $data_block;
+    }
+           print_r($datalist);
+   }
+  }
+}
+
+
 }//end class
 
 ?>
