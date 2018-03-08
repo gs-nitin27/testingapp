@@ -3015,6 +3015,7 @@ if(mysql_num_rows($bookmark)>0)
     $row = mysql_fetch_assoc($bookmark); 
     $ent_id = $row['userfav']; 
     $favarray = split(",",$ent_id);
+   
    // $job_id = $ent_id.",";
   } 
 if(mysql_num_rows($j_applicant)>0)
@@ -3034,11 +3035,12 @@ else
   
   $query  = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image, IFNull(`is_native`, '') AS is_native FROM `gs_jobInfo` WHERE `id` IN ($data)");
   if(mysql_num_rows($query)>0)
-  {
+  { 
     while ($data_block = mysql_fetch_assoc($query)) 
-    {
-          $favkey = array_search($data_block['id'], $favarray);
-          if($favkey != null)
+    {     //echo $data_block['id'];
+
+          //$favkey = array_search($data_block['id'], $favarray);
+          if(in_array($data_block['id'], $favarray))
           {
            $data_block['fav']='1';
           }else
