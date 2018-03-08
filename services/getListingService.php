@@ -89,7 +89,7 @@ public function getProfession($prof_type)
 {
 if (isset($prof_type)) 
 {
-   $query = mysql_query("SELECT DISTINCT `id`,`profession`,`profession_type` FROM `gs_profession` where `profession_type` LIKE 'P'");
+   $query = mysql_query("SELECT DISTINCT `id`,`profession`,`profession_type` FROM `gs_profession` where `profession_type` LIKE '$prof_type'");
 }
 else
 {
