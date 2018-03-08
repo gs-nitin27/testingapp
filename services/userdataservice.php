@@ -3015,21 +3015,23 @@ if(mysql_num_rows($bookmark)>0)
     $row = mysql_fetch_assoc($bookmark); 
     $ent_id = $row['userfav']; 
     $favarray = split(",",$ent_id);
-    $job_id = $ent_id.",";
+   // $job_id = $ent_id.",";
   } 
-
-
 if(mysql_num_rows($j_applicant)>0)
+{
+  while ($rowdata = mysql_fetch_assoc($j_applicant)) 
   {
-    while ($rowdata = mysql_fetch_assoc($j_applicant)) {
     $data1[] = $rowdata['userjob'];
     $apply_array[$rowdata['userjob']] = $rowdata['status']; 
   }
-    $data   = implode(',',$data1);
-  }
-    $data   = $job_id.$data;
-   
-     
+  $data   = implode(',',$data1);
+  $data   = $ent_id.','.$data;
+}
+else
+{
+  $data   = $ent_id;
+}
+  
   $query  = mysql_query("SELECT * FROM `gs_jobInfo` WHERE `id` IN ($data)");
   if(mysql_num_rows($query)>0)
   {
@@ -3068,20 +3070,25 @@ $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$us
     $row = mysql_fetch_assoc($bookmark); 
     $tournamentid = $row['userfav']; 
     $favarray = split(",",$tournamentid);
-    $tournament_id = $tournamentid.",";
+    //$tournament_id = $tournamentid.",";
   } 
-   $tournament_apply = mysql_query("SELECT `usertournament`,`status` FROM `user_tournaments` WHERE `userid` = '$userid'");
- if(mysql_num_rows($tournament_apply))
+   $tournament_apply = mysql_query("SELECT `tournament_id`,`category_code` FROM `gs_tournament_application` WHERE `userid` = '$userid'");
+ if(mysql_num_rows($tournament_apply)>0)
  {
   while ($t_data = mysql_fetch_assoc($tournament_apply))
   {
-    $tournament_apply_id[] = $t_data['usertournament'];
+    $tournament_apply_id[] = $t_data['tournament_id'];
   }
- }
  $tournament_apply_ids   = implode(',',$tournament_apply_id);
- $tour_id_data = $tournament_id.$tournament_apply_ids;
+ $tour_id_data = $tournamentid.','.$tournament_apply_ids;
+ }else
+ {
+  $tour_id_data = $tournamentid;
+ }
+ 
+ 
  $tournament_data =mysql_query("SELECT * FROM `gs_tournament_info` WHERE `id` IN ($tour_id_data)");
- if(mysql_num_rows($tournament_data))
+ if(mysql_num_rows($tournament_data)>0)
  {
   while ($trows = mysql_fetch_assoc($tournament_data))
   { 
@@ -3092,22 +3099,76 @@ $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$us
     }
     else
     {
-      $trows['fav']='0'; 
+       $trows['fav']='0'; 
     }
     $tapply = in_array($trows['id'], $tournament_apply_id);
     if($tapply !=0)
     {
      $trows['tournament_status']='1'; 
-    }else
+    }
+    else
     {
       $trows['tournament_status']='0'; 
     }
     $tdata[] = $trows;
   }
+ return $tdata;
+}else
+{
+  return 0;
 }
-  return $tdata;
+  
 }
 
+
+public function get_user_activities_event($userid,$module)
+{ 
+  $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
+  if(mysql_num_rows($bookmark)>0)
+  {
+    $row = mysql_fetch_assoc($bookmark);
+    $event_id = $row['userfav'];
+    $usereventdata = mysql_query("SELECT * FROM `gs_eventinfo` WHERE `id` IN ($event_id)");
+    if(mysql_num_rows($usereventdata))
+     {
+        while ($eventrow = mysql_fetch_assoc($usereventdata)) 
+        {
+          $eventrow['fav'] = '1';
+          $eventdata[]   = $eventrow;
+        }
+     }
+    return $eventdata;//die;
+  }
+  else
+  {
+    return 0;
+  }
+ }
+
+ public function get_user_activities_articles($userid,$module)
+ {
+  $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
+  if(mysql_num_rows($bookmark)>0)
+  {
+    $row = mysql_fetch_assoc($bookmark);
+    $resrce_id = $row['userfav'];
+    $userresdata = mysql_query("SELECT * FROM `gs_resources` WHERE `id` IN ($resrce_id)");
+    if(mysql_num_rows($userresdata))
+     {
+        while ($article_row = mysql_fetch_assoc($userresdata)) 
+        {
+          $article_row['fav'] = '1';
+          $res_data[] = $article_row;
+        }
+     }
+    return $res_data;//die;
+  }
+  else
+  {
+    return 0;
+  }
+
+ }
 }//end class
 
 ?>

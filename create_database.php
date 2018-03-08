@@ -2045,10 +2045,27 @@ else if($_REQUEST['act'] == 'user_activities')
   {
    $resp   = $obj->get_user_activities_tournament($userid,$module);  
   }
+  else if($module == "2")
+  {
+  $resp   = $obj->get_user_activities_event($userid,$module);
+  }
+  else if($module == "4")
+  {
+  $resp   = $obj->get_user_activities_event($userid,$module);
+  }
+  else if($module == "6")
+  {
+  $resp   = $obj->get_user_activities_articles($userid,$module);
+  }
   
-  echo json_encode($resp);
-
-
+ if($resp != 0)
+ {
+  $ret_val = array('status' => '1','data'=>$resp , 'message'=>'Success' );
+ }else
+ {
+  $ret_val = array('status' => '0','data'=>[] , 'message'=>'Failure' );
+ }
+ echo json_encode($ret_val);
 }
 
 
