@@ -2049,10 +2049,6 @@ else if($_REQUEST['act'] == 'user_activities')
   {
   $resp   = $obj->get_user_activities_event($userid,$module);
   }
-  else if($module == "4")
-  {
-  $resp   = $obj->get_user_activities_event($userid,$module);
-  }
   else if($module == "6")
   {
   $resp   = $obj->get_user_activities_articles($userid,$module);
