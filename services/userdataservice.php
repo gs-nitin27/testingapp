@@ -3005,7 +3005,7 @@ public function offerAccept_reject($userid,$jobid)
 }
 
 public function get_user_activities($userid,$module)
-{
+{    
   $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
 if($module == '1')
 { 
@@ -3014,10 +3014,20 @@ if(mysql_num_rows($bookmark)>0)
   { 
     $row = mysql_fetch_assoc($bookmark); 
     $ent_id = $row['userfav']; 
+    if($ent_id != '')
+    {
     $favarray = split(",",$ent_id);
-   
-   // $job_id = $ent_id.",";
-  } 
+    $ent_id = $ent_id.',';
+    }
+  else
+    {
+     $ent_id = null;
+    }
+  }
+  else
+  {
+   $ent_id = null;
+  }
 if(mysql_num_rows($j_applicant)>0)
 {
   while ($rowdata = mysql_fetch_assoc($j_applicant)) 
@@ -3026,21 +3036,17 @@ if(mysql_num_rows($j_applicant)>0)
     $apply_array[$rowdata['userjob']] = $rowdata['status']; 
   }
   $data   = implode(',',$data1);
-  $data   = $ent_id.','.$data;
+  $data   = $ent_id.$data;
 }
 else
 {
   $data   = $ent_id;
 }
-  
   $query  = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image, IFNull(`is_native`, '') AS is_native FROM `gs_jobInfo` WHERE `id` IN ($data)");
   if(mysql_num_rows($query)>0)
   { 
     while ($data_block = mysql_fetch_assoc($query)) 
-    {     //echo $data_block['id'];
-
-          //$favkey = array_search($data_block['id'], $favarray);
-          if(in_array($data_block['id'], $favarray))
+    {     if(in_array($data_block['id'], $favarray))
           {
            $data_block['fav']='1';
           }else
@@ -3048,7 +3054,7 @@ else
            $data_block['fav']='0';
           }
            $applystatuskey = array_search($data_block['id'], $data1);
-          if($applystatuskey != "")
+          if($applystatuskey >= 0)
            { 
             $data_block['job_status']=$apply_array[$data_block['id']];
            }else
@@ -3070,11 +3076,22 @@ $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$us
  if(mysql_num_rows($bookmark)>0)
   { 
     $row = mysql_fetch_assoc($bookmark); 
-    $tournamentid = $row['userfav']; 
-    $favarray = split(",",$tournamentid);
-    //$tournament_id = $tournamentid.",";
+    $ent_id = $row['userfav']; 
+    if($ent_id != '')
+    {
+    $favarray = split(",",$ent_id);
+    $ent_id = $ent_id.',';
+    }
+  else
+    {
+     $ent_id = null;
+    }
+  }
+  else
+  {
+   $ent_id = null;
   } 
-   $tournament_apply = mysql_query("SELECT `tournament_id`,`category_code` FROM `gs_tournament_application` WHERE `userid` = '$userid'");
+   $tournament_apply = mysql_query("SELECT DISTINCT `tournament_id`FROM `gs_tournament_application` WHERE `userid` = '$userid'");
  if(mysql_num_rows($tournament_apply)>0)
  {
   while ($t_data = mysql_fetch_assoc($tournament_apply))
@@ -3082,10 +3099,10 @@ $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$us
     $tournament_apply_id[] = $t_data['tournament_id'];
   }
  $tournament_apply_ids   = implode(',',$tournament_apply_id);
- $tour_id_data = $tournamentid.','.$tournament_apply_ids;
+ $tour_id_data = $ent_id.$tournament_apply_ids;
  }else
  {
-  $tour_id_data = $tournamentid;
+  $tour_id_data = $ent_id;
  }
  
  
