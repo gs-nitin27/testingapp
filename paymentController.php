@@ -62,11 +62,11 @@ else if($_REQUEST['act'] == "getTransactionList")
 	$res = $req->getTransactionList($userid);
     if($res != 0)
 	  {
-	   $res = array('status' => $res ,'msg' => 'Success');
+	   $res = array('status' =>'1' , 'data'=>$res ,'msg' => 'Success');
 	  }
   else
 	  {
-	   $res = array('status' => $res ,'msg' => 'Failure');
+	   $res = array('status' =>'0' , 'data'=>[] ,'msg' => 'Failure');
 	  }
     echo json_encode($res);
 }
