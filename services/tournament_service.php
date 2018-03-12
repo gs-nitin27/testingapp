@@ -3,7 +3,6 @@ class tournament_service
 {
  public function tournament_participants_list($tournament_id)
  {
-
     $query =mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `userid` FROM `user_tournaments` WHERE `usertournament` = $tournament_id)");
 			if(mysql_num_rows($query)>0)
 			{
@@ -41,20 +40,18 @@ public function get_tournament_sports()
 }
 
 public function apply_tournament($applydata)
- {     
-
-
+{     
 $query_data = implode(',', $applydata);
 $fields = "INSERT INTO `gs_tournament_application`(`id`, `applicant_id`, `tournament_id`, `date_applied`, `fee_amount`, `application_data`, `organiser_id`, `category_code`) VALUES".$query_data;
 $query = mysql_query($fields);
 if($query)
-{   
-	return 1;
-}
+	{   
+		return 1;
+	}
 else
-{
-	return 0;
-}
+	{
+		return 0;
+	}
 }
 
 public function get_participant_list($where)
