@@ -887,6 +887,7 @@ if($query1)
 while($row = mysql_fetch_assoc($query1))
 {
   $row['tour']='0';
+  $row['apply_data']=[];
   $row['fav']='0';
   if($row['category'] == null)
   {
@@ -1403,6 +1404,7 @@ $query  = mysql_query("SELECT `application_data`,`tournament_id` FROM `gs_tourna
                 if($res[$key]['id'] == $row['tournament_id'])
                 {  
                  $res[$key]['tour'] = '1';
+                 $res[$key]['apply_data'][] = json_decode($row['application_data']);
                 }
               }
           }
