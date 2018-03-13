@@ -1432,7 +1432,7 @@ else if($_REQUEST['act'] == "gs_searching")
  $req           =   new liteservice();
    if(empty($keyword)) 
    {
-       $keyword    = '' ;
+       $keyword    = '';
    }
    else
    {
@@ -1478,10 +1478,10 @@ else if($_REQUEST['act'] == "gs_searching")
                                $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
-                         if ($module=='2')
-                          {
-                            $response      = $request ->getuserEvent($response, $userid);
-                          } 
+                         // if ($module=='2')
+                         //  {
+                         //    $response      = $request ->getuserEvent($response, $userid);
+                         //  } 
                           if ($module=='3') 
                           {
                             $response      = $request ->getuserTournament($response, $userid);

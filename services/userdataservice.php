@@ -1342,6 +1342,8 @@ public function getuserEvent($res,$userid)
 $query  = mysql_query("SELECT `userevent` FROM `user_events` WHERE `userid` = '$userid' AND `status` >= '1' ");
     if(mysql_num_rows($query)>0)
     {
+
+
           while($row = mysql_fetch_assoc($query))
           {
                     $data = $row;
@@ -1391,50 +1393,29 @@ $query  = mysql_query("SELECT `userevent` FROM `user_events` WHERE `userid` = '$
 
 public function getuserTournament($res,$userid)
 {
-$query  = mysql_query("SELECT `usertournament` FROM `user_tournaments` WHERE `userid` = '$userid' AND `status` >= '1' ");
+$query  = mysql_query("SELECT `application_data`,`tournament_id` FROM `gs_tournament_application` WHERE `applicant_id` = '$userid'");
     if(mysql_num_rows($query)>0)
-    {
-          while($row = mysql_fetch_assoc($query))
-          {
-                    $data = $row;
-                    $value =$data['usertournament']; 
-                    $size = sizeof($res);
-                    for($j = 0 ; $j< $size ; $j++)
-                    {  
-                          $keyval = $res[$j]['id'];
-                          if($keyval != $value)
-                          {
-                                 array_push($res[$j]['tour'], 0);
-                                  $val1 = "0";
-                                  if($res[$j]['tour'] != "1")
-                                  {
-                                   $res[$j]['tour'] = $val1;
-                                  }
-                                  else
-                                  {
-                                     $res[$j]['tour'] = "1";
-                                  }
-                          }
-                          else if($keyval == $value)
-                          {      
-                              array_push($res[$j]['tour'], "1");
-                              $res[$j]['tour'] = "1";   
-                          }
-                     }
+    {     
+      while($row = mysql_fetch_assoc($query))
+          {  
+              foreach ($res as $key => $value) 
+              {  
+                if($res[$key]['id'] == $row['tournament_id'])
+                {  
+                 $res[$key]['tour'] = '1';
+                }
+              }
           }
-           return $res;
     }
-    else
-    {
-          $size = sizeof($res);
-          for($i = 0 ; $i<$size ; $i++)
-          {
-           array_push($res[$i]['tour'], 0);
-                    $res[$i]['tour'] = "0";
-          }
-          return $res;
-    }
-
+    // else
+    // {
+    //        foreach ($res as $key => $value) 
+    //           {  
+    //            $res[$key]['tour_apply'] = '0';
+                
+    //           }
+    // }
+return $res;
 
 }// End Function
 
