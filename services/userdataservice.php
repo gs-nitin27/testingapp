@@ -950,13 +950,7 @@ $rows[] = $row;
 
     error_reporting(E_ERROR | E_PARSE);//to remove warning message due to array puch function
       $query = mysql_query("SELECT `userfav` FROM  `users_fav` WHERE `userid` = '$id' AND `module` = '$type'");
-
-
-
-
-
-
-        if($type == '1' || $type == '2' || $type == '3')
+    if($type == '1' || $type == '2' || $type == '3')
         {
 
          $type = 'id';
@@ -1312,11 +1306,15 @@ public function event_status($id,$userid)
 
 public function tournament_status($id,$userid)
 { 
-  $query  = mysql_query("SELECT *FROM `user_tournaments` WHERE `userid` = '$userid' AND `usertournament` = $id ");
+  $query  = mysql_query("SELECT `application_data`,`tournament_id` FROM `gs_tournament_application` WHERE `applicant_id` = '$userid' AND `tournament_id` = '$id'" );
     if(mysql_num_rows($query)>0)
-    {
-          $row = mysql_fetch_assoc($query);
-          return $row['status'];
+    {  while ($row = mysql_fetch_assoc($query)){
+     
+       $rows[] = json_decode($row['application_data']);
+    
+    }
+     return $rows;     
+          
     }
     else
     {
@@ -1324,16 +1322,6 @@ public function tournament_status($id,$userid)
     }     
 
 }// End Function
-
-
-
-
-
-
-
-
-
-
 
 /*************************Function for Get The Event***************************/
 

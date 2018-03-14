@@ -917,7 +917,15 @@ else if($_REQUEST['act'] == "getsearchview")
             for ($i=0; $i <count($res) ; $i++)
             {  $request         =   new userdataservice();
                $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
-               $res[$i]['tour'] = $tour_status;
+               if($tour_status != 0)
+               {
+                $res[$i]['tour'] = '1';
+                $res[$i]['apply_data'] = $tour_status;
+               }else
+               {
+                $res[$i]['tour'] = '0';
+                $res[$i]['apply_data'] = [];
+               }
                $response        = $res; 
             }
           }
