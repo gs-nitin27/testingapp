@@ -477,7 +477,7 @@ $item = json_decode(file_get_contents("php://input"));
 // $item->image                 = $data1->image; 
 // $item->salary                = $data1->salary; 
 $req = new userdataservice();
-print_r($item);
+//print_r($item);
 $res = $req->create_job($item);
 if($res != 0)
 { 
