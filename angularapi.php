@@ -538,10 +538,11 @@ else if($_REQUEST['act'] == 'addOrg')
 {
 $data = json_decode(file_get_contents("php://input"));
 $item                 =  new stdClass();
+$item->id           =  $data->id;
 $item->userid       =  $data->userid;
 $item->org_name     =  $data->org_name;
 $item->about        =  $data->about;
-$item->address1     =  $data->address1 ;
+$item->address1     =  $data->address1;
 $item->address2     =  $data->address2;
 $item->city         =  $data->city;
 $item->state        =  $data->state;

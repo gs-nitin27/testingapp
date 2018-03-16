@@ -917,7 +917,15 @@ else if($_REQUEST['act'] == "getsearchview")
             for ($i=0; $i <count($res) ; $i++)
             {  $request         =   new userdataservice();
                $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
-               $res[$i]['tour'] = $tour_status;
+               if($tour_status != 0)
+               {
+                $res[$i]['tour'] = '1';
+                $res[$i]['apply_data'] = $tour_status;
+               }else
+               {
+                $res[$i]['tour'] = '0';
+                $res[$i]['apply_data'] = [];
+               }
                $response        = $res; 
             }
           }
@@ -1432,7 +1440,7 @@ else if($_REQUEST['act'] == "gs_searching")
  $req           =   new liteservice();
    if(empty($keyword)) 
    {
-       $keyword    = '' ;
+       $keyword    = '';
    }
    else
    {
@@ -1478,10 +1486,10 @@ else if($_REQUEST['act'] == "gs_searching")
                                $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
-                         if ($module=='2')
-                          {
-                            $response      = $request ->getuserEvent($response, $userid);
-                          } 
+                         // if ($module=='2')
+                         //  {
+                         //    $response      = $request ->getuserEvent($response, $userid);
+                         //  } 
                           if ($module=='3') 
                           {
                             $response      = $request ->getuserTournament($response, $userid);
@@ -2045,10 +2053,23 @@ else if($_REQUEST['act'] == 'user_activities')
   {
    $resp   = $obj->get_user_activities_tournament($userid,$module);  
   }
+  else if($module == "2")
+  {
+  $resp   = $obj->get_user_activities_event($userid,$module);
+  }
+  else if($module == "6")
+  {
+  $resp   = $obj->get_user_activities_articles($userid,$module);
+  }
   
-  echo json_encode($resp);
-
-
+ if($resp != 0)
+ {
+  $ret_val = array('status' => '1','data'=>$resp , 'message'=>'Success' );
+ }else
+ {
+  $ret_val = array('status' => '0','data'=>[] , 'message'=>'Failure' );
+ }
+ echo json_encode($ret_val);
 }
 
 

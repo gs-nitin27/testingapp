@@ -448,14 +448,24 @@ if($tes)
   }
   //  return $item->prof_id;
 
-  }else{
+  }
+  else
+  {
     return 0;
   }
 }
 
 public function addOrg($item)
-{
-  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')");
+{ 
+  if($item->id == 0)
+    {
+       $update = '';  
+    }
+    else
+    { 
+      $update = "ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin'";
+    }
+  $query = mysql_query("INSERT INTO `gs_org`(`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')".$update);
   if($query)
   {
     return 1;
