@@ -443,50 +443,51 @@ else
 
 //********* CODE FOR CREATING JOBS **********//
 
-else if($_POST['act']=="createjob")
+else if($_REQUEST['act']=="createjob")
 {
-$data1 = json_decode($_REQUEST[ 'data' ]);
-$item = new stdClass(); 
-$item->id                    = $data1->id;
-$item->userid                = $data1->userid;
-$item->title                 = $data1->title;
-$item->type                  = $data1->type;
-$item->sports                = $data1->sports;
-$item->gender                = $data1->gender;
-$item->work_exp              = $data1->work_experience;
-$item->desc                  = $data1->description;
-$item->desiredskill          = $data1->desired_skills;
-$item->qualification         = $data1->qualification;
-$item->keyreq                = $data1->key_requirement;
-$item->org_address1          = $data1->org_address1;
-$item->org_address2          = $data1->org_address2;
-$item->org_city              = $data1->org_city;
-$item->org_state             = $data1->org_state;
-$item->org_pin               = $data1->org_pin;
-$item->org_name              = $data1->organisation_name;
-$item->about                 = $data1->about;
-$item->address1              = $data1->address1; 
-$item->address2              = $data1->address2; 
-$item->state                 = $data1->state;
-$item->city                  = $data1->city;
-$item->pin                   = $data1->pin;  
-$item->name                  = $data1->name;
-$item->contact               = $data1->contact;
-$item->email                 = $data1->email_app_collection;
-$item->image                 = $data1->image; 
-$item->salary                = $data1->salary; 
+$item = json_decode(file_get_contents("php://input"));
+//print_r($data1);
+// $item = new stdClass(); 
+// $item->id                    = $data1->id;
+// $item->userid                = $data1->userid;
+// $item->title                 = $data1->title;
+// $item->type                  = $data1->type;
+// $item->sports                = $data1->sports;
+// $item->gender                = $data1->gender;
+// $item->work_exp              = $data1->work_experience;
+// $item->desc                  = $data1->description;
+// $item->desiredskill          = $data1->desired_skills;
+// $item->qualification         = $data1->qualification;
+// $item->keyreq                = $data1->key_requirement;
+// $item->org_address1          = $data1->org_address1;
+// $item->org_address2          = $data1->org_address2;
+// $item->org_city              = $data1->org_city;
+// $item->org_state             = $data1->org_state;
+// $item->org_pin               = $data1->org_pin;
+// $item->org_name              = $data1->organisation_name;
+// $item->about                 = $data1->about;
+// $item->address1              = $data1->address1; 
+// $item->address2              = $data1->address2; 
+// $item->state                 = $data1->state;
+// $item->city                  = $data1->city;
+// $item->pin                   = $data1->pin;  
+// $item->name                  = $data1->name;
+// $item->contact               = $data1->contact;
+// $item->email                 = $data1->email_app_collection;
+// $item->image                 = $data1->image; 
+// $item->salary                = $data1->salary; 
 $req = new userdataservice();
+print_r($item);
 $res = $req->create_job($item);
 if($res != 0)
 { 
-$status = array('status' => 'success');
-echo json_encode($status);
+$status = array('status' => '1','msg'=>'success');
 }
 else
 {
-$status = array('status' => 'failure');
-echo json_encode($status['failure']);
+$status = array('status' => '0','msg'=>'failure');
 }
+echo json_encode($status);
 }
 
 
