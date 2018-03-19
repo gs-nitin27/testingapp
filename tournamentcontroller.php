@@ -199,10 +199,25 @@ else if($_REQUEST['act'] == 'get_update')
     $resp = array('status' => '0' ,'data'=> [] , 'msg'=>'Failure' );
   }
 echo json_encode($resp);
-
-
 }
 
+else if($_REQUEST['act'] == 'get_live_tournamemnts_list')
+{
+
+$obj = new tournament_service();
+$tournament_list = $obj->getAllLiveTour();
+if($tournament_list != 0)
+  {
+    $resp = array('status' =>'1' , 'data'=>$tournament_list , 'msg'=>'success');
+  }
+else
+  {
+   $resp = array('status' =>'0' , 'data'=>[] , 'msg'=>'Failure'); 
+  }
+echo json_encode($resp);
+}
+
+//}
 // else if($_REQUEST['act'] == 'get_tour_events')
 // {
 // $userid  = $_REQUEST['userid'];

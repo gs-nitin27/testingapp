@@ -171,9 +171,6 @@ public function create_update($data)
 
       $success = file_put_contents($file, $data);
       $img_name = $img_name. '.png';
-      //echo $success;
-      //echo $img_name;die;
-      //$updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
       if($success)
       {
         return $img_name;
@@ -185,6 +182,21 @@ public function create_update($data)
           //echo json_encode($res);
           return 0;
         }
+    }
+
+    public function getAllLiveTour()
+    {
+      $query = mysql_query("SELECT * FROM `gs_tournament_info` WHERE `id` IN (SELECT `tournament_id` FROM `gs_tournament_updates` WHERE '1=1')");
+      if(mysql_num_rows($query)>0)
+      {
+      	while ($row = mysql_fetch_assoc($query)) {
+      		$rows[] = $row;
+      	}
+      return $rows;
+      }else
+      {
+      	return 0;
+      }
     }
 
 
