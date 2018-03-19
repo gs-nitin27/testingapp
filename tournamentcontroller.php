@@ -137,22 +137,43 @@ else if($_REQUEST['act'] == "tournament_appy_catogery")
 else if($_REQUEST['act'] == 'post_update')
 {
   $data = json_decode(file_get_contents("php://input"));
- // print_r($data);//die;
   $tournament_id = $data->tournamentid; 
   $obj = new tournament_service();
   $get_update_data = $obj->getTournament_data($tournament_id);
+  $table = 'gs_tournament_updates';
   if($get_update_data != '0')
   {
+  
   $get_update_data = json_decode($get_update_data['update_info']); 
+ // $image_obj = new userdataservice();
+  $image_name = $obj->imageuploadforupdates($data->update_info->image,$tournament_id,$table);
+  if($image_name != 0)
+  {
+    $data->update_info->image =$image_name;
+  }else
+  {
+    $data->update_info->image =$image_name;
+  }
   array_unshift($get_update_data, $data->update_info);
   $data->update_info = json_encode($get_update_data);
   }
   else
   {
+  $get_update_data = json_decode($get_update_data['update_info']); 
+ // $image_obj = new userdataservice();
+  $image_name = $obj->imageuploadforupdates($data->update_info->image,$tournament_id,$table);
+  if($image_name != 0)
+  {
+    $data->update_info->image =$image_name;
+  }else
+  {
+    $data->update_info->image =$image_name;
+  }
   $update_data[] = $data->update_info;
   $update_data = json_encode($update_data);
   $data->update_info = $update_data;    
   }
+
   $create_update = $obj->create_update($data);
   if($create_update != 0)
   {
@@ -172,10 +193,10 @@ else if($_REQUEST['act'] == 'get_update')
   $getdata = $obj->getTournament_data($tournamentid);
   if($getdata != 0)
   {
-    $resp = array('status' => '1' ,'data'=> $getdata , 'msg'=>'Success' );
+    $resp = array('status' => '1' ,'data'=> json_decode($getdata['update_info']) , 'msg'=>'Success' );
   }else
   {
-    $resp = array('status' => '1' ,'data'=> $getdata , 'msg'=>'Failure' );
+    $resp = array('status' => '0' ,'data'=> [] , 'msg'=>'Failure' );
   }
 echo json_encode($resp);
 

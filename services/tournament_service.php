@@ -129,7 +129,7 @@ public function getTournament_data($tournament_id)
 
 public function create_update($data)
 {
- $query = mysql_query("INSERT INTO `gs_tournament_updates` (`tournament_id`, `update_info`, `userid`, `date_created`, `date_updated`) VALUES ('$data->tournamentid','$data->update_info','$data->userid','CURDATE()','CURDATE()') ON DUPLICATE KEY UPDATE `update_info` = '$data->update_info', `date_updated` = 'CURDATE()'");
+ $query = mysql_query("INSERT INTO `gs_tournament_updates` (`tournament_id`, `update_info`, `userid`, `date_created`, `date_updated`) VALUES ('$data->tournamentid','$data->update_info','$data->userid',CURDATE(),CURDATE()) ON DUPLICATE KEY UPDATE `update_info` = '$data->update_info', `date_updated` = CURDATE()");
    if($query)
    {
      return $this->getTournament_data($data->tournamentid);
@@ -139,10 +139,54 @@ public function create_update($data)
      return 0;
 
    }
-
-
-
 }
+
+
+ public function imageuploadforupdates($image,$userid,$table)
+{
+
+      $now = new DateTime();
+      $time=$now->getTimestamp(); 
+      $img = $image;
+      $filepath =str_replace('data:image/png;base64,', '', $img);
+      $img = str_replace('$filepath,', '', $img);
+      $img = str_replace(' ', '+', $img);
+      $data = base64_decode($img);
+      $img_name= "$userid"."_".$time; // This is code for upload the Image for User
+      $path= $url."/"."$userid"."_".$time.'.png';
+      $success =move_uploaded_file($img, $filepath);
+      // if ($table=='gs_jobInfo') 
+      // {
+      //   $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+      // }
+      if ($table=='gs_tournament_updates') 
+      {
+        $file   = UPLOAD_DIR_TOUR.'updates/'.$img_name.'.png';
+      //echo $file;die;
+      }
+      // if($table=='gs_eventinfo') 
+      // {
+      //   $file   = UPLOAD_DIR_EVENT.$img_name.'.png';
+      // }
+
+      $success = file_put_contents($file, $data);
+      $img_name = $img_name. '.png';
+      //echo $success;
+      //echo $img_name;die;
+      //$updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
+      if($success)
+      {
+        return $img_name;
+      
+      }
+      else
+        {
+          $res = array('data' =>'Image is Not Upload' ,'status' => 0);
+          //echo json_encode($res);
+          return 0;
+        }
+    }
+
 
 } // End Class
 
