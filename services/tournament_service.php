@@ -112,6 +112,38 @@ public function tournament_apply_catogery($tournament_id,$userid)
 		return 0;
 	}
 }
+
+public function getTournament_data($tournament_id)
+{
+   // echo "SELECT `update_info` FROM `gs_tournament_updates` WHERE `tournament_id` = '$tournament_id'";die;
+	$query  = mysql_query("SELECT `update_info` FROM `gs_tournament_updates` WHERE `tournament_id` = '$tournament_id'");
+	if(mysql_num_rows($query) != 0)
+	{
+	    return mysql_fetch_assoc($query);
+	}
+	else
+	{
+		return 0;
+	}
+} 
+
+public function create_update($data)
+{
+ $query = mysql_query("INSERT INTO `gs_tournament_updates` (`tournament_id`, `update_info`, `userid`, `date_created`, `date_updated`) VALUES ('$data->tournamentid','$data->update_info','$data->userid','CURDATE()','CURDATE()') ON DUPLICATE KEY UPDATE `update_info` = '$data->update_info', `date_updated` = 'CURDATE()'");
+   if($query)
+   {
+     return $this->getTournament_data($data->tournamentid);
+   }
+   else
+   {
+     return 0;
+
+   }
+
+
+
+}
+
 } // End Class
 
 

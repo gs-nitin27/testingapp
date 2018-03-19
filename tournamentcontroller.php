@@ -134,6 +134,54 @@ else if($_REQUEST['act'] == "tournament_appy_catogery")
     echo json_encode($data);
 }
 
+else if($_REQUEST['act'] == 'post_update')
+{
+  $data = json_decode(file_get_contents("php://input"));
+ // print_r($data);//die;
+  $tournament_id = $data->tournamentid; 
+  $obj = new tournament_service();
+  $get_update_data = $obj->getTournament_data($tournament_id);
+  if($get_update_data != '0')
+  {
+  $get_update_data = json_decode($get_update_data['update_info']); 
+  array_unshift($get_update_data, $data->update_info);
+  $data->update_info = json_encode($get_update_data);
+  }
+  else
+  {
+  $update_data[] = $data->update_info;
+  $update_data = json_encode($update_data);
+  $data->update_info = $update_data;    
+  }
+  $create_update = $obj->create_update($data);
+  if($create_update != 0)
+  {
+  $resp = array('status' =>'1' ,'data' => $create_update , 'msg'=>'Success' );
+  }else
+  {
+  $resp = array('status' =>'0' ,'data' => [] , 'msg'=>'Failure' );  
+  }
+  echo json_encode($resp);
+}
+
+else if($_REQUEST['act'] == 'get_update')
+{
+
+  $tournamentid = $_REQUEST['tournament_id'];
+  $obj = new tournament_service();
+  $getdata = $obj->getTournament_data($tournamentid);
+  if($getdata != 0)
+  {
+    $resp = array('status' => '1' ,'data'=> $getdata , 'msg'=>'Success' );
+  }else
+  {
+    $resp = array('status' => '1' ,'data'=> $getdata , 'msg'=>'Failure' );
+  }
+echo json_encode($resp);
+
+
+}
+
 // else if($_REQUEST['act'] == 'get_tour_events')
 // {
 // $userid  = $_REQUEST['userid'];
