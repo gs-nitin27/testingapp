@@ -183,6 +183,9 @@ else if($_REQUEST['act'] == 'post_update')
   $resp = array('status' =>'0' ,'data' => [] , 'msg'=>'Failure' );  
   }
   echo json_encode($resp);
+   ignore_user_abort(true);
+   set_time_limit(1); 
+  $sendUpdates = $obj->sendUpdates($tournament_id);
 }
 
 else if($_REQUEST['act'] == 'get_update')

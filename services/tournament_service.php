@@ -198,7 +198,24 @@ public function create_update($data)
       	return 0;
       }
     }
+   
 
+   public function sendUpdates($tournament_id)
+   {
+     $array_data = array('tournament_id' => $tournament_id, 'indicator' => '13');
+     $query  = mysql_query("SELECT `L_device_id` FROM `user` WHERE `L_device_id` <> '' ");
+     include('userdataservice.php');
+     $userdata = new userdataservice();
+     if(mysql_num_rows($query)>0)
+      {
+       while ($row = mysql_fetch_assoc($query)) {
+       $device_id[] = $row['L_device_id'];
+      }
+      //print_r($device_id);
+      $userdata->sendLitePushNotificationToGCM($device_id,$array_data);
+       
+     }
+   }
 
 } // End Class
 
