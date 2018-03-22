@@ -508,8 +508,13 @@ $query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`
              }
              if($image)
              {
-              return $image;
-             }else
+              if(isset($item->old_image))
+                {
+                  unlink(UPLOAD_DIR_JOB.$item->old_image);
+                }
+             return $image;
+             }
+             else
              {
               return 1;
              }
@@ -2007,6 +2012,7 @@ public function createResources($data)
       if ($table=='gs_jobInfo') 
       {
         $file   = UPLOAD_DIR_JOB.$img_name.'.png';
+        
       }
       if ($table=='gs_tournament_info') 
       {
@@ -2021,7 +2027,8 @@ public function createResources($data)
       $img_name = $img_name. '.png';
       $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
       if($updateImage)
-      {
+      { 
+        
         return 1;
       
       }

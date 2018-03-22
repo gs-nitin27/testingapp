@@ -110,7 +110,7 @@ public function getInvoiceData($invoice_id)
 }
 
 public function create_hash($data)
-{   
+{   //print_r($data);die;
 	$txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
 	$data->txnid = $txnid;
 	unset($data->hash);

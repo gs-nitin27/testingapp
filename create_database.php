@@ -476,6 +476,10 @@ $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
 $item->salary                = $data1->salary; 
+if($data->id != '0' || $data->id != '')
+{
+  $item->old_image  = $data1->old_image;
+}
 $req = new userdataservice();
 //print_r($item);
 $res = $req->create_job($item);
@@ -1301,7 +1305,7 @@ else if($_REQUEST['act']=="send_offer")
   // print_r($message);die;
   $jsondata        =  json_encode($message);
   $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
-  $emailsent = new emailService();
+  $emailsent       = new emailService();
   $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id,$emp_email,$name);
   $pushobj         =  new userdataservice();
   $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
@@ -2005,13 +2009,18 @@ if($res)
 
 else if($_REQUEST['act'] == "create_tournament") 
 {
-  $data     =   (file_get_contents("php://input"));
-  $item     =  json_decode($data);
-  $req      =   new userdataservice();
-  $res      =   $req->save_tournament($item);
+  $data      =   (file_get_contents("php://input"));
+  $item      =  json_decode($data);
+  $req       =   new userdataservice();
+  $res       =   $req->save_tournament($item);
+  $user_info =   $req->getdeviceid($item->userid,'M');
 
 if($res) 
-  {
+  {    if($user_info != 0 && $user_info['email'] != '')
+       {
+       $email_obj  = new emailService();
+       $send_email = $email_obj->email_for_update($user_info); 
+       }
        $output = array('status' => '1','data'=>[]);
        echo json_encode($output);
   }
