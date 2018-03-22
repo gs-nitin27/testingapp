@@ -1490,7 +1490,20 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
 
 
 
-} // End Function
+}
+
+public function email_for_update($userinfo)
+ {
+
+return 1;
+
+
+
+
+ }
+
+
+ // End Function
 
 
 // public function email_invoice_to_participant($applydata);

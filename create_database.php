@@ -2009,13 +2009,18 @@ if($res)
 
 else if($_REQUEST['act'] == "create_tournament") 
 {
-  $data     =   (file_get_contents("php://input"));
-  $item     =  json_decode($data);
-  $req      =   new userdataservice();
-  $res      =   $req->save_tournament($item);
+  $data      =   (file_get_contents("php://input"));
+  $item      =  json_decode($data);
+  $req       =   new userdataservice();
+  $res       =   $req->save_tournament($item);
+  $user_info =   $req->getdeviceid($item->userid,'M');
 
 if($res) 
-  {
+  {    if($user_info != 0 && $user_info['email'] != '')
+       {
+       $email_obj  = new emailService();
+       $send_email = $email_obj->email_for_update($user_info); 
+       }
        $output = array('status' => '1','data'=>[]);
        echo json_encode($output);
   }
