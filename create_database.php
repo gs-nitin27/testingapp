@@ -534,75 +534,75 @@ else if($_REQUEST['act'] == 'publish')
 
 //********* CODE FOR CREATING TOURNAMENTS **********//
 
-else if($_POST['act'] == "createtournament")
-{
+// else if($_POST['act'] == "createtournament")
+// {
 
-$status = array('failure' => 0 , 'success' => 1);
-$data1 = json_decode($_REQUEST[ 'data' ]);
-$item = new stdClass();
+// $status = array('failure' => 0 , 'success' => 1);
+// $data1 = json_decode($_REQUEST[ 'data' ]);
+// $item = new stdClass();
 
 
-$item->id                      = $data1->id;
-$item->tournament_name         = $data1->tournament_name;
-$item->tournament_level        = $data1->tournament_level;
-$item->tournament_ageGroup     = $data1->tournament_ageGroup;
-$item->checkBox_maleValue      = $data1->checkBox_maleValue;
-$item->checkBox_femaleValue    = $data1->checkBox_femaleValue;
-$item->userid                  = $data1->userid;
-$item->address_line1           = $data1->address_line1;
-$item->address_line2           = $data1->address_line2;
-$item->city                    = $data1->city;
-$item->state                   = $data1->state;
-$item->pin                     = $data1->pin;
-$item->description             = $data1->description;
-$item->eligibility1            = $data1->eligibility1;
-$item->terms_and_conditions1   = $data1->terms_and_conditions1;
-$item->organizer_name          = $data1->organizer_name;
-$item->mobile                  = $data1->mobile;
-$item->landline                = $data1->landline;
-$item->emailid                 = $data1->emailid;
-$item->organizer_address_line1 = $data1->organizer_address_line1;
-$item->organizer_address_line2 = $data1->organizer_address_line2;
-$item->organizer_city          = $data1->organizer_city;
-$item->organizer_pin           = $data1->organizer_pin;
-$item->tournament_links        = $data1->tournament_links;
-$item->start_date              = strtotime($data1->start_date);
-$item->end_date                = strtotime($data1->end_date);
-$item->entry_start_date        = strtotime($data1->entry_start_date);
-$item->entry_end_date          = strtotime($data1->entry_end_date);
-$item->file_name               = $data1->file_name;
-$item->file                    = $data1->file;
-$item->email_app_collection    = $data1->email_app_collection;
-$item->phone_app_collection    = $data1->phone_app_collection;
-$item->sport                   = $data1->sport;
-$item->image                   = $data1->image;
-$eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
-$eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
-$terms = json_decode($data1->terms_and_conditions1);
-$terms = implode("|",$terms);
-$item->eligibility1          = $eligibility;
-$item->terms_and_conditions1 = $terms;
-if($item->checkBox_maleValue == "1" )
-{
-$gender = "Male";
-}
-else if($item->checkBox_femaleValue == "1")
-{
-$gender = "Female";
-}
-else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  )
-{
-$gender = "Unisex";
-}
-$req = new userdataservice();
-$res = $req->create_tournament($item);
-if($res == 1)
-{
-echo json_encode($status['success']);
-}
-else
-echo json_encode($status['failure']);
-}
+// $item->id                      = $data1->id;
+// $item->tournament_name         = $data1->tournament_name;
+// $item->tournament_level        = $data1->tournament_level;
+// $item->tournament_ageGroup     = $data1->tournament_ageGroup;
+// $item->checkBox_maleValue      = $data1->checkBox_maleValue;
+// $item->checkBox_femaleValue    = $data1->checkBox_femaleValue;
+// $item->userid                  = $data1->userid;
+// $item->address_line1           = $data1->address_line1;
+// $item->address_line2           = $data1->address_line2;
+// $item->city                    = $data1->city;
+// $item->state                   = $data1->state;
+// $item->pin                     = $data1->pin;
+// $item->description             = $data1->description;
+// $item->eligibility1            = $data1->eligibility1;
+// $item->terms_and_conditions1   = $data1->terms_and_conditions1;
+// $item->organizer_name          = $data1->organizer_name;
+// $item->mobile                  = $data1->mobile;
+// $item->landline                = $data1->landline;
+// $item->emailid                 = $data1->emailid;
+// $item->organizer_address_line1 = $data1->organizer_address_line1;
+// $item->organizer_address_line2 = $data1->organizer_address_line2;
+// $item->organizer_city          = $data1->organizer_city;
+// $item->organizer_pin           = $data1->organizer_pin;
+// $item->tournament_links        = $data1->tournament_links;
+// $item->start_date              = strtotime($data1->start_date);
+// $item->end_date                = strtotime($data1->end_date);
+// $item->entry_start_date        = strtotime($data1->entry_start_date);
+// $item->entry_end_date          = strtotime($data1->entry_end_date);
+// $item->file_name               = $data1->file_name;
+// $item->file                    = $data1->file;
+// $item->email_app_collection    = $data1->email_app_collection;
+// $item->phone_app_collection    = $data1->phone_app_collection;
+// $item->sport                   = $data1->sport;
+// $item->image                   = $data1->image;
+// $eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
+// $eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
+// $terms = json_decode($data1->terms_and_conditions1);
+// $terms = implode("|",$terms);
+// $item->eligibility1          = $eligibility;
+// $item->terms_and_conditions1 = $terms;
+// if($item->checkBox_maleValue == "1" )
+// {
+// $gender = "Male";
+// }
+// else if($item->checkBox_femaleValue == "1")
+// {
+// $gender = "Female";
+// }
+// else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  )
+// {
+// $gender = "Unisex";
+// }
+// $req = new userdataservice();
+// $res = $req->create_tournament($item);
+// if($res == 1)
+// {
+// echo json_encode($status['success']);
+// }
+// else
+// echo json_encode($status['failure']);
+// }
 
 
 
@@ -2019,7 +2019,7 @@ if($res)
   {    if($user_info != 0 && $user_info['email'] != '')
        {
        $email_obj  = new emailService();
-       $send_email = $email_obj->email_for_update($user_info); 
+       $send_email = $email_obj->email_for_update($user_info,$res); 
        }
        $output = array('status' => '1','data'=>[]);
        echo json_encode($output);
@@ -2081,7 +2081,13 @@ else if($_REQUEST['act'] == 'user_activities')
  }
  echo json_encode($ret_val);
 }
-
+else if($_REQUEST['act'] == "update_link")
+{
+  $data = array('email' => 'nitin@darkhorsesports.in');
+  $id = '1105';
+  $obj = new emailService();
+  $link  = $obj->email_for_update($data,$id);
+}
 
 
 

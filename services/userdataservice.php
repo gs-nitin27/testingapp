@@ -717,21 +717,12 @@ if($query)
              {
               $image = $this->imageupload($image,$edit_id,$table);
              }
-
-
-             if($image)
-             {
-              return $image;
-             }
-             else
-             {
-              return 1;
-             }
+return $id;  
 }
 else
-{
-  return false;
-}
+  {
+    return false;
+  }
 }   
 
 

@@ -1492,15 +1492,19 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
 
 }
 
-public function email_for_update($userinfo)
- {
-
-return 1;
-
-
-
-
- }
+public function email_for_update($userinfo,$id)
+{
+  if($userinfo['email'] != '' && $id != '')
+  {
+    $t_data = $userinfo['email']."|".$id;
+    $t_data = base64_encode($t_data);
+    $body = '<a href ="http://localhost/gs_newsite/manage/login/'.$t_data.'">www.example.com</a>';
+    //echo $body;die;
+    $subject = "Create updates for tournament";
+    $this->email_send($userinfo['email'],$body,$subject);
+  }
+  //echo "nitin".$t_data;die;
+}
 
 
  // End Function
