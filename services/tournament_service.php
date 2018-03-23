@@ -129,7 +129,7 @@ public function getTournament_data($tournament_id)
 
 public function create_update($data)
 {
- $query = mysql_query("INSERT INTO `gs_tournament_updates` (`tournament_id`, `update_info`, `userid`, `date_created`, `date_updated`) VALUES ('$data->tournamentid','$data->update_info','$data->userid',CURDATE(),CURDATE()) ON DUPLICATE KEY UPDATE `update_info` = '$data->update_info', `date_updated` = CURDATE()");
+  $query = mysql_query("INSERT INTO `gs_tournament_updates` (`tournament_id`, `update_info`, `userid`, `date_created`, `date_updated`) VALUES ('$data->tournamentid','$data->update_info','$data->userid',CURDATE(),CURDATE()) ON DUPLICATE KEY UPDATE `update_info` = '$data->update_info', `date_updated` = CURDATE()");
    if($query)
    {
      return $this->getTournament_data($data->tournamentid);
