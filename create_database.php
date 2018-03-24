@@ -1888,23 +1888,24 @@ else if($_REQUEST['act'] == "interview_schedule")
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
   $module            =  '1';    // for Job
-  
-  //$date1             =  date("F j, Y, g:i a");
-
   $req               =  new userdataservice();
   $pushobj           =  new userdataservice();
-
   $con               =  new connect_userservice();
-
-  $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
+//print_r($userdata);
+  $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$userdata->applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
 
 
   $json_data         = json_encode($message);
   $alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
-
-  $applicant_id      =  implode(",",$applicant_id);
+ if(is_array ($userdata->applicant_id ))
+  {
+   $applicant_id      =  implode(",",$userdata->applicant_id);
+  }else
+  {
+    $applicant_id     =  $userdata->applicant_id;
+  }
   $response          =  $req->FindLiteDevice($applicant_id);
-
+ // echo $applicant_id;die;
   //$response1 = implode("|", $response);
 
 

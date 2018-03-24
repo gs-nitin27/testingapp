@@ -335,7 +335,7 @@ if($update)
 /***************************************************************************/
 
     public function userdata($id)
-    {  //echo "SELECT *FROM `user` where `userid` = '$id'";die;
+    { 
        $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
@@ -1888,7 +1888,8 @@ $num   =  mysql_affected_rows();
 
 
 public function interview_schedule($applicant_id,$job_id,$status,$date )
-{
+{//echo $applicant_id.$job_id.$status.$date; 
+  //echo "UPDATE `user_jobs` SET `status` = '$status',`interview_date` = '$date'  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'";die;
 $query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status',`interview_date` = '$date'  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
 $num   =  mysql_affected_rows();
   if($num)
