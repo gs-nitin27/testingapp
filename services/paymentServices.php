@@ -54,7 +54,7 @@ public function useremaildata($userid)
 
 public function getTransactionList($userid)
 {
-	$query = mysql_query("SELECT `invoice_id`,`date`,`amount`,`transaction_data` FROM `gs_billing` WHERE `userid`='$userid' ORDER BY  `date` DESC ");
+	$query = mysql_query("SELECT `invoice_id`,`date`,`amount`,`transaction_data`,`transaction_id` FROM `gs_billing` WHERE `userid`='$userid' ORDER BY  `date` DESC ");
 
 	if(mysql_num_rows($query))
 	{
