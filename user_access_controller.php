@@ -54,7 +54,7 @@ $obj = new User_access_service();
 		$where  = "`userid`= '".$obj_var['userid']."'"; 
 		$updt_obj = $obj->update_user_data($update,$where); //update 
 	    }//
-	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull');
+	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull'); 
 	  }
 	  else  // No Record found from email value
 	  {
