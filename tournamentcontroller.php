@@ -107,7 +107,7 @@ if($resp != 0)
   }
   else 
   {  
-  $result = array('status' =>'0','data'=>$resp , 'msg'=>'failure');  
+  $result = array('status' =>'0','data'=>[] , 'msg'=>'failure');  
   }
 echo json_encode($result);
 }
