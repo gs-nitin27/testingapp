@@ -85,7 +85,7 @@ If (isset($_POST["additionalCharges"])) {
 <script> 
 
         setTimeout(function() {
-              window.location = 'http://localhost/gs_newsite/manage/dashbo#';
+              window.location = 'https://getsporty.in/gs_newsite/manage/dashbo#';
         }, 3000);       
 </script> 
 
