@@ -40,7 +40,7 @@ if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
   echo json_encode($user);
-  die();
+  //die();
 }
 else
   {    
@@ -335,7 +335,7 @@ if($update)
 /***************************************************************************/
 
     public function userdata($id)
-    { 
+    {  //echo "SELECT *FROM `user` where `userid` = '$id'";die;
        $query  = mysql_query("SELECT *FROM `user` where `userid` = '$id'");
        if(mysql_num_rows($query)>0)
        {
@@ -497,7 +497,22 @@ public function create_job($item)
 
 $image =$item->image;
 $table ="gs_jobInfo";
-$query = mysql_query("INSERT INTO `gs_jobInfo`(`id`, `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`,`salary`, `date_created`,`is_native`) VALUES ('$item->id','$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email','$item->salary',CURDATE(),'1') ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' ,`salary` = '$item->salary', `pin` = '$item->pin'"); 
+//echo $item->id;die;
+if($item->id != '0')
+{
+//echo "yesy";die;
+$id_column = '`id`,';  
+$id_value = "'$item->id',";
+}else
+{
+  //echo "no";die;
+ $id_column = '';
+ $id_value  = '';
+}
+ //echo "INSERT INTO `gs_jobInfo`(".$id_column." `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`,`salary`, `date_created`,`is_native`) VALUES (".$id_value."'$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email','$item->salary',CURDATE(),'1') ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' ,`salary` = '$item->salary', `pin` = '$item->pin'"; die;
+
+
+$query = mysql_query("INSERT INTO `gs_jobInfo`(".$id_column." `userid`, `title`,`sport`,`gender`, `type`, `work_experience`, `description`, `desired_skills`, `qualification`, `key_requirement`, `org_address1`, `org_address2`, `org_city`, `org_state`, `org_pin`, `organisation_name`, `about`, `address1`, `address2`, `state`, `city`, `pin`, `name`, `contact`, `email`,`salary`, `date_created`,`is_native`) VALUES (".$id_value."'$item->userid','$item->title','$item->sports','$item->gender','$item->type','$item->work_exp','$item->desc','$item->desiredskill','$item->qualification','$item->keyreq','$item->org_address1','$item->org_address2','$item->org_city','$item->org_state','$item->org_pin','$item->org_name','$item->about','$item->address1','$item->address2','$item->state','$item->city','$item->pin','$item->name','$item->contact','$item->email','$item->salary',CURDATE(),'1') ON DUPLICATE KEY UPDATE `title` ='$item->title' , `sport` = '$item->sports',`gender` = '$item->gender' ,`type` = '$item->type' , `work_experience` = '$item->work_exp' , `description` = '$item->desc' , `desired_skills` = '$item->desiredskill' , `qualification` = '$item->qualification' , `key_requirement` = '$item->keyreq' , `organisation_name` = '$item->org_name' , `about` = '$item->about' ,`name` = '$item->name' , `contact` = '$item->contact' , `email` = '$item->email' , `date_created` = CURDATE(), `org_address1` = '$item->org_address1',`org_address2` = '$item->org_address2',`org_city` = '$item->org_city' , `org_pin` = '$item->org_pin' , `org_state`= '$item->org_state' , `address1`= '$item->address1' , `address2` = '$item->address2' , `city` = '$item->city' , `state` = '$item->state' ,`salary` = '$item->salary', `pin` = '$item->pin'"); 
  if($query)
         { 
              $id = mysql_insert_id();
@@ -717,12 +732,21 @@ if($query)
              {
               $image = $this->imageupload($image,$edit_id,$table);
              }
-return $id;  
+
+
+             if($image)
+             {
+              return $image;
+             }
+             else
+             {
+              return 1;
+             }
 }
 else
-  {
-    return false;
-  }
+{
+  return false;
+}
 }   
 
 

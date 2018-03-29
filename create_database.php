@@ -445,7 +445,7 @@ else
 
 else if($_REQUEST['act']=="createjob")
 {
-ini_set("memory_limit","12M");  
+ini_set("memory_limit","50M");  
 $data1 = json_decode(file_get_contents("php://input"));
 //print_r($data1);
 $item = new stdClass(); 
