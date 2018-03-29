@@ -10,7 +10,19 @@ public function find_user_data($where)
   $sql = mysql_query($query);
   if(mysql_num_rows($sql)>0)
 	{
-		return mysql_fetch_assoc($sql);
+    $row =  mysql_fetch_assoc($sql);
+    $userid = $row['userid'];
+    $data = $this->getuserorgdetails($userid);
+    if($data != 0)
+    {
+      $org_array = array('org_id' => $data['id'],'org_name' =>$data['org_name']);
+    }
+    else
+    {
+      $org_array = [];
+    }
+    $row['org_data'] = $org_array;
+		return $row;
 	}
 	else
 	{
@@ -108,6 +120,23 @@ public function create_new_user($data)
      }
 
   }
+public function getuserorgdetails($userid) // Function To fetch organisation details at login
+{ 
+
+   $query = mysql_query("SELECT * FROM `gs_org` WHERE `userid` = '$userid'");
+   if(mysql_num_rows($query)>0)
+   {
+    while ($row = mysql_fetch_assoc($query)) 
+    {
+      $data = $row;
+    }
+    return $data;
+   }
+   else
+   {
+    return 0;
+   }
+}
 
 }
 

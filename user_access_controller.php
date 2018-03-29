@@ -11,6 +11,13 @@ $data = file_get_contents("php://input");           //json_decode($_REQUEST['dat
 $data = json_decode($data);
 $login_type  = $data->loginType;                    // Login Via Facebook Or Google
 $device_id_column = $data->app."_device_id";
+if(isset($data->device_id))
+{
+	$device_id = $data->device_id; 
+}else
+{
+	$device_id = '';
+}
 if(isset($data->data->email))
 {
 	$email = $data->data->email;
@@ -41,11 +48,13 @@ $obj = new User_access_service();
 	        $obj_var['classes'] = $req->connected_class($obj_var['userid']);  // To get connected classes
 	      }
 	        $obj_var['profile'] = $req->checkprofile($obj_var['userid']);  // To get profile completion percentage
-	    
-        $update = "`".$device_id_column."` = '".$data->device_id."'";
+	    if($device_id != '')
+	    {
+        $update = "`".$device_id_column."` = '".$device_id."'";
 		$where  = "`userid`= '".$obj_var['userid']."'"; 
 		$updt_obj = $obj->update_user_data($update,$where); //update 
-	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull'); //
+	    }//
+	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull'); 
 	  }
 	  else  // No Record found from email value
 	  {
@@ -120,10 +129,12 @@ $obj = new User_access_service();
 	        $obj_var['classes'] = $req->connected_class($obj_var['userid']);   // to get connected classes 
 	      }
 	     $obj_var['profile'] = $req->checkprofile($obj_var['userid']);      // to get profile completion percentage 
-	    $update = "`".$device_id_column."` = '".$data->device_id."'";
+	    if($device_id != '')
+	    {
+	    $update = "`".$device_id_column."` = '".$device_id."'";
 		$where  = "`userid`= '".$obj_var['userid']."'"; 
 		$updt_obj = $obj->update_user_data($update,$where); //update 
-
+        }
 	     $resp = array('status' =>'1' ,'data'=>$obj_var , 'msg'=>'Successfully logged In');
 	}
 	else

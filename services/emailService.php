@@ -85,7 +85,7 @@ public function emailVarification($email)
           
 /**************************************Send Email for Interview*************************/  
 
-public function email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue)
+public function email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue,$employer_email)
 {
       $query  = mysql_query("SELECT `email`,`name`,`device_id` FROM `user` WHERE `userid` IN ($applicant_id) ");
       $num    = mysql_num_rows($query);
@@ -115,6 +115,7 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
          $mail->Port = 465; 
          $mail->Username =$from;  
          $mail->Password = "2016Darkhorse";
+         $mail->AddReplyTo($employer_email, $employer_name);
          $mail->SetFrom($from, $from_name);
          $mail->Subject = $subject;
          $mail->Body = '<head>
@@ -243,7 +244,7 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
             </tr>
             <tr>
                 <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-                    <p style="margin: 0;">You have an interview call for the post of '.$title.' at '.$organisation_name.'
+                    <p style="margin: 0;">You have an interview call for the post of <b> '.$title.'</b> at <b>'.$organisation_name.'</b>
                     <br>'.$msg.'
                     <br><b>Date of interview:</b>  '.$date.'
                     </p>
@@ -1217,13 +1218,12 @@ public function email_send($email,$body,$subject)
 }
 
 
-public function tournament_apply_email($cat_data, $billingdata,$userdata)
+public function tournament_apply_email($cat_data, $billingdata,$userdata,$emailtemp)
 {
-     $taxamount = $billingdata->amount / 1.18;
-     $Basic_Taxable_Amount = $billingdata->amount - $taxamount; 
+     $Basic_Taxable_Amount = $billingdata->amount / 1.18;
+     $taxamount = $billingdata->amount - $Basic_Taxable_Amount; 
  
-    $msg ='<html> <head> <title></title> </head> <body> <div style="width:auto;height:auto;background:none repeat scroll 0 0 #ffffff;float:left" id=""> <table width="100%" style="height:70px;border-bottom:1px solid #ccc"> <tbody><tr> <td align="left" colspan="2" style="padding-left:10px"> <img src="https://getsporty.in/img/logo.png" alt="TMM" height="95" class="CToWUd"><img src="https://getsporty.in/portal/uploads/tournament/tournament_1498471430.jpg" alt="TMM" height="95" class="CToWUd"> </td> </tr> </tbody></table> <div style="padding:10px;font-weight:bold"> <label style="text-align:left;width:100%;color:#d39a12">Welcome '.$userdata->name.',</label></div><p style="padding:10px">Thank you. We have received your entry for the '.$userdata->tournament_title.'.</p> <p style="padding:10px">Your online entry transaction number is <b>'.$billingdata->txnid.'</b>. Please note this is NOT YOUR RUNNING NUMBER. Your participation in the Event is subject to entry confirmation and rules &amp; guidelines. You are required to check your application status online at <a href="">adhm.procamrunning.in</a> post 15 working days of closure of registration.</p> <div style="padding:10px;background:none repeat scroll 0 0 #ffffff"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Transaction Details</label> <table width="100%" style="border:1px solid #ccc"> <tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Transaction Date </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$billingdata->date.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gender </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$userdata->gender.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Date of Birth </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$userdata->dob.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Nationality </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Indian</label></td></tr></tbody></table><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Billing Contact Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Name </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>'.$userdata->name.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>'.$userdata->addressdetails.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Email Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label><a href="mailto:'.$billingdata->email.'" target="_blank">'.$billingdata->email.'</a> <small>(All communications would be sent to this address)</small></label></td></tr></tbody></table></div><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Payment Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gross Total Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'.$billingdata->amount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> &nbsp;&nbsp;&nbsp;&nbsp;Basic Taxable Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'.$Basic_Taxable_Amount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold">&nbsp;&nbsp;&nbsp;&nbsp; IGST  (18.00%)</label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'.$taxamount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Amount Paid </label> </td> <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>(-) Rs.'.$billingdata->amount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Balance Due </label> </td><td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.0.00</label></td></tr></tbody></table></div><p style="padding-top:10px"><b>Please Note:</b> The charges will be billed to your credit or debit card as <a href="">www.getsporty.in</a></p><p style="padding-top:10px">ON YOUR MARK, 20% OFF, GO! "Enjoy a 20% discount on Running and Training Products at select PUMA Stores from <span class="aBn" data-term="goog_22569913" tabindex="0"><span class="aQJ">13th Sept to 17th Nov</span></span> and also at <a href="#">Click here</a> to read about how to redeem this coupon.</p><p style="padding-top:10px">For event related query, you can contact us by e-mail at <b><a href="mailto:info@darkhorsesports.in" target="_blank">info@darkhorsesports.in</a></b>. Kindly include your transaction number, e-mail address, name and dates of the event in all future correspondence.</p><p style="padding-top:10px">For further information about TOURNAMENT TITLE, Call us at<a href="#">http://adhm.procamrunning.in/</a></p><p style="padding-top:10px">Thank you for registering for <b>TournamentTitle</b>. We hope you have a wonderful time. </p><p style="padding-top:10px">Best Regards,<br><b>Team Getsporty</b><br>Event helpline: +91 96500 33333 (<span class="aBn" data-term="goog_22569914" tabindex="0"><span class="aQJ">Monday</span></span> to <span class="aBn" data-term="goog_22569915" tabindex="0"><span class="aQJ">Saturday</span></span>, <span class="aBn" data-term="goog_22569916" tabindex="0"><span class="aQJ">10 am to 7 pm</span></span>)</p></div></div></body> </html>';
-
+    $msg ='<html> <head> <title></title> </head> <body> <div style="width:auto;height:auto;background:none repeat scroll 0 0 #ffffff;float:left" id=""> <table width="100%" style="height:70px;border-bottom:1px solid #ccc"> <tbody><tr> <td align="left" colspan="2" style="padding-left:10px"> <img src="https://getsporty.in/img/logo.png" alt="TMM" height="95" class="CToWUd"></td></tr></tbody></table><div style="padding:10px;font-weight:bold"><label style="text-align:left;width:100%;color:#d39a12">Welcome '.$userdata->name.',</label></div><p style="padding:10px">Thank you. We have received your entry for the '.$userdata->tournament_title.'.</p><p style="padding:10px">Your online entry transaction number is <b>'.$billingdata->txnid.'</b>. Please note this is NOT YOUR RUNNING NUMBER. Your participation in the Event is subject to entry confirmation and rules &amp; guidelines. You are required to check your application status online at <a href="">adhm.procamrunning.in</a> post 15 working days of closure of registration.</p> <div style="padding:10px;background:none repeat scroll 0 0 #ffffff"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Transaction Details</label> <table width="100%" style="border:1px solid #ccc"> <tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Transaction Date </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$billingdata->date.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gender </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$userdata->gender.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Date of Birth </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>'.$userdata->dob.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Nationality </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Indian</label></td></tr></tbody></table>'.$emailtemp.'<div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"><label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Billing Contact Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Name </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>'.$userdata->name.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label>'.$userdata->addressdetails.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Email Address </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:left;padding-right:10px"><label><a href="mailto:'.$billingdata->email.'" target="_blank">'.$billingdata->email.'</a> <small>(All communications would be sent to this address)</small></label></td></tr></tbody></table></div><div style="background:none repeat scroll 0 0 #ffffff;margin-top:20px"> <label style="text-align:left;width:100%;font-weight:bold;font-size:17px;color:#d39a12;padding:6px 3px">Payment Details</label> <table width="100%" style="border:1px solid #ccc"><tbody><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Gross Total Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'. $billingdata->amount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> &nbsp;&nbsp;&nbsp;&nbsp;Basic Taxable Amount </label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'.number_format((float)$Basic_Taxable_Amount, 2, ".", "").'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold">&nbsp;&nbsp;&nbsp;&nbsp; IGST  (18.00%)</label> </td>  <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.'.number_format((float)$taxamount, 2, ".", "").'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Amount Paid </label> </td> <td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>(-) Rs.'.$billingdata->amount.'</label></td></tr><tr><td width="50%" style="border-bottom:1px solid #eaeaea"><label style="font-weight:bold"> Balance Due </label> </td><td width="50%" style="border-bottom:1px solid #eaeaea;text-align:right;padding-right:10px"><label>Rs.0.00</label></td></tr></tbody></table></div><p style="padding-top:10px"><b>Please Note:</b> The charges will be billed to your credit or debit card as <a href="">www.getsporty.in</a></p><p style="padding-top:10px">For event related query, you can contact us by e-mail at <b><a href="mailto:info@darkhorsesports.in" target="_blank">info@darkhorsesports.in</a></b>. Kindly include your transaction number, e-mail address, name and dates of the event in all future correspondence.</p><p style="padding-top:10px">For further information about '.$userdata->tournament_title.', Call us at +91 120 4511807</p><p style="padding-top:10px">Thank you for registering for <b>'.$userdata->tournament_title.'</b>. We hope you have a wonderful time. </p><p style="padding-top:10px">Best Regards,<br><b>Team Getsporty</b><br>Event helpline: +91 120 4511807 (<span class="aBn" data-term="goog_22569914" tabindex="0"><span class="aQJ">Monday</span></span> to <span class="aBn" data-term="goog_22569915" tabindex="0"><span class="aQJ">Saturday</span></span>, <span class="aBn" data-term="goog_22569916" tabindex="0"><span class="aQJ">10 am to 7 pm</span></span>)</p></div></div></body> </html>';
 
      require('class.phpmailer.php');
      $to             =  $billingdata->email;
@@ -1247,8 +1247,268 @@ public function tournament_apply_email($cat_data, $billingdata,$userdata)
      $mail->AddAddress($to);
      $mail->Send();
 
+}
+
+
+
+
+/**************************************Send Email for Job Offer *************************/  
+
+public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_id,$emp_email,$emp_name)
+{
+    $query  = mysql_query("SELECT `title`,`organisation_name` FROM `gs_jobInfo` WHERE `id`= '$job_id'");
+      $num    = mysql_num_rows($query);
+      if($num) 
+      {
+       require('class.phpmailer.php');
+       while ($row=mysql_fetch_assoc($query))
+        {
+         $to                     = $applicant_email;
+         $title                  = $row['title'];
+         $organisation_name      = $row['organisation_name'];
+      
+         $from           = "info@darkhorsesports.in";
+         $subject        = "Offer from  ".$organisation_name;
+         //global $error;
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->SMTPAuth = true;  // authentication enabled
+         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         //$mail->Host = 'dezire.websitewelcome.com';
+         $mail->Host = 'smtp.gmail.com';
+         $mail->Port = 465; 
+         $mail->Username =$from;  
+         $mail->Password = "2016Darkhorse";
+         $mail->AddReplyTo($emp_email, $emp_name);
+         $mail->SetFrom($from);
+         $mail->Subject = $subject;
+         $mail->Body = '<head>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta name="x-apple-disable-message-reformatting">  
+  <title></title> 
+    <style>
+        html,
+        body {
+          margin: 0 auto !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        div[style*="margin: 16px 0"] {
+            margin:0 !important;
+        }
+        table,
+        td {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+        }
+        table table table {
+            table-layout: auto;
+        }
+        img {
+            -ms-interpolation-mode:bicubic;
+        }
+        *[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+        }
+        .x-gmail-data-detectors,
+        .x-gmail-data-detectors *,
+        .aBn {
+            border-bottom: 0 !important;
+            cursor: default !important;
+        }
+        .a6S {
+          display: none !important;
+          opacity: 0.01 !important;
+        }
+        img.g-img + div {
+          display:none !important;
+      }
+        .button-link {
+            text-decoration: none !important;
+        }       
+        @media only screen and (min-device-width: 375px) and (max-device-width: 413px) { 
+            .email-container {
+                min-width: 375px !important;
+            }
+        }
+    </style>
+    <style>
+        .button-td,
+        .button-a {
+            transition: all 100ms ease-in;
+        }
+        .button-td:hover,
+        .button-a:hover {
+            background: #555555 !important;
+            border-color: #555555 !important;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: auto !important;
+            }
+            .fluid {
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+            .stack-column-center {
+                text-align: center !important;
+            }
+            .center-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+            table.center-on-narrow {
+                display: inline-block !important;
+            }
+      .email-container p {
+        font-size: 17px !important;
+        line-height: 22px !important;
+      }
+        }
+    </style>
+</head>
+<body width="100%" bgcolor="#fff" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; text-align: left;">
+        <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
+          <tr>
+        <td bgcolor="#03a9f4">
+          <img src="http://getsporty.in/img/logo.png" aria-hidden="true" width="180" height="" alt="alt_text" border="0" align="center" style="margin:0 0 0 15px;height: auto; background: #03a9f4; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;" class="g-img">
+        </td>
+            </tr>
+            <tr>
+                <td bgcolor="#ffffff" style="padding: 40px 40px 20px;">
+                    <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Hi,Greetings!</h1>
+                </td>
+            </tr>
+            <tr>
+                <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+                    <p style="margin: 0;">You got offer  for the post of <b>'.$title.'</b> at <b>'.$organisation_name.'</b>
+                     <br><b>Salary:</b>  '.$salary.'
+                    <br><b>Date of Joining:</b>  '.$joining_date.'
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td bgcolor="#ffffff" style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+                    <p style="margin: 0;"></p>
+                </td>
+            </tr>
+            <tr>
+                <td bgcolor="#000000" align="center" valign="top" style="padding: 10px;">
+                    <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                            <!-- Column : BEGIN -->
+                            <td class="stack-column-center">
+                                <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0">
+                                   
+                                    <tr>
+                                        <td style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 0 10px 10px; text-align: left;" class="center-on-narrow">
+                                            <img src="http://getsporty.in/img/logo.png" aria-hidden="true" width="120" height="" alt="alt_text" border="0" align="center" style="margin:0 0 0 15px;height: auto; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;" class="g-img">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <!-- Column : END -->
+                            <!-- Column : BEGIN -->
+                            <td class="stack-column-center">
+                                <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0"  style="float: right;padding-right: 10px;display: inline-block;">
+                                    
+                                    <tr>
+                                        <td style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 0 10px 10px; text-align: left;" class="center-on-narrow">
+                                            <ul>
+                                                <li style="list-style:none;display:inline-block;"><a href=""><img style="width:30px" src="http://getsporty.in/emailimages/f.png"></a></li>
+                                                <li style="list-style:none;display:inline-block;"><a href=""><img style="width:30px" src="https://getsporty.in/emailimages/go.png"></a></li>
+                                                <li style="list-style:none;display:inline-block;"><a href=""><img style="width:30px" src="http://getsporty.in/emailimages/ln.png"></a></li>
+                                                <li style="list-style:none;display:inline-block;"><a href=""><img style="width:30px" src="http://getsporty.in/emailimages/t.png"></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <!-- Column : END -->
+                        </tr>
+
+                    </table><hr style="width: 90%;margin-top:0">
+                </td>
+            </tr>
+            <!-- 2 Even Columns : END -->
+            
+
+
+        <!-- Email Footer : BEGIN -->
+        <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
+            <tr>
+                <td style="background:#000000;padding: 10px 10px;width: 100%;font-size: 12px; font-family: sans-serif; line-height:18px; text-align: center; color: #888888;" class="x-gmail-data-detectors">
+                    <webversion style="color:#cccccc; text-decoration:underline; font-weight: bold;"></webversion>
+                </td>
+            </tr>
+        </table>
+        <!-- Email Footer : END -->
+
+    </center>
+</body>
+'; 
+
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $mail->Send();
+   } 
+    return 1;
+   }
+   else
+   {
+    return  0;
+   }  
+
+
 
 }
+
+public function email_for_update($userinfo,$id)
+{
+  if($userinfo['email'] != '' && $id != '')
+  {
+    $t_data = $userinfo['email']."|".$id;
+    $t_data = base64_encode($t_data);
+    $body = '<a href ="http://localhost/gs_newsite/manage/login/'.$t_data.'">www.example.com</a>';
+    //echo $body;die;
+    $subject = "Create updates for tournament";
+    $this->email_send($userinfo['email'],$body,$subject);
+  }
+  //echo "nitin".$t_data;die;
+}
+
+
+ // End Function
+
 
 // public function email_invoice_to_participant($applydata);
 // {

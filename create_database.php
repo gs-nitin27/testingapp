@@ -443,9 +443,10 @@ else
 
 //********* CODE FOR CREATING JOBS **********//
 
-else if($_POST['act']=="createjob")
+else if($_REQUEST['act']=="createjob")
 {
-$data1 = json_decode($_REQUEST[ 'data' ]);
+$data1 = json_decode(file_get_contents("php://input"));
+//print_r($data1);
 $item = new stdClass(); 
 $item->id                    = $data1->id;
 $item->userid                = $data1->userid;
@@ -475,18 +476,22 @@ $item->contact               = $data1->contact;
 $item->email                 = $data1->email_app_collection;
 $item->image                 = $data1->image; 
 $item->salary                = $data1->salary; 
+if($data->id != '0' || $data->id != '')
+{
+  $item->old_image  = $data1->old_image;
+}
 $req = new userdataservice();
+//print_r($item);
 $res = $req->create_job($item);
 if($res != 0)
 { 
-$status = array('status' => 'success');
-echo json_encode($status);
+$status = array('status' => '1','msg'=>'success');
 }
 else
 {
-$status = array('status' => 'failure');
-echo json_encode($status['failure']);
+$status = array('status' => '0','msg'=>'failure');
 }
+echo json_encode($status);
 }
 
 
@@ -529,75 +534,75 @@ else if($_REQUEST['act'] == 'publish')
 
 //********* CODE FOR CREATING TOURNAMENTS **********//
 
-else if($_POST['act'] == "createtournament")
-{
+// else if($_POST['act'] == "createtournament")
+// {
 
-$status = array('failure' => 0 , 'success' => 1);
-$data1 = json_decode($_REQUEST[ 'data' ]);
-$item = new stdClass();
+// $status = array('failure' => 0 , 'success' => 1);
+// $data1 = json_decode($_REQUEST[ 'data' ]);
+// $item = new stdClass();
 
 
-$item->id                      = $data1->id;
-$item->tournament_name         = $data1->tournament_name;
-$item->tournament_level        = $data1->tournament_level;
-$item->tournament_ageGroup     = $data1->tournament_ageGroup;
-$item->checkBox_maleValue      = $data1->checkBox_maleValue;
-$item->checkBox_femaleValue    = $data1->checkBox_femaleValue;
-$item->userid                  = $data1->userid;
-$item->address_line1           = $data1->address_line1;
-$item->address_line2           = $data1->address_line2;
-$item->city                    = $data1->city;
-$item->state                   = $data1->state;
-$item->pin                     = $data1->pin;
-$item->description             = $data1->description;
-$item->eligibility1            = $data1->eligibility1;
-$item->terms_and_conditions1   = $data1->terms_and_conditions1;
-$item->organizer_name          = $data1->organizer_name;
-$item->mobile                  = $data1->mobile;
-$item->landline                = $data1->landline;
-$item->emailid                 = $data1->emailid;
-$item->organizer_address_line1 = $data1->organizer_address_line1;
-$item->organizer_address_line2 = $data1->organizer_address_line2;
-$item->organizer_city          = $data1->organizer_city;
-$item->organizer_pin           = $data1->organizer_pin;
-$item->tournament_links        = $data1->tournament_links;
-$item->start_date              = strtotime($data1->start_date);
-$item->end_date                = strtotime($data1->end_date);
-$item->entry_start_date        = strtotime($data1->entry_start_date);
-$item->entry_end_date          = strtotime($data1->entry_end_date);
-$item->file_name               = $data1->file_name;
-$item->file                    = $data1->file;
-$item->email_app_collection    = $data1->email_app_collection;
-$item->phone_app_collection    = $data1->phone_app_collection;
-$item->sport                   = $data1->sport;
-$item->image                   = $data1->image;
-$eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
-$eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
-$terms = json_decode($data1->terms_and_conditions1);
-$terms = implode("|",$terms);
-$item->eligibility1          = $eligibility;
-$item->terms_and_conditions1 = $terms;
-if($item->checkBox_maleValue == "1" )
-{
-$gender = "Male";
-}
-else if($item->checkBox_femaleValue == "1")
-{
-$gender = "Female";
-}
-else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  )
-{
-$gender = "Unisex";
-}
-$req = new userdataservice();
-$res = $req->create_tournament($item);
-if($res == 1)
-{
-echo json_encode($status['success']);
-}
-else
-echo json_encode($status['failure']);
-}
+// $item->id                      = $data1->id;
+// $item->tournament_name         = $data1->tournament_name;
+// $item->tournament_level        = $data1->tournament_level;
+// $item->tournament_ageGroup     = $data1->tournament_ageGroup;
+// $item->checkBox_maleValue      = $data1->checkBox_maleValue;
+// $item->checkBox_femaleValue    = $data1->checkBox_femaleValue;
+// $item->userid                  = $data1->userid;
+// $item->address_line1           = $data1->address_line1;
+// $item->address_line2           = $data1->address_line2;
+// $item->city                    = $data1->city;
+// $item->state                   = $data1->state;
+// $item->pin                     = $data1->pin;
+// $item->description             = $data1->description;
+// $item->eligibility1            = $data1->eligibility1;
+// $item->terms_and_conditions1   = $data1->terms_and_conditions1;
+// $item->organizer_name          = $data1->organizer_name;
+// $item->mobile                  = $data1->mobile;
+// $item->landline                = $data1->landline;
+// $item->emailid                 = $data1->emailid;
+// $item->organizer_address_line1 = $data1->organizer_address_line1;
+// $item->organizer_address_line2 = $data1->organizer_address_line2;
+// $item->organizer_city          = $data1->organizer_city;
+// $item->organizer_pin           = $data1->organizer_pin;
+// $item->tournament_links        = $data1->tournament_links;
+// $item->start_date              = strtotime($data1->start_date);
+// $item->end_date                = strtotime($data1->end_date);
+// $item->entry_start_date        = strtotime($data1->entry_start_date);
+// $item->entry_end_date          = strtotime($data1->entry_end_date);
+// $item->file_name               = $data1->file_name;
+// $item->file                    = $data1->file;
+// $item->email_app_collection    = $data1->email_app_collection;
+// $item->phone_app_collection    = $data1->phone_app_collection;
+// $item->sport                   = $data1->sport;
+// $item->image                   = $data1->image;
+// $eligibility = json_decode($data1->eligibility1);// decoding the eligibility json into array
+// $eligibility = implode("|", $eligibility);// converting eligibilities array stack into string to 
+// $terms = json_decode($data1->terms_and_conditions1);
+// $terms = implode("|",$terms);
+// $item->eligibility1          = $eligibility;
+// $item->terms_and_conditions1 = $terms;
+// if($item->checkBox_maleValue == "1" )
+// {
+// $gender = "Male";
+// }
+// else if($item->checkBox_femaleValue == "1")
+// {
+// $gender = "Female";
+// }
+// else if($item->checkBox_femaleValue == "1" && $item->checkBox_maleValue == "1"  )
+// {
+// $gender = "Unisex";
+// }
+// $req = new userdataservice();
+// $res = $req->create_tournament($item);
+// if($res == 1)
+// {
+// echo json_encode($status['success']);
+// }
+// else
+// echo json_encode($status['failure']);
+// }
 
 
 
@@ -917,7 +922,15 @@ else if($_REQUEST['act'] == "getsearchview")
             for ($i=0; $i <count($res) ; $i++)
             {  $request         =   new userdataservice();
                $tour_status     = $request->tournament_status($res[$i]['id'],$user_id);
-               $res[$i]['tour'] = $tour_status;
+               if($tour_status != 0)
+               {
+                $res[$i]['tour'] = '1';
+                $res[$i]['apply_data'] = $tour_status;
+               }else
+               {
+                $res[$i]['tour'] = '0';
+                $res[$i]['apply_data'] = [];
+               }
                $response        = $res; 
             }
           }
@@ -1260,31 +1273,48 @@ else if($_REQUEST['act']=="send_offer")
 {
   $data              =  file_get_contents("php://input");
   $userdata          =  json_decode(file_get_contents("php://input"));
+
+  
+
   $emp_id            =  $userdata->emp_id;
   $applicant_id      =  $userdata->applicant_id;
+
+  // print_r(  $applicant_id);
+
   $job_id            =  $userdata->job_id;
   $salary            =  $userdata->salary;
   $joining_date      =  $userdata->joining_date;
-  $status            =  '5';                      // Status 5 for Offer
+  $status            =  '4';                      // Status 4 for Offer
   $user_app          =  'L';
   $date              =  date("F j, Y, g:i a");
   $req               =  new userdataservice();
   $res               =  $req->jobStatus($applicant_id,$job_id,$status,$salary,$joining_date);
   $pushobj           =  new userdataservice();
-  $emp_name          =  $pushobj->getdeviceid($emp_id);
+  $emp_name          =  $pushobj->getdeviceid($emp_id,"M");
   $name              =  $emp_name['name'];
-  $getid             =  $pushobj->getdeviceid($applicant_id);
-  $device_id_apply   =  $getid['device_id'];
+  $emp_email         =  $emp_name['email'];
+  $getid             =  $pushobj->getdeviceid($applicant_id,"L");
+  $device_id_apply   =  $getid['L_device_id'];
+  $applicant_email   =  $getid['email'];
+  // $name              =  $emp_name['name'];
+
+
   $req1              =  new connect_userservice();
   $message           =  array('message'=>$name ." "." has sent you an offer" ,'title'=>'Offer Recieved','date_applied'=>$date,'userid'=>$applicant_id, 'id'=>$job_id,'indicator' => 3);   // Indicattor 3 for Job Module
-   $jsondata        =  json_encode($message);
-   $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
-   $pushobj         =  new userdataservice();
-   $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
+
+  // print_r($message);die;
+  $jsondata        =  json_encode($message);
+  $response        =  $req1->alerts($applicant_id,$user_app,$jsondata);
+  $emailsent       = new emailService();
+  $eres = $emailsent->email_for_joboffer($applicant_email,$joining_date,$salary,$job_id,$emp_email,$name);
+  $pushobj         =  new userdataservice();
+  $pushnote        =  $pushobj ->sendLitePushNotificationToGCM($device_id_apply,$jsondata);
+
   if ($res) 
   {
    $Result = array('status' => '1','data'=>1 ,'msg'=>'Send Offer to Applicant');
              echo json_encode($Result);
+            
   }
   else
   {
@@ -1295,7 +1325,30 @@ else if($_REQUEST['act']=="send_offer")
 } // End Function
 
 
+/********************Job Offers Accept/Reject***********************************/
 
+else if($_REQUEST['act'] == 'offerAccept_reject')
+{
+   $userid = $_REQUEST['userid'];
+   $jobid  = $_REQUEST['jobid'];
+   
+   $req = new userdataservice();
+
+   $res = $req->offerAccept_reject($userid,$jobid);
+
+   if($res)
+   {
+      $Result = array('status' => '1','data'=>1 ,'msg'=>'Offer Accept ');
+             echo json_encode($Result);
+   }else
+   {
+     $Result = array('status' => '0','data'=>0 ,'msg'=>'Offer Reject');
+             echo json_encode($Result);
+   }
+
+  
+
+}
 
 
 /********************Job OffersList***********************************/
@@ -1392,7 +1445,7 @@ else if($_REQUEST['act'] == "gs_searching")
  $req           =   new liteservice();
    if(empty($keyword)) 
    {
-       $keyword    = '' ;
+       $keyword    = '';
    }
    else
    {
@@ -1438,10 +1491,10 @@ else if($_REQUEST['act'] == "gs_searching")
                                $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
-                         if ($module=='2')
-                          {
-                            $response      = $request ->getuserEvent($response, $userid);
-                          } 
+                         // if ($module=='2')
+                         //  {
+                         //    $response      = $request ->getuserEvent($response, $userid);
+                         //  } 
                           if ($module=='3') 
                           {
                             $response      = $request ->getuserTournament($response, $userid);
@@ -1835,23 +1888,24 @@ else if($_REQUEST['act'] == "interview_schedule")
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
   $module            =  '1';    // for Job
-  
-  //$date1             =  date("F j, Y, g:i a");
-
   $req               =  new userdataservice();
   $pushobj           =  new userdataservice();
-
   $con               =  new connect_userservice();
-
-  $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
+//print_r($userdata);
+  $message           = array('message'=>$username." "." has shortlisted you for interview" ,'title'=>'Interview','date_applied'=>$date,'userid'=>$userdata->applicant_id ,'id'=>$job_id,'indicator' => 3); // indicator 3 is for job module 
 
 
   $json_data         = json_encode($message);
   $alerts            = $con->alerts($user_responser_id ,$user_app ,$json_data);
-
-  $applicant_id      =  implode(",",$applicant_id);
+ if(is_array ($userdata->applicant_id ))
+  {
+   $applicant_id      =  implode(",",$userdata->applicant_id);
+  }else
+  {
+    $applicant_id     =  $userdata->applicant_id;
+  }
   $response          =  $req->FindLiteDevice($applicant_id);
-
+ // echo $applicant_id;die;
   //$response1 = implode("|", $response);
 
 
@@ -1872,12 +1926,13 @@ else if($_REQUEST['act'] == "interview_schedule")
   $userdata          =  $request->userdata($employer_id);
 
   $employer_name     =  $userdata['name']; 
+  $employer_email    =  $userdata['email'];
   $fwhere            =  "`id`= $job_id"; 
   $job_user          =  $request->jobsearch_user($fwhere);
   $title             =  $job_user[0]['title']; 
   $organisation_name =  $job_user[0]['organisation_name'];  
 
-  $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue);
+  $emailnote         =  $email_res->email_for_interview($applicant_id,$employer_name,$title,$date,$msg,$organisation_name,$venue,$employer_email);
 
 
   if ($emailnote) 
@@ -1955,13 +2010,18 @@ if($res)
 
 else if($_REQUEST['act'] == "create_tournament") 
 {
-  $data     =   (file_get_contents("php://input"));
-  $item     =  json_decode($data);
-  $req      =   new userdataservice();
-  $res      =   $req->save_tournament($item);
+  $data      =   (file_get_contents("php://input"));
+  $item      =  json_decode($data);
+  $req       =   new userdataservice();
+  $res       =   $req->save_tournament($item);
+  $user_info =   $req->getdeviceid($item->userid,'M');
 
 if($res) 
-  {
+  {    if($user_info != 0 && $user_info['email'] != '')
+       {
+       $email_obj  = new emailService();
+       $send_email = $email_obj->email_for_update($user_info,$res); 
+       }
        $output = array('status' => '1','data'=>[]);
        echo json_encode($output);
   }
@@ -1992,6 +2052,47 @@ else if($_REQUEST['act'] == "update_deviceid")
 
 
 
+else if($_REQUEST['act'] == 'user_activities')
+{
+  $userid = $_REQUEST['userid'];
+  $module = $_REQUEST['module'];
+  $obj    = new userdataservice();
+
+ if($module == "1")
+  {
+  $resp   = $obj->get_user_activities($userid,$module);
+  }
+  else if($module == "3")
+  {
+   $resp   = $obj->get_user_activities_tournament($userid,$module);  
+  }
+  else if($module == "2")
+  {
+  $resp   = $obj->get_user_activities_event($userid,$module);
+  }
+  else if($module == "6")
+  {
+  $resp   = $obj->get_user_activities_articles($userid,$module);
+  }
+  
+ if($resp != 0)
+ {
+  $ret_val = array('status' => '1','data'=>$resp , 'message'=>'Success' );
+ }else
+ {
+  $ret_val = array('status' => '0','data'=>[] , 'message'=>'Failure' );
+ }
+ echo json_encode($ret_val);
+}
+else if($_REQUEST['act'] == "update_link")
+{
+  $data = array('email' => 'nitin@darkhorsesports.in');
+  $id = '1105';
+  $obj = new emailService();
+  $link  = $obj->email_for_update($data,$id);
+}
+
+
 if($_REQUEST['act'] == "lazy")
 {
 
@@ -2018,8 +2119,6 @@ while ( $row = mysql_fetch_assoc($results)) {
 }
 
 } // End of Function
-
-
 
 
 

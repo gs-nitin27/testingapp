@@ -47,7 +47,8 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $mail = $req->invoicemail($item->email,$item);     
 
         $data = array('status' => "1", "data" => []);
-	echo json_encode($data);
 
+	echo json_encode($data);
 }
+
 ?>

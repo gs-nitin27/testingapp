@@ -60,7 +60,14 @@ else if($_REQUEST['act'] == "getTransactionList")
 
 	$req = new paymentServices();
 	$res = $req->getTransactionList($userid);
-
+    if($res != 0)
+	  {
+	   $res = array('status' =>'1' , 'data'=>$res ,'msg' => 'Success');
+	  }
+  else
+	  {
+	   $res = array('status' =>'0' , 'data'=>[] ,'msg' => 'Failure');
+	  }
     echo json_encode($res);
 }
 

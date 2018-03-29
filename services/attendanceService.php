@@ -140,7 +140,6 @@ public function check_attendance($data1)
        $attendance_data  	=  array('attendence'=>$attendance_status ,'Date'=>$date_created);
 	   $data[] 				=  $attendance_data;
 
-
 		} // End of Function
 	}
    return $data;
@@ -195,14 +194,13 @@ public function  cancel_class($data)
 	$class_id  = $data->class_id;
 	$date 	   = $data->date;
 	$message   = $data->message;
-<<<<<<< HEAD
+
 	//  $this->cheak_cancel_row($coach_id,$class_id)
-	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
-=======
+//	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$class_id','$coach_id','$date','2',CURDATE(),'$message')");
+
 	$day = split('-', $date);
     $id = $day[0].$day[1].$day[2].$class_id;
 	$row_sel    = mysql_query("INSERT INTO `class_reschedule`(`id`,`classid`, `userid`, `resc_date`, `resc_type`, `resc_made`, `msg`) VALUES ('$id','$class_id','$coach_id','$date','2',CURDATE(),'$message')ON DUPLICATE KEY UPDATE `resc_date` = '$date', `resc_type` = '2', `resc_made` = CURDATE(),`msg` = '$message' ");
->>>>>>> b4cce78b7d87630386b2c366cd478ea87e256385
 	if($row_sel) 
 		{
 		return 1;
