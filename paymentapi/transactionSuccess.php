@@ -68,9 +68,10 @@ If (isset($_POST["additionalCharges"])) {
                 $publish = $req->publishjob($item->jobid);
                 $tr_data = $_POST;
                 $tr_data['j_title'] = $item->title;
-                $tr_data['invoice_id'] = $item->invoiceid;
+                $tr_data['invoiceid'] = $item->invoiceid;
                 $tr_data['date'] = $item->date;
                 $tr_data['userid'] = $item->userid;
+                $tr_data['jobid']  = $item->jobid;
                 $res = $req->paymentservice(json_encode($tr_data));
                 $mail = $req->invoicemail($item->email,$item);     
          
