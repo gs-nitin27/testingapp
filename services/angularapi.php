@@ -458,18 +458,19 @@ if($tes)
 public function addOrg($item)
 { 
   if($item->id == 0 || $item->id == '')
-    {
-       $update = ''; 
-       $item->id == '';
+    {  $column_name = '';
+       $column_value = '';
+       
 
     }
     else
     { 
-      $update = "ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin'";
+      $column_name = "`id`,";
+      $column_value = "'$item->id',";
 
     }
-    //echo "INSERT INTO `gs_org`(`id`,`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->id','$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')".$update;die;
-  $query = mysql_query("INSERT INTO `gs_org`(`id`,`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->id','$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')".$update);
+    //echo "INSERT INTO `gs_org`(".$column_name."`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES(".$column_value."'$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin'";die;
+  $query = mysql_query("INSERT INTO `gs_org`(`id`,`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES('$item->id','$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin'");
   if($query)
   {
     return mysql_insert_id();
