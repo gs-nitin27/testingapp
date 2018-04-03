@@ -35,11 +35,11 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $item->date = $paymentdate;
         $item->transaction_data = json_encode($paymentdata);
 
-                
+        //print_r($item);die;
 	// $getuserid = $req->getuserid($item->email);
 	// $item->userid = $getuserid['userid'];
         $item->userid = $fulldata->userid;
-	$res = $req->paymentservice($item);
+	$res = $req->paymentservice(json_encode($item));
 	//$jobtitle = $req->getjobtitle($item->jobid);  
 	//$item->title = $jobtitle['title'];
         $item->title = $fulldata->jobTitle;

@@ -45,6 +45,7 @@ public function get_job_data($item_per_page,$position)
 
        echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$J_image_path.'" alt="img"></div><div class="slide-job-list"><h4>'.$J_title.'</h4><p> Location : <span>'.$J_location.' </span></p><p> Posted : <span> '.$J_day.' </span></p><p> Organisation Name : <span> '.$job_org_name.' </span></p><div class="read-c"><a href="'.$J_url.'">Read More</a> </div></div></div></div> ';
 
+
      
       }
   }
@@ -88,21 +89,31 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_id           = $row['id'];
                   $A_title        = $row['title'];
                   $A_img          = $row['image'];
+
                   $A_summary      = substr($row['summary'],0,200) ;
                   $A_token        = $row['token'];
                   $A_url          = $row['url'];
                   $A_video_link   = $row['video_link'];
                   $A_url          = "article-detail/".$row['id'];
                   $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
+                  $A_summary      = substr($row['summary'],0,200) ;
+                  $A_token        = $row['token'];
+                  $A_url          = $row['url'];
+                  $A_video_link   = $row['video_link'];
+                  $A_url          = "article-detail/".$row['id'];
+                  $abc ='';
+                  $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
+
+
   if($A_token==0)
             {
                 $res_url     = $A_url;
-                
+
             }
             if ($A_token==1 || $A_token==3) 
             {
                 $res_url               = "article-detail/".$A_id ;
-                
+
             }
             if ($A_token== 2) 
             {
@@ -123,11 +134,8 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                 </div>
             </div>';
 
-               
-
             }
          
-
 
 
  echo ' <div class="col-lg-3 col-md-3">  <div class=" hover-boxs"> <div class="job-box"> <img src="'.$A_image_path.'" alt="img">     </div>     <div class="slide-job-list">     <h4>'.$A_title.'</h4> <p><span> '.$A_summary.'</span></p>  '.$A_video.' <div class="read-c"><a href="'.$res_url.'">Read More</a> </div>    </div>                            </div>                </div> ';

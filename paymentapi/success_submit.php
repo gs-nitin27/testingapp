@@ -3,8 +3,11 @@ Class payment
 {
     public function paymentservice($paymentdata)
     {
-
-    $query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','1','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$paymentdata->transaction_data') ");
+       $paymentdata = json_decode($paymentdata);
+       $data  = json_encode($paymentdata);
+       // echo "INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','1','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$data') ";//die;
+       // print_r($paymentdata);die;
+     $query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','1','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$data') ");
     if($query)
     {
         return 1;

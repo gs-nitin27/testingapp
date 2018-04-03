@@ -34,13 +34,14 @@ public function update_user_data($update,$where)
  {
 
 	$query = "UPDATE `user` SET  ".$update."  WHERE  ".$where." ";
+  //echo $query;die;
 	$sql = mysql_query($query);
 	if($sql)
 	{
 		return $this->find_user_data($where);
 	}else
 	{
-		return 0;
+		return $this->find_user_data($where);
 	}
 
  }

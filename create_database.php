@@ -445,6 +445,7 @@ else
 
 else if($_REQUEST['act']=="createjob")
 {
+ini_set("memory_limit","50M");  
 $data1 = json_decode(file_get_contents("php://input"));
 //print_r($data1);
 $item = new stdClass(); 
@@ -1796,20 +1797,19 @@ $user_app    = 'M';
           $prof_name    = $response['prof_name'];
           $contact_no   = $response['contact_no'];
           $user_image   = $response['user_image'];
+          $sport        = $response['sport'];
 
-       // $res1                      = $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username);
-
-if(empty($user_image)) 
-{
-$user_image = "http://getsporty.in/staging/uploads/profile/demo.png";
-}
+          if(empty($user_image)) 
+          {
+           $user_image = "http://getsporty.in/staging/uploads/profile/demo.png";
+          }
 
 
-$res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
+         $res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
 
            if ($module=='1')
            {
-            $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$job_id,'indicator' => 3,);
+            $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$job_id,'indicator' => 3,'prof_id'=>$prof_id,'job_status'=>'1','sport'=>$sport);
            }  
           if ($module=='2')
            {

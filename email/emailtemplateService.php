@@ -4,7 +4,7 @@ class emailtemplateService
 public function job_apply_template($email,$userid,$prof_id,$username,$prof_name,$contact_no,$image_url)
 {
 
-  $profile_link = "https://getsporty.in/web/#/allProfile/$userid/$prof_id";
+  $profile_link = VIEW_PROFILE."manage/job/candidate_profile/$userid";
  
 
  $job_template = '<div> <!DOCTYPE html>

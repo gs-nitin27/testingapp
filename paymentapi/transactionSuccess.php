@@ -10,6 +10,7 @@ $posted_hash=$_POST["hash"];
 $key=$_POST["key"];
 $productinfo=$_POST["productinfo"];
 $email=$_POST["email"];
+$udf1=$_POST["udf1"];
 $salt="e5iIg1jwi8";
 
 
@@ -17,18 +18,20 @@ $salt="e5iIg1jwi8";
 
 If (isset($_POST["additionalCharges"])) {
        $additionalCharges=$_POST["additionalCharges"];
-        $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+        $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||'.$udf1.'|'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
         
                   }
 	else {	  
 
-        $retHashSeq = $salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+        $retHashSeq = $salt.'|'.$status.'||||||||||'.$udf1.'|'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
 
          }
+         //echo $retHashSeq;die;
 		 $hash = hash("sha512", $retHashSeq);
 		 
        if ($hash != $posted_hash) {
-	       echo "Invalid Transaction. Please try again";
+        echo "Invalid Transaction. Please try again";
+        echo $retHashSeq;echo '------'.$posted_hash;die;
 	}
 	else { 
                 $req = new payment();
@@ -51,21 +54,25 @@ If (isset($_POST["additionalCharges"])) {
                 $item->key               = $_POST["key"];
                 $item->jobid             = $_POST["productinfo"];
                 $item->email             = $_POST["email"];
+                $item->userid            = $_POST["udf1"];
                 $item->salt              = "e5iIg1jwi8";
                 $item->invoiceid         = $invoiceid;
                 $item->date              = $paymentdate;
+                // $data = $_POST;
+                // $data['j_title'] =
                 $item->transaction_data  = json_encode($_POST);
                 
-
-               // print_r($jobtitle['title']);
-
-
-                $getuserid = $req->getuserid($item->email);
-                $item->userid = $getuserid['userid'];
-                $res = $req->paymentservice($item);
+                
                 $jobtitle = $req->getjobtitle($item->jobid);  
                 $item->title = $jobtitle['title'];
                 $publish = $req->publishjob($item->jobid);
+                $tr_data = $_POST;
+                $tr_data['j_title'] = $item->title;
+                $tr_data['invoiceid'] = $item->invoiceid;
+                $tr_data['date'] = $item->date;
+                $tr_data['userid'] = $item->userid;
+                $tr_data['jobid']  = $item->jobid;
+                $res = $req->paymentservice(json_encode($tr_data));
                 $mail = $req->invoicemail($item->email,$item);     
          
 
@@ -85,7 +92,11 @@ If (isset($_POST["additionalCharges"])) {
 <script> 
 
         setTimeout(function() {
+<<<<<<< HEAD
+              window.location = 'http://localhost/gs_newsite/manage/job/transaction_list';
+=======
               window.location = 'https://getsporty.in/gs_newsite/manage/dashbo#';
+>>>>>>> 29baba36fd886e9678e686f3665cd33c7d71f504
         }, 3000);       
 </script> 
 
