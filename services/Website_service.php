@@ -100,24 +100,21 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_token        = $row['token'];
                   $A_url          = $row['url'];
                   $A_video_link   = $row['video_link'];
-                  $A_url          = "article-detail/".$row['id'];
-                  $abc ='';
-                  $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
+                  $res_url        = "article-detail/".$row['id'];
+                  $A_image_path   = "https://getsporty.in/portal/uploads/resources/".$A_img;
 
-
-  if($A_token==0)
+            if($A_token==0)
             {
-                $res_url     = $A_url;
-
+                          $res_url     = $A_url;
             }
-            if ($A_token==1 || $A_token==3) 
+            if($A_token==1 || $A_token==3) 
             {
                 $res_url               = "article-detail/".$A_id ;
 
             }
             if ($A_token== 2) 
             {
-                $res_url     = "https://www.youtube.com/embed/".$A_video_link;
+          $video_url     = "https://www.youtube.com/embed/".$A_video_link;
           $A_video = '
           <div  data-toggle="modal" data-target="#myModa'.$A_video_link.'">
                    <img src="img/play-icon.svg" width= "50px">
@@ -128,7 +125,7 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                     <div class="modal-content">
                        <div class="modal-body">
                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <iframe width="100%" height="315" src="'.$res_url.'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                          <iframe width="100%" height="315" src="'.$video_url.'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                          </div>
                     </div>
                 </div>
