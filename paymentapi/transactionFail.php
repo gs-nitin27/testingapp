@@ -29,6 +29,6 @@ If (isset($_POST["additionalCharges"])) {
 <!--Please enter your website homepagge URL -->
 
 <script>
-window.location = 'https://getsporty.in/gs_newsite/manage/dashbo';
+window.location = 'https://localhost/gs_newsite/manage/dashbo';
 </script>
 <p><a href=http://localhost/testing/success_failure/PayUMoney_form.php> Try Again</a></p>

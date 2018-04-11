@@ -92,11 +92,8 @@ If (isset($_POST["additionalCharges"])) {
 <script> 
 
         setTimeout(function() {
-<<<<<<< HEAD
               window.location = 'http://localhost/gs_newsite/manage/job/transaction_list';
-=======
-              window.location = 'https://getsporty.in/gs_newsite/manage/dashbo#';
->>>>>>> 29baba36fd886e9678e686f3665cd33c7d71f504
+
         }, 3000);       
 </script> 
 

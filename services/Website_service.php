@@ -45,7 +45,6 @@ public function get_job_data($item_per_page,$position)
 
        echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$J_image_path.'" alt="img"></div><div class="slide-job-list"><h4>'.$J_title.'</h4><p> Location : <span>'.$J_location.' </span></p><p> Posted : <span> '.$J_day.' </span></p><p> Organisation Name : <span> '.$job_org_name.' </span></p><div class="read-c"><a href="'.$J_url.'">Read More</a> </div></div></div></div> ';
 
-
      
       }
   }
@@ -53,7 +52,7 @@ public function get_job_data($item_per_page,$position)
 
 
   public function get_tournament_data($item_per_page,$position)
-  {
+  {// echo "SELECT id,name,image,start_date,end_date,event_entry_date,event_end_date, org_city,sport FROM gs_tournament_info WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page";
     $tournament = mysql_query("SELECT id,name,image,start_date,end_date,event_entry_date,event_end_date, org_city,sport FROM gs_tournament_info WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page");
     while($row = mysql_fetch_assoc($tournament)){
 
@@ -89,38 +88,31 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_id           = $row['id'];
                   $A_title        = $row['title'];
                   $A_img          = $row['image'];
-
                   $A_summary      = substr($row['summary'],0,200) ;
                   $A_token        = $row['token'];
                   $A_url          = $row['url'];
                   $A_video_link   = $row['video_link'];
                   $A_url          = "article-detail/".$row['id'];
                   $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
-                  $A_summary      = substr($row['summary'],0,200) ;
-                  $A_token        = $row['token'];
-                  $A_url          = $row['url'];
-                  $A_video_link   = $row['video_link'];
-                  $A_url          = "article-detail/".$row['id'];
-                  $abc ='';
-                  $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
-
-
   if($A_token==0)
             {
                 $res_url     = $A_url;
-
+                
             }
             if ($A_token==1 || $A_token==3) 
             {
                 $res_url               = "article-detail/".$A_id ;
-
+                
             }
             if ($A_token== 2) 
             {
-                $res_url     = "https://www.youtube.com/embed/".$A_video_link;
+               $res_url               = $A_url;
+
+                $video_url     = "https://www.youtube.com/embed/".$A_video_link;
+
           $A_video = '
           <div  data-toggle="modal" data-target="#myModa'.$A_video_link.'">
-                   <img src="img/play-icon.svg" width= "50px">
+                   <img src="public/img/play-icon.svg" width= "50px">
               </div>
                <div id="myModa'.$A_video_link.'" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -128,14 +120,17 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                     <div class="modal-content">
                        <div class="modal-body">
                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <iframe width="100%" height="315" src="'.$res_url.'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                          <iframe width="100%" height="315" src="'.$video_url.'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                          </div>
                     </div>
                 </div>
             </div>';
 
+               
+
             }
          
+
 
 
  echo ' <div class="col-lg-3 col-md-3">  <div class=" hover-boxs"> <div class="job-box"> <img src="'.$A_image_path.'" alt="img">     </div>     <div class="slide-job-list">     <h4>'.$A_title.'</h4> <p><span> '.$A_summary.'</span></p>  '.$A_video.' <div class="read-c"><a href="'.$res_url.'">Read More</a> </div>    </div>                            </div>                </div> ';

@@ -1,5 +1,5 @@
 <?php
-include('test._config_website.php');
+include('config1.php');
 
 //include('config1.php');
 
@@ -11,7 +11,6 @@ include('services/Website_service.php');
  // $selected = mysql_select_db('getsport_gs') or die("Could not select databasename");
  //}else
 
-
     $page_number = filter_var($_POST["page"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
     if(!is_numeric($page_number))
     {
@@ -22,8 +21,9 @@ include('services/Website_service.php');
     $position = (($page_number-1) * $item_per_page);
     $input = $_REQUEST['act'];
     $request           =   new Website_service();
+    echo $position; 
     switch ($input)
-    {
+    {   
         case 'event':
         $request->get_event_data($item_per_page,$position);
         break;

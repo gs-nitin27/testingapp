@@ -22,21 +22,22 @@ public function getjobtitle($jobid)
 {
  $query = mysql_query("SELECT `title` FROM `gs_jobInfo` WHERE `id` = '$jobid'");
  if(mysql_num_rows($query))
- {
-    while ($row = mysql_fetch_assoc($query)) 
     {
-        $rows = $row;
+        while ($row = mysql_fetch_assoc($query)) 
+        {
+            $rows = $row;
+        }
+        return $rows;
     }
-    return $rows;
- }else
- {
- return 0;
-}
+    else
+    {
+        return 0;
+    }
 }
 
 public function publishjob($jobid)
 { //echo "UPDATE  `gs_jobInfo` SET `publish` = '1' WHERE `id` = '$jobid'";die;
-  $insert = mysql_query("UPDATE  `gs_jobInfo` SET `publish` = '1' WHERE `id` = '$jobid'");
+  $insert = mysql_query("UPDATE  `gs_jobInfo` SET `publish` = '1' AND `date_publish`= CURDATE() WHERE `id` = '$jobid'");
   $tes = mysql_affected_rows();
 
   if($tes)

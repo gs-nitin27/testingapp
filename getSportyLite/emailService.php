@@ -307,7 +307,64 @@ public function visitor_Acknowlege($user_info)
                }
 }        
        
+public function careers_apply($user_info)
+{       
+         require('class.phpmailer.php');
+         $to             =  "info@darkhorsesports.in";
+         $from           =  $user_info['email'];//"info@darkhorsesports.in";
+         $from_name      =  $user_info['name'];
+         $subject        =  "New message from visitor";//$user_info->name." has sent a message";
+         $mail = new PHPMailer();  // create a new object
+         $mail->IsSMTP(); // enable SMTP
+         $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
+         $mail->Host = 'mail.getsporty.in';
+         $attachments = $_FILES['doc'];
+         $mail->Port = 587; 
+         $mail->Username =$from;  
+        
+         $mail->SetFrom($from, $from_name);
+                $mail->Subject = $subject;
+                //$attachments = $FILES['doc'];
+                $file_name = $attachments['name'];
+                $file_size = $attachments['size'];
+                $file_type = $attachments['type'];
+                
+                //read file 
+                $handle = fopen($attachments['tmp_name'], "r");
+                $content = fread($handle, $file_size);
+                fclose($handle);
+                $encoded_content = chunk_split(base64_encode($content)); //split into sm
 
+         $mail->Body = "<!DOCTYPE html>
+                        <html>
+                        <body>
+                        <p><b>Name:</b>".$user_info['name']."</p>
+                        <p><b>Email:</b>".$user_info['email']."</p>";
+        $mail->Body .= "--boundary\r\n";
+        $mail->Body .="Content-Type: $file_type; name=".$file_name."\r\n";
+        $mail->Body .="Content-Disposition: attachment; filename=".$file_name."\r\n";
+        $mail->Body .="Content-Transfer-Encoding: base64\r\n";
+        $mail->Body .="X-Attachment-Id: ".rand(1000,99999)."\r\n\r\n"; 
+        $mail->Body .= $encoded_content;
+        $mail->Body .=  "</body>
+                        </html>";//$user_info->message; 
+               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AltBody = $txt; 
+               $mail->AddAddress($to);
+               $requ = $this->visitor_Acknowlege((object)$user_info);
+               if($requ == 1)
+               {
+               $mail->Send(); 
+               return $requ; 
+               }else
+               {
+               return 0;
+               }
+               
+               
+               
+
+}
 
 
 
