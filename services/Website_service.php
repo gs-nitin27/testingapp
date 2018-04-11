@@ -19,9 +19,12 @@ class Website_service
                   $e_entry_end_date        = date('d F, Y',strtotime($row['entry_end_date']));
                   $event_img_name          = $row['image'];
                   $event_image_path        = "https://getsporty.in/portal/uploads/event/".$event_img_name;
+      if(!empty($event_img_name))
+      {
       echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$event_image_path.'"></div><div class="slide-job-list"><h4>'.$event_title.'</h4><p> Type : <span> '.$event_type .'</span></p><p> Start : <span> '.$e_start_date.' - '.$e_end_date.'</span></p><p> Entry : <span> '.$e_entry_start_date.' - '.$e_entry_end_date.' </span></p><p> Location : <span>'.$event_location.'</span></p><div class="read-c"><a href="'.$event_url .'">Read More</a> </div></div></div></div> ';
     }
   }
+}
 
 
 public function get_job_data($item_per_page,$position)
@@ -42,6 +45,10 @@ public function get_job_data($item_per_page,$position)
                     $datetime2 = new DateTime($date_updated);
                     $interval = $datetime1->diff($datetime2);
                     $J_day = $interval->format(' %a Days ago ');
+                    if($J_day == ' 0 Days ago ')
+                    {
+                      $J_day = 'Today';
+                    }
 
        echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$J_image_path.'" alt="img"></div><div class="slide-job-list"><h4>'.$J_title.'</h4><p> Location : <span>'.$J_location.' </span></p><p> Posted : <span> '.$J_day.' </span></p><p> Organisation Name : <span> '.$job_org_name.' </span></p><div class="read-c"><a href="'.$J_url.'">Read More</a> </div></div></div></div> ';
 
@@ -50,12 +57,12 @@ public function get_job_data($item_per_page,$position)
   }
 
 
-
   public function get_tournament_data($item_per_page,$position)
-  {// echo "SELECT id,name,image,start_date,end_date,event_entry_date,event_end_date, org_city,sport FROM gs_tournament_info WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page";
+  {  
+    
     $tournament = mysql_query("SELECT id,name,image,start_date,end_date,event_entry_date,event_end_date, org_city,sport FROM gs_tournament_info WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page");
     while($row = mysql_fetch_assoc($tournament)){
-
+    
                   $T_id                = $row['id'];
                   $T_title             = $row['name'];
                   $T_img               = $row['image'];
@@ -69,10 +76,8 @@ public function get_job_data($item_per_page,$position)
                   $T_image_path        = "https://getsporty.in/portal/uploads/tournament/".$T_img;
       if(!empty($T_img))
       {
-echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-box"> <img src="'.$T_image_path.'" alt="img"> </div><div class="slide-job-list"><h4>'.$T_title.'</h4><p> Location : <span> '.$T_org_city.'</span></p><p> Start : <span> '.$T_start_date.' - '.$T_end_date.'</span></p><p> Entry : <span> '.$T_event_entry_date.' - '.$T_event_end_date.' </span></p> <p> Sport : <span>Lawn Tennis </span></p><div class="read-c"> <a href="'.$T_url.'">Read More</a> </div></div> </div> </div>    ';  
+echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-box"> <img src="'.$T_image_path.'" alt="img"> </div><div class="slide-job-list"><h4>'.$T_title.'</h4><p> Location : <span> '.$T_org_city.'</span></p><p> Start : <span> '.$T_start_date.' - '.$T_end_date.'</span></p><p> Entry : <span> '.$T_event_entry_date.' - '.$T_event_end_date.' </span></p> <p> Sport : <span>Lawn Tennis </span></p><div class="read-c"> <a href="'.$T_url.'">Read More</a> </div></div> </div> </div>';  
 }
-
-
       } // End of for Loop
 
 
