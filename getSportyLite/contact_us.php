@@ -1,5 +1,5 @@
 <?php
-include('../config1.php');
+include('../config.php');
 include('emailService.php');
 include('visitorService.php');
 switch ($_REQUEST['act']) {
@@ -35,7 +35,7 @@ case 'career':
       }
       $result = array('status'=>$email,'msg'=>$msg);
       echo json_encode($result);
-      break;
+            break;
 	
 	default:
 		$Result = array('status' => '0','msg'=>'Please Try Again');

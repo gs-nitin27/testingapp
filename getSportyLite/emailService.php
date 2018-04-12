@@ -313,7 +313,7 @@ public function careers_apply($user_info)
          $to             =  "info@darkhorsesports.in";
          $from           =  $user_info['email'];//"info@darkhorsesports.in";
          $from_name      =  $user_info['name'];
-         $subject        =  "New message from visitor";//$user_info->name." has sent a message";
+         $subject        =  "New Job Applicant";//$user_info->name." has sent a message";
          $mail = new PHPMailer();  // create a new object
          $mail->IsSMTP(); // enable SMTP
          $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
@@ -334,21 +334,17 @@ public function careers_apply($user_info)
                 $content = fread($handle, $file_size);
                 fclose($handle);
                 $encoded_content = chunk_split(base64_encode($content)); //split into sm
-
+          
          $mail->Body = "<!DOCTYPE html>
                         <html>
                         <body>
                         <p><b>Name:</b>".$user_info['name']."</p>
-                        <p><b>Email:</b>".$user_info['email']."</p>";
-        $mail->Body .= "--boundary\r\n";
-        $mail->Body .="Content-Type: $file_type; name=".$file_name."\r\n";
-        $mail->Body .="Content-Disposition: attachment; filename=".$file_name."\r\n";
-        $mail->Body .="Content-Transfer-Encoding: base64\r\n";
-        $mail->Body .="X-Attachment-Id: ".rand(1000,99999)."\r\n\r\n"; 
-        $mail->Body .= $encoded_content;
+                        <p><b>Email:</b>".$user_info['email']."</p>
+                        <p><b>Contact No. :</b>".$user_info['contact']."</p>";
         $mail->Body .=  "</body>
                         </html>";//$user_info->message; 
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+               $mail->AddAttachment($_FILES['doc']['tmp_name'],$_FILES['doc']['name']);
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $requ = $this->visitor_Acknowlege((object)$user_info);
