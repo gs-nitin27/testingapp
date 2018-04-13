@@ -61,10 +61,7 @@ button:hover, a:hover {
 </div>
 
 </body>
-</html>
-
-
-</div>';
+</html>';
 
  return $this->main_template($job_template);
 
@@ -72,7 +69,7 @@ button:hover, a:hover {
 
 public function job_subject($username)
 {
-  return ucwords($username). ' is apply this job';
+  return ucwords($username). ' has applied for a job';
 }
 
 public function main_template($template)

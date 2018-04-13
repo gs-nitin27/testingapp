@@ -3,7 +3,7 @@ include('config1.php');
 include('services/user_access_service.php');
 include('services/userdataservice.php');
 include('services/UserProfileService.php');
-
+ini_set('display_errors','0');
 $req = new userdataservice();
 if($_REQUEST['act'] == 'gs_login')
 {
@@ -207,8 +207,9 @@ if($resp[$column] == $item->id && $resp['status'] == '1')
 	      {
 	        $resp['classes'] = $req->connected_class($resp['userid']);  // To get connected classes
 	      }
+	        
 	        $resp['profile'] = $req->checkprofile($resp['userid']);  // To get 
-
+            
 	$resp = array('status' =>'1' ,'data'=>$resp , 'msg'=>'user info successfully updated');
 
 
@@ -228,7 +229,7 @@ $update = "`userType` = '".$item->userType."' , `email`= '".$item->email."',`nam
 	if($resp['prof_name'] == 'Athletes')
 	      {
 	        $resp['classes'] = $req->connected_class($resp['userid']);  // To get connected classes
-	      }
+	      }  
 	        $resp['profile'] = $req->checkprofile($resp['userid']);  // To get 
 	$resp = array('status' =>'1' ,'data'=>$resp , 'msg'=>'user info successfully updated');
 }

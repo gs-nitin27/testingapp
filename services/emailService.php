@@ -1179,11 +1179,10 @@ public function invoicemail($data,$paymentdata)
 public function email_job_apply($email,$userid,$prof_id,$username,$prof_name,$contact_no,$image_url)
 {
 
-  $req = new emailtemplateService();
-  $body = $req->job_apply_template($email,$userid,$prof_id,$username,$prof_name,$contact_no,$image_url);
- $subject = $req->job_subject($username);
-
- $this->email_send($email,$body,$subject);
+$req = new emailtemplateService();
+$body = $req->job_apply_template($email,$userid,$prof_id,$username,$prof_name,$contact_no,$image_url);
+$subject = $req->job_subject($username);
+$this->email_send($email,$body,$subject);
 } // End Function
 
 

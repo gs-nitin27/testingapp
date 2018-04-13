@@ -36,7 +36,7 @@ public function getjobtitle($jobid)
 }
 
 public function publishjob($jobid)
-{ //echo "UPDATE  `gs_jobInfo` SET `publish` = '1' AND `date_publish`= CURDATE() WHERE `id` = '$jobid'";die;
+{ 
   $insert = mysql_query("UPDATE `gs_jobInfo` SET `publish` = '1' , `publish_date` = CURDATE() WHERE `gs_jobInfo`.`id` = '$jobid'  ");
   $tes = mysql_affected_rows();
 

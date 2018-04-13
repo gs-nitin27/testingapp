@@ -1746,12 +1746,18 @@ else if($_REQUEST['act'] == "apply")
   $data              =  file_get_contents("php://input");
   $job_data          =  json_decode(file_get_contents("php://input"));
   $userid            =  $job_data->user_id ;
-  $job_id            =  $job_data->job_id ; 
   $type              =  $job_data->type ;
   $module            =  $job_data->module ;
   $user_name         =  $job_data->user_name ;
   $email             =  $job_data->email ;
-
+  if($module == '1')
+  {
+     $job_id            =  $job_data->job_id ; 
+  }
+   else if($module == '2')
+   {
+    $job_id            =  $job_data->event_id ;
+   }
 // $userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
 // $id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
 // $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
@@ -1798,17 +1804,18 @@ $user_app    = 'M';
           $contact_no   = $response['contact_no'];
           $user_image   = $response['user_image'];
           $sport        = $response['sport'];
-
+          //print_r($response);die;
           if(empty($user_image)) 
           {
            $user_image = "http://getsporty.in/staging/uploads/profile/demo.png";
           }
 
 
-         $res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
-
+         
            if ($module=='1')
            {
+            $res1   =  $req1->email_job_apply($email_id_Emp,$userid,$prof_id,$username,$prof_name,$contact_no,$user_image);
+
             $message      = array('message'=>$username." "." has applied for a job" ,'title'=>'Job Application','date_applied'=>$date,'userid'=>$userid ,'id'=>$job_id,'indicator' => 3,'prof_id'=>$prof_id,'job_status'=>'1','sport'=>$sport);
            }  
           if ($module=='2')
@@ -1827,10 +1834,6 @@ $user_app    = 'M';
              $Result = array('status' => '1','data'=>'1' ,'msg'=>'Apply Success','notification'=>'send notification');
              echo json_encode($Result);
           }
-    // }
-      
-             // $res2     = $req1->emailForApply($email_id_Emp,$email,$module);
-   
     }
     else
     {

@@ -39,7 +39,7 @@ $prof_id = $user_res['prof_id'];
 if($user_res==0)
 {
   $user = array('status' => 0, 'data'=> $user_res, 'msg'=>'User is Not Register');
-  echo json_encode($user);
+ return 0;
   //die();
 }
 else
@@ -2464,7 +2464,7 @@ public function  FindDeviceId($id,$module)
     if ($module==3)
     {
       $table ="`gs_tournament_info`";
-    }  
+    }  echo "SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)";die;
     $query=mysql_query("SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)");
        $num=mysql_num_rows($query);
         if ($num!=0) 
