@@ -2464,7 +2464,7 @@ public function  FindDeviceId($id,$module)
     if ($module==3)
     {
       $table ="`gs_tournament_info`";
-    }  echo "SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)";die;
+    }  
     $query=mysql_query("SELECT * FROM `user` WHERE `userid` = (SELECT `userid` FROM $table WHERE `id`=$id)");
        $num=mysql_num_rows($query);
         if ($num!=0) 
