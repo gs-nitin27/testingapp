@@ -83,7 +83,7 @@ else if($_REQUEST['act'] == 'tournament_apply')
   if($res != 0)
   { 
     $req = new paymentServices();
-    $billing_status = $req->billing_data_save($savebillingdata);
+    $billing_status = $req->billing_data_save($savebillingdata,'3');
     $response = array('status' =>$res ,'data'=>[],'msg'=>'successfully applied');
     $emailres = new emailService();
     $eres = $emailres->tournament_apply_email($cat_data, $savebillingdata,$userdata,$emailtemp);

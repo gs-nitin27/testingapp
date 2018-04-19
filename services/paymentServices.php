@@ -4,9 +4,9 @@
 Class paymentServices
 {
 
-public function paymentPlan()
+public function paymentPlan($module)
 {
-	$query = mysql_query("SELECT * FROM `gs_pricing_plan`");
+	$query = mysql_query("SELECT * FROM `gs_pricing_plan` WHERE `module` = '$module'");
 	if(mysql_num_rows($query))
 	{
 		while ($row = mysql_fetch_assoc($query)) 
@@ -134,18 +134,16 @@ public function create_hash($data)
 }
 
 
-public function billing_data_save($item)
+public function billing_data_save($item,$module)
 {
-
- $query = mysql_query("INSERT INTO `gs_participant_billing`(`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`userid`,`date_created`,`date_updated`,`transaction_data`) VALUES('$item->invoice_id','$item->productinfo','3','$item->amount',CURDATE(),'1','$item->txnid','$item->userid',CURDATE(),CURDATE(),'$item->transaction_data')");
- if($query)
- {
- 	return 1;
- }else
- {
- 	return 0;
- }
-
+	 $query = mysql_query("INSERT INTO `gs_participant_billing`(`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`userid`,`date_created`,`date_updated`,`transaction_data`) VALUES('$item->invoice_id','$item->productinfo','$module','$item->amount',CURDATE(),'1','$item->txnid','$item->userid',CURDATE(),CURDATE(),'$item->transaction_data')");
+	 if($query)
+	 {
+	 	return 1;
+	 }else
+	 {
+	 	return 0;
+	 }
 }
 
 }

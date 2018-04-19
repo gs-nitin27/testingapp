@@ -21,7 +21,8 @@ include('services/Website_service.php');
     $position = (($page_number-1) * $item_per_page);
     $input = $_REQUEST['act'];
     $request           =   new Website_service();
-    echo $position; 
+    //echo $position; 
+    $where = $_REQUEST['where'];
     switch ($input)
     {   
         case 'event':
@@ -34,7 +35,7 @@ include('services/Website_service.php');
         $request->get_tournament_data($item_per_page,$position);
         break;
         case 'article':
-        $request->get_article_data($item_per_page,$position);
+        $request->get_article_data($item_per_page,$position,$where);
         break;
         default:
         break;

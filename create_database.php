@@ -1674,20 +1674,16 @@ else if($_REQUEST['act'] == "professional")
     $response   = $request->user_Info($whereclause);
 
 if($response)
-{
-                                $response      = $request->getfavForUser($response,$module, $userid);
-                              //  if (!empty($userid))
-                               // {
-                                    
-                               // }
-           $Result = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
-           echo json_encode($Result);
-}
+    {
+               $response = $request->getfavForUser($response,$module, $userid);
+               $Result   = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
+               echo json_encode($Result);
+    }
 else
-{       $response = [];              
-        $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
-        echo json_encode($Result);
-}
+    {       $response = [];              
+            $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
+            echo json_encode($Result);
+    }
  }   // End Function
 
 
@@ -1718,21 +1714,21 @@ $response           =  $request->getConnectUser($lite_user_id,$prof_user_id);
 
 else if($_POST['act'] == "gs_viewapply")
 {
-$userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
-$type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
-$rev = new userdataservice();
-$res = $rev->view_apply($userid,$type);
-$res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
-if($res1)
-{
- $data = array('data'=>$res1,'status'=>'1');
- echo json_encode($data);
-}
-else
-{
-$data = array('data'=>'0','status'=>'0');
-echo json_encode($data);
-}
+  $userid = urldecode($_POST['user_id']);  // User Id [Person which is Apply Job Or Event or Tournament]
+  $type = urldecode($_POST['type']);       // Type is Defined the Module [1. Job , 2.Event, 3. Tournament]
+  $rev = new userdataservice();
+  $res = $rev->view_apply($userid,$type);
+  $res1 = $rev->getfavForUser($res, $type, $userid);  // vew the [job,event,tournament is Fav or Not]
+  if($res1)
+  {
+   $data = array('data'=>$res1,'status'=>'1');
+   echo json_encode($data);
+  }
+  else
+  {
+  $data = array('data'=>'0','status'=>'0');
+  echo json_encode($data);
+  }
 }
 
 
@@ -1750,24 +1746,14 @@ else if($_REQUEST['act'] == "apply")
   $module            =  $job_data->module ;
   $user_name         =  $job_data->user_name ;
   $email             =  $job_data->email ;
-  if($module == '1')
-  {
-     $job_id            =  $job_data->job_id ; 
-  }
-   else if($module == '2')
-   {
-    $job_id            =  $job_data->event_id ;
-   }
-// $userid      = urldecode($_REQUEST ['user_id']); // Applicant User Id
-// $id          = urldecode($_REQUEST ['id']);       // This is  [Job Id   Event Id  Tournament Id]
-// $type        = urldecode($_REQUEST ['type']);   // when user is Apply the Status/ is Set the 1 
-// $module      = urldecode($_REQUEST ['module']);  // User is Apply the Job=1 Event=2 Tournament=3
-// $user_name   = urldecode($_REQUEST ['user_name']);  // User is Apply the Job=1 Event=2 Tournament=3
-// $email       = urldecode($_REQUEST ['email']);  // User is Apply the Job=1 Event=2 Tournament=3
-//echo "$userid";die();
-
-
-
+if($module == '1')
+{
+   $job_id            =  $job_data->job_id ; 
+}
+else if($module == '2')
+{
+   $job_id            =  $job_data->event_id ;
+}
 $request     = new userdataservice();
 $req         = new connect_userservice();
 $req1        = new emailService();

@@ -6,9 +6,9 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
 {   
 
         $fulldata  =  json_decode(file_get_contents("php://input"));
-
+        
         $paymentdata1 =  json_decode($fulldata->payuData);  
-        $paymentdata = $paymentdata1->result;
+        $paymentdata  =  $paymentdata1->result;
               
         $req = new payment();
         $date = date("Y-m-d");
@@ -17,8 +17,16 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $dateObj   = DateTime::createFromFormat('!m', $monthNum);
         $monthName = $dateObj->format('F');
         $year = date("y");
-        $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;
-        $paymentdate = $date1[2]."-" .$monthName."-".$date1[0];
+        if($fulldata->module == '1')
+        {
+        $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;        
+        }
+        else if ($fulldata->module == '2') 
+        {
+        $invoiceid = "GSEV/2/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;
+        }
+        
+        $paymentdate = $date1[2]."-".$monthName."-".$date1[0];
          
         $item = new stdClass();
 
@@ -33,17 +41,13 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $item->salt = "e5iIg1jwi8";
         $item->invoiceid = $invoiceid;
         $item->date = $paymentdate;
+        $item->module = $fulldata->module;
         $item->transaction_data = json_encode($paymentdata);
 
-        //print_r($item);die;
-	// $getuserid = $req->getuserid($item->email);
-	// $item->userid = $getuserid['userid'];
         $item->userid = $fulldata->userid;
 	$res = $req->paymentservice(json_encode($item));
-	//$jobtitle = $req->getjobtitle($item->jobid);  
-	//$item->title = $jobtitle['title'];
-        $item->title = $fulldata->jobTitle;
-	$publish = $req->publishjob($item->jobid);
+	$item->title = $fulldata->title;
+	$publish = $req->publishjob($fulldata->id,$fulldata->module);
         $mail = $req->invoicemail($item->email,$item);     
 
         $data = array('status' => "1", "data" => []);

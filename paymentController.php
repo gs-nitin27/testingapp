@@ -5,9 +5,10 @@ include('services/paymentServices.php');
 
 if($_REQUEST['act'] == "paymentPlan")
 {
+	$module = $_REQUEST['module'];
 	$req = new paymentServices();
-	$res = $req->paymentPlan();
-
+	$res = $req->paymentPlan($module);
+   
 	if($res)
 	{
 		$data = array('data' => $res, 'status' => '1');

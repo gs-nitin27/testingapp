@@ -244,29 +244,7 @@ $mail = new PHPMailer();
 </body>
 </html>
 '; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-               $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
+$txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
@@ -275,5 +253,21 @@ $mail = new PHPMailer();
 return 1;
 
 }
+public function get_code($entry_passcode)
+{
+    require('BarcodeQR.php');
+    $qr = new BarcodeQR(); 
+    $qr->text($entry_passcode); 
+    if($qr->draw(150, "QrCodeImage/qr-code.png"))
+    {
+    return true;
+    }
+    else
+    {
+    return false;
+    }
+}
+
+
 }// End Class
 ?>

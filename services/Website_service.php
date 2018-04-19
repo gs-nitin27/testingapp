@@ -76,7 +76,7 @@ public function get_job_data($item_per_page,$position)
                   $T_image_path        = "https://getsporty.in/portal/uploads/tournament/".$T_img;
       if(!empty($T_img))
       {
-echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-box"> <img src="'.$T_image_path.'" alt="img"> </div><div class="slide-job-list"><h4>'.$T_title.'</h4><p> Location : <span> '.$T_org_city.'</span></p><p> Start : <span> '.$T_start_date.' - '.$T_end_date.'</span></p><p> Entry : <span> '.$T_event_entry_date.' - '.$T_event_end_date.' </span></p> <p> Sport : <span>Lawn Tennis </span></p><div class="read-c"> <a href="'.$T_url.'">Read More</a> </div></div> </div> </div>';  
+echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-box"> <img src="'.$T_image_path.'" alt="img"> </div><div class="slide-job-list"><h4>'.$T_title.'</h4><p> Location : <span> '.$T_org_city.'</span></p><p> Start : <span> '.$T_start_date.' - '.$T_end_date.'</span></p><p> Entry : <span> '.$T_event_entry_date.' - '.$T_event_end_date.' </span></p> <p> Sport : <span>'.$T_sport.'</span></p><div class="read-c"> <a href="'.$T_url.'">Read More</a> </div></div> </div> </div>';  
 }
       } // End of for Loop
 
@@ -86,9 +86,9 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
 
 
 
-  public function get_article_data($item_per_page,$position)
+  public function get_article_data($item_per_page,$position,$where)
   {
-    $resources = mysql_query("SELECT id,title,summary,image,token,url,video_link,token  FROM `gs_resources` WHERE `status` = '1' ORDER BY id DESC LIMIT $position, $item_per_page");
+      $resources = mysql_query("SELECT id,title,summary,image,token,url,video_link,token  FROM `gs_resources` WHERE `status` = '1'".$where." ORDER BY id DESC LIMIT $position, $item_per_page");
     while ( $row = mysql_fetch_assoc($resources)){
                   $A_id           = $row['id'];
                   $A_title        = $row['title'];
@@ -99,7 +99,8 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_video_link   = $row['video_link'];
                   $A_url          = "article-detail/".$row['id'];
                   $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
-  if($A_token==0)
+                  $A_video='';
+   if($A_token==0)
             {
                 $res_url     = $A_url;
                 
@@ -115,8 +116,7 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
 
                 $video_url     = "https://www.youtube.com/embed/".$A_video_link;
 
-          $A_video = '
-          <div  data-toggle="modal" data-target="#myModa'.$A_video_link.'">
+          $A_video = '<div  data-toggle="modal" data-target="#myModa'.$A_video_link.'">
                    <img src="public/img/play-icon.svg" width= "50px">
               </div>
                <div id="myModa'.$A_video_link.'" class="modal fade" role="dialog">

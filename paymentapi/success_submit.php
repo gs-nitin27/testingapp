@@ -5,9 +5,7 @@ Class payment
     {
        $paymentdata = json_decode($paymentdata);
        $data  = json_encode($paymentdata);
-       // echo "INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','1','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$data') ";//die;
-       // print_r($paymentdata);die;
-     $query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','1','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$data') ");
+       $query = mysql_query("INSERT INTO `gs_billing`(`userid`,`invoice_id`,`user_item`,`module`,`amount`,`date`,`billing_status`,`transaction_id`,`date_created`,`date_updated`,`transaction_data`) VALUES('$paymentdata->userid','$paymentdata->invoiceid','$paymentdata->jobid','$paymentdata->module','$paymentdata->amount',CURDATE(),'1','$paymentdata->txnid',CURDATE(),CURDATE(),'$data') ");
     if($query)
     {
         return 1;
@@ -35,9 +33,17 @@ public function getjobtitle($jobid)
     }
 }
 
-public function publishjob($jobid)
+public function publishjob($id,$module)
 { 
-  $insert = mysql_query("UPDATE `gs_jobInfo` SET `publish` = '1' , `publish_date` = CURDATE() WHERE `gs_jobInfo`.`id` = '$jobid'  ");
+    if($module == '1')
+    {
+        $table = '`gs_jobInfo`';
+    }else if($module == '2')
+    {
+        $table = '`gs_eventinfo`';
+    }
+  
+  $insert = mysql_query("UPDATE ".$table." SET `publish` = '1' , `publish_date` = CURDATE() WHERE ".$table.".`id` = '$id'  ");
   $tes = mysql_affected_rows();
 
   if($tes)
