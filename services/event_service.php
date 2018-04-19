@@ -3,7 +3,8 @@ class event_service
 {
  public function event_participants_list($id)
  {
-    $query =mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `applicant_id` FROM `gs_event_application` WHERE `event_id` = $id)");
+    $query =mysql_query("SELECT a.`name`,a.`dob`,a.`gender`,a.`prof_name`,a.`location`,a.`user_image`,a.`email`,a.`userid`,a.`prof_id`,a.`sport`,b.`applicant_id`,b.`status` AS apply_status ,b.`event_id`,b.`id`,b.`application_data` FROM `gs_event_application` AS b LEFT JOIN `user` AS a ON a.`userid` = b.`applicant_id` WHERE b.`event_id` = '$id'");//mysql_query("SELECT * FROM `user` WHERE `userid` IN (SELECT `applicant_id` FROM `gs_event_application` WHERE `event_id` = $id)");
+			
 			if(mysql_num_rows($query)>0)
 			{
 				while ($row = mysql_fetch_assoc($query)) 
