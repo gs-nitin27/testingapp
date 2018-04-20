@@ -881,6 +881,7 @@ if($query1)
 while($row = mysql_fetch_assoc($query1))
 {
 $row['event']='0';
+$row['apply_data']=[];
 $row['fav']='0';
 $row['eligibility1'] = json_decode($row['eligibility1']);
 $row['terms_cond1'] = json_decode($row['terms_cond1']);
@@ -1350,36 +1351,42 @@ public function tournament_status($id,$userid)
 
 public function getuserEvent($res,$userid)
 {
-$query  = mysql_query("SELECT `userevent` FROM `user_events` WHERE `userid` = '$userid' AND `status` >= '1' ");
+$query  = mysql_query("SELECT * FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
     if(mysql_num_rows($query)>0)
     {
 
 
           while($row = mysql_fetch_assoc($query))
-          {
+          {         $row['application_data'] = json_decode($row['application_data']);
                     $data = $row;
-                    $value =$data['userevent']; 
+                    $value =$data['event_id']; 
                     $size = sizeof($res);
+                    $blank = [];
                     for($j = 0 ; $j< $size ; $j++)
                     {  
                           $keyval = $res[$j]['id'];
                           if($keyval != $value)
                           {
-                                 array_push($res[$j]['event'], 0);
-                                  $val1 = "0";
-                                  if($res[$j]['event'] != "1")
-                                  {
-                                   $res[$j]['event'] = $val1;
-                                  }
-                                  else
-                                  {
-                                     $res[$j]['event'] = "1";
-                                  }
+                                 // array_push($res[$j]['event'], 0);
+                                 // array_push($res[$j]['apply_data'], $blank);
+                                 //  $val1 = "0";
+                                 //  if($res[$j]['event'] != "1")
+                                 //  {
+                                   $res[$j]['event'] = '0';
+                                   $res[$j]['apply_data'] = [];
+                                 //  }
+                                 //  else
+                                 //  {
+                                 //     $res[$j]['event'] = "1";
+                                 //     $res[$j]['apply_data'] = $row;
+                                 //  }
                           }
                           else if($keyval == $value)
                           {      
-                              array_push($res[$j]['event'], "1");
-                              $res[$j]['event'] = "1";   
+                              // array_push($res[$j]['event'], "1");
+                              // array_push($res[$j]['apply_data'], $row);
+                              $res[$j]['event'] = "1"; 
+                              $res[$j]['apply_data'] = $row;   
                           }
                      }
           }
@@ -1387,12 +1394,7 @@ $query  = mysql_query("SELECT `userevent` FROM `user_events` WHERE `userid` = '$
     }
     else
     {
-          $size = sizeof($res);
-          for($i = 0 ; $i<$size ; $i++)
-          {
-           array_push($res[$i]['event'], 0);
-                    $res[$i]['event'] = "0";
-          }
+          
           return $res;
     }
 

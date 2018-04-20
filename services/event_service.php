@@ -23,7 +23,7 @@ class event_service
  }
 
 
-public function  check_entry_passcode($userdata)
+public function check_entry_passcode($userdata)
 {
 	$event_id           =  $userdata->event_id;
     $entry_passcode     =  $userdata->entry_passcode;
