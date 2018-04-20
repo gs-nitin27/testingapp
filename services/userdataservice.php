@@ -1351,11 +1351,11 @@ public function tournament_status($id,$userid)
 
 public function getuserEvent($res,$userid)
 {
-$query  = mysql_query("SELECT * FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
+$query  = mysql_query("SELECT `event_id`, `applicant_id`, `fee_amount`, `organiser_id`, `date_applied` FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
     if(mysql_num_rows($query)>0)
     {
          while($row = mysql_fetch_assoc($query))
-          {         $row['application_data'] = json_decode($row['application_data']);
+          {        
                     $data = $row;
                     $value =$data['event_id']; 
                     $size = sizeof($res);
@@ -1371,7 +1371,7 @@ $query  = mysql_query("SELECT * FROM `gs_event_application` WHERE `applicant_id`
                           else if($keyval == $value)
                           {      
                               $res[$j]['event'] = "1"; 
-                              $res[$j]['apply_data'] = $row['application_data'];   
+                              $res[$j]['apply_data'] = [$data];   
                           }
                      }
           }
