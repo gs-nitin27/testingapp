@@ -1354,9 +1354,7 @@ public function getuserEvent($res,$userid)
 $query  = mysql_query("SELECT * FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
     if(mysql_num_rows($query)>0)
     {
-
-
-          while($row = mysql_fetch_assoc($query))
+         while($row = mysql_fetch_assoc($query))
           {         $row['application_data'] = json_decode($row['application_data']);
                     $data = $row;
                     $value =$data['event_id']; 
@@ -1367,26 +1365,13 @@ $query  = mysql_query("SELECT * FROM `gs_event_application` WHERE `applicant_id`
                           $keyval = $res[$j]['id'];
                           if($keyval != $value)
                           {
-                                 // array_push($res[$j]['event'], 0);
-                                 // array_push($res[$j]['apply_data'], $blank);
-                                 //  $val1 = "0";
-                                 //  if($res[$j]['event'] != "1")
-                                 //  {
                                    $res[$j]['event'] = '0';
                                    $res[$j]['apply_data'] = [];
-                                 //  }
-                                 //  else
-                                 //  {
-                                 //     $res[$j]['event'] = "1";
-                                 //     $res[$j]['apply_data'] = $row;
-                                 //  }
                           }
                           else if($keyval == $value)
                           {      
-                              // array_push($res[$j]['event'], "1");
-                              // array_push($res[$j]['apply_data'], $row);
                               $res[$j]['event'] = "1"; 
-                              $res[$j]['apply_data'] = $row;   
+                              $res[$j]['apply_data'] = $row['application_data'];   
                           }
                      }
           }
