@@ -1309,11 +1309,14 @@ public function job_status($id,$userid)
 
 public function event_status($id,$userid)
 { 
-  $query  = mysql_query("SELECT `id`, `event_id`, `applicant_id`, `fee_amount`, `application_data`, `organiser_id`, `date_applied`, `status` FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `event_id` = $id ");
+  $query  = mysql_query("SELECT `application_data` FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `event_id` = $id ");
     if(mysql_num_rows($query)>0)
     {
           $row = mysql_fetch_assoc($query);
-          return $row['status'];
+          $row[0] = json_decode($row['application_data']);
+          unset($row['application_data']);
+    //print_r($row);die;
+    return $row;
     }
     else
     {
@@ -1351,28 +1354,31 @@ public function tournament_status($id,$userid)
 
 public function getuserEvent($res,$userid)
 {
-$query  = mysql_query("SELECT `event_id`, `applicant_id`, `fee_amount`, `organiser_id`, `date_applied` FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
+$query  = mysql_query("SELECT `event_id`, `application_data` FROM `gs_event_application` WHERE `applicant_id` = '$userid' AND `status` >= '1' ");
     if(mysql_num_rows($query)>0)
     {
          while($row = mysql_fetch_assoc($query))
           {        
-                    $data = $row;
-                    $value =$data['event_id']; 
+                    //$data = $row;
+                    $value =   $row['event_id'];
+                    $data[]  = json_decode($row['application_data']); 
                     $size = sizeof($res);
                     $blank = [];
+                    $n = 0;
+                    //echo '-------';
                     for($j = 0 ; $j< $size ; $j++)
-                    {  
+                    {    // echo $n;
                           $keyval = $res[$j]['id'];
-                          if($keyval != $value)
-                          {
-                                   $res[$j]['event'] = '0';
-                                   $res[$j]['apply_data'] = [];
+                          if($keyval == $value)
+                          {      // echo "ddddddsd";
+                              $res[$j]['event'] = "1";
+                              $res[$j]['apply_data'][0] =  json_decode($row['application_data']);
+                              break; 
+                                 
                           }
-                          else if($keyval == $value)
-                          {      
-                              $res[$j]['event'] = "1"; 
-                              $res[$j]['apply_data'] = [$data];   
-                          }
+                          
+
+                     $n++;
                      }
           }
            return $res;

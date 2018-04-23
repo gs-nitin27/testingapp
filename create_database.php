@@ -913,7 +913,12 @@ else if($_REQUEST['act'] == "getsearchview")
             { 
               $request         =   new userdataservice();
                $event_status     = $request->event_status($res[$i]['id'],$user_id);
-               $res[$i]['event'] = $event_status;
+               if(!empty($event_status))
+               {
+               $res[$i]['event'] = '1';
+               $res[$i]['apply_data'] = $event_status; 
+               }
+               
                $response = $res; 
             }
           } 
