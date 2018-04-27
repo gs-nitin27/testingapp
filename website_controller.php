@@ -24,7 +24,9 @@ include('services/Website_service.php');
     //echo $position; 
     $where = $_REQUEST['where'];
     switch ($input)
-    {   
+    {   case 'trial':
+        $request->get_trial_data($item_per_page,$position,$where);
+        break;
         case 'event':
         $request->get_event_data($item_per_page,$position);
         break;

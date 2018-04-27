@@ -1374,10 +1374,7 @@ $query  = mysql_query("SELECT `event_id`, `application_data` FROM `gs_event_appl
                               $res[$j]['event'] = "1";
                               $res[$j]['apply_data'][0] =  json_decode($row['application_data']);
                               break; 
-                                 
                           }
-                          
-
                      $n++;
                      }
           }
@@ -1408,6 +1405,7 @@ $query  = mysql_query("SELECT `application_data`,`tournament_id` FROM `gs_tourna
                 {  
                  $res[$key]['tour'] = '1';
                  $res[$key]['apply_data'][] = json_decode($row['application_data']);
+                     break;
                 }
               }
           }
@@ -1443,23 +1441,24 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
                     for($j = 0 ; $j< $size ; $j++)
                     {  
                           $keyval = $res[$j]['id'];
-                          if($keyval != $value)
-                          {
-                                 array_push($res[$j]['offer'], 0);
-                                  $val1 = "0";
-                                  if($res[$j]['offer'] != "1")
-                                  {
-                                   $res[$j]['offer'] = $val1;
-                                  }
-                                  else
-                                  {
-                                     $res[$j]['offer'] = "1";
-                                  }
-                          }
-                          else if($keyval == $value)
+                          // if($keyval != $value)
+                          // {
+                          //        array_push($res[$j]['offer'], 0);
+                          //         $val1 = "0";
+                          //         if($res[$j]['offer'] != "1")
+                          //         {
+                          //          $res[$j]['offer'] = $val1;
+                          //         }
+                          //         else
+                          //         {
+                          //            $res[$j]['offer'] = "1";
+                          //         }
+                          // }
+                          if($keyval == $value)
                           {      
-                              array_push($res[$j]['offer'], "1");
+                              //array_push($res[$j]['offer'], "1");
                               $res[$j]['offer'] = "1";   
+                              break;
                           }
                      }
           }

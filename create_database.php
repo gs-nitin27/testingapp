@@ -818,7 +818,7 @@ else if ($_REQUEST['act'] == "search_event" )
  $location    = urldecode($_REQUEST['location']);
  $module      = '2';                                // for Event 
  $request    = new userdataservice();
- $where[]         =   '1 =1 ';
+ $where[]         =   '1=1';
  $arr = array();
  if($key != '')
  {
