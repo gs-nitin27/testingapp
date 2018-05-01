@@ -98,7 +98,7 @@ class visitor_cron_service
  }
 
  public function getEventData($where)
- {  echo "SELECT `id`,`name`,`description`,`image` FROM `gs_eventinfo` WHERE ".$where." AND datediff(CURDATE(), `end_date`) < 0";die;
+ {  
     $query = mysql_query("SELECT `id`,`name`,`description`,`image` FROM `gs_eventinfo` WHERE ".$where." AND datediff(CURDATE(), `end_date`) < 0");
     if(mysql_num_rows($query)>0)
     {
@@ -115,7 +115,7 @@ class visitor_cron_service
 
 public function getTournamentData($where)
  {
-    $query = mysql_query("SELECT `id`,`name`,`description`,`image` FROM `gs_tournament_info` WHERE ".$where."");
+  $query = mysql_query("SELECT `id`,`name`,`description`,`image` FROM `gs_tournament_info` WHERE ".$where." AND datediff(CURDATE(), `end_date`) < 0");
     if(mysql_num_rows($query)>0)
     {
      while ($row = mysql_fetch_assoc($query)) {
