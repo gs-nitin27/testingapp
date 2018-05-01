@@ -21,7 +21,7 @@ class Website_service
                   $event_image_path        = "https://getsporty.in/portal/uploads/event/".$event_img_name;
       if(!empty($event_img_name))
       {
-      echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$event_image_path.'"></div><div class="slide-job-list"><h4>'.$event_title.'</h4><p> Type : <span> '.$event_type .'</span></p><p> Start : <span> '.$e_start_date.' - '.$e_end_date.'</span></p><p> Entry : <span> '.$e_entry_start_date.' - '.$e_entry_end_date.' </span></p><p> Location : <span>'.$event_location.'</span></p><div class="read-c"><a href="'.$event_url .'">Read More</a> </div></div></div></div>';
+      echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$event_image_path.'"></div><div class="slide-job-list"><h4>'.$event_title.'</h4><p> Type : <span> '.$event_type .'</span></p><p> Start : <span> '.$e_start_date.' - '.$e_end_date.'</span></p><p> Entry : <span> '.$e_entry_start_date.' - '.$e_entry_end_date.' </span></p><p> Location : <span>'.$event_location.'</span></p><div class="read-c"><a href="'.$event_url .'">Read More</a> </div></div></div></div> ';
     }
   }
 }
@@ -29,7 +29,7 @@ class Website_service
 
 public function get_job_data($item_per_page,$position)
   {
-    $job = mysql_query("SELECT id,title,description,image,organisation_name,org_city,date_updated,date_created  FROM gs_jobInfo WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page");
+    $job = mysql_query("SELECT id,title,description,image,organisation_name,city,org_city,date_updated,date_created  FROM gs_jobInfo WHERE `publish` = '1' ORDER BY id DESC LIMIT $position, $item_per_page");
       while ( $row = mysql_fetch_assoc($job)){
 
                     $J_id                =   $row['id'];
@@ -50,7 +50,7 @@ public function get_job_data($item_per_page,$position)
                       $J_day = 'Today';
                     }
 
-       echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$J_image_path.'" alt="img"></div><div class="slide-job-list"><h4>'.$J_title.'</h4><p> Location : <span>'.$J_location.' </span></p><p> Posted : <span> '.$J_day.' </span></p><p> Organisation Name : <span> '.$job_org_name.' </span></p><div class="read-c"><a href="'.$J_url.'">Read More</a> </div></div></div></div> ';
+       echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"><div class="job-box"><img src="'.$J_image_path.'" alt="img"></div><div class="slide-job-list"><h4>'.$J_title.'</h4><p> Location : <span>'.$row['city'].' </span></p><p> Posted : <span> '.$J_day.' </span></p><p> Organisation Name : <span> '.$job_org_name.' </span></p><div class="read-c"><a href="'.$J_url.'">Read More</a> </div></div></div></div> ';
 
      
       }
