@@ -7,17 +7,35 @@ include('../services/emailService.php');
 //echo "ddsdsdsd";
 $obj = new visitor_cron_service();
 $obj_var = $obj->get_subscriber_data(); 
-//echo json_encode($obj_var);die;
 $emailObj = new emailService();
 
 if($obj_var != 0)
 {
-	foreach ($obj_var as $key => $value) {
-		if($key != null)
-		{
-        $email = $emailObj->create_subscribe_body($value,$key);
-		}
-	}
+   foreach ($obj_var as $key => $value) {
+   	   if($value != null)
+   	   {
+   	   	foreach ($value as $key1 => $value1) {
+   	   		$resp  = $emailObj->create_subscribe_body($value1,$key);
+   	   	}
+   	   }
+   }
+
+	// $job = $obj_var[1];
+	// if($job != null)
+	// {
+	// 	echo "dsdsdsds";
+	// }else
+	// {
+	// 	echo "oh! no!";
+	// }
+ //   $event = $obj_var[2];
+	// if($event != null)
+	// {
+	// 	echo "dsdsdsds";
+	// }else
+	// {
+	// 	echo "oh! no!";
+	// }
 }
 
 

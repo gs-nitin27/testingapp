@@ -14,7 +14,7 @@ class visitor_cron_service
                 $job_data =  $this->getJobData($where);
       	        if($job_data != 0)
       	        {
-                $job[$row['phone']]['data'][] = $this->getJobData($where);  //get job data to send inmail notification
+                $job[$row['phone']]['data'][] = $job_data;  //get job data to send inmail notification
       		    	$job[$row['phone']]['user_info'] = $row['email'];	
       	        }
       		}
@@ -24,7 +24,7 @@ class visitor_cron_service
                $event_data =  $this->getEventData($where);
                 if($event_data != 0)
                 {
-                $event[$row['phone']]['data'][] = $this->getEventData($where);   //get event data to send inmail notification
+                $event[$row['phone']]['data'][] = $event_data;   //get event data to send inmail notification
                 $event[$row['phone']]['user_info'] = $row['email'];
                 }
       		}if($row['module'] == '3')
@@ -33,7 +33,7 @@ class visitor_cron_service
                 $tournament_data =  $this->getTournamentData($where);
                 if($tournament_data != 0)
                 {
-                $tournament[$row['phone']]['data'][] = $this->getTournamentData($where);  //get tournament data to send inmail notification
+                $tournament[$row['phone']]['data'][] =  $tournament_data;  //get tournament data to send inmail notification
                 $tournament[$row['phone']]['user_info'] = $row['email'];
                 }
       		}if($row['module'] == '4')
@@ -43,7 +43,7 @@ class visitor_cron_service
                 if($trial_data != 0)
                 {
 
-                $trial[$row['phone']]['data'][] = $this->getEventData($where);     //get trial data to send inmail notification
+                $trial[$row['phone']]['data'][] = $trial_data;     //get trial data to send inmail notification
                 $trial[$row['phone']]['user_info'] = $row['email'];
                 }        		
           }if($row['module'] == '6')
@@ -52,7 +52,7 @@ class visitor_cron_service
       			    $article_data =  $this->getArticleData($where);
                 if( $article_data != 0)
                 {
-                $article[$row['phone']]['data'][] = $this->getArticleData($where); //get article data to send inmail notification
+                $article[$row['phone']]['data'][] = $article_data; //get article data to send inmail notification
                 $article[$row['phone']]['user_info'] = $row['email'];
       		      }
           }
@@ -99,7 +99,7 @@ class visitor_cron_service
 
  public function getEventData($where)
  {  
-    $query = mysql_query("SELECT `id`,`name`,`description`,`image` FROM `gs_eventinfo` WHERE ".$where." AND datediff(CURDATE(), `end_date`) < 0");
+    $query = mysql_query("SELECT `id`,`name`,`description`,`image` FROM `gs_eventinfo` WHERE ".$where." AND datediff(CURDATE(), `end_date`) < 0 AND `publish` = '1' ");
     if(mysql_num_rows($query)>0)
     {
      while ($row = mysql_fetch_assoc($query)) {

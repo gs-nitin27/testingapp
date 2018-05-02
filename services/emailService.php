@@ -1579,7 +1579,8 @@ public function email_for_update($userinfo,$id)
 // }
 
 public function create_subscribe_body($info,$module)
-{   if(isset($info))
+{ //print_r($info);die;  
+  if(isset($info['data']))
     {
     $email = $info['user_info'];//die;
     $subject = '';
@@ -1606,7 +1607,7 @@ public function create_subscribe_body($info,$module)
          foreach ($value as $key => $value1) {
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
+                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
                 <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
                 </p>
             </div><br>';
@@ -1621,7 +1622,7 @@ public function create_subscribe_body($info,$module)
          foreach ($value as $key => $value1) {
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
+                <h4><a href="'.VIEW_PROFILE.'tournament-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
                 <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
                 </p>
             </div><br>';
@@ -1636,7 +1637,7 @@ public function create_subscribe_body($info,$module)
          foreach ($value as $key => $value1) {
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
+                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
                 <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
                 </p>
             </div><br>';
@@ -1655,7 +1656,7 @@ public function create_subscribe_body($info,$module)
          foreach ($value as $key => $value1) {
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
+                <h4><a href="'.VIEW_PROFILE.'article-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
                 <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
                 </p>
             </div><br>';
