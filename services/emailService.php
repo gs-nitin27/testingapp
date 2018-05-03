@@ -1188,9 +1188,12 @@ $this->email_send($email,$body,$subject);
 
 public function email_send($email,$body,$subject)
 {
- 
-              require('class.phpmailer.php');
-              include('../email/emailtemplateService.php');
+              if(isset($mail))
+              {
+                unset($mail);
+              }
+              require_once('class.phpmailer.php');
+              include_once('../email/emailtemplateService.php');
               $mail = new PHPMailer();
               $req = new emailtemplateService();
               $to=$email;
