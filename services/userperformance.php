@@ -114,7 +114,7 @@ public function  savePerformance($userdata)
 	$status       	 =  $userdata->status;
 	$avg 			 =  $userdata->avg;
 	$modules_avg	 =  $userdata->modules_avg;
-
+   echo "UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id";die;
 	$query 			 =	mysql_query("UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id");
 	$num=mysql_affected_rows(); 
 	if ($num)
@@ -157,6 +157,7 @@ public function  publishPerformance($userdata)
 	$data 		      	=  $userdata->data;
 	$status     		=  $userdata->status;
 	$next_assessment 	=	date('Y/m/d', strtotime('+3 months'));
+	echo "UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'";die;
 	$query =mysql_query("UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'");
 	$num=mysql_affected_rows();
 	if ($num)
@@ -241,7 +242,7 @@ public function viewPerformanceguide($item,$agegropup)
 	$gender 		=	 $userdata->gender;
 	$dob 			=	 $userdata->dob;
 	$sport 			=	 $userdata->sport;
-   $query = mysql_query("INSERT INTO `gs_suggestion` (`sugg_id`,`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('0','$coachid','$title','$description','$module','$gender','$dob','$sport')");
+   $query = mysql_query("INSERT INTO `gs_suggestion` (`coachid`,`title`,`description`,`module`,`gender`,`dob`,`sport`) VALUES('$coachid','$title','$description','$module','$gender','$dob','$sport')");
 	if($query)
 	{
 	   return 1;

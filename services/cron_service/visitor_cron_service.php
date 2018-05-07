@@ -25,6 +25,7 @@ class visitor_cron_service
                 $job[$row['phone']]['data'][] = $job_data;  //get job data to send inmail notification
       		    	$job[$row['phone']]['user_info'] = $row['email'];
                 $job[$row['phone']]['unique_code'] = $row['unique_code'];	
+                $job[$row['phone']]['sent_items'] = $row['sent_items']; 
       	        }
       		}
       		if($row['module'] == '2')
@@ -36,6 +37,7 @@ class visitor_cron_service
                 $event[$row['phone']]['data'][] = $event_data;   //get event data to send inmail notification
                 $event[$row['phone']]['user_info'] = $row['email'];
                 $event[$row['phone']]['unique_code'] = $row['unique_code'];
+                $event[$row['phone']]['sent_items'] = $row['sent_items'];
                 }
       		}if($row['module'] == '3')
       		{    $sport = $row['sport'];
@@ -46,6 +48,7 @@ class visitor_cron_service
                 $tournament[$row['phone']]['data'][] =  $tournament_data;  //get tournament data to send inmail notification
                 $tournament[$row['phone']]['user_info'] = $row['email'];
                 $tournament[$row['phone']]['unique_code'] = $row['unique_code'];
+                $tournament[$row['phone']]['sent_items'] = $row['sent_items'];
                 }
       		}if($row['module'] == '4')
       		{     $sport = $row['sport'];
@@ -57,6 +60,7 @@ class visitor_cron_service
                 $trial[$row['phone']]['data'][] = $trial_data;     //get trial data to send inmail notification
                 $trial[$row['phone']]['user_info'] = $row['email'];
                 $trial[$row['phone']]['unique_code'] = $row['unique_code'];
+                $trial[$row['phone']]['sent_items'] = $row['sent_items'];
                 }        		
           }if($row['module'] == '6')
       		{     $sport = $row['sport'];
@@ -67,7 +71,8 @@ class visitor_cron_service
                 $article[$row['phone']]['data'][] = $article_data; //get article data to send inmail notification
                 $article[$row['phone']]['user_info'] = $row['email'];
                 $article[$row['phone']]['unique_code'] = $row['unique_code'];
-      		      }
+      		      $article[$row['phone']]['sent_items'] = $row['sent_items'];
+                }
           }
       		
       	}
@@ -80,7 +85,7 @@ class visitor_cron_service
 	}
  public function getJobData($where)
  {  
-  $query = mysql_query("SELECT `id`,`title`,`description`,`image` FROM `gs_jobInfo` WHERE ".$where." AND datediff(CURDATE(), `date_updated`) < 30 ");
+    $query = mysql_query("SELECT `id`,`title`,`description`,`image` FROM `gs_jobInfo` WHERE ".$where." AND datediff(CURDATE(), `date_updated`) < 30 ");
     if(mysql_num_rows($query)>0)
     {
      while ($row = mysql_fetch_assoc($query)) {
@@ -144,7 +149,6 @@ public function getTournamentData($where)
 
  public function update_sent_item($item,$key)
  {
-//echo "UPDATE `visitor_subscribe` SET `sent_items`  = '$item' WHERE `unique_code` = '$key' ";die;
  $query = mysql_query("UPDATE `visitor_subscribe` SET `sent_items`  = '$item' WHERE `unique_code` = '$key' ");
  if($query)
  {
