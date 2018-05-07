@@ -32,7 +32,7 @@ public function userPerformance($id,$age,$sport,$gender)
 /*********************************** Check The Performance**********************************/
 
 public function cheackPerformance($age,$sport,$gender)
-{  
+{  //echo "SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ";die;
 	$query 	= mysql_query("SELECT *FROM `gs_assess_question` WHERE `age_group` LIKE '$age' AND `sport` LIKE '$sport' AND `gender` LIKE '$gender' ");
 	$num = mysql_num_rows($query);
 	if ($num>0)
@@ -51,7 +51,7 @@ public function cheackPerformance($age,$sport,$gender)
 
 
 public function  save($coachid,$athleteid)
-{
+{   //echo "INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`avg`,`modules_avg`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0','0','0',CURRENT_DATE )";die;
     $query =mysql_query("INSERT INTO `gs_athlit_performance` (`id`,`coachid`,`athlitid`,`data`,`avg`,`modules_avg`,`status`,`date_created`) VALUES('0','$coachid','$athleteid','0','0','0','0',CURRENT_DATE )");
 	if ($query)
 	{
