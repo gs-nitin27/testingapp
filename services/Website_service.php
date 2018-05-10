@@ -38,7 +38,7 @@ public function get_job_data($item_per_page,$position)
                     $J_org_name          =  $row['organisation_name'];
                     $J_org_city          =  $row['org_city'];
                     $date_updated        =  $row['date_updated'];
-                    $J_url               =  "job-detail/".$row['id'];
+                    $J_url               =  "job-detail/".base64_encode($row['id']);
                     $J_img               =  $row['image'];
                     $J_image_path        =  "https://getsporty.in/portal/uploads/job/".$J_img;
                     $datetime1 = new DateTime();

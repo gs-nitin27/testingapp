@@ -308,7 +308,17 @@ public function invoicemail($email,$paymentdata)
                
                //return $mail->Send();
 }   
-
+public function getCount()
+{
+    $query = mysql_query("SELECT COUNT(`invoice_id`) AS sale FROM `gs_billing` WHERE YEAR(`date_created`)  = YEAR(CURDATE())");
+    if($query)
+     {
+        return mysql_fetch_assoc($query);
+     }else
+     {
+        return 0;
+     }
+}
 }
 ?>
 

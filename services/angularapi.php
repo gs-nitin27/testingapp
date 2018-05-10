@@ -469,7 +469,7 @@ public function addOrg($item)
       $column_value = "'$item->id',";
 
     }
-  $query = mysql_query("INSERT INTO `gs_org`(".$column_name."`userid`,`org_name`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES(".$column_value."'$item->userid','$item->org_name','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin'");
+  $query = mysql_query("INSERT INTO `gs_org`(".$column_name."`userid`,`org_name`,`type`,`about`,`address1`,`address2`,`city`,`state`,`pin`,`mobile`,`email`,`gstin`) VALUES(".$column_value."'$item->userid','$item->org_name','$item->type','$item->about','$item->address1','$item->address2','$item->city','$item->state','$item->pin','$item->mobile','$item->email','$item->gstin')ON DUPLICATE KEY UPDATE `org_name`='$item->org_name',`about` = '$item->about',`address1`='$item->address1',`address2` = '$item->address1',`city`='$item->city',`state`='$item->state',`pin`='$item->pin',`mobile`='$item->mobile',`email`='$item->email',`gstin`='$item->gstin',`type` = '$item->type'");
   if($item->id == 0 || $item->id == '')
   {
   if($query)

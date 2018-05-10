@@ -735,7 +735,7 @@ $res = $req->getCreation($where, $type);
 
 //********* CODE FOR MARKING SEARCH FOR JOBS **********//
 
-else if($_POST['act'] == "search_job")
+else if($_REQUEST['act'] == "search_job")
 {
  $userid      =urldecode($_POST['userid']);
  $title       =urldecode($_POST['job_title']);
@@ -818,7 +818,7 @@ else if ($_REQUEST['act'] == "search_event" )
  $location    = urldecode($_REQUEST['location']);
  $module      = '2';                                // for Event 
  $request    = new userdataservice();
- $where[]         =   '1=1';
+ $where[]         =   ' 1=1  ';
  $arr = array();
  if($key != '')
  {
@@ -832,7 +832,7 @@ else if ($_REQUEST['act'] == "search_event" )
   }
   if($sport != '')
   {
-    $where[] = " `sport` LIKE '%$sport%' ";
+    $where[] = " `sport_name` LIKE '%$sport%' ";
     $arr['sport'] =  $sport ; 
   }
   if($location != '')
@@ -841,7 +841,7 @@ else if ($_REQUEST['act'] == "search_event" )
        $arr['location'] = $location;
   }
  
-    $whereclause = implode('AND', $where);
+    $whereclause = implode(' AND  ', $where);
    // echo "$whereclause";die();
   $response = $request->searchEvent($whereclause);
 if($response)

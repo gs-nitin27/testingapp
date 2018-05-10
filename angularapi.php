@@ -540,6 +540,7 @@ $data = json_decode(file_get_contents("php://input"));
 $item                 =  new stdClass();
 $item->id           =  $data->id;
 $item->userid       =  $data->userid;
+$item->type         =  $data->type;
 $item->org_name     =  $data->org_name;
 $item->about        =  $data->about;
 $item->address1     =  $data->address1;
