@@ -2393,7 +2393,7 @@ function generate_random_code($length) {
 
 
 public function apply($userid , $id ,$status,$module,$user_name,$email)
-{//echo $module;die;
+{
 switch ($module)
  {
    case 1:
@@ -2405,12 +2405,12 @@ switch ($module)
        else
       {
        $query = mysql_query("INSERT INTO `user_jobs`(`id`, `userid`, `userjob`, `date`,`status`) VALUES ('0','$userid','$id',CURDATE(),'$status')");
-       }
+      }
      break;
      
    case 2:
     $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-   $entry_passcode='';
+    $entry_passcode='';
    mysql_query("UPDATE `gs_eventinfo` SET `no_of_ticket`=`no_of_ticket`-1 WHERE `id` = $id");
    for ($i = 0; $i < 20; $i++)
                  {

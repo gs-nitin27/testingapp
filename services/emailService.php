@@ -246,7 +246,7 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
                 <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                     <p style="margin: 0;">You have an interview call for the post of <b> '.$title.'</b> at <b>'.$organisation_name.'</b>
                     <br>'.$msg.'
-                    <br><b>Date of interview:</b>  '.$date.'
+                    <br><b>Date of interview:</b>  '.date("M jS, Y", strtotime($date));.'
                     </p>
                 </td>
             </tr>
@@ -1448,7 +1448,7 @@ public function email_for_joboffer($applicant_email,$joining_date,$salary,$job_i
                 <td bgcolor="#ffffff" style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                     <p style="margin: 0;">You got offer  for the post of <b>'.$title.'</b> at <b>'.$organisation_name.'</b>
                      <br><b>Salary:</b>  '.$salary.'
-                    <br><b>Date of Joining:</b>  '.$joining_date.'
+                    <br><b>Date of Joining:</b>  '.date("M jS, Y", strtotime($joining_date)).'
                     </p>
                 </td>
             </tr>

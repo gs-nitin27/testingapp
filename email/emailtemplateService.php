@@ -257,13 +257,6 @@ public function main_template($template)
         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="600" style="margin: auto;" class="email-container">
             <tr>
                 <td style="background:#000000;padding: 10px 10px;width: 100%;font-size: 12px; font-family: sans-serif; line-height:18px; text-align: center; color: #888888;" class="x-gmail-data-detectors">
-                    <webversion style="color:#cccccc; text-decoration:underline; font-weight: bold;">Lorem ipsum dolor sit amet</webversion>
-                    <br><br><div class="foot-logo">
-            <a href="index.html" style="border-bottom:none;">
-                
-        </a></div><br>consectetur adipiscing elit. In quis fermentum<br>(123) 456-7890
-                    <br><br>
-                    <unsubscribe style="color:#888888; text-decoration:underline;">unsubscribe</unsubscribe>
                 </td>
             </tr>
         </table>
