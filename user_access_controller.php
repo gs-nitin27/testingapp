@@ -84,14 +84,40 @@ $obj = new User_access_service();
 	  $where = "`".$app_type."_fb_id` = '".$fb_id."' ";
 	  $obj_var = $obj->find_user_data($where);
 	  if($obj_var != 0)
-	  {
+	  { 
+
+	  	if($obj_var['email'] == '')
+		{
+		// $update = "`".$app_type."_fb_id` = '".$fb_id."'";
+		// $where  = "`userid`= '".$obj_var['userid']."'"; 
+		// //$updt_obj = $obj->update_user_data($update,$where); //update Facebook Id for the particular email for a app
+		$resp = array('status' =>'2' ,'data'=>$obj_var , 'msg'=>'please update your info');
+		}else
+		{
+		if($obj_var['prof_name'] == 'Athletes')
+	      {
+	        $obj_var['classes'] = $req->connected_class($obj_var['userid']);  // To get connected classes
+	      }
+	        $obj_var['profile'] = $req->checkprofile($obj_var['userid']);  // To get profile completion percentage
+	    if($device_id != '')
+	    {
+        $update = "`".$device_id_column."` = '".$device_id."'";
+		$where  = "`userid`= '".$obj_var['userid']."'"; 
+		$updt_obj = $obj->update_user_data($update,$where); //update 
+	    }//
+	    $resp = array('status' => '1','data'=>$obj_var,'msg'=>'login successfull'); 	
+		}
+		 
 
 		 // if($obj_var['prof_name'] == 'Athletes')
 	  //     {
 	  //       $obj_var['classes'] = $req->connected_class($obj_var['userid']);  // To get connected classes
 	  //     }
 	  //       $obj_var['profile'] = $req->checkprofile($obj_var['userid']);  // To get 	
-	   $resp = array('status' =>'2' ,'data'=>$obj_var , 'msg'=>'please update your info'); // To get email id from user verify and update
+	  
+
+
+	   //$resp = array('status' =>'2' ,'data'=>$obj_var , 'msg'=>'please update your info'); // To get email id from user verify and update
 	  }
 	   else
 	  {
@@ -156,7 +182,7 @@ $obj = new User_access_service();
  }
 
 
-else if($_REQUEST['act'] = 'gs_signup')
+else if($_REQUEST['act'] == 'gs_signup')
 {
 
 $data1 = json_decode(file_get_contents("php://input"));
@@ -182,21 +208,21 @@ $item->location       =  $data1->location;
 $item->prof_id        =  $data1->prof_id;
 $item->device_id      =  $data1->device_id;
 $device_id_column     =  $item->app."_device_id";
+if($item->loginType == '1')
+	{
+		$column = $item->app."_fb_id";
+        $item->name           =  $data1->data->first_name.' '.$data1->data->last_name;
+	}
+else
+	{
+		$column = "google_id";
+		$item->name           = $data1->data->name;
+	}
 $obj_var = new User_access_service();
 $where = "`email` = '".$item->email."'";
 $resp = $obj_var->find_user_data($where);
 if($resp != 0)
 {
-if($item->loginType == '1')
-	{
-		$column = $item->app."_fb_id";
-
-	}
-else
-	{
-		$column = "google_id";
-	}
-	//print_r($resp);die;
 if($resp[$column] == $item->id && $resp['status'] == '1')
 {
 
@@ -275,6 +301,25 @@ $update = "`userType` = '".$item->userType."' , `email`= '".$item->email."',`nam
 // 	}
 echo json_encode($resp);
 }
+else if($_REQUEST['act'] == 'manage_login')
+{
+	$data = json_decode(file_get_contents("php://input"));
+
+	$obj = new user_access_service();
+	$where = "`email` = '".$data->email."' AND `password` = '".base64_encode($data->password)."'";
+	$objinfo = $obj->find_user_data($where);
+	if($objinfo != 0)
+	{   $upd_field = "`M_device_id` = '".$data->device_id."'";
+        $upd_where = "`userid` = '".$objinfo['userid']."'";
+        $upd_obj = $obj->update_user_data($upd_field,$upd_where);
+		$resp = array('status' =>'1' ,'data'=>$objinfo , 'msg'=>'success' );
+	}else
+	{
+		$resp = array('status' =>'0' ,'data'=>$objinfo , 'msg'=>'failure' );
+	}
+	echo json_encode($resp);
+}
+
 
 // Response status parameter Indication  
 // 

@@ -149,16 +149,16 @@ public function getTournamentData($where)
 
  public function update_sent_item($item,$key)
  {
- $query = mysql_query("UPDATE `visitor_subscribe` SET `sent_items`  = '$item' WHERE `unique_code` = '$key' ");
- if($query)
- {
-  return 1;
+    $query = mysql_query("UPDATE `visitor_subscribe` SET `sent_items`  = '$item' WHERE `unique_code` = '$key' ");
+    if($query)
+   {
+    return 1;
+   }
+   else
+   {
+    return 0;
+   }
  }
-else
-{
-  return 0;
-}
-}
 
 }
  ?>

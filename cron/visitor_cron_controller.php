@@ -10,8 +10,9 @@ $obj_var = $obj->get_subscriber_data();
 $emailObj = new emailService();
 $sent = '';
 if($obj_var != 0)
-{  $filterArray = array_filter($obj_var);
+{
 
+$filterArray = array_filter($obj_var);
 if(!count($filterArray) == 0){
 //    return false;
    foreach ($obj_var as $key => $value) {

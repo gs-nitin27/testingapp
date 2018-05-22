@@ -15,15 +15,16 @@ if($_REQUEST['act'] == 'mobilePaymentSuccess')
         $date1 = explode('-', $date);
         $monthNum  = $date1[1];
         $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+        $count = $req->getCount();
         $monthName = $dateObj->format('F');
         $year = date("y");
         if($fulldata->module == '1')
         {
-        $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;        
+        $invoiceid = "GSJB/1/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo."/".$count['sale'];        
         }
         else if ($fulldata->module == '2') 
         {
-        $invoiceid = "GSEV/2/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo;
+        $invoiceid = "GSEV/2/".$year.$date1[1].$date1[2]."/".$paymentdata->productinfo."/".$count['sale'];
         }
         
         $paymentdate = $date1[2]."-".$monthName."-".$date1[0];

@@ -1,14 +1,14 @@
 <?php
+include('../config1.php');
 $status=$_POST["status"];
 $firstname=$_POST["firstname"];
 $amount=$_POST["amount"];
 $txnid=$_POST["txnid"];
-
 $posted_hash=$_POST["hash"];
 $key=$_POST["key"];
 $productinfo=$_POST["productinfo"];
 $email=$_POST["email"];
-$salt="GQs7yium";
+$salt="AwGMsoxe";
 
 If (isset($_POST["additionalCharges"])) {
        $additionalCharges=$_POST["additionalCharges"];
@@ -29,6 +29,6 @@ If (isset($_POST["additionalCharges"])) {
 <!--Please enter your website homepagge URL -->
 
 <script>
-window.location = 'https://localhost/gs_newsite/manage/dashbo';
+window.location = '<?php echo PAYU_SUCCESS_URL; ?>'+'manage/dashbo';
 </script>
-<p><a href=http://localhost/testing/success_failure/PayUMoney_form.php> Try Again</a></p>
+<p><a href="<?php echo PAYU_SUCCESS_URL.'manage/dashbo'; ?>"> Try Again</a></p>

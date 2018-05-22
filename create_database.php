@@ -903,26 +903,38 @@ else if($_REQUEST['act'] == "getsearchview")
             for ($i=0; $i <count($res) ; $i++)
             {  $request       =   new userdataservice();
                $job_status      = $request->job_status($res[$i]['id'],$user_id);
-               $res[$i]['job_status'] = $job_status;
+               $res[$i]['job_status'] = $job_status['status'];
+               $res[$i]['interview_data'] = json_decode($job_status['interview_data']);
                $response = $res; 
             }
          }
-        if($type=='2')
+        // if($type=='2')
+        //   {
+        //     for ($i=0; $i <count($res) ; $i++)
+        //     { 
+        //       $request         =   new userdataservice();
+        //        $event_status     = $request->event_status($res[$i]['id'],$user_id);
+        //        if(!empty($event_status))
+        //        {
+        //        $res[$i]['event'] = '1';
+        //        $res[$i]['apply_data'] = $event_status; 
+        //        }
+               
+        //        $response = $res; 
+        //     }
+        //   } 
+        
+         if($type=='2')
           {
             for ($i=0; $i <count($res) ; $i++)
             { 
               $request         =   new userdataservice();
                $event_status     = $request->event_status($res[$i]['id'],$user_id);
-               if(!empty($event_status))
-               {
-               $res[$i]['event'] = '1';
-               $res[$i]['apply_data'] = $event_status; 
-               }
-               
+               $res[$i]['event'] = $event_status;
                $response = $res; 
             }
-          } 
-        
+          }
+
           if($type=='3') 
           {
             for ($i=0; $i <count($res) ; $i++)
@@ -1882,6 +1894,7 @@ else if($_REQUEST['act'] == "interview_schedule")
   $msg               =  $userdata->msg;
   $venue             =  $userdata->venue;
   $module            =  '1';    // for Job
+  $interview_array   =  array('venue' =>$venue , 'date'=>$date, 'msg'=>$msg);
   $req               =  new userdataservice();
   $pushobj           =  new userdataservice();
   $con               =  new connect_userservice();
@@ -1899,22 +1912,9 @@ else if($_REQUEST['act'] == "interview_schedule")
     $applicant_id     =  $userdata->applicant_id;
   }
   $response          =  $req->FindLiteDevice($applicant_id);
- // echo $applicant_id;die;
-  //$response1 = implode("|", $response);
-
-
-  //print_r($response1); 
-
-
-
-  $pushnote          = $pushobj ->sendLitePushNotificationToGCM($response, $message);
-  
-  //$response          =  $request->FindDeviceId($id,$module);
-
-
-  
+  $pushnote          =  $pushobj ->sendLitePushNotificationToGCM($response, $message);
   $request           =  new userdataservice();
-  $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date);  // This code for Interview 
+  $response          =  $request->interview_schedule($applicant_id,$job_id,$status,$date,$interview_array);  // This code for Interview 
   $email_res         =  new emailService();
   $request           =  new userdataservice();
   $userdata          =  $request->userdata($employer_id);

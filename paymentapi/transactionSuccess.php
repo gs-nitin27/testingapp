@@ -1,5 +1,5 @@
 <?php
-include('config1.php');
+include('../config1.php');
 include('success_submit.php');
 
 $status=$_POST["status"];
@@ -31,7 +31,7 @@ If (isset($_POST["additionalCharges"])) {
 		 
        if ($hash != $posted_hash) {
         echo "Invalid Transaction. Please try again";
-        echo $retHashSeq;echo '------'.$posted_hash;die;
+       // echo $retHashSeq;echo '------'.$posted_hash;die;
 	}
 	else { 
                 $req = new payment();
@@ -94,7 +94,7 @@ If (isset($_POST["additionalCharges"])) {
 <script> 
 
         setTimeout(function() {
-              window.location = 'http://localhost/gs_newsite/manage/job/transaction_list';
+              window.location = '<?php echo PAYU_SUCCESS_URL; ?>'+'manage/job/transaction_list';
 
         }, 3000);       
 </script> 

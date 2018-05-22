@@ -72,9 +72,11 @@ public function create_new_user($data)
    }
 }
   public function create_user($data)
-  {   $item = new stdClass();
+  {  
+      
+      $item = new stdClass();
       $item->userType = $data->userType;
-      $item->name     = $data->data->name;
+     
       $item->passwsord = md5($data->data->email);
       $item->email     = $data->data->email;
       $item->image    = $data->data->image;
@@ -97,15 +99,17 @@ public function create_new_user($data)
         $app_id_column = "google_id";
         $column = $app_id_column;
         $item->app_id        = $data->data->id; 
+         $item->name         = $data->data->name;
       }else
       {
         $app_id_column = $data->app."_fb_id";
         $column  = $app_id_column;
         $item->app_id        = $data->data->id;
+        $item->name = $data->data->first_name.' '.$data->data->last_name;
 
       }
       //echo $app_id;die;
-      $password = md5($data->data->email);
+      $password =base64_encode(mt_rand(1000,9999));
       $query = "INSERT INTO `user`(`name`, `status`,`password`,`email`,`user_image`, `date_created`,`".$app_id_column."`,`".$device_id_column."`) VALUES ('$item->name','$status','$password','$item->email','$item->image',CURDATE(),'$item->app_id','$item->device_id')";
      $sql    = mysql_query($query);
      $log_id = mysql_insert_id();

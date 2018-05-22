@@ -874,17 +874,14 @@ if($query)
 
 public function eventsearch($keyword)
 {
-$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`image`,'') AS image, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`feetype`,'') AS feetype, IFNull(`ticket_detail`,'') AS ticket_detail, IFNull(`no_of_ticket`,'') AS no_of_ticket, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open , IFNull(`is_native`,'') AS is_native FROM `gs_eventinfo` WHERE `publish` = '1' AND( `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%')  ORDER BY `id` DESC ";
+$query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`image`,'') AS image, IFNull(`type`,'') AS type, IFNull(`name`,'') AS name, IFNull(`feetype`,'') AS feetype, IFNull(`ticket_detail`,'') AS ticket_detail, IFNull(`no_of_ticket`,'') AS no_of_ticket, IFNull(`address_1`,'') AS address_1, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`PIN`,'') AS PIN, IFNull(`state`,'') AS state, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull(`eligibility1`,'') AS eligibility1, IFNull(`eligibility2`,'') AS eligibility2, IFNull(`terms_cond1`,'') AS terms_cond1, IFNull(`terms_cond2`,'') AS terms_cond2, IFNull(`organizer_name`,'') AS organizer_name, IFNull(`mobile`,'') AS mobile,IFNull(`organizer_address_line1`,'') AS organizer_address_line1, IFNull(`organizer_address_line2`,'') AS organizer_address_line2, IFNull(`organizer_city`,'') AS organizer_city, IFNull(`organizer_state`,'') AS organizer_state, IFNull(`organizer_pin`,'') AS organizer_pin, IFNull(`event_links`,'') AS event_links, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`entry_start_date`, '%D %M %Y'),'') AS entry_start_date, IFNull(DATE_FORMAT(`entry_end_date`, '%D %M %Y'),'') AS entry_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`email_app_collection`,'') AS email_app_collection, IFNull(DATE_FORMAT(`dateCreated`, '%D %M %Y'),'') AS dateCreated,IFNull(DATEDIFF(`entry_start_date`,CURDATE()) , '') AS days,IFNull(DATEDIFF(`entry_end_date`,CURDATE()) , '') AS open FROM `gs_eventinfo` WHERE `publish` = '1' AND( `type` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%')  ORDER BY `id` DESC ";
 $query1 = mysql_query($query);
 if($query1)
 {
 while($row = mysql_fetch_assoc($query1))
 {
 $row['event']='0';
-$row['apply_data']=[];
 $row['fav']='0';
-$row['eligibility1'] = json_decode($row['eligibility1']);
-$row['terms_cond1'] = json_decode($row['terms_cond1']);
 $rows[] = $row;
 }
   return $rows;
@@ -901,27 +898,16 @@ public function tournamentsearch($keyword)
 $query1 = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,'')AS name, IFNull(`address_1`,'') AS address_1
 , IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`state`,'') AS state
 , IFNull(`pin`,'') AS pin, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull
-(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_cond , IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2
+(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2
 , IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
 , IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'')AS org_city , IFNull(`org_pin`,'')
- AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created ,IFNull(`is_native`,'') AS  is_native,IFNull(`category`,'') AS  category  FROM `gs_tournament_info` WHERE `publish` = '1' AND (`description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%') ORDER BY `id` DESC");
+ AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `publish` = '1' AND (`description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%') ORDER BY `id` DESC");
 if($query1)
 {
 while($row = mysql_fetch_assoc($query1))
 {
   $row['tour']='0';
-  $row['apply_data']=[];
   $row['fav']='0';
-  if($row['category'] == null)
-  {
-  $row['category'] = []; 
-  }
-  else
-  {
-  $row['category'] = json_decode($row['category']);
-  }
-  $row['terms_cond'] = json_decode($row['terms_cond']);
-
 $rows[] = $row;
 }
   return $rows;
@@ -1294,7 +1280,7 @@ public function job_status($id,$userid)
     if(mysql_num_rows($query)>0)
     {
           $row = mysql_fetch_assoc($query);
-          return $row['status'];
+          return $row;
     }
     else
     {
@@ -1905,9 +1891,11 @@ $num   =  mysql_affected_rows();
 /********************************************************************************************/
 
 
-public function interview_schedule($applicant_id,$job_id,$status,$date )
+public function interview_schedule($applicant_id,$job_id,$status,$date,$inter_data)
 {
-$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status',`interview_date` = '$date'  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
+$apply_data = array('jobid'=>$job_id,'interview' =>$inter_data);
+$apply_data = json_encode($apply_data);
+$query =  mysql_query("UPDATE `user_jobs` SET `status` = '$status',`interview_date` = '$date' ,`interview_data` = '$apply_data'  WHERE `userid` IN ($applicant_id) AND `userjob` = '$job_id'");
 $num   =  mysql_affected_rows();
   if($num)
   {
