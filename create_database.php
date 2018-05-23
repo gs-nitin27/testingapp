@@ -904,6 +904,9 @@ else if($_REQUEST['act'] == "getsearchview")
             {  $request       =   new userdataservice();
                $job_status      = $request->job_status($res[$i]['id'],$user_id);
                $res[$i]['job_status'] = $job_status['status'];
+               $interview_data  = json_decode($job_status['interview_data']);
+               $offer_data = array('salary' =>$job_status['salary'] , 'joining_date'=>$job_status['joining_date']);
+               $interview_data['interview_data']->salary = $offer_data; 
                $res[$i]['interview_data'] = json_decode($job_status['interview_data']);
                $response = $res; 
             }
@@ -1506,7 +1509,7 @@ else if($_REQUEST['act'] == "gs_searching")
                             for ($i=0; $i <count($response) ; $i++)
                             { 
                                $job_status      = $request->job_status($response[$i]['id'],$userid);
-                               $response[$i]['job_status'] =$job_status; //1=Applied,2=shortlisted,3=joboffer
+                               $response[$i]['job_status'] =$job_status['status']; //1=Applied,2=shortlisted,3=joboffer
                             }
                          }
                          if ($module=='2')

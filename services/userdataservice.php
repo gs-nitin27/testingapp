@@ -1276,10 +1276,14 @@ $query  = mysql_query("SELECT `userjob` FROM `user_jobs` WHERE `userid` = '$user
 
 public function job_status($id,$userid)
 { 
-  $query  = mysql_query("SELECT *FROM `user_jobs` WHERE `userid` = '$userid' AND `userjob` = $id ");
+  $query  = mysql_query("SELECT IFNull(`id`,'') AS id, `userid`, `userjob`, `date`, `status`, `joining_date`, `salary`, `interview_date`, IFNull(`interview_data`,'') AS interview_data FROM `user_jobs` WHERE `userid` = '$userid' AND `userjob` = $id ");
     if(mysql_num_rows($query)>0)
     {
           $row = mysql_fetch_assoc($query);
+          $apply_data = json_decode($row['interview_data']);
+          $offer_data = json_encode(array('salary' =>$row['salary'] ,'joining_date'=>$row['joining_date'] ));
+          $apply_data->offer = json_decode($offer_data);
+          $row['interview_data'] = json_encode($apply_data);
           return $row;
     }
     else
