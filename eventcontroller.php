@@ -114,7 +114,7 @@ else if($_REQUEST['act'] == 'quick_event_apply')
   $applydata = json_decode(file_get_contents("php://input"));
   $cat_data = $applydata->ApplyEvent;
   
-  //$billingdata = json_decode($applydata->response_data);
+  $billingdata = json_decode($applydata->response_data);
   //$savebillingdata =  $billingdata->result; 
   $userdata  = $applydata->userdata;
   $date = date("Y-m-d");
@@ -158,7 +158,7 @@ else if($_REQUEST['act'] == 'quick_event_apply')
     // $athlete_code = $code_obj->get_code($id);
     // if($athlete_code == true)
     // {
-    $res = $emailres->quick_event_apply_email($cat_data, $savebillingdata,$userdata,$emailtemp);  
+    $res = $emailres->quick_event_apply_email($cat_data, $billingdata,$userdata,$emailtemp);  
     //}
     
   }
