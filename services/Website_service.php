@@ -108,7 +108,7 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_url          = $row['url'];
                   $A_video_link   = $row['video_link'];
                   $A_url          = "article-detail/".$row['id'];
-                  $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
+                  $A_image_path   = "https://getsporty.in/portal/uploads/resources/".$A_img;
                   $A_video='';
    if($A_token==0)
             {
