@@ -200,6 +200,12 @@ $item->sport          =  $data1->sport;
 if(isset($data1->login_status)){
 $item->login_status   =  $data1->login_status;	
 }
+if(isset($data1->address1)){
+$item->address1   =  $data1->address1;	
+}else
+{
+$item->address1   =  '';
+}
 $item->gender         =  $data1->gender;
 $item->dob            =  $data1->dob;
 $item->userType       =  $data1->userType; 
@@ -226,7 +232,7 @@ if($resp != 0)
 if($resp[$column] == $item->id && $resp['status'] == '1')
 {
 
-  	$update = "`userType` = '".$item->userType."' ,  `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+  	$update = "`userType` = '".$item->userType."' ,  `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."',`address1` = '".$item->address1."'";
 	$where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);
 	if($resp['prof_name'] == 'Athletes')
@@ -248,7 +254,7 @@ else
 }
 else
 {
-$update = "`userType` = '".$item->userType."' , `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."'";
+$update = "`userType` = '".$item->userType."' , `email`= '".$item->email."',`name` = '".$item->name."',`contact_no` = '".$item->phone_no."',`prof_name` = '".$item->prof_name."',`prof_id` = '".$item->prof_id."',`sport` = '".$item->sport."',`gender` = '".$item->gender."',`dob` = '".$item->dob."',`location` = '".$item->location."',`".$device_id_column."` = '".$item->device_id."',`address1` = '".$item->address1."'";
 	//$where  = "`".$item->app."_fb_id` = '".$item->id."'";
     $where  = "`userid` = '".$item->userid."'";
 	$resp   = $obj_var->update_user_data($update,$where);
