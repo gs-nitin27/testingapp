@@ -158,7 +158,8 @@ else if($_REQUEST['act'] == 'quick_event_apply')
     // $athlete_code = $code_obj->get_code($id);
     // if($athlete_code == true)
     // {
-    $res = $emailres->quick_event_apply_email($cat_data, $billingdata,$userdata,$emailtemp);  
+    $attendee_id = $cat_data[0]->event_id.$cat_data[0]->applicant_id;//die;
+    $res = $emailres->quick_event_apply_email($cat_data, $billingdata,$userdata,$emailtemp,$attendee_id);  
     //}
     
   }
