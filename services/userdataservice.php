@@ -2985,11 +2985,12 @@ public function offerAccept_reject($userid,$jobid)
 }
 
 public function get_user_activities($userid,$module)
-{    
+{   
   $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
 if($module == '1')
 { 
   $j_applicant = mysql_query("SELECT `userjob`, `status` FROM `user_jobs` WHERE `userid` = '$userid'");
+  $data = [];
 if(mysql_num_rows($bookmark)>0)
   { 
     $row = mysql_fetch_assoc($bookmark); 
@@ -2997,7 +2998,7 @@ if(mysql_num_rows($bookmark)>0)
     if($ent_id != '')
     {
     $favarray = split(",",$ent_id);
-    $ent_id = $ent_id.',';
+    $data[] = $ent_id;
     }
   else
     {
@@ -3015,12 +3016,19 @@ if(mysql_num_rows($j_applicant)>0)
     $data1[] = $rowdata['userjob'];
     $apply_array[$rowdata['userjob']] = $rowdata['status']; 
   }
-  $data   = implode(',',$data1);
-  $data   = $ent_id.$data;
+  $job_data   = implode(',',$data1);
+  $data[]   = $job_data;
 }
 else
 {
-  $data   = $ent_id;
+  $job_data   = null;//$ent_id;
+}
+if(!empty($data))
+{
+  $data = implode(',',$data);
+}else
+{
+  $data = null;
 }
   $query  = mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`location`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image, IFNull(`is_native`, '') AS is_native FROM `gs_jobInfo` WHERE `id` IN ($data)");
   if(mysql_num_rows($query)>0)
