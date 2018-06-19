@@ -173,9 +173,10 @@ switch($_REQUEST['act'])
 			  $req       		= new userdataservice();
 
 			  $where            = "WHERE `email` ='".$parent_email."'";//  Check if user is registered as parent
-
+             // echo $where;die;
 			  $Verified         = $req->userVarify($where);
-              if($Verified == 0)
+              //print_r($Verified);die;
+              if($Verified == '0')
 
 			  { 
                 $Obj  = new parentsUserService();
@@ -190,7 +191,7 @@ switch($_REQUEST['act'])
 
 			  {
 			    if($Verified['prof_name'] == 'Parent')
-			    {  
+			    {   
                     $getcodeObj = new parentsUserService();
                     $email_req  = new emailService();
 	                $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id);
@@ -199,10 +200,10 @@ switch($_REQUEST['act'])
                     $unique_code = rand();
                     $create_assoc = $getcodeObj->insert_association($Verified['userid'],$child_id,$unique_code,'-1');
                     $getcode = $getcodeObj->get_association_data($Verified['userid'],$child_id);
-                    $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code']);
+                    $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code'],$Verified['name']);
                     }else
                     {
-                      $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code']);
+                      $send_email = $email_req->ActivateChildAccount($parent_email,$getcode['unique_code'],$Verified['name']);
                     }
                 $status = "1";
                 $msg = 'Account already exist as parent, connection request sent';

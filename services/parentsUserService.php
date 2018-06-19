@@ -4,7 +4,7 @@
 class parentsUserService
 {
 public function  get_parent_child($parent_id)
-{  //echo "SELECT * FROM `gs_association1` WHERE `parent_id` ='$parent_id' ";//die;
+{  echo "SELECT * FROM `gs_association1` WHERE `parent_id` ='$parent_id' ";//die;
 	$query  = mysql_query("SELECT * FROM `gs_association1` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
@@ -94,16 +94,19 @@ public function add_Parent($parent_email,$child_id)
 {  
    $unique_code = rand();
    define(UNIQUE, $unique_code);
-   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`date_created`,`unique_code`) VALUES('$parent_email','104','6','Parent','CURDATE()','".UNIQUE."')");
+    $unique_array_val = array('unique' =>UNIQUE);
+   $query =mysql_query("INSERT INTO `user`(`email`,`userType`,`prof_id`,`prof_name`,`unique_code`) VALUES('$parent_email','104','6','Parent','".$unique_array_val['unique']."')");
+    
        if($query)
        {
              $parent_id = mysql_insert_id();
              if($parent_id!=NULL)
-              {
-              	 $data1 = $this->insert_association($parent_id,$child_id,UNIQUE,'-1');
+              { 
+              	 $data1 = $this->insert_association($parent_id,$child_id,$unique_array_val['unique'],'-1');
                            
               }
-              return UNIQUE;//$data['userid'];
+              
+              return $unique_array_val['unique'];//$data['userid'];
        } 
         else
         {    
@@ -178,9 +181,9 @@ public function get_association_data($parent_id,$child_id)
 public function child_account_verify($code)
 {
 
-	$query = mysql_query("UPDATE `gs_association1` SET `child_activate` = '2'  WHERE `unique_code` = '$code'");;
+	$query = mysql_query("UPDATE `gs_association1` SET `child_activate` = '2'  WHERE `unique_code` = '$code'");
 	if(mysql_affected_rows() == 1)
-	{   
+	{   mysql_query("UPDATE `user` SET `unique_code` = ''  WHERE `unique_code` = '$code'");
 		return "1";
 	}
 	else

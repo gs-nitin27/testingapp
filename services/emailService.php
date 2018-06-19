@@ -326,8 +326,8 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
 
 }  // End of Function
 
-public function ActivateChildAccount($child_email,$code)
-{
+public function ActivateChildAccount($child_email,$code,$name)
+{     
        require('class.phpmailer.php');
          $to             = $child_email;
          $from           = "info@darkhorsesports.in";
@@ -364,9 +364,8 @@ public function ActivateChildAccount($child_email,$code)
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Dear Mr. /Ms., <strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' . $user . '</strong></p>
 <p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
-Hi user your login code is<br>'.$code.'
+Hi user, your login code is<br>'.$code.'
 <br><br><br><br><br>Please login with your current google account with the code and access all your info </p> 
 
 </td>
