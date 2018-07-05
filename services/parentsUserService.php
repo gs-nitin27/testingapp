@@ -4,11 +4,12 @@
 class parentsUserService
 {
 public function  get_parent_child($parent_id)
-{  echo "SELECT * FROM `gs_association1` WHERE `parent_id` ='$parent_id' ";//die;
+{ 	
 	$query  = mysql_query("SELECT * FROM `gs_association1` WHERE `parent_id` ='$parent_id' ");
      $num = mysql_num_rows($query);
 	if($num>0)
-	{    $i = 0;
+	{    
+		$i = 0;
 		while ($row  = mysql_fetch_assoc($query)) 
 		{    
 
@@ -16,10 +17,13 @@ public function  get_parent_child($parent_id)
 	  		{
 	  		/*1=child is less than 12; 2=12 to 15; 3=above 15;4=above 12 but not separated*/
 	  		$child_info = $this->get_child_data($row['child_id']);
-	  		include('../services/userdataservice.php');
-	  		$classObj = new userdataservice();
-	  		$class = $classObj->connected_class($row['child_id']);
-	  		$child_info['classes'] = $class;
+	  		
+	  		//include('userdataservice.php');
+	  		//print_r($child_info);
+	  		//$classObj = new userdataservice();
+	  		//$class = $classObj->connected_class($row['child_id']);
+	  		//print_r($class);die;
+	  		//$child_info['classes'] = $class;
 	  		$child_info['child_activate'] = $row['child_activate'];	
 	  		if($child_info['age'] < 12 || $child_info['age'] == 12)
 			{
@@ -33,12 +37,13 @@ public function  get_parent_child($parent_id)
 			}else if((($child_info['age'] > 15) || $child_info['age'] == 15) && ($child_info['child_activate'] > 0))
 			{
 				$child_info['status'] = '4';
-			}	
+			}
+
 	  		$data[] = $child_info; 
 	  		}
 	  		$i++;
 	    }
-
+    
 	return $data;
     }
 	else
@@ -116,7 +121,8 @@ public function add_Parent($parent_email,$child_id)
 } 
 
 public function get_child_data($child_id)
-{   $query = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code,IFNull(`user_image`,'') AS user_image ,(select DATEDIFF(CURDATE(),`dob`) / 365) AS age FROM `user` WHERE `userid`= $child_id");
+{   
+	$query = mysql_query("SELECT IFNull(`userid`,'') AS userid, IFNull(`name`,'') AS name , IFNull(`dob`,'') AS dob , IFNull(`gender`,'') AS gender,IFNull(`sport`,'') AS sport, IFNull(`unique_code`,'') AS unique_code,IFNull(`user_image`,'') AS user_image ,(select DATEDIFF(CURDATE(),`dob`) / 365) AS age FROM `user` WHERE `userid`= $child_id");
 	$num = mysql_num_rows($query);
 	 if ($num>0)
 	 {  

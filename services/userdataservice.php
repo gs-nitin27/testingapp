@@ -3064,61 +3064,46 @@ $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$us
  if(mysql_num_rows($bookmark)>0)
   { 
     $row = mysql_fetch_assoc($bookmark); 
-    $ent_id = $row['userfav']; 
-    if($ent_id != '')
-    {
-    $favarray = split(",",$ent_id);
-    $ent_id = $ent_id.',';
-    }
-  else
-    {
-     $ent_id = null;
-    }
+    $ent_id = $row['userfav'];
+    $favarray = split(",",$ent_id); 
+  //   if($ent_id != '')
+  //   {
+  //   $favarray = split(",",$ent_id);
+  //   $ent_id = $ent_id.',';
+  //   }
+  // else
+  //   {
+  //    $ent_id = null;
+  //   }
   }
   else
   {
    $ent_id = null;
   } 
-   $tournament_apply = mysql_query("SELECT DISTINCT `tournament_id`FROM `gs_tournament_application` WHERE `userid` = '$userid'");
- if(mysql_num_rows($tournament_apply)>0)
- {
-  while ($t_data = mysql_fetch_assoc($tournament_apply))
-  {
-    $tournament_apply_id[] = $t_data['tournament_id'];
-  }
- $tournament_apply_ids   = implode(',',$tournament_apply_id);
- $tour_id_data = $ent_id.$tournament_apply_ids;
- }else
- {
-  $tour_id_data = $ent_id;
- }
+ //   $tournament_apply = mysql_query("SELECT DISTINCT `tournament_id`FROM `gs_tournament_application` WHERE `userid` = '$userid'");
+ // if(mysql_num_rows($tournament_apply)>0)
+ // {
+ //  while ($t_data = mysql_fetch_assoc($tournament_apply))
+ //  {
+ //    $tournament_apply_id[] = $t_data['tournament_id'];
+ //  }
+ // $tournament_apply_ids   = implode(',',$tournament_apply_id);
+ // $tour_id_data = $ent_id.$tournament_apply_ids;
+ // }else
+ // {
+   $tour_id_data = $ent_id;
+ // }
  
  
- $tournament_data =mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,'')AS name, IFNull(`address_1`,'') AS address_1
-
-
-, IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`state`,'') AS state
-
-
-, IFNull(`pin`,'') AS pin, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull
-
-
-(`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2
-
-
-, IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1
-
-
-, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'')AS org_city , IFNull(`org_pin`,'')
-
-
- AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `id` IN ($tour_id_data)");
+ $tournament_data =mysql_query("SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`name`,'')AS name, IFNull(`address_1`,'') AS address_1 , IFNull(`address_2`,'') AS address_2, IFNull(`location`,'') AS location, IFNull(`state`,'') AS state , IFNull(`pin`,'') AS pin, IFNull(`description`,'') AS description, IFNull(`sport`,'') AS sport, IFNull (`level`,'') AS level, IFNull(`age_group`,'') AS age_group, IFNull(`gender`,'') AS gender, IFNull(`terms_and_cond1`,'') AS terms_and_cond1 , IFNull(`terms_and_cond2`,'') AS terms_and_cond2, IFNull(`organiser_name`,'') AS organiser_name, IFNull(`mobile`,'') AS mobile,IFNull(`eligibility1`, '') AS eligibility1,IFNull(`eligibility2`, '') AS eligibility2 , IFNull(`landline`,'') AS landline, IFNull(`email`,'') AS email, IFNull(`org_address1`,'') AS org_address1 , IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'')AS org_city , IFNull(`org_pin`,'') AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `id` IN ($tour_id_data)"); 
  if(mysql_num_rows($tournament_data)>0)
  {
   while ($trows = mysql_fetch_assoc($tournament_data))
   { 
     $tfav = in_array($trows['id'], $favarray); 
-    if($tfav !=0)
+    echo $trows['id'].'|';print_r($favarray);
+    //echo '0'.$tfav;
+    if($tfav == true)
     {
        $trows['fav']='1';
     }
