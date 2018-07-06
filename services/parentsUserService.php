@@ -294,7 +294,7 @@ if($module==3)
 	$query = mysql_query("INSERT INTO `user_tournaments`(`id`, `userid`, `usertournament`, `date`,`status`,`entry_passcode`)  VALUES $values");
 }
 
-	return 1;
+return 1;
 }
 else
 {

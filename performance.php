@@ -245,19 +245,20 @@ else if($_REQUEST['act'] == 'coach_class_listing')
 else if($_REQUEST['act'] == 'get_catagories_info')
 {
 
-$scenario_data = json_decode(file_get_contents(USER_ASSETS.'/assets/json/assessment_scenario.json'));
+$scenario_data = json_decode(file_get_contents(USER_ASSETS.'/uploads/json/assessment_scenario.json'));
+//print_r($scenario_data);die;
 $dob = $_REQUEST['dob'];
 $sport = $_REQUEST['sport'];
 $age = date_diff(date_create($dob), date_create('today'))->y;
 $screnario ='';
 foreach ($scenario_data as $key => $value) {
-  
            if($key == $sport)
-           {
+           {  //echo $key;die;
              foreach ($value as $ageGropup => $data) {
                if($age <= $ageGropup)
                {
-                 $screnario = $data;
+                $screnario = $data;
+                break;
                }
              }
            }
