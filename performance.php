@@ -275,5 +275,35 @@ echo json_encode($resp);
 }
 
 
+else if($_REQUEST['act'] == 'submit_assessment_request')
+{
+  $data = json_decode(file_get_contents('php://input'));
+  $obj = new UserPerformanceService();
+  $resp = $obj->submit_assessment_request($data);
+  if($resp == 1)
+  {
+    $resp = array('status' =>$resp ,'message'=>'Success');
+  }
+  else
+  {
+    $resp = array('status' =>$resp ,'message'=>'Failure');
+  }
+  echo json_encode($resp);
+}
+
+else if($_REQUEST['act'] == 'get_assessement_list')
+{
+  $obj = new UserPerformanceService();
+  $user_var = $obj->get_assessement_list();
+  if($user_var != 0)
+  {
+    $resp = array('status' => '1','data'=>$user_var,'msg'=>'success' );
+  }else
+  {
+    $resp = array('status' => '0','data'=>[],'msg'=>'failure' );
+  }
+echo json_encode($resp);
+}
+
 
 ?>

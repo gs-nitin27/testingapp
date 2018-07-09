@@ -114,7 +114,7 @@ public function  savePerformance($userdata)
 	$status       	 =  $userdata->status;
 	$avg 			 =  $userdata->avg;
 	$modules_avg	 =  $userdata->modules_avg;
-   echo "UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id";die;
+  // echo "UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id";die;
 	$query 			 =	mysql_query("UPDATE  `gs_athlit_performance` SET `coachid`='$coachid',`athlitid`= '$athleteid' ,`data`='$data',`status`='$status',`avg`= '$avg',`modules_avg`='$modules_avg',`date_created`= CURDATE() WHERE `id`=$id");
 	$num=mysql_affected_rows(); 
 	if ($num)
@@ -151,13 +151,13 @@ public function findData($last_id)
 /**************************************************************/
 
 		
-public function  publishPerformance($userdata)
+public function publishPerformance($userdata)
 {
 	$id 		        =  $userdata->id;
 	$data 		      	=  $userdata->data;
 	$status     		=  $userdata->status;
 	$next_assessment 	=	date('Y/m/d', strtotime('+3 months'));
-	echo "UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'";die;
+	// echo "UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'";die;
 	$query =mysql_query("UPDATE `gs_athlit_performance` SET `data`= '$data' ,`status`='$status' ,`date_publish`= CURDATE(),`next_assessment`='$next_assessment' WHERE `id`='$id'");
 	$num=mysql_affected_rows();
 	if ($num)
@@ -259,16 +259,23 @@ public function viewPerformanceguide($item,$agegropup)
 
  public function save_request_assessment($userdata)
  {
-
-
- 	$request_type		=	 $userdata->request_type;
+    $request_type		=	 $userdata->request_type;
 	$assessment_type 	=	 $userdata->assessment_type;
 	$athlete_id 		=	 $userdata->athlete_id;
-	$video_link 		=	 $userdata->video_link;
-	$date 				=	 $userdata->date;
 	$time 				=	 $userdata->time;
 	$venue 				=	 $userdata->venue;
-    $query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link','$date','$time','$venue')");
+	if($request_type == '1')
+    {
+    $video_link 		=	 json_encode($userdata->video_link);
+    $date 				=	 'CURDATE()';
+	}
+	else
+	{
+    $video_link 		=	 $userdata->video_link;
+	$date               =    $userdata->date;
+	}
+	//echo "INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link',CURDATE(),'$time','$venue')";die;
+ 	$query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link',CURDATE(),'$time','$venue')");
 	if($query)
 	{
 	   return 1;
@@ -292,7 +299,7 @@ public function  view_request_assessment($athlete_id)
   if($num)
   {
      while($row = mysql_fetch_assoc($query))
-     {
+     {  $row['video_link'] = json_decode($row['video_link']);
      	$data[]  = $row;
      }
      return $data;
@@ -370,6 +377,36 @@ public function cheack_coach_id($coach_id)
 	}
 }
 
+public function submit_assessment_request($data)
+{    $assess_data = json_encode($data->data);
+     $query = mysql_query("INSERT INTO `gs_user_assessment`(`assessment_data`, `userid`, `date_of_submission`) VALUES ('$assess_data','$data->userid',CURDATE())");
+    if($query)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+
+}
+
+public function get_assessement_list()
+{
+   $query = mysql_query("SELECT `id`, `request_type`, `assessment_type`, `athlete_id`, `video_link`, `date`, `time`, `venue`, `status` FROM `gs_request_assessment` WHERE '1=1'");
+    
+  if(mysql_num_rows($query)>0)
+  {
+  	while ($row = mysql_fetch_assoc($query)) {
+          $row['video_link'] = json_decode($row['video_link']);
+          $rows[] = $row;
+  	}
+    return $rows;
+  }else
+  {
+  	return 0;
+  }
+}
 
 
 } // End Class 
