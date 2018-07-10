@@ -482,8 +482,9 @@ public function visitor_Acknowlege($user_info)
 
 /*****************Function for Send The Email to Athelte ***************/
 
-public function send_email_athlete($email,$name,$request_type)
+public function send_email_athlete($email,$name,$request_type,$video_link)
 {
+  $video = $video_link;
   if($request_type==1)
   {
      $request_name  = "Online";
@@ -545,7 +546,7 @@ public function send_email_athlete($email,$name,$request_type)
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
-                $res = $this->send_email_info($info_mail,$name,$request_name);
+               $res = $this->send_email_info($info_mail,$name,$request_name,$video);
              // return 1;
           
    
@@ -553,10 +554,15 @@ public function send_email_athlete($email,$name,$request_type)
    
 
 
-public function send_email_info($info_mail,$name,$request_name)
-{
+public function send_email_info($info_mail,$name,$request_name,$video)
+{        
+         $show_video_link   = '';
+         foreach ($video as $key => $value) {
+           $show_video_link .= '<li>'.$value->videolink.'</li>';
+         }
+           $show_video_link = $show_video_link;
          $from           =  "info@darkhorsesports.in";
-         $from_name      =  "Getsporty";
+         $from_name      =  $name;
          $subject        =  "Request for Assesment";
          $mail           = new PHPMailer();  // create a new object
          $mail->IsSMTP(); // enable SMTP
@@ -577,9 +583,11 @@ public function send_email_info($info_mail,$name,$request_name)
 </td></tr><tr><td style="padding-bottom:20px" valign="top">
 <h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">
 </td></tr><tr><td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:30px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"> Hi   ' . $name . '</br> </p>
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Has sent request for ' . $request_name . ' assessment ........<br><br><br><br><br>Thanks you for Request</br><p>GetSporty Team</p> 
-</td>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:30px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"> Hi</br> </p>
+<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>' . $name . ' has sent request for ' . $request_name . ' assessment
+<br>
+<p><b>Video links provided by candidate</b><p><br>
+'.$show_video_link.'
 </tr>
 <tr>
 <td align="center" style="padding-bottom:60px" valign="top">

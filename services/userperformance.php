@@ -264,6 +264,7 @@ public function viewPerformanceguide($item,$agegropup)
 	$athlete_id 		=	 $userdata->athlete_id;
 	$time 				=	 $userdata->time;
 	$venue 				=	 $userdata->venue;
+	$sport              =    $userdata->sport; 
 	if($request_type == '1')
     {
     $video_link 		=	 json_encode($userdata->video_link);
@@ -274,8 +275,7 @@ public function viewPerformanceguide($item,$agegropup)
     $video_link 		=	 $userdata->video_link;
 	$date               =    $userdata->date;
 	}
-	//echo "INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link',CURDATE(),'$time','$venue')";die;
- 	$query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link',CURDATE(),'$time','$venue')");
+ 	$query = mysql_query("INSERT INTO `gs_request_assessment`(`id`,`request_type`,`assessment_type`,`athlete_id`,`video_link`,`date`,`time`,`venue`,`sport`) VALUES('0','$request_type','$assessment_type','$athlete_id','$video_link',CURDATE(),'$time','$venue','$sport')");
 	if($query)
 	{
 	   return 1;
@@ -391,9 +391,9 @@ public function submit_assessment_request($data)
 
 }
 
-public function get_assessement_list()
+public function get_assessement_list($sport)
 {
-   $query = mysql_query("SELECT `id`, `request_type`, `assessment_type`, `athlete_id`, `video_link`, `date`, `time`, `venue`, `status` FROM `gs_request_assessment` WHERE '1=1'");
+   $query = mysql_query("SELECT a.`userid`,a.`user_image`,a.`dob`,a.`gender`,a.`name`,a.`location`,b.`video_link`,b.`date` FROM `user` AS a LEFT JOIN `gs_request_assessment` AS b ON a.`userid` = b.`athlete_id` WHERE a.`userid` IN (SELECT `athlete_id` FROM `gs_request_assessment` WHERE `sport` LIKE '%$sport%')");
     
   if(mysql_num_rows($query)>0)
   {

@@ -170,13 +170,14 @@ else if($_REQUEST['act'] == 'save_suggestion')
 
 else if($_REQUEST['act'] == 'request_assessment') 
 {
-   $data              =  file_get_contents("php://input");
+   //$data              =  file_get_contents("php://input");
    $userdata          =  json_decode(file_get_contents("php://input"));
    $email             =  $userdata->email;
    $name              =  $userdata->name;
    $request_type      =  $userdata->request_type;
+   $video_link        =  $userdata->video_link;
    $req1              =  new emailService();
-   $res1              =  $req1->send_email_athlete($email,$name,$request_type);
+   $res1              =  $req1->send_email_athlete($email,$name,$request_type,$video_link);
    $req               =  new UserPerformanceService();
    $res               =  $req->save_request_assessment($userdata);
         if($res)
@@ -292,9 +293,10 @@ else if($_REQUEST['act'] == 'submit_assessment_request')
 }
 
 else if($_REQUEST['act'] == 'get_assessement_list')
-{
+{ 
+  $sport = $_REQUEST['sport'];
   $obj = new UserPerformanceService();
-  $user_var = $obj->get_assessement_list();
+  $user_var = $obj->get_assessement_list($sport);
   if($user_var != 0)
   {
     $resp = array('status' => '1','data'=>$user_var,'msg'=>'success' );
