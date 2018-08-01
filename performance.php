@@ -177,7 +177,7 @@ else if($_REQUEST['act'] == 'request_assessment')
    $request_type      =  $userdata->request_type;
    $video_link        =  $userdata->video_link;
    $req1              =  new emailService();
-   $res1              =  $req1->send_email_athlete($email,$name,$request_type,$video_link);
+   $res1              =  $req1->send_email_athlete($email,$name,$request_type,$video_link,$userdata);
    $req               =  new UserPerformanceService();
    $res               =  $req->save_request_assessment($userdata);
         if($res)

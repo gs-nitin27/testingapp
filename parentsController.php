@@ -323,7 +323,7 @@ switch($_REQUEST['act'])
         default:
         $Result = array('status' => '0','data'=>'0' ,'msg'=>'Please Try Again');
 
-	            echo json_encode($Result);
+	    echo json_encode($Result);
         break;
 }
 ?>

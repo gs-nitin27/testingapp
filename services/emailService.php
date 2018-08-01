@@ -30,7 +30,7 @@ public function emailVarification($email)
               $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
-              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#03a9f4;">
 
  <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" >
 <tbody><tr>
@@ -46,13 +46,13 @@ public function emailVarification($email)
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Please verify your email Address.</h1>
+<h1 style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">Please verify your email Address.</h1>
 </td>
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click activate to login</br> <a href="'.$emailconform.''.$email.'">Activate<br></strong>
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting</p></br><p>GetSporty Team</p> 
+<p style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">To validate Your email Address, you MUST click the link below.<strong><br><h1> Click activate to login</br> <a href="'.$emailconform.''.$email.'">Activate<br></strong>
+<p style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Note:- If clicking the link does not work, you can copy and paste the link into your browser address window,or retype it there.<br><br><br><br><br>Thanks you for visiting</p></br><p>GetSporty Team</p> 
 
 </td>
 </tr>
@@ -110,7 +110,6 @@ public function email_for_interview($applicant_id,$employer_name,$title,$date,$m
          $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
          $mail->SMTPAuth = true;  // authentication enabled
          $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-         //$mail->Host = 'dezire.websitewelcome.com';
          $mail->Host = 'smtp.gmail.com';
          $mail->Port = 465; 
          $mail->Username =$from;  
@@ -344,7 +343,7 @@ public function ActivateChildAccount($child_email,$code,$name)
          $mail->Password = "2016Darkhorse";
          $mail->SetFrom($from, $from_name);
          $mail->Subject = $subject;
-         $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+         $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#03a9f4;">
 
  <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:480px" width="100%" class="" >
 <tbody><tr>
@@ -359,12 +358,12 @@ public function ActivateChildAccount($child_email,$code,$name)
 </tr>
 <tr>
 <td style="padding-bottom:10px" valign="top">
-<h3 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left"></h1>
+<h3 style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left"></h1>
 </td>
 </tr>
 <tr>
 <td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
+<p style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">
 Hi user, your login code is<br>'.$code.'
 <br><br><br><br><br>Please login with your current google account with the code and access all your info </p> 
 
@@ -482,10 +481,10 @@ public function visitor_Acknowlege($user_info)
 
 /*****************Function for Send The Email to Athelte ***************/
 
-public function send_email_athlete($email,$name,$request_type,$video_link)
+public function send_email_athlete($email,$name,$request_type,$video_link,$request)
 {
-  $video = $video_link;
-  if($request_type==1)
+  $video = $request->video_link;
+  if($request->request_type==1)
   {
      $request_name  = "Online";
   }
@@ -512,16 +511,16 @@ public function send_email_athlete($email,$name,$request_type,$video_link)
               $mail->Password = "2016Darkhorse";           
               $mail->SetFrom($from, $from_name);
               $mail->Subject = $subject;
-              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
+              $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#03a9f4;">
  <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" ><tbody><tr><td align="center" valign="top"><table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%"><tbody><tr>
 <td align="center" style="padding-right:20px;padding-left:20px" valign="top">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody><tr><td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
 </td></tr><tr><td style="padding-bottom:20px" valign="top">
-<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">
+<h1 style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">
 </td></tr><tr><td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:30px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"> Hi   ' . $name . '</br> </p>
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Your request for performance assessment has been received and it is under process......<br><br><br><br><br>Thanks you for Request</br><p>GetSporty Team</p> 
+<p style="color:#000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"> Hi   ' . $request->name . '</br> </p>
+<p style="color:#000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>Your request for performance assessment has been received and it is under process.<br><br><br><br><br>Thanks you for Request</br><p>GetSporty Team</p> 
 </td>
 </tr>
 <tr>
@@ -546,7 +545,7 @@ public function send_email_athlete($email,$name,$request_type,$video_link)
                $mail->AltBody = $txt; 
                $mail->AddAddress($to);
                $mail->Send();
-               $res = $this->send_email_info($info_mail,$name,$request_name,$video);
+               $res = $this->send_email_info($info_mail,$name,$request);
              // return 1;
           
    
@@ -554,59 +553,36 @@ public function send_email_athlete($email,$name,$request_type,$video_link)
    
 
 
-public function send_email_info($info_mail,$name,$request_name,$video)
-{        
+public function send_email_info($info_mail,$data,$userdata)
+{ //print_r($userdata);die;       
+  $video = $userdata->video_link;
          $show_video_link   = '';
          foreach ($video as $key => $value) {
-           $show_video_link .= '<li>'.$value->videolink.'</li>';
+           $show_video_link .= '<li><a href="'.$value->videolink.'">'.$value->videolink.'</a></li>';
          }
-           $show_video_link = $show_video_link;
-         $from           =  "info@darkhorsesports.in";
-         $from_name      =  $name;
-         $subject        =  "Request for Assesment";
+         if($userdata->user_image == '')
+         {
+          $userimage = 'https://www.actionconnected.com/uploads/images/default/unknown_user.png';
+         }else
+         {
+          $userimage = $userdata->user_image;
+         }
+         $show_video_link = $show_video_link;
+         $from           =  $userdata->email;
+         $from_name      =  "Getsporty Assessment";
+         $subject        =  $userdata->sport.': '.$userdata->name." has sent an assessment request";
          $mail           = new PHPMailer();  // create a new object
          $mail->IsSMTP(); // enable SMTP
          $mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
-         $mail->SMTPAuth = true;  // authentication enabled
-         $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
-         $mail->Host = 'smtp.gmail.com';
-         $mail->Port = 465; 
+         //$mail->SMTPAuth = true;  // authentication enabled
+         //$mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
+         $mail->Host = 'mail.getsporty.in';
+         $mail->Port = 587; 
          $mail->Username =$from;  
-         $mail->Password = "2016Darkhorse";
+         //$mail->Password = "2016Darkhorse";
          $mail->SetFrom($from, $from_name);
          $mail->Subject = $subject;
-         $mail->Body = $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#5666be;">
- <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px" width="100%" class="" ><tbody><tr><td align="center" valign="top"><table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #e5e5e5;border-radius:4px" width="100%"><tbody><tr>
-<td align="center" style="padding-right:20px;padding-left:20px" valign="top">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr><td align="left" valign="top" style="padding-top:40px;padding-bottom:30px">
-</td></tr><tr><td style="padding-bottom:20px" valign="top">
-<h1 style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left">
-</td></tr><tr><td style="padding-bottom:20px" valign="top">
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:30px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"> Hi</br> </p>
-<p style="color:#5666be;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left"><br>' . $name . ' has sent request for ' . $request_name . ' assessment
-<br>
-<p><b>Video links provided by candidate</b><p><br>
-'.$show_video_link.'
-</tr>
-<tr>
-<td align="center" style="padding-bottom:60px" valign="top">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody><tr>
-<td align="center" valign="middle">
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</td>
-</tr>
-</tbody></table>
-</div>'; 
+         $mail->Body = $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-color:#03a9f4;"> <table align="center" border="4" cellpadding="4" cellspacing="3" style="max-width:440px;border-color: #ffffff" width="100%"><tbody style="border-color: #ffffff"><tr><td align="center" valign="top"><table align="center" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" style="background-color:#ffffff;  border-bottom:2px solid #03a9f4;border-radius:4px" width="100%"><tbody><tr> <td align="center" style="padding-right:20px;padding-left:20px" valign="top"> <table border="0" cellpadding="0" cellspacing="0" width="100%"> <tbody><tr><td align="left" valign="top" style="padding-top:40px;padding-bottom:30px"> </td></tr><tr><td style="padding-bottom:20px" valign="top"> <h1 style="color:#03a9f4;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:28px;font-style:normal;font-weight:600;line-height:36px;letter-spacing:normal;margin:0;padding:0;text-align:left"> </td></tr><tr><td style="padding-bottom:20px" valign="top"> <p style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;line-height:24px;padding-top:0;margin-top:0;text-align:left">Hi, Admin </p> <p style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;margin-top:0;text-align:left">'.$userdata->name.' has made an assessment request <br><div style="border: 1px solid #03a9f4;width: auto;height: 30%"><h5 style="text-align: center;margin-top:0%;">Basic Information</h5><div><ul style="list-style: none;"><li><img src="'.$userimage.'" width="100" height="100" style="float: right;border-radius: 99px;"></li><li><b><span>Name:</span></b>'.$userdata->name.'</li><li><b><span>Age:</span></b>'.(date('Y') - date('Y',strtotime($userdata->dob))).'</li><li><b><span>Contact no.:</span></b>'.$userdata->contact_no.'</li><li><b><span>Email:</span></b>'.$userdata->email.'</li><li><b><span>Gender:</span></b>'.$userdata->gender.'</li><li><b><span>Location:</span></b>'.$userdata->location.'</li></ul></div></div> <p><b>Video links provided by candidate</b><p>'.$show_video_link.'</tr> <tr> <td align="center" style="padding-bottom:60px" valign="top"> <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"> <tbody><tr> <td align="center" valign="middle"> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </div>'; 
                $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
                $mail->AltBody = $txt; 
                $mail->AddAddress($info_mail);
@@ -1779,7 +1755,7 @@ function acknowlege_event($userdata,$attendee_id)
      $txt='This email was sent in HTML format. Please make sure your preferences allow you to view HTML emails.'; 
      $mail->AltBody = $txt; 
      $mail->AddAddress($to);
-     echo  $mail->Send();die;
+     echo  $mail->Send();//die;
      return $mail->Send();
 
 

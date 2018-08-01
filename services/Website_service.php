@@ -7,12 +7,13 @@ class Website_service
     $event = mysql_query("SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM(SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM `gs_eventinfo` WHERE `publish` = '1' AND `type` != 'Trial' AND datediff(CURDATE(), `entry_end_date`) <= 0 ORDER BY DIFF DESC)AS tab1 UNION SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF, id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM (SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM `gs_eventinfo` WHERE `publish` = '1' AND `type` != 'Trial' AND datediff(CURDATE(), `entry_end_date`) >= 0 ORDER BY datediff(CURDATE(), `entry_end_date`) ASC)AS tab2 LIMIT $position, $item_per_page");
     while($row = mysql_fetch_assoc($event)){
                   $event_title             = $row['name'];
+                  $event_url_title         = explode(' ',$event_title);$event_url_title = str_replace( '\/', '-', implode('-',$event_url_title));
                   $event_summary           = $row['description'];
                   $event_org_name          = $row['organizer_name'];
                   $event_type              = $row['type'];
                   $event_email             = $row['email_app_collection'];
                   $event_location          = $row['location'];
-                  $event_url               = "event-detail/".$row['id'];
+                  $event_url               = "event-detail/".$row['id']."/".$event_url_title;
                   $e_start_date            = date('d F', strtotime($row['start_date']));
                   $e_end_date              = date('d F, Y', strtotime($row['end_date']));
                   $e_entry_start_date      = date('d F', strtotime($row['entry_start_date']));
@@ -20,13 +21,13 @@ class Website_service
                   $event_img_name          = $row['image'];
                   $event_image_path        = "https://getsporty.in/portal/uploads/event/".$event_img_name;
                   $diff                    = $row['DIFF'];
-                  if($diff > 0)
-                  {
-                    $style = 'style="opacity:0.4"';
-                  }else
-                  {
-                    $style = '';
-                  }
+                  // if($diff > 0)
+                  // {
+                  //   $style = 'style="opacity:0.4"';
+                  // }else
+                  // {
+                  //   $style = '';
+                  // }
       if(!empty($event_img_name))
       {
       echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs" '.$style.'><div class="job-box"><img src="'.$event_image_path.'"></div><div class="slide-job-list"><h4>'.$event_title.'</h4><p> Type : <span> '.$event_type .'</span></p><p> Start : <span> '.$e_start_date.' - '.$e_end_date.'</span></p><p> Entry : <span> '.$e_entry_start_date.' - '.$e_entry_end_date.' </span></p><p> Location : <span>'.$event_location.'</span></p><div class="read-c"><a href="'.$event_url .'" target="_blank">Read More</a> </div></div></div></div> ';
@@ -42,11 +43,12 @@ public function get_job_data($item_per_page,$position)
 
                     $J_id                =   $row['id'];
                     $J_title             =  $row['title'];
+                    $job_url_title       =  explode(' ',$J_title);$job_url_title = str_replace( '\/', '-', implode('-',$job_url_title));
                     $J_description       =  $row['description'];
                     $J_org_name          =  $row['organisation_name'];
                     $J_org_city          =  $row['org_city'];
                     $date_updated        =  $row['date_updated'];
-                    $J_url               =  "job-detail/".$row['id'];
+                    $J_url               =  "job-detail/".$row['id']."/".$job_url_title;
                     $J_img               =  $row['image'];
                     $J_image_path        =  "https://getsporty.in/portal/uploads/job/".$J_img;
                     $datetime1 = new DateTime();
@@ -75,6 +77,7 @@ public function get_job_data($item_per_page,$position)
     
                   $T_id                = $row['id'];
                   $T_title             = $row['name'];
+                  $tournament_url_title = explode(' ',$T_title);$tournament_url_title = str_replace( '\/', '-', implode('-',$tournament_url_title));
                   $T_img               = $row['image'];
                   $T_start_date        = date('d F', strtotime($row['start_date']));
                   $T_end_date          = date('d F, Y', strtotime($row['end_date']));
@@ -82,7 +85,7 @@ public function get_job_data($item_per_page,$position)
                   $T_event_end_date    = date('d F, Y', strtotime($row['event_end_date']));
                   $T_org_city          = $row['org_city'];
                   $T_sport             = $row['sport'];
-                  $T_url               = "tournament-detail/".$T_id;
+                  $T_url               = "tournament-detail/".$T_id."/".$tournament_url_title;
                   $T_image_path        = "https://getsporty.in/portal/uploads/tournament/".$T_img;
       if(!empty($T_img))
       {
@@ -108,7 +111,7 @@ echo '<div class="col-lg-3 col-md-3"><div class=" hover-boxs"> <div class="job-b
                   $A_url          = $row['url'];
                   $A_video_link   = $row['video_link'];
                   $A_url          = "article-detail/".$row['id'];
-                  $A_image_path   = "https://getsporty.in/portal/uploads/resources/".$A_img;
+                  $A_image_path        = "https://getsporty.in/portal/uploads/resources/".$A_img;
                   $A_video='';
    if($A_token==0)
             {
@@ -159,12 +162,13 @@ public function get_trial_data($item_per_page,$position,$where)
     $event = mysql_query("SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM(SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM `gs_eventinfo` WHERE `publish` = '1' AND `type` LIKE '%trial%' AND datediff(CURDATE(), `entry_end_date`) <= 0 ORDER BY DIFF DESC)AS tab1 UNION SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF, id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM (SELECT datediff(CURDATE(), `entry_end_date`) AS DIFF,id,name,description,image,sport_name,organizer_city,start_date,end_date,entry_start_date,entry_end_date, email_app_collection,type,location,organizer_name FROM `gs_eventinfo` WHERE `publish` = '1' AND `type` LIKE '%trial%' AND datediff(CURDATE(), `entry_end_date`) >= 0 ORDER BY datediff(CURDATE(), `entry_end_date`) ASC)AS tab2 LIMIT $position, $item_per_page");
     while($row = mysql_fetch_assoc($event)){
                   $event_title             = $row['name'];
+                  $trial_url_title         = explode(' ',$event_title);$trial_url_title = str_replace( '\/', '-', implode('-',$trial_url_title));
                   $event_summary           = $row['description'];
                   $event_org_name          = $row['organizer_name'];
                   $event_type              = $row['type'];
                   $event_email             = $row['email_app_collection'];
                   $event_location          = $row['location'];
-                  $event_url               = "event-detail/".$row['id'];
+                  $event_url               = "event-detail/".$row['id']."/".$trial_url_title;
                   $e_start_date            = date('d F', strtotime($row['start_date']));
                   $e_end_date              = date('d F, Y', strtotime($row['end_date']));
                   $e_entry_start_date      = date('d F', strtotime($row['entry_start_date']));
@@ -172,13 +176,13 @@ public function get_trial_data($item_per_page,$position,$where)
                   $event_img_name          = $row['image'];
                   $event_image_path        = "https://getsporty.in/portal/uploads/event/".$event_img_name;
                   $diff                    = $row['DIFF'];
-                  if($diff > 0)
-                  {
-                    $style = 'style="opacity:0.4"';
-                  }else
-                  {
-                    $style = '';
-                  }
+                  // if($diff > 0)
+                  // {
+                  //   $style = 'style="opacity:0.4"';
+                  // }else
+                  // {
+                  //   $style = '';
+                  // }
       if(!empty($event_img_name))
       {
       echo '<div class="col-lg-3 col-md-3" '.$style.'><div class=" hover-boxs"><div class="job-box"><img src="'.$event_image_path.'"></div><div class="slide-job-list"><h4>'.$event_title.'</h4><p> Type : <span> '.$event_type .'</span></p><p> Start : <span> '.$e_start_date.' - '.$e_end_date.'</span></p><p> Entry : <span> '.$e_entry_start_date.' - '.$e_entry_end_date.' </span></p><p> Location : <span>'.$event_location.'</span></p><div class="read-c"><a href="'.$event_url .'" target="_blank">Read More</a> </div></div></div></div> ';
