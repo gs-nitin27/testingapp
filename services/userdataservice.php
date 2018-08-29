@@ -1079,6 +1079,7 @@ if($type == '1'){
  AS org_pin , IFNull(`tournaments_link`,'') AS tournaments_link, IFNull(DATE_FORMAT(`start_date`, '%D %M %Y'),'') AS start_date, IFNull(DATE_FORMAT(`end_date`, '%D %M %Y'),'') AS end_date, IFNull(DATE_FORMAT(`event_entry_date`, '%D %M %Y'),'') AS event_entry_date, IFNull(DATE_FORMAT(`event_end_date`, '%D %M %Y'),'') AS event_end_date, IFNull(`file_name`,'') AS file_name, IFNull(`file`,'') AS file, IFNull(`image`,'') AS image, IFNull(`email_app_collection`,'') AS email_app_collection,IFNull(`phone_app_collection`,'') AS phone_app_collection , IFNull(DATEDIFF(`event_entry_date`,CURDATE()) , '') AS days , IFNull(DATEDIFF(`event_end_date`,CURDATE()) , '') AS open ,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created FROM `gs_tournament_info` WHERE `id` = '$id'");
   
 }
+
 //$query = mysql_query("SELECT * FROM `".$table."` WHERE `id` = '$id' ");
 if(mysql_num_rows($query)>0){
 
@@ -2004,6 +2005,7 @@ public function createResources($data)
       $now = new DateTime();
       $time=$now->getTimestamp(); 
       $img = $image;
+      $url = '';
       $filepath =str_replace('data:image/png;base64,', '', $img);
       $img = str_replace('$filepath,', '', $img);
       $img = str_replace(' ', '+', $img);
@@ -2014,19 +2016,30 @@ public function createResources($data)
       if ($table=='gs_jobInfo') 
       {
         $file   = UPLOAD_DIR_JOB.$img_name.'.png';
-        
+         $success = file_put_contents($file, $data);
+         $img_name = $img_name. '.png';
       }
       if ($table=='gs_tournament_info') 
       {
         $file   = UPLOAD_DIR_TOUR.$img_name.'.png';
+        $success = file_put_contents($file, $data);
+        $img_name = $img_name. '.png';
       }
       if($table=='gs_eventinfo') 
       {
         $file   = UPLOAD_DIR_EVENT.$img_name.'.png';
+        $success = file_put_contents($file, $data);
+        $img_name = $img_name. '.png';
+      }
+      if($table == 'gs_institute')
+      {
+       $file   = UPLOAD_DIR_PROP.$img_name.'.png'; 
+       $success = file_put_contents($file, $data);
+       $img_name = RESOURCE_FILE_URL.'uploads/property/'.$img_name. '.png';
       }
 
-      $success = file_put_contents($file, $data);
-      $img_name = $img_name. '.png';
+     
+      //echo $img_name;die;
       $updateImage = mysql_query("update `$table` set `image`='$img_name' where `id`='$userid'");
       if($updateImage)
       { 
@@ -2599,10 +2612,7 @@ $body ='<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;background-
 
 public function jobsearch_user($fwhere)
 {
-
-//echo $fwhere;die();
-//$fwhere   =" WHERE `title` LIKE '%$keyword%' OR `description` LIKE '%$keyword%' ";
-
+//echo "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`city`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` where $fwhere  ORDER BY `date_created` DESC";die;
 $query = "SELECT `id`, IFNull(`userid`,'') AS userid, IFNull(`title`,'') AS title, IFNull(`city`,'') AS location, IFNull(`gender`,'') AS gender, IFNull(`sport`,'') AS sport, IFNull(`type`,'') AS type, IFNull(`work_experience`,'') AS work_experience, IFNull(`description`,'') AS description, IFNull(`desired_skills`,'') AS desired_skills, IFNull(`qualification`,'') AS qualification, IFNull(`key_requirement`,'') AS key_requirement, IFNull(`org_address1`,'') AS org_address1, IFNull(`org_address2`,'') AS org_address2, IFNull(`org_city`,'') AS org_city, IFNull(`org_state`,'') AS org_state,IFNull(`org_pin`,'') AS org_pin, IFNull(`organisation_name`,'') AS organisation_name, IFNull(`about`,'') AS about, IFNull(`address1`,'') AS address1, IFNull(`address2`,'') AS address2, IFNull(`state`,'') AS state, IFNull(`city`,'') AS city, IFNull(`pin`,'') AS pin, IFNull(`name`,'') AS name, IFNull(`contact`,'') AS contact, IFNull(`email`,'') AS email, IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS date_created , IFNull(DATEDIFF(CURDATE(),`date_created`) , '') AS days, IFNull(`job_api_key` , '') AS jobkey , IFNull(`job_link`, '') AS link , IFNull(`image`, '') AS image FROM `gs_jobInfo` where $fwhere  ORDER BY `date_created` DESC";
 //echo $query;die;
 $query1 = mysql_query($query);
@@ -2743,8 +2753,8 @@ public function user_Info($whereclause)
 
 
 public function searchEvent($where)
-{
-  $query =mysql_query("SELECT *FROM gs_eventinfo where $where AND datediff(CURDATE(), `end_date`) < 0 AND `publish` = '1' ORDER BY `id` DESC");
+{ //echo "SELECT *FROM gs_eventinfo where $where AND datediff(CURDATE(), `end_date`) < 0 AND `publish` = '1' ORDER BY `id` DESC";die;
+  $query =mysql_query("SELECT * FROM gs_eventinfo where $where  AND `publish` = '1' ORDER BY `id` DESC");
   $num=mysql_num_rows($query);
   if ($num!=0) 
   {
@@ -3169,6 +3179,31 @@ public function get_user_activities_event($userid,$module)
         {
           $article_row['fav'] = '1';
           $res_data[] = $article_row;
+        }
+     }
+    return $res_data;//die;
+  }
+  else
+  {
+    return 0;
+  }
+
+ }
+
+ public function get_user_activities_academies($userid,$module)
+ {
+  $bookmark = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$userid' AND `module` = '$module'");
+  if(mysql_num_rows($bookmark)>0)
+  {
+    $row = mysql_fetch_assoc($bookmark);
+    $resrce_id = $row['userfav'];
+    $userresdata = mysql_query("SELECT  IFNull(`id`,'') AS `id` , IFNull(`type`,'') AS `type`, IFNull(`name`,'') AS `name`,IFNull(`location`,'') AS `location`,IFNull(`address`,'') AS `address`,IFNull(`coaches_info`,'') AS `coaches_info`,IFNull(`residential`,'') AS `residential`,IFNull(`hostel_available`,'') AS `hostel_available`,IFNull(`image`,'') AS `image`,IFNull(`email`,'') AS `email`,IFNull(`phone`,'') AS `phone`,IFNull(`sports`,'') AS `sports`,IFNull(`date_created`,'') AS `date_created`,IFNull(`date_updated`,'') AS `date_updated`,IFNull(`status`,'') AS `status`,IFNull(`level`,'') AS `level`,IFNull(`fee`,'') AS `fee`,IFNull(`schooling`,'') AS `schooling`,IFNull(`affilation`,'') AS `affilation` FROM `gs_prop_list` WHERE `id` IN ($resrce_id)");
+    if(mysql_num_rows($userresdata))
+     {
+        while ($prop_row = mysql_fetch_assoc($userresdata)) 
+        {
+          $prop_row['fav'] = '1';
+          $res_data[] = $prop_row;
         }
      }
     return $res_data;//die;

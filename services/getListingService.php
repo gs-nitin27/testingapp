@@ -175,7 +175,25 @@ else
       }
     }
 
+public function academy_list($where) 
+{  
+   $where  = implode("AND", $where);
+   $query = mysql_query("SELECT * FROM `gs_prop_list` WHERE $where");
+   if(mysql_num_rows($query)>0)
+   {
+      while ($row = mysql_fetch_assoc($query)) {
+           $row['coaches_info'] = json_decode($row['coaches_info']);
+           $row['fav'] = '0';
+           $rows[] = $row;
+      }
+      return $rows;
 
+   }
+   else
+   {
+    return '0';
+   }
+}
 
 
 

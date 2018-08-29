@@ -3,6 +3,7 @@ include('config1.php');
 include('services/searchdataservice.php');
 include('services/userdataservice.php');
 include('services/getListingService.php');
+include('getSportyLite/liteservice.php');
 
 
 
@@ -12,19 +13,6 @@ include('services/getListingService.php');
 
 if($_REQUEST['act'] == "statelisting")
 {
-
-// $sug = $_POST['suggest'];
-
-// if ($sug == '')
-// {
-
-// 	$fwhere = 'WHERE 1';
-	
-// }
-// else 
-// {
-// 	$fwhere = "WHERE `state` LIKE '%".$sug."%'";
-// }
 
 $fwhere = 'WHERE 1';
 $req = new GetListingService();
@@ -118,4 +106,46 @@ if($_REQUEST['act']=='event_type_list')
     }
     echo json_encode($resp); 
 }
+//*********Code For Academy Listing *************//
+if($_REQUEST['act']=="academy_listing")
+{
+$where = [];
+@$location  = $_REQUEST['location'];
+@$sport     = $_REQUEST['sport'];
+@$userid    = $_REQUEST['userid'];
+$where[] = " `status` <> 0 ";
+if($location != '')
+{
+	$where[] = "`location` LIKE '%$location%'";
+}
+if($sport != '')
+{
+	$where[] = "`sports` LIKE '%$sport%'";
+}
+$obj = new GetListingService();
+$objvar = $obj->academy_list($where);
+if($objvar != '0')
+{
+$obj1 = new liteservice();
+$fa_var = $obj1->getfav($userid,'7');	
+if($fa_var != 0)
+{
+	$fav_list = split(',', $fa_var);
+    foreach ($objvar as $key => $value) {
+    	if(in_array($value['id'], $fav_list))
+    	{
+    		$objvar['fav'] = '1';
+    	}
+    }
+}
+$resp = array('status' => '1','data'=>$objvar , 'msg'=>'Success');
+}
+else
+{
+$resp = array('status' => '0','data'=>[] , 'msg'=>'Failure');	
+}
+echo json_encode($resp);
+}	
+
+
 ?>

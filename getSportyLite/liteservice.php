@@ -410,7 +410,8 @@ $mail->Body = '<div style="font-family:HelveticaNeue-Light,Arial,sans-serif;back
     /*****************Get The Favourate [Function]**********************/
 
     public function getfav($id,$type)
-   {
+   {  
+    // echo "SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ";die;
       $query = mysql_query("SELECT `userfav` FROM `users_fav` WHERE `userid` = '$id' AND `module` = '$type'  AND  `userfav` != '' ");
       if(mysql_num_rows($query)>0)
       {

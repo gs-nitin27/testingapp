@@ -737,10 +737,11 @@ $res = $req->getCreation($where, $type);
 
 else if($_REQUEST['act'] == "search_job")
 {
- $userid      =urldecode($_POST['userid']);
- $title       =urldecode($_POST['job_title']);
- $sport       =urldecode($_POST['sport_name']);
- $location    =urldecode($_POST['location']);
+ $userid      =urldecode($_REQUEST['userid']);
+ $title       =urldecode($_REQUEST['job_title']);
+ $sport       =urldecode($_REQUEST['sport_name']);
+ $location    =urldecode($_REQUEST['location']);
+ //print_r($_REQUEST);die;
  $module      = '1' ;                            // This is Job Module
  $request   =   new userdataservice();
  $req           =   new liteservice();
@@ -752,18 +753,18 @@ else if($_REQUEST['act'] == "search_job")
     $arr['sport'] =  $sport ; 
   }
   if($location != '')
-  {
-       $where[] = "`location` LIKE '%$location%' ";
+  {    $location = explode(',', $location);
+       $where[] = " (`location` LIKE '%$location[0]%' || `city` LIKE '%$location[0]%') ";
        $arr['location'] = $location;
   }
   if($title != '')
   {
      $where[] = "`title` LIKE '%$title%' "; 
      $arr['title'] = $title ;    
-  }
+  }   //print_r($where);die;
      $whereclause = implode('AND', $where);
     $response       = $request ->jobsearch_user($whereclause);
-if($response)
+ if($response)
 {
   $req           =  new liteservice();
   $res2          = $req->getfav($userid,$module);
@@ -836,30 +837,25 @@ else if ($_REQUEST['act'] == "search_event" )
     $arr['sport'] =  $sport ; 
   }
   if($location != '')
-  {
-       $where[] = "`location` LIKE '%$location%' ";
+  {    $location = explode(',', $location);
+       $where[] = " (`location` LIKE '%$location[0]%' || `organizer_city` LIKE '%$location[0]%') ";
        $arr['location'] = $location;
   }
  
     $whereclause = implode(' AND  ', $where);
    // echo "$whereclause";die();
   $response = $request->searchEvent($whereclause);
+ // print_r($response);die;
 if($response)
 {
-                        $response      = $request->getfavForUser($response,$module, $userid);
-
-                              //  if (!empty($userid))
-                               // {
-                                    
-                               // }
-
-           $Result = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
-           echo json_encode($Result);
+                       $response      = $request->getfavForUser($response,$module, $userid);
+                       $Result = array('status' => '1','data'=>$response ,'msg'=>'More Result successfully');
+                       echo json_encode($Result);
 }
 else
 {                     
-        $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
-        echo json_encode($Result);
+                      $Result = array('status' => '0','data'=>$response ,'msg'=>'More Result is Not Found');
+                      echo json_encode($Result);
 } 
                      
 }
@@ -1213,52 +1209,49 @@ echo json_encode($row1);
 
 //******* CODE FOR FETCHING FAVOURITE SEARCH RECORDS UNDER FAVOURITE TAB FOR THE USER *******//
 
-else if($_POST['act'] == "get_fav")
-{
- 
-$id   = urldecode($_POST ['userid']);
-$type = urldecode($_POST ['type']);
-$rev  = new userdataservice();
-$rev = new   liteservice();
-$res = $rev->getfav($id,$type);
-$res  = $rev->getfavdata($id,$type);
-if($res != 0)
-{
-$favdata = $res['userfav'];
-$favdata = split(",",$favdata);
-for($i = 0; $i<sizeof($favdata) ; $i++ )
-{
+// else if($_REQUEST['act'] == "get_fav")
+// {
+// $id   = urldecode($_REQUEST['userid']);
+// $type = urldecode($_REQUEST['type']);
+// $revObj1  = new userdataservice();
+// $revObj2  = new liteservice();
+// $res  = $revObj2->getfav($id,$type);
+// //$res1  = $revObj1->getfavdata($id,$type);
+// if($res != 0)
+// {
+// $favdata = $res['userfav'];
+// $favdata = split(",",$favdata);
+// for($i = 0; $i<sizeof($favdata) ; $i++)
+// {
 
-if($type == '4' || $type =='5')
-   { 
-      $fwhere ="WHERE us.`userid` = ".$favdata[$i];
-      $page = 'fav';
-      $res1  = new searchdataservice();
-      $rev1  = $res1->gensearch($fwhere,$page);
-      $res2[] = $rev1; 
+// if($type == '4' || $type =='5')
+//    { 
+//       $fwhere ="WHERE us.`userid` = ".$favdata[$i];
+//       $page = 'fav';
+//       $res1  = new searchdataservice();
+//       $rev1  = $res1->gensearch($fwhere,$page);
+//       $res2[] = $rev1; 
       
-    }
-else
-   {
-      $res1 = new userdataservice();
-      $rev1 = $res1->getfavdata($favdata[$i] , $type);
-      $res2[] = $rev1; 
-   }
-}
-
-if($type == 1)
-{
-$req = new userdataservice();
-$res2 = $req->getuserjobs($res2, $id);
-}
-
-$data = array('data'=>$res2,'status' => 1);
-echo json_encode($data);
-}
-else 
-$data3 = array('status' => 0);
-echo json_encode($data3);
-}
+//     }
+// else if($type == 1)
+//     {
+//     $req = new userdataservice();
+//     $res2 = $req->getuserjobs($res2, $id);
+//     }
+// else
+//    {
+//       $res1 = new userdataservice();
+//       $rev1 = $res1->getfavdata($favdata[$i] , $type);
+//       $res2[] = $rev1; 
+//    }
+// }
+// $data = array('data'=>$res2,'status' => 1);
+// echo json_encode($data);
+// }
+// else 
+// $data3 = array('status' => 0);
+// echo json_encode($data3);
+// }
 
 
 
@@ -1459,7 +1452,7 @@ else if($_REQUEST['act'] == "gs_searching")
 
  $userid        =   urldecode($_REQUEST['userid']);  //Apply User Id 
  $module        =   urldecode($_REQUEST['module']);  //Type Job=1 Event=2 Tournament=3 
- $keyword       =   urldecode($_REQUEST ['key']);   // Search the Value by Applicant User
+ $keyword       =   urldecode($_REQUEST['key']);   // Search the Value by Applicant User
 
 
  $request       =   new userdataservice();
@@ -1597,13 +1590,14 @@ else
 /********************************************************************/
 
  else if($_REQUEST['act'] == "filter_tournament")
- {
+ {//print_r($_REQUEST);die;
   $userid        =   urldecode($_REQUEST ['userid']);
   $level         =   urldecode($_REQUEST ['level']);  // Topic of the Article//
-  $sport         =   urldecode($_REQUEST ['sport']); 
+  $sport         =   urldecode($_REQUEST ['sport']);
+  $location      =   urldecode($_REQUEST ['location']); 
   $module        =  '3'; 
   $request       =   new userdataservice();
-  $where[]         =   '1 =1 ';
+  $where[]       =   '1 = 1  ';
   $arr = array();
    
    if($level != '')
@@ -1616,8 +1610,14 @@ else
     $where[] = " `sport` LIKE '%$sport%' ";
     $arr['sport'] =  $sport ; 
   }
- 
+ if($location != '')
+ {
+  $location = explode(',', $location);
+  $where[] = "  `location` LIKE '%$location[0]%' || `state` LIKE '%$location[0]%'   ";
+  $arr['location'] =  $location ; 
+ }
 $whereclause    =   implode('AND', $where);
+echo $whereclause;die;
 $response       =   $request->findTournament($whereclause);
 $req            =    new liteservice();
 $res2           =   $req->getfav($userid,$module);
@@ -2070,6 +2070,10 @@ else if($_REQUEST['act'] == 'user_activities')
   else if($module == "6")
   {
   $resp   = $obj->get_user_activities_articles($userid,$module);
+  }
+  else if($module == "7")
+  {
+  $resp   = $obj->get_user_activities_academies($userid,$module);
   }
   
  if($resp != 0)

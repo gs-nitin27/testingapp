@@ -33,7 +33,4 @@ $resp = array('status' =>'0' ,'data'=>[], 'msg'=>'Failure');
 echo json_encode($resp);
 }
 
-
-
-
  ?>

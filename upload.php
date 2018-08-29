@@ -1,6 +1,34 @@
 	<?php
-	include('db.php');
-	if(isset($_POST['btn_upload']))
+	include('config1.php');
+	$filename = $_FILES['file']['name'];
+	$ext = pathinfo($filename, PATHINFO_EXTENSION);
+	if($ext == 'csv')
+	{
+	   $tmpName = $_FILES['file']['tmp_name'];	
+       if(($handle = fopen($tmpName, 'r')) !== FALSE) {
+            // necessary if a large csv file
+            set_time_limit(0);
+
+            $row = 0;
+
+            while(($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                // number of fields in the csv
+                $col_count = count($data);
+                if($row > 0)
+                {
+                    $id = $data['7'].$data['2'].$data['6'];
+                    $query[] = "('".$id."','".$data['7']."','".$data['6']."','".$data['5']."','".$data['4']."',CURDATE(),'".$data['2']."','".$data['1']."','".$data['3']."')";  	
+                }
+
+                // inc the row
+                $row++;
+            }
+           $values = implode(',', $query);
+           $sql_query = mysql_query("INSERT INTO `gs_student_list`(`student_id`, `institute_id`, `student_reg_no`, `date_of_birth`, `gender`, `date_created`, `class`, `name`, `guardian name`) VALUES ".$values."");
+            fclose($handle);
+        }
+	}
+	else if(isset($_POST['btn_upload']))
 	{
 		$filetmp=$_FILES["file_img"]["tmp_name"];
 		$filename=$_FILES["file_img"]["name"];

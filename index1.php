@@ -49,12 +49,12 @@ $.ajax({
 
 </script>
 </head>
-<form id="con" enctype='multipart/form-data' action="Image_upload.php" method="POST">
-	<input type="file" name="eventImage">
+<form enctype='multipart/form-data' action="upload.php" method="POST">
+	<input type="file" name="file">
     <input type="text" name="userid" value="16">
 	<input name="submit" type="submit" value="Submit">
 </form>
-<input type="button" id="hit" name="Hit Me" value="Hit me" onClick="hit()">
+<input type="submit" id="hit" name="Hit Me">
 <div id="resp"></div>
 <body>
 	
