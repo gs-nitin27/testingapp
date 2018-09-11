@@ -2753,7 +2753,8 @@ public function user_Info($whereclause)
 
 
 public function searchEvent($where)
-{ //echo "SELECT *FROM gs_eventinfo where $where AND datediff(CURDATE(), `end_date`) < 0 AND `publish` = '1' ORDER BY `id` DESC";die;
+{ //echo "SELECT * FROM gs_eventinfo where $where  AND `publish` = '1' ORDER BY `id` DESC";die;
+  //echo "SELECT *FROM gs_eventinfo where $where AND datediff(CURDATE(), `end_date`) < 0 AND `publish` = '1' ORDER BY `id` DESC";die;
   $query =mysql_query("SELECT * FROM gs_eventinfo where $where  AND `publish` = '1' ORDER BY `id` DESC");
   $num=mysql_num_rows($query);
   if ($num!=0) 
@@ -2764,6 +2765,7 @@ public function searchEvent($where)
               $row['image'] = EVENT_IMAGE_URL.$row['image'];
               $data[]   = $row ;
             }
+           // print_r($data);
         return $data;
   }
 }
@@ -3197,7 +3199,7 @@ public function get_user_activities_event($userid,$module)
   {
     $row = mysql_fetch_assoc($bookmark);
     $resrce_id = $row['userfav'];
-    $userresdata = mysql_query("SELECT  IFNull(`id`,'') AS `id` , IFNull(`type`,'') AS `type`, IFNull(`name`,'') AS `name`,IFNull(`location`,'') AS `location`,IFNull(`address`,'') AS `address`,IFNull(`coaches_info`,'') AS `coaches_info`,IFNull(`residential`,'') AS `residential`,IFNull(`hostel_available`,'') AS `hostel_available`,IFNull(`image`,'') AS `image`,IFNull(`email`,'') AS `email`,IFNull(`phone`,'') AS `phone`,IFNull(`sports`,'') AS `sports`,IFNull(`date_created`,'') AS `date_created`,IFNull(`date_updated`,'') AS `date_updated`,IFNull(`status`,'') AS `status`,IFNull(`level`,'') AS `level`,IFNull(`fee`,'') AS `fee`,IFNull(`schooling`,'') AS `schooling`,IFNull(`affilation`,'') AS `affilation` FROM `gs_prop_list` WHERE `id` IN ($resrce_id)");
+    $userresdata = mysql_query("SELECT  IFNull(`id`,'') AS `id` , IFNull(`type`,'') AS `type`, IFNull(`name`,'') AS `name`,IFNull(`location`,'') AS `location`,IFNull(`address`,'') AS `address`,IFNull(`coaches_info`,'') AS `coaches_info`,IFNull(`residential`,'') AS `residential`,IFNull(`hostel_available`,'') AS `hostel_available`,IFNull(`image`,'') AS `image`,IFNull(`email`,'') AS `email`,IFNull(`phone`,'') AS `phone`,IFNull(`sports`,'') AS `sports`,IFNull(DATE_FORMAT(`date_created`, '%D %M %Y'),'') AS `date_created`,IFNull(DATE_FORMAT(`date_updated`, '%D %M %Y'),'') AS `date_updated`,IFNull(`status`,'') AS `status`,IFNull(`level`,'') AS `level`,IFNull(`fee`,'') AS `fee`,IFNull(`schooling`,'') AS `schooling`,IFNull(`affilation`,'') AS `affilation` FROM `gs_prop_list` WHERE `id` IN ($resrce_id)");
     if(mysql_num_rows($userresdata))
      {
         while ($prop_row = mysql_fetch_assoc($userresdata)) 

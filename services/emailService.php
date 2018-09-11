@@ -1578,7 +1578,7 @@ public function email_for_update($userinfo,$id)
 // }
 
 public function create_subscribe_body($info,$module)
-{ //print_r($info);die;  
+{  
   if(isset($info['data']))
     {
      $sent=[];
@@ -1591,10 +1591,13 @@ public function create_subscribe_body($info,$module)
       foreach ($info['data'] as $key => $value) {
          $temp = '';
          foreach ($value as $key => $value1) {
+          $job_title             = $value1['title'];
+          $job_url_title         = explode(' ',$job_title);
+          $job_url_title         = str_replace( '\/', '-', implode('-',$job_url_title));
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
-                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
+                <h4><a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].'/'.$job_url_title.' target="_blank">'.$value1['title'].'</a></h4>
+                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].'/'.$job_url_title.' target="_blank">Know More..</a>
                 </p>
             </div><br>';
             $sent[] = $value1['id'];
@@ -1609,10 +1612,13 @@ public function create_subscribe_body($info,$module)
       foreach ($info['data'] as $key => $value) {
          $temp = '';
          foreach ($value as $key => $value1) {
+          $event_title             = $value1['name'];
+          $event_url_title         = explode(' ',$event_title);
+          $event_url_title         = str_replace( '\/', '-', implode('-',$event_url_title));
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
-                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
+                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].'/'.$event_url_title.' target="_blank">'.$value1['name'].'</a></h4>
+                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].'/'.$event_url_title.' target="_blank">Know More..</a>
                 </p>
             </div><br>';
             $sent[] = $value1['id'];
@@ -1626,10 +1632,13 @@ public function create_subscribe_body($info,$module)
       foreach ($info['data'] as $key => $value) {
          $temp = '';
          foreach ($value as $key => $value1) {
-          $temp .='
+           $tour_title             = $value1['name'];
+           $tour_url_title         = explode(' ',$tour_title);
+           $tour_url_title         = str_replace( '\/', '-', implode('-',$tour_url_title));
+           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'tournament-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
-                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
+                <h4><a href="'.VIEW_PROFILE.'tournament-detail/'.$value1['id'].'/'.$tour_url_title.' target="_blank">'.$value1['name'].'</a></h4>
+                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].'/'.$tour_url_title.' target="_blank">Know More..</a>
                 </p>
             </div><br>';
             $sent[] = $value1['id'];
@@ -1643,10 +1652,13 @@ public function create_subscribe_body($info,$module)
       foreach ($info['data'] as $key => $value) {
          $temp = '';
          foreach ($value as $key => $value1) {
-          $temp .='
+           $trial_title             = $value1['name'];
+           $trial_url_title         = explode(' ',$trial_title);
+           $trial_url_title         = str_replace( '\/', '-', implode('-',$trial_url_title));
+           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].' target="_blank">'.$value1['name'].'</a></h4>
-                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
+                <h4><a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].'/'.$trial_url_title.' target="_blank">'.$value1['name'].'</a></h4>
+                <p>'.substr(strip_tags($value1['description']),0,300).'..<a href="'.VIEW_PROFILE.'event-detail/'.$value1['id'].'/'.$trial_url_title.' target="_blank">Know More..</a>
                 </p>
             </div><br>';
             $sent[] = $value1['id'];
@@ -1662,10 +1674,13 @@ public function create_subscribe_body($info,$module)
       foreach ($info['data'] as $key => $value) {
          $temp = '';
          foreach ($value as $key => $value1) {
+           $article_title             = $value1['name'];
+           $article_url_title         = explode(' ',$article_title);
+           $article_url_title         = str_replace( '\/', '-', implode('-',$article_url_title));
           $temp .='
          <div class="slide-content">
-                <h4><a href="'.VIEW_PROFILE.'article-detail/'.$value1['id'].' target="_blank">'.$value1['title'].'</a></h4>
-                <p>'.substr(strip_tags($value1['summary']),0,300).'..<a href="'.VIEW_PROFILE.'job-detail/'.$value1['id'].' target="_blank">Know More..</a>
+                <h4><a href="'.VIEW_PROFILE.'article-detail/'.$value1['id'].'/'.$article_url_title.' target="_blank">'.$value1['title'].'</a></h4>
+                <p>'.substr(strip_tags($value1['summary']),0,300).'..<a href="'.VIEW_PROFILE.'article-detail/'.$value1['id'].'/'.$article_url_title.' target="_blank">Know More..</a>
                 </p>
             </div><br>';
             $sent[] = $value1['id'];

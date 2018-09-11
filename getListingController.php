@@ -130,11 +130,13 @@ $obj1 = new liteservice();
 $fa_var = $obj1->getfav($userid,'7');	
 if($fa_var != 0)
 {
-	$fav_list = split(',', $fa_var);
+	$fav_list = split(',', $fa_var['userfav']);
     foreach ($objvar as $key => $value) {
+
     	if(in_array($value['id'], $fav_list))
-    	{
-    		$objvar['fav'] = '1';
+    	{  
+    		
+    		$objvar[$key]['fav'] = '1';
     	}
     }
 }

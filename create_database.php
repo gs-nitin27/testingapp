@@ -823,7 +823,7 @@ else if ($_REQUEST['act'] == "search_event" )
  $arr = array();
  if($key != '')
  {
-      $where[] = " `description` LIKE '%$key%' ";
+      $where[] = "  `description` LIKE '%$key%' || `sport_name` LIKE '%$key%'|| `name` LIKE '%$key%' ";
       $arr['description'] =  $key ; 
  }
  if($userid != '')
@@ -838,7 +838,7 @@ else if ($_REQUEST['act'] == "search_event" )
   }
   if($location != '')
   {    $location = explode(',', $location);
-       $where[] = " (`location` LIKE '%$location[0]%' || `organizer_city` LIKE '%$location[0]%') ";
+       $where[] = " `location` LIKE '%$location[0]%' || `organizer_city` LIKE '%$location[0]%' ";
        $arr['location'] = $location;
   }
  
